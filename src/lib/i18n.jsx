@@ -564,7 +564,9 @@ const landingTranslations = {
   "Создайте свою следующую интеграцию.": { en: "Build your next integration.", zh: "构建您的下一个集成。" },
   "Начните с одного API и подключайте нужные модели по мере роста проекта.": { en: "Start with one API and add the models you need as your project grows.", zh: "从一个 API 开始，随着项目发展按需接入模型。" },
   "Единый интерфейс для AI-моделей.": { en: "One interface for AI models.", zh: "AI 模型的统一接口。" },
-  "Регистрация": { en: "Sign up", zh: "注册" }
+  "Регистрация": { en: "Sign up", zh: "注册" },
+  "Разработчик: Kristofer Biksan": { en: "Developer: Kristofer Biksan", zh: "开发者：Kristofer Biksan" },
+  "Telegram: @web3ResearchCN": { en: "Telegram: @web3ResearchCN", zh: "Telegram：@web3ResearchCN" }
 };
 
 const supported = ["en", "ru", "zh"];
