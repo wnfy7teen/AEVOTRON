@@ -462,3 +462,13 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 @media(max-width:800px){.av-footer-main{grid-template-columns:1fr 1fr;gap:30px 24px;padding:34px 0}.av-footer-brand{grid-column:1/-1}.av-footer-bottom{padding:16px 0 20px}}
 @media(max-width:520px){.av-language-switcher{right:14px;bottom:14px}.av-language-trigger{height:39px;min-width:68px;padding:0 11px}.av-language-menu{width:205px}.av-footer{padding-left:22px;padding-right:22px}.av-footer-main{gap:26px 18px}.av-footer-column>a{font-size:11px}.av-footer-bottom{align-items:flex-start;flex-direction:column;gap:7px}}
 @media(prefers-reduced-motion:reduce){.av-language-trigger,.av-language-trigger>svg,.av-language-menu button{transition:none}.av-language-menu{animation:none}}
+
+
+/* Keep footer grid rules stronger than legacy generic footer selectors */
+.av-footer>.av-footer-main{display:grid;grid-template-columns:1.5fr .8fr .8fr 1.2fr;gap:42px;align-items:start;margin:0 auto}
+.av-footer>.av-footer-main>div{margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.av-footer>.av-footer-main>.av-footer-brand{display:block}
+.av-footer>.av-footer-main>.av-footer-contact{min-width:0}
+.av-footer>.av-footer-main .av-footer-heading{display:block}
+.av-footer>.av-footer-bottom{display:flex;margin:0 auto;flex-direction:row;align-items:center;justify-content:space-between}
+@media(max-width:800px){.av-footer>.av-footer-main{grid-template-columns:1fr 1fr;gap:30px 24px}.av-footer>.av-footer-main>.av-footer-brand{grid-column:1/-1}.av-footer>.av-footer-bottom{align-items:flex-start;flex-direction:column;gap:7px}}
