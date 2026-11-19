@@ -517,6 +517,11 @@ const dictionaries = {
 };
 
 const landingTranslations = {
+  "РАЗДЕЛЫ": { en: "SECTIONS", zh: "页面导航" },
+  "АККАУНТ": { en: "ACCOUNT", zh: "账户" },
+  "СВЯЗАТЬСЯ": { en: "CONTACT", zh: "联系方式" },
+  "Все права защищены.": { en: "All rights reserved.", zh: "保留所有权利。" },
+
   "Схема единого API и подключённых моделей": { en: "Unified API and connected models diagram", zh: "统一 API 与已连接模型示意图" },
   "Единая точка доступа": { en: "Single access point", zh: "统一接入点" },
   "Подключено": { en: "Connected", zh: "已连接" },
