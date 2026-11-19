@@ -631,3 +631,12 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
     word-spacing: normal;
   }
 }
+
+
+/* Keep the mobile hamburger control visible against the dark header */
+.av-site[data-theme="dark"] .av-menu-toggle {
+  color: #e6ebf1;
+}
+.av-site[data-theme="dark"] .av-menu-toggle:hover {
+  color: #ffffff;
+}
