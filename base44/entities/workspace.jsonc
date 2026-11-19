@@ -1,0 +1,60 @@
+{
+  "name": "Workspace",
+  "type": "object",
+  "properties": {
+    "owner_user_id": {
+      "type": "string",
+      "description": "Base44 user ID of the workspace owner"
+    },
+    "name": {
+      "type": "string",
+      "description": "Workspace display name"
+    },
+    "region": {
+      "type": "string",
+      "enum": [
+        "global",
+        "eu",
+        "us",
+        "ru"
+      ],
+      "default": "global"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "owner_user_id",
+    "name",
+    "region",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
