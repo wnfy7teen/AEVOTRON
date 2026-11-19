@@ -282,7 +282,7 @@ export function useLanguage() {
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
   return (
-    <div className="fixed right-5 top-5 z-[100]">
+    <div className="fixed bottom-5 right-5 z-[100]">
       <label className="sr-only" htmlFor="aevotron-language">Language</label>
       <select
         id="aevotron-language"
