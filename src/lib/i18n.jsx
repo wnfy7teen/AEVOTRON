@@ -212,7 +212,14 @@ const translateText = (value, language) => {
   if (dictionary[trimmed]) return value.replace(trimmed, dictionary[trimmed]);
   let result = value;
   for (const [source, target] of Object.entries(dictionary).sort((a, b) => b[0].length - a[0].length)) {
+    if (source.includes(" ")) {
+      if (result.includes(source)) result = result.replaceAll(source, target);
+    } else {
+      const escaped = source.replace(/[.*+?^${}()|[\]\\]/g, "\\  for (const [source, target] of Object.entries(dictionary).sort((a, b) => b[0].length - a[0].length)) {
     if (result.includes(source)) result = result.replaceAll(source, target);
+  }");
+      result = result.replace(new RegExp(`\\\\b${escaped}\\\\b`, "g"), target);
+    }
   }
   return result;
 };
