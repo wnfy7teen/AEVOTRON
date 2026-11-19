@@ -712,3 +712,42 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   font-kerning: none;
   font-variant-ligatures: none;
 }
+
+/* Keep the API code sample dark and readable on the gray page theme.
+   The gray theme's generic .av-visual background otherwise overrides
+   the dark .av-code surface and makes its light syntax colors disappear. */
+.av-site[data-theme="gray"] .av-code {
+  background: #111820;
+  border-color: #273440;
+  color: #e9eef4;
+}
+.av-site[data-theme="gray"] .av-code pre {
+  color: #d5dde6;
+}
+.av-site[data-theme="gray"] .av-code .av-code-muted {
+  color: #c792ea;
+}
+.av-site[data-theme="gray"] .av-code .av-code-blue {
+  color: #83bfff;
+}
+.av-site[data-theme="gray"] .av-code .av-code-green {
+  color: #a6d6a0;
+}
+.av-site[data-theme="gray"] .av-code .av-window-bar {
+  background: #18222d;
+  border-color: #273440;
+}
+.av-site[data-theme="gray"] .av-code .av-window-bar > span {
+  background: #475361;
+}
+.av-site[data-theme="gray"] .av-code .av-window-bar small {
+  color: #a0acb8;
+}
+.av-site[data-theme="gray"] .av-code .av-code-result {
+  color: #b7e0bd;
+  background: #18242d;
+  border-color: #2c3c49;
+}
+.av-site[data-theme="gray"] .av-code .av-code-result small {
+  color: #84929e;
+}
