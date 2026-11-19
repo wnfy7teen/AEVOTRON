@@ -85,7 +85,7 @@ export default function AppleLanding() {
         codeExample.classList.add("is-typing");
         observer.disconnect();
       }
-    }, { threshold: 0.25 });
+    }, { threshold: 0, rootMargin: "0px 0px 80px 0px" });
     observer.observe(codeExample);
     return () => observer.disconnect();
   }, []);
