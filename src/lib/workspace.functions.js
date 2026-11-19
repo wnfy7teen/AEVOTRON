@@ -6,6 +6,12 @@ import { toPublicWorkspace, validateWorkspaceInput } from "@/lib/workspace.valid
  * Returns the signed-in user's personal workspace, creating it on first use.
  * All writes use Base44 service role from the server; callers cannot supply owner IDs,
  * workspace IDs, roles, or membership status.
+ *
+ * IMPORTANT: Base44's documented entity CRUD has no atomic upsert/unique constraint.
+ * The read-then-create flow is retry-safe after partial failure, but concurrent first
+ * requests can still create duplicate workspaces or owner memberships. Do not treat
+ * this provisioning path as production race-safe until an atomic platform primitive
+ * is available and used here.
  */
 export const getOrCreateMyWorkspace = createServerFn({ method: "POST" })
   .middleware([requireUser])
