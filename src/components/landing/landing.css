@@ -346,3 +346,59 @@ html:has(.av-site) { scroll-behavior: smooth; }
     animation: none !important;
   }
 }
+
+
+/* More expressive scroll-triggered reveals */
+.av-site .av-reveal.av-reveal-ready:not(.is-visible) {
+  opacity: 0;
+  transform: translate3d(0, 52px, 0) scale(.985);
+}
+.av-site .av-reveal.is-visible {
+  animation: av-scroll-reveal 900ms cubic-bezier(.16, 1, .3, 1) both;
+}
+@keyframes av-scroll-reveal {
+  from { opacity: 0; transform: translate3d(0, 52px, 0) scale(.985); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+.av-site .av-intro.is-visible p,
+.av-site .av-feature.is-visible .av-eyebrow,
+.av-site .av-final-cta.is-visible .av-final-icon {
+  animation: av-child-reveal 650ms 120ms cubic-bezier(.16,1,.3,1) both;
+}
+.av-site .av-intro.is-visible h2,
+.av-site .av-feature.is-visible .av-feature-copy h2,
+.av-site .av-final-cta.is-visible h2 {
+  animation: av-child-reveal 760ms 220ms cubic-bezier(.16,1,.3,1) both;
+}
+.av-site .av-feature.is-visible .av-feature-copy p,
+.av-site .av-final-cta.is-visible p {
+  animation: av-child-reveal 760ms 340ms cubic-bezier(.16,1,.3,1) both;
+}
+.av-site .av-feature.is-visible .av-inline-link,
+.av-site .av-feature.is-visible .av-visual,
+.av-site .av-final-cta.is-visible .av-primary-button {
+  animation: av-child-reveal 850ms 420ms cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes av-child-reveal {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-site .av-reveal.av-reveal-ready:not(.is-visible),
+  .av-site .av-reveal.is-visible,
+  .av-site .av-intro.is-visible p,
+  .av-site .av-intro.is-visible h2,
+  .av-site .av-feature.is-visible .av-eyebrow,
+  .av-site .av-feature.is-visible .av-feature-copy h2,
+  .av-site .av-feature.is-visible .av-feature-copy p,
+  .av-site .av-feature.is-visible .av-inline-link,
+  .av-site .av-feature.is-visible .av-visual,
+  .av-site .av-final-cta.is-visible .av-final-icon,
+  .av-site .av-final-cta.is-visible h2,
+  .av-site .av-final-cta.is-visible p,
+  .av-site .av-final-cta.is-visible .av-primary-button {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
