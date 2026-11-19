@@ -217,6 +217,9 @@ const translateText = (value, language) => {
   return result;
 };
 
+const originalText = new WeakMap();
+const originalAttributes = new WeakMap();
+
 function applyTranslations(language) {
   if (typeof document === "undefined") return;
   document.documentElement.lang = language === "zh" ? "zh-CN" : language;
@@ -224,15 +227,23 @@ function applyTranslations(language) {
   const nodes = [];
   while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach((node) => {
+    if (!originalText.has(node)) originalText.set(node, node.nodeValue);
     if (!node.parentElement?.closest("[data-no-translate]")) {
-      const next = translateText(node.nodeValue, language);
+      const next = translateText(originalText.get(node), language);
       if (next !== node.nodeValue) node.nodeValue = next;
     }
   });
   document.querySelectorAll("input[placeholder], textarea[placeholder], [aria-label], [title]").forEach((element) => {
     ["placeholder", "aria-label", "title"].forEach((attribute) => {
-      const value = element.getAttribute(attribute);
-      if (value) element.setAttribute(attribute, translateText(value, language));
+      const key = attribute;
+      let originals = originalAttributes.get(element);
+      if (!originals) { originals = {}; originalAttributes.set(element, originals); }
+      if (originals[key] === undefined) originals[key] = element.getAttribute(attribute);
+      const value = originals[key];
+      if (value) {
+        const next = translateText(value, language);
+        if (element.getAttribute(attribute) !== next) element.setAttribute(attribute, next);
+      }
     });
   });
 }
