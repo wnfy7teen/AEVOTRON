@@ -123,3 +123,41 @@
 .av-site[data-theme="dark"] .av-nav-links.is-open{background:#171d25}
 .av-site[data-theme="dark"] .av-nav-links.is-open a{color:#e6ebf1}
 @media(prefers-reduced-motion:reduce){.av-theme-switch button{transition:none}}
+
+
+/* Landing page smooth anchor navigation and scroll reveals */
+.av-site {
+  scroll-behavior: smooth;
+}
+.av-site section[id] {
+  scroll-margin-top: 82px;
+}
+.av-site .av-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 650ms cubic-bezier(.2,.7,.25,1), transform 650ms cubic-bezier(.2,.7,.25,1);
+}
+.av-site .av-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.av-site .av-nav-links a,
+.av-site .av-theme-switch button,
+.av-site .av-menu-toggle,
+.av-site .av-brand,
+.av-site .av-footer a {
+  transition: color 220ms ease, background-color 220ms ease, border-color 220ms ease, transform 220ms ease, opacity 220ms ease;
+}
+.av-site .av-nav-links a:active,
+.av-site .av-theme-switch button:active {
+  transform: scale(.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-site { scroll-behavior: auto !important; }
+  .av-site .av-reveal,
+  .av-site .av-reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
