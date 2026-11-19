@@ -279,3 +279,70 @@
 @media (prefers-reduced-motion: reduce) {
   .av-section-nav, .av-section-nav * { transition: none !important; }
 }
+
+
+/* Reliable, visible motion: entrance, scroll reveals, floating artwork and interactions */
+html:has(.av-site) { scroll-behavior: smooth; }
+.av-site .av-reveal.is-visible {
+  animation: av-section-enter 760ms cubic-bezier(.18,.72,.24,1) both;
+}
+@keyframes av-section-enter {
+  from { opacity: 0; transform: translate3d(0, 34px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.av-site .av-hero.is-visible .av-hero-kicker { animation: av-item-enter 650ms 80ms both; }
+.av-site .av-hero.is-visible h1 { animation: av-item-enter 760ms 150ms both; }
+.av-site .av-hero.is-visible .av-hero-copy { animation: av-item-enter 700ms 240ms both; }
+.av-site .av-hero.is-visible .av-hero-actions { animation: av-item-enter 700ms 330ms both; }
+.av-site .av-hero.is-visible .av-hero-footnote { animation: av-item-enter 700ms 410ms both; }
+.av-site .av-hero.is-visible .av-hero-art { animation: av-item-enter 900ms 480ms both; }
+@keyframes av-item-enter {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.av-site .av-orbit-one { animation: av-orbit-drift 18s ease-in-out infinite alternate; }
+.av-site .av-orbit-two { animation: av-orbit-drift 22s ease-in-out infinite alternate-reverse; }
+.av-site .av-core { animation: av-core-float 5s ease-in-out infinite; }
+@keyframes av-orbit-drift {
+  from { translate: -7px 0; }
+  to { translate: 7px 0; }
+}
+@keyframes av-core-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.av-site .av-section-nav { animation: av-nav-enter 650ms 350ms cubic-bezier(.18,.72,.24,1) both; }
+@keyframes av-nav-enter {
+  from { opacity: 0; transform: translate3d(22px, -50%, 0); }
+  to { opacity: 1; transform: translate3d(0, -50%, 0); }
+}
+.av-site .av-primary-button,
+.av-site .av-nav-cta,
+.av-site .av-provider,
+.av-site .av-api-node,
+.av-site .av-control-inner,
+.av-site .av-code {
+  transition: transform 260ms cubic-bezier(.2,.7,.25,1), box-shadow 260ms ease, border-color 260ms ease;
+}
+.av-site .av-provider:hover,
+.av-site .av-api-node:hover,
+.av-site .av-control-inner:hover { transform: translateY(-4px); box-shadow: 0 18px 42px rgba(25, 45, 65, .13); }
+.av-site .av-code:hover { transform: translateY(-3px); box-shadow: 0 26px 60px rgba(12, 25, 37, .24); }
+.av-site .av-section-nav a:active,
+.av-site .av-primary-button:active { transform: scale(.97); }
+@media (prefers-reduced-motion: reduce) {
+  html:has(.av-site) { scroll-behavior: auto; }
+  .av-site .av-reveal.is-visible,
+  .av-site .av-hero.is-visible .av-hero-kicker,
+  .av-site .av-hero.is-visible h1,
+  .av-site .av-hero.is-visible .av-hero-copy,
+  .av-site .av-hero.is-visible .av-hero-actions,
+  .av-site .av-hero.is-visible .av-hero-footnote,
+  .av-site .av-hero.is-visible .av-hero-art,
+  .av-site .av-orbit-one,
+  .av-site .av-orbit-two,
+  .av-site .av-core,
+  .av-site .av-section-nav {
+    animation: none !important;
+  }
+}
