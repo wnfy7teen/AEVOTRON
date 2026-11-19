@@ -45,6 +45,8 @@ const features: Feature[] = [
 export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [activeSection, setActiveSection] = useState("platform");
+  const [showSectionNav, setShowSectionNav] = useState(false);
   const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
   useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
   useEffect(() => {
@@ -71,6 +73,24 @@ export default function AppleLanding() {
     });
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    const sectionIds = ["platform", "security", "developers"];
+    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const updateVisibility = () => setShowSectionNav(window.scrollY > 220);
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActiveSection(visible[0].target.id);
+    }, { rootMargin: "-22% 0px -58% 0px", threshold: [0, 0.1, 0.25, 0.5] });
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      observer.disconnect();
+    };
+  }, []);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
@@ -88,6 +108,12 @@ export default function AppleLanding() {
       </div>
       <button className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
+    <aside className={"av-section-nav " + (showSectionNav ? "is-visible" : "")} aria-label="Навигация по разделам">
+      <span className="av-section-nav-label">НА СТРАНИЦЕ</span>
+      <a href="#platform" className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />Platform</a>
+      <a href="#security" className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />Security</a>
+      <a href="#developers" className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />Developers</a>
+    </aside>
     <section className="av-hero av-reveal" id="platform">
       <div className="av-hero-kicker"><span /> ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ</div>
       <h1>Все модели.<br /><span>Один API.</span></h1>
