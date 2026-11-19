@@ -793,22 +793,25 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   color: #a0acb8 !important;
 }
 
-/* Typewriter effect for the developer API example */
+/* Typewriter effect starts only when the API example enters the viewport. */
 .av-site .av-code pre {
+  clip-path: none;
+  animation: none;
+}
+.av-site .av-code.is-typing pre {
   clip-path: inset(0 100% 0 0);
   animation: av-code-type 720ms steps(34, end) forwards;
 }
-.av-site .av-code pre:nth-of-type(1) { animation-delay: 350ms; }
-.av-site .av-code pre:nth-of-type(2) { animation-delay: 1.05s; }
-.av-site .av-code pre:nth-of-type(3) { animation-delay: 1.75s; }
-.av-site .av-code pre:nth-of-type(4) { animation-delay: 2.45s; }
-.av-site .av-code pre:nth-of-type(5) { animation-delay: 3.15s; }
-.av-site .av-code pre:nth-of-type(6) { animation-delay: 3.85s; }
-.av-site .av-code pre:nth-of-type(7) { animation-delay: 4.55s; }
-.av-site .av-code pre:nth-of-type(8) { animation-delay: 5.25s; }
-.av-site .av-code pre:nth-of-type(9) { animation-delay: 5.95s; }
-.av-site .av-code pre:nth-of-type(10) { animation-delay: 6.65s; }
-.av-site .av-code .av-code-result {
+.av-site .av-code.is-typing pre:nth-of-type(1) { animation-delay: 350ms; }
+.av-site .av-code.is-typing pre:nth-of-type(2) { animation-delay: 1.05s; }
+.av-site .av-code.is-typing pre:nth-of-type(3) { animation-delay: 1.75s; }
+.av-site .av-code.is-typing pre:nth-of-type(4) { animation-delay: 2.45s; }
+.av-site .av-code.is-typing pre:nth-of-type(5) { animation-delay: 3.15s; }
+.av-site .av-code.is-typing pre:nth-of-type(6) { animation-delay: 3.85s; }
+.av-site .av-code.is-typing pre:nth-of-type(7) { animation-delay: 4.55s; }
+.av-site .av-code.is-typing pre:nth-of-type(8) { animation-delay: 5.25s; }
+.av-site .av-code.is-typing pre:nth-of-type(9) { animation-delay: 5.95s; }
+.av-site .av-code.is-typing .av-code-result {
   opacity: 0;
   animation: av-code-result-in 450ms ease-out 7.35s forwards;
 }
@@ -819,14 +822,4 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 @keyframes av-code-result-in {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .av-site .av-code pre {
-    clip-path: none !important;
-    animation: none !important;
-  }
-  .av-site .av-code .av-code-result {
-    opacity: 1 !important;
-    animation: none !important;
-  }
 }
