@@ -402,3 +402,15 @@ html:has(.av-site) { scroll-behavior: smooth; }
     transform: none !important;
   }
 }
+
+
+/* The section navigator is portaled to body, outside the animated page root */
+.av-section-nav[data-theme="dark"] {
+  background: rgba(22, 27, 35, .9);
+  border-color: rgba(160, 174, 192, .2);
+  box-shadow: 0 12px 38px rgba(0,0,0,.28);
+}
+.av-section-nav[data-theme="dark"] .av-section-nav-label { color: #8994a3; }
+.av-section-nav[data-theme="dark"] a { color: #aab4c2; }
+.av-section-nav[data-theme="dark"] a.active { color: #83c5ff; background: rgba(67,157,230,.14); }
+.av-section-nav[data-theme="dark"] a.active i { background: #439de6; box-shadow: 0 0 0 4px rgba(67,157,230,.14); }
