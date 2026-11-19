@@ -640,3 +640,55 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 .av-site[data-theme="dark"] .av-menu-toggle:hover {
   color: #ffffff;
 }
+
+
+/* Mobile: keep section navigation and language picker aligned in one bottom row */
+@media (max-width: 700px) {
+  body .av-section-nav,
+  body .av-section-nav.is-visible {
+    left: 12px;
+    right: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: max-content;
+    max-width: calc(100vw - 104px);
+    min-width: 0;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 4px;
+    transform: none !important;
+  }
+  body .av-section-nav a {
+    min-height: 36px;
+    padding: 0 clamp(6px, 2vw, 10px);
+    font-size: clamp(9px, 2.5vw, 10px);
+  }
+  body .av-language-switcher {
+    left: auto;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 121;
+  }
+  body .av-language-trigger {
+    height: 44px;
+    min-width: 72px;
+  }
+}
+@media (max-width: 390px) {
+  body .av-section-nav,
+  body .av-section-nav.is-visible {
+    left: 8px;
+    max-width: calc(100vw - 92px);
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    gap: 1px;
+    padding: 3px;
+  }
+  body .av-section-nav a {
+    min-height: 38px;
+    padding: 0 6px;
+    font-size: 9px;
+  }
+  body .av-language-switcher {
+    right: 8px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+}
