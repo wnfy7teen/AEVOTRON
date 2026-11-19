@@ -1,3 +1,4 @@
+import "./landing.css";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useState } from "react";
