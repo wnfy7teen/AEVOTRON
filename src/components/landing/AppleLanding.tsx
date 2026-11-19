@@ -143,7 +143,7 @@ export default function AppleLanding() {
         </div>
       </div>
       <div className="av-footer-bottom">
-        <small>© {new Date().getFullYear()} AEVOTRON. Все права защищены.</small>
+        <small>© {new Date().getFullYear()} AEVOTRON. <span>Все права защищены.</span></small>
         <span>Developed by <strong>Kristofer Biksan</strong></span>
       </div>
     </footer>
