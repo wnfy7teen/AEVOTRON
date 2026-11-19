@@ -74,6 +74,22 @@ export default function AppleLanding() {
     return () => observer.disconnect();
   }, []);
   useEffect(() => {
+    const codeExample = document.querySelector(".av-site .av-code");
+    if (!codeExample) return;
+    if (!( "IntersectionObserver" in window)) {
+      codeExample.classList.add("is-typing");
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        codeExample.classList.add("is-typing");
+        observer.disconnect();
+      }
+    }, { threshold: 0.25 });
+    observer.observe(codeExample);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
     const sectionIds = ["platform", "security", "developers"];
     const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
     const observer = new IntersectionObserver((entries) => {
