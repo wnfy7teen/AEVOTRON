@@ -9,23 +9,27 @@
     "key_hash": {
       "type": "string",
       "description": "HMAC-SHA-256 hash; never store the plaintext API key",
-      "rls": { "read": false, "write": false }
+      "rls": {
+        "read": { "user_condition": { "role": "admin" } },
+        "write": { "user_condition": { "role": "admin" } }
+      }
     },
     "scopes_json": { "type": "string" },
     "last_used_at": { "type": "string", "format": "date-time" },
     "expires_at": { "type": "string", "format": "date-time" },
     "revoked_at": { "type": "string", "format": "date-time" },
-    "status": {
-      "type": "string",
-      "enum": ["active", "revoked", "expired"],
-      "default": "active"
-    }
+    "status": { "type": "string", "enum": ["active", "revoked", "expired"], "default": "active" }
   },
   "required": ["workspace_id", "owner_user_id", "name", "key_prefix", "key_hash", "status"],
   "rls": {
-    "create": false,
-    "read": { "data.owner_user_id": "{{user.id}}" },
-    "update": false,
-    "delete": false
+    "create": { "user_condition": { "role": "admin" } },
+    "read": {
+      "$or": [
+        { "data.owner_user_id": "{{user.id}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
+    },
+    "update": { "user_condition": { "role": "admin" } },
+    "delete": { "user_condition": { "role": "admin" } }
   }
 }
