@@ -540,3 +540,60 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   .av-section-nav a { min-height: 34px; padding: 0 9px; font-size: 10px; }
 }
 
+
+
+/* Mobile layout: keep the section navigation truly centered and separate
+   it vertically from the language picker. The !important transform also
+   overrides the desktop .is-visible positioning rule. */
+@media (max-width: 700px) {
+  body .av-section-nav,
+  body .av-section-nav.is-visible {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    min-width: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 5px;
+    border-radius: 999px;
+    transform: translateX(-50%) !important;
+  }
+  body .av-section-nav a {
+    min-width: 0;
+    min-height: 36px;
+    padding: 0 clamp(8px, 2.5vw, 12px);
+    justify-content: center;
+    white-space: nowrap;
+    font-size: clamp(9px, 2.7vw, 11px);
+  }
+  body .av-section-nav a i { display: none; }
+  body .av-language-switcher {
+    right: 14px;
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    z-index: 121;
+  }
+}
+@media (max-width: 390px) {
+  body .av-section-nav,
+  body .av-section-nav.is-visible {
+    max-width: calc(100vw - 20px);
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    gap: 2px;
+    padding: 4px;
+  }
+  body .av-section-nav a {
+    min-height: 34px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+  body .av-language-switcher {
+    right: 10px;
+    bottom: calc(64px + env(safe-area-inset-bottom));
+  }
+}
