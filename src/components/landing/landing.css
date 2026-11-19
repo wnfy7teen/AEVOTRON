@@ -133,13 +133,18 @@
   scroll-margin-top: 82px;
 }
 .av-site .av-reveal {
+  opacity: 1;
+  transform: none;
+}
+.av-site .av-reveal.av-reveal-ready:not(.is-visible) {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 650ms cubic-bezier(.2,.7,.25,1), transform 650ms cubic-bezier(.2,.7,.25,1);
+  transform: translateY(28px);
+  transition: opacity 720ms cubic-bezier(.2,.7,.25,1), transform 720ms cubic-bezier(.2,.7,.25,1);
 }
 .av-site .av-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+  transition: opacity 720ms cubic-bezier(.2,.7,.25,1), transform 720ms cubic-bezier(.2,.7,.25,1);
 }
 .av-site .av-nav-links a,
 .av-site .av-theme-switch button,
