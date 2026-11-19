@@ -751,3 +751,44 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 .av-site[data-theme="gray"] .av-code .av-code-result small {
   color: #84929e;
 }
+
+
+/* Hard-lock API code sample contrast in the gray theme.
+   Keep every code token readable even when global theme rules target nested spans. */
+.av-site[data-theme="gray"] .av-visual.av-code {
+  background: #111820 !important;
+  border-color: #273440 !important;
+  color: #e9eef4 !important;
+}
+.av-site[data-theme="gray"] .av-visual.av-code pre {
+  color: #e1e8f0 !important;
+  -webkit-text-fill-color: #e1e8f0;
+  opacity: 1 !important;
+}
+.av-site[data-theme="gray"] .av-visual.av-code pre .av-code-muted {
+  color: #d5a6f5 !important;
+  -webkit-text-fill-color: #d5a6f5;
+}
+.av-site[data-theme="gray"] .av-visual.av-code pre .av-code-blue {
+  color: #91c9ff !important;
+  -webkit-text-fill-color: #91c9ff;
+}
+.av-site[data-theme="gray"] .av-visual.av-code pre .av-code-green {
+  color: #a9e2a5 !important;
+  -webkit-text-fill-color: #a9e2a5;
+}
+.av-site[data-theme="gray"] .av-visual.av-code .av-window-bar {
+  background: #18222d !important;
+  border-color: #273440 !important;
+}
+.av-site[data-theme="gray"] .av-visual.av-code .av-window-bar small {
+  color: #aebbc8 !important;
+}
+.av-site[data-theme="gray"] .av-visual.av-code .av-code-result {
+  color: #b7e0bd !important;
+  background: #18242d !important;
+  border-color: #2c3c49 !important;
+}
+.av-site[data-theme="gray"] .av-visual.av-code .av-code-result small {
+  color: #a0acb8 !important;
+}
