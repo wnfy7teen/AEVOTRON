@@ -1,6 +1,6 @@
 import "./landing.css";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Sun, Moon, Cloud } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Moon, Cloud } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type FeatureVisualProps = { variant: "routing" | "control" | "integration" };
@@ -45,7 +45,7 @@ const features: Feature[] = [
 export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [theme, setTheme] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-theme") || "gray" : "gray");
+  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
   useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
@@ -59,7 +59,6 @@ export default function AppleLanding() {
       </nav>
       <div className="av-nav-actions"><Link to="/login" className="av-login">Войти</Link><Link to="/register" className="av-nav-cta">Начать работу <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label="Тема оформления">
-        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label="Белая тема" aria-pressed={theme === "light"} title="Белая"><Sun size={16} /><span>Белая</span></button>
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label="Тёмная тема" aria-pressed={theme === "dark"} title="Тёмная"><Moon size={16} /><span>Тёмная</span></button>
         <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label="Серая тема" aria-pressed={theme === "gray"} title="Серая"><Cloud size={16} /><span>Серая</span></button>
       </div>
