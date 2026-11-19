@@ -259,7 +259,6 @@ export function LanguageProvider({ children }) {
     const saved = window.localStorage.getItem("aevotron-language");
     const initial = supported.includes(saved) ? saved : "en";
     setLanguageState(initial);
-    applyTranslations(initial);
   }, []);
   useEffect(() => {
     applyTranslations(language);
