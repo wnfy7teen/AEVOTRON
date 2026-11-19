@@ -887,3 +887,10 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
     min-width: 0;
   }
 }
+
+/* Character-by-character typing for the API key management preview. */
+.av-site .av-control .av-typed-char {
+  display: inline;
+  opacity: 0;
+  transition: opacity 0s;
+}
