@@ -40,7 +40,7 @@ type Feature = { eyebrow: string; title: string; description: string; variant: F
 const features: Feature[] = [
   { eyebrow: "ЕДИНЫЙ ИНТЕРФЕЙС", title: "Разные модели. Один способ работы.", description: "Подключайтесь к моделям разных провайдеров через согласованный API и меняйте модели без перестройки интеграции.", variant: "routing" },
   { eyebrow: "КОНТРОЛЬ ДОСТУПА", title: "Ваши ключи. Ваши правила.", description: "Храните учётные данные провайдеров на серверной стороне и управляйте доступом из одного рабочего пространства.", variant: "control", reverse: true },
-  { eyebrow: "ДЛЯ РАЗРАБОТЧИКОВ", title: "Интеграция, которая не мешает работе.", description: "Используйте привычный формат запросов, подключайте существующие инструменты и сосредоточьтесь на своём продукте.", variant: "integration" },
+  { eyebrow: "ДЛЯ РАЗРАБОТЧИКОВ", title: "Интеграция,\u00a0которая не мешает работе.", description: "Используйте привычный формат запросов, подключайте существующие инструменты и сосредоточьтесь на своём продукте.", variant: "integration" },
 ];
 
 export default function AppleLanding() {
@@ -110,7 +110,7 @@ export default function AppleLanding() {
       <h1>Все модели.<br /><span>Один API.</span></h1>
       <p className="av-hero-copy">Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.</p>
       <div className="av-hero-actions"><Link to="/register" className="av-primary-button">Создать аккаунт <ArrowRight size={17} /></Link><a href="#developers" className="av-secondary-button">Как это работает <ChevronRight size={17} /></a></div>
-      <div className="av-hero-footnote"><ShieldCheck size={15} /> Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем</div>
+      <div className="av-hero-footnote"><ShieldCheck size={15} /><span className="av-hero-footnote-text">Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем</span></div>
       <div className="av-hero-art" aria-label="Визуализация единого API AEVOTRON"><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>AEVOTRON</strong><small>UNIFIED API</small></div><div className="av-orbit-label av-label-top">ONE INTERFACE</div><div className="av-orbit-label av-label-bottom">MULTIPLE MODELS</div></div>
     </section>
     <section className="av-intro av-reveal"><p>ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ</p><h2>Меньше связующего кода.<br />Больше времени на продукт.</h2></section>
