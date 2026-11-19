@@ -66,7 +66,7 @@ const dictionaries = {
     "Add an extra layer of protection when signing in. You'll be asked for a code each time you sign in.":"Добавьте дополнительный уровень защиты. При каждом входе потребуется код.",
     "Country code":"Код страны","Remember this device for 30 days":"Запомнить это устройство на 30 дней",
     "Provider connections":"Подключения провайдеров","API reference":"Справочник API","Preferences":"Настройки",
-    "Language":"Язык","English":"Английский","Russian":"Русский","Chinese (Simplified)":"Китайский (упрощённый)"
+    "Language":"Язык","English":"Английский","Russian":"Русский","Chinese (Simplified)":"Китайский (упрощённый)",
     "One API. Every model.":"Один API. Любая модель.",
     "Three steps to your first API call.":"Три шага до первого вызова API.",
     "Across 6 model families":"В 6 семействах моделей","Input + output":"Входящие + исходящие","All time":"За всё время",
@@ -164,7 +164,7 @@ const dictionaries = {
     "Enter the code from your authenticator app":"请输入身份验证器应用中的验证码","Enter the code sent to":"请输入发送至以下号码的验证码",
     "Sending code to":"正在向以下号码发送验证码","Set up your authenticator app":"设置身份验证器应用","Enter your phone number":"输入您的电话号码",
     "Add an extra layer of protection when signing in. You'll be asked for a code each time you sign in.":"增加一层登录保护。每次登录时，您都需要输入验证码。",
-    "Country code":"国家/地区代码","Language":"语言","English":"英语","Russian":"俄语","Chinese (Simplified)":"简体中文"
+    "Country code":"国家/地区代码","Language":"语言","English":"英语","Russian":"俄语","Chinese (Simplified)":"简体中文",
     "One API. Every model.":"一个 API，连接所有模型。",
     "Three steps to your first API call.":"只需三个步骤即可发起首次 API 调用。",
     "Across 6 model families":"涵盖 6 个模型系列","Input + output":"输入 + 输出","All time":"全部时间",
