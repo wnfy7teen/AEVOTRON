@@ -2,6 +2,7 @@ import "./landing.css";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Moon, Cloud } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type FeatureVisualProps = { variant: "routing" | "control" | "integration" };
 
@@ -90,7 +91,8 @@ export default function AppleLanding() {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
   };
-  return <main className="av-site" data-theme={theme}>
+  return <>
+  <main className="av-site" data-theme={theme}>
     <header className="av-header"><div className="av-nav-wrap">
       <Link to="/" className="av-brand" aria-label="AEVOTRON — главная"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
       <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label="Основная навигация">
@@ -103,12 +105,6 @@ export default function AppleLanding() {
       </div>
       <button className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
-    <aside className="av-section-nav is-visible" aria-label="Навигация по разделам">
-      <span className="av-section-nav-label">НА СТРАНИЦЕ</span>
-      <a href="#platform" className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />Platform</a>
-      <a href="#security" className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />Security</a>
-      <a href="#developers" className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />Developers</a>
-    </aside>
     <section className="av-hero av-reveal" id="platform">
       <div className="av-hero-kicker"><span /> ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ</div>
       <h1>Все модели.<br /><span>Один API.</span></h1>
@@ -124,5 +120,15 @@ export default function AppleLanding() {
     </section>)}
     <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
     <footer className="av-footer av-reveal"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><div className="av-footer-contact"><strong>Developed by Kristofer Biksan</strong><a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram: @web3ResearchCN</a><a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
-  </main>;
+  </main>
+  {typeof document !== "undefined" && createPortal(
+    <aside className="av-section-nav is-visible" data-theme={theme} aria-label="Навигация по разделам">
+      <span className="av-section-nav-label">НА СТРАНИЦЕ</span>
+      <a href="#platform" className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />Platform</a>
+      <a href="#security" className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />Security</a>
+      <a href="#developers" className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />Developers</a>
+    </aside>,
+    document.body
+  )}
+  </>;
 }
