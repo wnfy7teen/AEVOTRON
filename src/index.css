@@ -55,3 +55,24 @@ body {
     transition: none !important;
   }
 }
+
+
+/* Consistent transitions when switching application pages */
+.app-route-transition {
+  min-height: 100%;
+  animation: app-route-enter 420ms cubic-bezier(.2,.7,.25,1) both;
+  will-change: opacity, transform;
+}
+@keyframes app-route-enter {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.mh-content, .mh-page-heading, .mh-panel, .mh-stat, .mh-provider-card, .mh-model-row {
+  transition: opacity 220ms ease, transform 220ms ease, background-color 220ms ease, border-color 220ms ease;
+}
+.mh-nav-item, .mh-button, .mh-icon-button, .mh-tab, [role="tab"] {
+  transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 200ms ease, opacity 200ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-route-transition { animation: none !important; }
+}
