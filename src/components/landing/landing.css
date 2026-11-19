@@ -311,7 +311,10 @@ html:has(.av-site) { scroll-behavior: smooth; }
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }
 }
-.av-site .av-section-nav { animation: av-nav-enter 650ms 350ms cubic-bezier(.18,.72,.24,1) both; }
+@media (min-width: 701px) {
+  /* The navigator is rendered through a portal directly under body. */
+  .av-section-nav { animation: av-nav-enter 650ms 350ms cubic-bezier(.18,.72,.24,1) both; }
+}
 @keyframes av-nav-enter {
   from { opacity: 0; transform: translate3d(22px, -50%, 0); }
   to { opacity: 1; transform: translate3d(0, -50%, 0); }
@@ -342,7 +345,7 @@ html:has(.av-site) { scroll-behavior: smooth; }
   .av-site .av-orbit-one,
   .av-site .av-orbit-two,
   .av-site .av-core,
-  .av-site .av-section-nav {
+  .av-section-nav {
     animation: none !important;
   }
 }
