@@ -516,11 +516,68 @@ const dictionaries = {
   }
 };
 
+const landingTranslations = {
+  "Схема единого API и подключённых моделей": { en: "Unified API and connected models diagram", zh: "统一 API 与已连接模型示意图" },
+  "Единая точка доступа": { en: "Single access point", zh: "统一接入点" },
+  "Подключено": { en: "Connected", zh: "已连接" },
+  "Интерфейс управления API-ключами": { en: "API key management interface", zh: "API 密钥管理界面" },
+  "Безопасность · API-ключи": { en: "Security · API keys", zh: "安全 · API 密钥" },
+  "АКТИВНЫЙ КЛЮЧ": { en: "ACTIVE KEY", zh: "当前密钥" },
+  "Создан сегодня · Полный доступ": { en: "Created today · Full access", zh: "今天创建 · 完全访问权限" },
+  "Защищён": { en: "Protected", zh: "已受保护" },
+  "Разрешения": { en: "Permissions", zh: "权限" },
+  "Последнее использование": { en: "Last used", zh: "最近使用" },
+  "2 минуты назад": { en: "2 minutes ago", zh: "2 分钟前" },
+  "Пример запроса к API AEVOTRON": { en: "AEVOTRON API request example", zh: "AEVOTRON API 请求示例" },
+  "Ответ получен": { en: "Response received", zh: "已收到响应" },
+  "ЕДИНЫЙ ИНТЕРФЕЙС": { en: "ONE INTERFACE", zh: "统一接口" },
+  "Разные модели. Один способ работы.": { en: "Different models. One way to work.", zh: "不同模型，同一种使用方式。" },
+  "Подключайтесь к моделям разных провайдеров через согласованный API и меняйте модели без перестройки интеграции.": { en: "Connect to models from different providers through a consistent API and switch models without rebuilding your integration.", zh: "通过统一 API 接入不同服务商的模型，无需重构集成即可切换模型。" },
+  "КОНТРОЛЬ ДОСТУПА": { en: "ACCESS CONTROL", zh: "访问控制" },
+  "Ваши ключи. Ваши правила.": { en: "Your keys. Your rules.", zh: "您的密钥，由您掌控。" },
+  "Храните учётные данные провайдеров на серверной стороне и управляйте доступом из одного рабочего пространства.": { en: "Keep provider credentials server-side and manage access from a single workspace.", zh: "在服务器端安全保存服务商凭据，并通过一个工作空间统一管理访问权限。" },
+  "ДЛЯ РАЗРАБОТЧИКОВ": { en: "FOR DEVELOPERS", zh: "面向开发者" },
+  "Интеграция, которая не мешает работе.": { en: "An integration that stays out of your way.", zh: "让集成融入工作，而不是打断工作。" },
+  "Используйте привычный формат запросов, подключайте существующие инструменты и сосредоточьтесь на своём продукте.": { en: "Use a familiar request format, connect your existing tools, and focus on your product.", zh: "使用熟悉的请求格式，连接现有工具，并专注于您的产品。" },
+  "Платформа": { en: "Platform", zh: "平台" },
+  "Безопасность": { en: "Security", zh: "安全" },
+  "Разработчикам": { en: "Developers", zh: "开发者" },
+  "Войти": { en: "Sign in", zh: "登录" },
+  "Начать работу": { en: "Get started", zh: "开始使用" },
+  "Закрыть меню": { en: "Close menu", zh: "关闭菜单" },
+  "Открыть меню": { en: "Open menu", zh: "打开菜单" },
+  "ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ": { en: "INFRASTRUCTURE FOR AI PRODUCTS", zh: "AI 产品基础设施" },
+  "Все модели.": { en: "Every model.", zh: "所有模型。" },
+  "Один API.": { en: "One API.", zh: "一个 API。" },
+  "Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.": { en: "Connect AI models from different providers through one interface, without unnecessary integration complexity.", zh: "通过统一界面连接不同服务商的 AI 模型，简化集成流程。" },
+  "Создать аккаунт": { en: "Create an account", zh: "创建账户" },
+  "Как это работает": { en: "How it works", zh: "工作原理" },
+  "Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем": { en: "BYOK architecture · Your provider keys stay under your control", zh: "BYOK 架构 · 服务商密钥始终由您掌控" },
+  "Визуализация единого API AEVOTRON": { en: "AEVOTRON unified API visualization", zh: "AEVOTRON 统一 API 示意图" },
+  "ONE INTERFACE": { en: "ONE INTERFACE", zh: "统一接口" },
+  "MULTIPLE MODELS": { en: "MULTIPLE MODELS", zh: "多种模型" },
+  "ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ": { en: "ONE ENVIRONMENT FOR WORKING WITH MODELS", zh: "统一的模型工作环境" },
+  "Меньше связующего кода.": { en: "Less glue code.", zh: "更少的连接代码。" },
+  "Больше времени на продукт.": { en: "More time for your product.", zh: "为产品创造更多时间。" },
+  "Скопировано": { en: "Copied", zh: "已复制" },
+  "Скопировать адрес API": { en: "Copy API endpoint", zh: "复制 API 地址" },
+  "Создайте свою следующую интеграцию.": { en: "Build your next integration.", zh: "构建您的下一个集成。" },
+  "Начните с одного API и подключайте нужные модели по мере роста проекта.": { en: "Start with one API and add the models you need as your project grows.", zh: "从一个 API 开始，随着项目发展按需接入模型。" },
+  "Единый интерфейс для AI-моделей.": { en: "One interface for AI models.", zh: "AI 模型的统一接口。" },
+  "Регистрация": { en: "Sign up", zh: "注册" }
+};
+
 const supported = ["en", "ru", "zh"];
 const translateText = (value, language) => {
-  if (language === "en" || !value) return value;
-  const dictionary = dictionaries[language];
+  if (!value) return value;
   const trimmed = value.trim();
+  const landingTranslation = landingTranslations[trimmed];
+  if (landingTranslation) {
+    const translated = landingTranslation[language] ?? trimmed;
+    return value.replace(trimmed, translated);
+  }
+  if (language === "en") return value;
+  const dictionary = dictionaries[language];
   if (dictionary[trimmed]) return value.replace(trimmed, dictionary[trimmed]);
   let result = value;
   for (const [source, target] of Object.entries(dictionary).sort((a, b) => b[0].length - a[0].length)) {
