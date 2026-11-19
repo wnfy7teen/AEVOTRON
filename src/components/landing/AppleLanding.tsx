@@ -1,7 +1,7 @@
 import "./landing.css";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Sun, Moon, Cloud } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type FeatureVisualProps = { variant: "routing" | "control" | "integration" };
 
