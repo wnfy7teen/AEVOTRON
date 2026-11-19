@@ -49,11 +49,7 @@ export default function AppleLanding() {
   useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      sections.forEach((section) => section.classList.add("is-visible"));
-      return;
-    }
-    if (!("IntersectionObserver" in window)) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       sections.forEach((section) => section.classList.add("is-visible"));
       return;
     }
@@ -64,8 +60,15 @@ export default function AppleLanding() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
-    sections.forEach((section) => observer.observe(section));
+    }, { threshold: 0.08, rootMargin: "0px 0px -24px 0px" });
+    sections.forEach((section) => {
+      section.classList.add("av-reveal-ready");
+      if (section.getBoundingClientRect().top < window.innerHeight * 0.92) {
+        section.classList.add("is-visible");
+      } else {
+        observer.observe(section);
+      }
+    });
     return () => observer.disconnect();
   }, []);
   const copyEndpoint = async () => {
