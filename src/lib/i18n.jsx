@@ -662,20 +662,33 @@ export function useLanguage() {
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const options = [
+    { code: "en", label: "English", native: "EN" },
+    { code: "ru", label: "Русский", native: "RU" },
+    { code: "zh", label: "简体中文", native: "中文" },
+  ];
+  const current = options.find((option) => option.code === language) ?? options[0];
   return (
-    <div className="fixed bottom-5 right-5 z-[100]">
-      <label className="sr-only" htmlFor="aevotron-language">Language</label>
-      <select
-        id="aevotron-language"
-        aria-label="Language"
-        value={language}
-        onChange={(event) => setLanguage(event.target.value)}
-        className="rounded-lg border border-white/15 bg-slate-950/90 px-3 py-2 text-sm font-medium text-white shadow-lg backdrop-blur focus:outline-none focus:ring-2 focus:ring-cyan-300"
-      >
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-        <option value="zh">简体中文</option>
-      </select>
+    <div className="av-language-switcher" data-open={open}>
+      {open && <div className="av-language-menu" role="listbox" aria-label="Language">
+        <span className="av-language-menu-title">ЯЗЫК ИНТЕРФЕЙСА</span>
+        {options.map((option) => (
+          <button key={option.code} type="button" role="option" aria-selected={language === option.code}
+            className={language === option.code ? "active" : ""}
+            onClick={() => { setLanguage(option.code); setOpen(false); }}>
+            <span className="av-language-native">{option.native}</span>
+            <span>{option.label}</span>
+            {language === option.code && <Check size={15} />}
+          </button>
+        ))}
+      </div>}
+      <button type="button" className="av-language-trigger" aria-label="Language" aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}>
+        <span className="av-language-globe">文</span>
+        <span className="av-language-current">{current.native}</span>
+        <ChevronDown size={14} className={open ? "is-open" : ""} />
+      </button>
     </div>
   );
 }
