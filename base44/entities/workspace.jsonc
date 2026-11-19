@@ -4,7 +4,10 @@
   "properties": {
     "owner_user_id": {
       "type": "string",
-      "description": "Base44 user ID of the workspace owner"
+      "description": "Immutable Base44 user ID of the workspace owner",
+      "rls": {
+        "write": false
+      }
     },
     "name": {
       "type": "string",
@@ -12,49 +15,20 @@
     },
     "region": {
       "type": "string",
-      "enum": [
-        "global",
-        "eu",
-        "us",
-        "ru"
-      ],
+      "enum": ["global", "eu", "us", "ru"],
       "default": "global"
     },
     "status": {
       "type": "string",
-      "enum": [
-        "active",
-        "suspended"
-      ],
+      "enum": ["active", "suspended"],
       "default": "active"
     }
   },
-  "required": [
-    "owner_user_id",
-    "name",
-    "region",
-    "status"
-  ],
+  "required": ["owner_user_id", "name", "region", "status"],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "read": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
+    "create": { "data.owner_user_id": "{{user.id}}" },
+    "read": { "data.owner_user_id": "{{user.id}}" },
+    "update": { "data.owner_user_id": "{{user.id}}" },
+    "delete": { "data.owner_user_id": "{{user.id}}" }
   }
 }
