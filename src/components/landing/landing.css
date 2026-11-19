@@ -811,3 +811,21 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 .av-site .av-code .av-code-result.is-typed {
   opacity: 1;
 }
+
+
+/* Mobile: keep the key protection label visible beside its shield icon. */
+@media (max-width: 520px) {
+  .av-site .av-key-status {
+    flex: 0 0 auto;
+    gap: 6px;
+    padding: 8px 10px;
+    font-size: 9px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .av-site .av-key-status svg {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+  }
+}
