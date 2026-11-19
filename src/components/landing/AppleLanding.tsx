@@ -47,6 +47,27 @@ export default function AppleLanding() {
   const [copied, setCopied] = useState(false);
   const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
   useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
+  useEffect(() => {
+    const sections = document.querySelectorAll(".av-site .av-reveal");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      sections.forEach((section) => section.classList.add("is-visible"));
+      return;
+    }
+    if (!("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
@@ -64,7 +85,7 @@ export default function AppleLanding() {
       </div>
       <button className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
-    <section className="av-hero" id="platform">
+    <section className="av-hero av-reveal" id="platform">
       <div className="av-hero-kicker"><span /> ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ</div>
       <h1>Все модели.<br /><span>Один API.</span></h1>
       <p className="av-hero-copy">Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.</p>
@@ -72,12 +93,12 @@ export default function AppleLanding() {
       <div className="av-hero-footnote"><ShieldCheck size={15} /> Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем</div>
       <div className="av-hero-art" aria-label="Визуализация единого API AEVOTRON"><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>AEVOTRON</strong><small>UNIFIED API</small></div><div className="av-orbit-label av-label-top">ONE INTERFACE</div><div className="av-orbit-label av-label-bottom">MULTIPLE MODELS</div></div>
     </section>
-    <section className="av-intro"><p>ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ</p><h2>Меньше связующего кода.<br />Больше времени на продукт.</h2></section>
-    {features.map((feature, index) => <section className={"av-feature " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
+    <section className="av-intro av-reveal"><p>ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ</p><h2>Меньше связующего кода.<br />Больше времени на продукт.</h2></section>
+    {features.map((feature, index) => <section className={"av-feature av-reveal " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
       <div className="av-feature-copy"><span className="av-eyebrow">{feature.eyebrow}</span><h2>{feature.title}</h2><p>{feature.description}</p>{index === 2 && <button className="av-inline-link" onClick={copyEndpoint}>{copied ? <><Check size={15} /> Скопировано</> : <><Copy size={15} /> Скопировать адрес API</>}</button>}</div>
       <FeatureVisual variant={feature.variant} />
     </section>)}
-    <section className="av-final-cta"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
-    <footer className="av-footer"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><div className="av-footer-contact"><strong>Developed by Kristofer Biksan</strong><a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram: @web3ResearchCN</a><a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
+    <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
+    <footer className="av-footer av-reveal"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><div className="av-footer-contact"><strong>Developed by Kristofer Biksan</strong><a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram: @web3ResearchCN</a><a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
   </main>;
 }
