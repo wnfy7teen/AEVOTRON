@@ -566,7 +566,14 @@ const landingTranslations = {
   "Единый интерфейс для AI-моделей.": { en: "One interface for AI models.", zh: "AI 模型的统一接口。" },
   "Регистрация": { en: "Sign up", zh: "注册" },
   "Разработчик: Kristofer Biksan": { en: "Developer: Kristofer Biksan", zh: "开发者：Kristofer Biksan" },
-  "Telegram: @web3ResearchCN": { en: "Telegram: @web3ResearchCN", zh: "Telegram：@web3ResearchCN" }
+  "Telegram: @web3ResearchCN": { en: "Telegram: @web3ResearchCN", zh: "Telegram：@web3ResearchCN" },
+  "Тема оформления": { en: "Appearance", zh: "外观主题" },
+  "Белая тема": { en: "Light theme", zh: "浅色主题" },
+  "Тёмная тема": { en: "Dark theme", zh: "深色主题" },
+  "Серая тема": { en: "Gray theme", zh: "灰色主题" },
+  "Белая": { en: "Light", zh: "浅色" },
+  "Тёмная": { en: "Dark", zh: "深色" },
+  "Серая": { en: "Gray", zh: "灰色" }
 };
 
 const supported = ["en", "ru", "zh"];
