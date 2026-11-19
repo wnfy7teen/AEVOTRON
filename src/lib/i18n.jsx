@@ -104,7 +104,7 @@ const dictionaries = {
     "AI INFRASTRUCTURE, SIMPLIFIED":"ИНФРАСТРУКТУРА ИИ — ПРОСТО","WORKSPACE":"РАБОЧЕЕ ПРОСТРАНСТВО","SETTINGS":"НАСТРОЙКИ",
     "Overview":"Обзор","Model catalog":"Каталог моделей","API keys":"API-ключи","Providers":"Провайдеры",
     "Quickstart":"Быстрый старт","API reference":"Справочник API","Preferences":"Настройки",
-    "Model catalog":"Каталог моделей","Provider connections":"Подключения провайдеров","Usage & logs":"Использование и журналы"
+    "Model catalog":"Каталог моделей","Provider connections":"Подключения провайдеров","Usage & logs":"Использование и журналы",
     "Welcome back":"С возвращением","Log in to your account":"Войдите в свой аккаунт","Invalid email or password":"Неверная почта или пароль","Logging in...":"Выполняется вход...","Log in":"Войти","Create one":"Создать аккаунт",
     "Create your account":"Создайте аккаунт","Sign up to get started":"Зарегистрируйтесь, чтобы начать","Registration failed":"Не удалось зарегистрироваться","Invalid verification code":"Неверный код подтверждения","Code sent":"Код отправлен","Check your email for the new code.":"Проверьте почту: мы отправили новый код.","Failed to resend code":"Не удалось отправить код повторно","We sent a 6-digit code to":"Мы отправили 6-значный код на","Didn't receive the code?":"Не получили код?","Resend":"Отправить повторно","Creating account...":"Создание аккаунта...","is already verified. Sign in to continue.":"уже подтверждён. Войдите, чтобы продолжить.",
     "We'll send you a link to reset it":"Мы отправим вам ссылку для сброса пароля","If an account exists with that email, you'll receive a password reset link shortly.":"Если аккаунт с таким адресом существует, вы скоро получите ссылку для сброса пароля.","Email address":"Адрес электронной почты","Back to log in":"Вернуться ко входу",
@@ -204,7 +204,7 @@ const dictionaries = {
     "AI INFRASTRUCTURE, SIMPLIFIED":"让 AI 基础设施更简单","WORKSPACE":"工作空间","SETTINGS":"设置",
     "Overview":"概览","Model catalog":"模型目录","API keys":"API 密钥","Providers":"服务提供商",
     "Quickstart":"快速开始","API reference":"API 参考","Preferences":"偏好设置",
-    "Provider connections":"服务商连接","Usage & logs":"用量与日志"
+    "Provider connections":"服务商连接","Usage & logs":"用量与日志",
     "Welcome back":"欢迎回来","Log in to your account":"登录您的账户","Invalid email or password":"邮箱或密码错误","Logging in...":"正在登录...","Log in":"登录","Create one":"创建账户",
     "Create your account":"创建账户","Sign up to get started":"注册以开始使用","Registration failed":"注册失败","Invalid verification code":"验证码无效","Code sent":"验证码已发送","Check your email for the new code.":"请查看邮箱中的新验证码。","Failed to resend code":"重新发送验证码失败","We sent a 6-digit code to":"我们已发送 6 位验证码至","Didn't receive the code?":"没有收到验证码？","Resend":"重新发送","Creating account...":"正在创建账户...","is already verified. Sign in to continue.":"已完成验证。请登录以继续。",
     "We'll send you a link to reset it":"我们将向您发送密码重置链接","If an account exists with that email, you'll receive a password reset link shortly.":"如果该邮箱对应的账户存在，您很快就会收到密码重置链接。","Email address":"电子邮箱地址","Back to log in":"返回登录",
