@@ -12,7 +12,7 @@ async function post(suffix, body, token) {
   const response = await fetch(authPath(suffix), {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    headers: { "Content-Type": "application/json", "X-App-Id": appId(), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     body: JSON.stringify(body),
   });
   const result = await response.json();
