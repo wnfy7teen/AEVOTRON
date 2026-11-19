@@ -2,33 +2,22 @@
   "name": "ProviderConnection",
   "type": "object",
   "properties": {
-    "workspace_id": {
-      "type": "string"
-    },
-    "owner_user_id": {
-      "type": "string"
-    },
-    "provider_code": {
-      "type": "string"
-    },
-    "display_name": {
-      "type": "string"
-    },
+    "workspace_id": { "type": "string" },
+    "owner_user_id": { "type": "string" },
+    "provider_code": { "type": "string" },
+    "display_name": { "type": "string" },
     "credential_ciphertext": {
       "type": "string",
-      "description": "Encrypted credential only; never store plaintext provider API keys"
+      "description": "Encrypted credential only; never store plaintext provider API keys",
+      "rls": { "read": false, "write": false }
     },
     "credential_key_version": {
-      "type": "string"
+      "type": "string",
+      "rls": { "read": false, "write": false }
     },
     "status": {
       "type": "string",
-      "enum": [
-        "pending",
-        "active",
-        "error",
-        "revoked"
-      ],
+      "enum": ["pending", "active", "error", "revoked"],
       "default": "pending"
     },
     "last_tested_at": {
@@ -36,32 +25,11 @@
       "format": "date-time"
     }
   },
-  "required": [
-    "workspace_id",
-    "owner_user_id",
-    "provider_code",
-    "status"
-  ],
+  "required": ["workspace_id", "owner_user_id", "provider_code", "status"],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "read": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
+    "create": false,
+    "read": { "data.owner_user_id": "{{user.id}}" },
+    "update": false,
+    "delete": false
   }
 }
