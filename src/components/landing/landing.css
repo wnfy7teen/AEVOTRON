@@ -27,3 +27,41 @@
 .av-footer-contact a:hover{color:var(--av-blue)}
 .av-footer>div{margin-left:0}
 @media(max-width:800px){.av-footer{align-items:flex-start}.av-footer-contact{width:100%;margin-left:0}.av-footer>div{margin-left:0}}
+
+
+/* Clearly visible soft-gray page theme */
+.av-site {
+  background: #e7eaee;
+}
+.av-header {
+  background: rgba(231, 234, 238, .92);
+}
+.av-hero {
+  background: #e7eaee;
+}
+.av-intro,
+.av-final-cta {
+  background: #dfe4e9;
+}
+.av-feature {
+  background: transparent;
+}
+.av-visual {
+  background-color: #f8f9fa;
+  border-color: #d9dfe5;
+}
+.av-control {
+  background: #e3e7eb;
+}
+.av-routing {
+  background: radial-gradient(ellipse at 50% 50%, #e4edf5 0%, #f4f6f8 70%);
+}
+.av-footer {
+  background: #e7eaee;
+  border-top-color: #cfd6dd;
+}
+@media (max-width: 800px) {
+  .av-nav-links {
+    background: rgba(231, 234, 238, .98);
+  }
+}
