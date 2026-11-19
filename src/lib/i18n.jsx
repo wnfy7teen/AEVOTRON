@@ -216,7 +216,7 @@ const translateText = (value, language) => {
       if (result.includes(source)) result = result.replaceAll(source, target);
     } else {
       const pattern = new RegExp("\\b" + source + "\\b", "g");
-      result = result.replace(new RegExp(`\\\\b${escaped}\\\\b`, "g"), target);
+      result = result.replace(pattern, target);
     }
   }
   return result;
