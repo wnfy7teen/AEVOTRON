@@ -161,3 +161,33 @@
     transition: none !important;
   }
 }
+
+
+/* Prevent the rotated hero orbit from colliding with the intro section */
+.av-hero-art {
+  margin-bottom: 54px;
+}
+.av-intro {
+  position: relative;
+  z-index: 1;
+  padding-top: 68px;
+  padding-bottom: 58px;
+}
+@media (max-width: 800px) {
+  .av-hero-art {
+    margin-bottom: 42px;
+  }
+  .av-intro {
+    padding-top: 58px;
+    padding-bottom: 48px;
+  }
+}
+@media (max-width: 520px) {
+  .av-hero-art {
+    margin-bottom: 34px;
+  }
+  .av-intro {
+    padding-top: 48px;
+    padding-bottom: 42px;
+  }
+}
