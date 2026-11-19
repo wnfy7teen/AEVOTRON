@@ -1,4 +1,4 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Outlet, Scripts, createRootRoute, useRouterState } from "@tanstack/react-router";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import { NotFound } from "@/components/NotFound";
 import { Toaster } from "@/components/ui/sonner";
@@ -24,10 +24,11 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
     <LanguageProvider>
       <AuthProvider>
-        <Outlet />
+        <div key={pathname} className="app-route-transition"><Outlet /></div>
         <Toaster />
         <LanguageSwitcher />
       </AuthProvider>
