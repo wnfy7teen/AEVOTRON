@@ -99,7 +99,7 @@ const isInAppBrowser = () => /LinkedIn|Twitter/i.test(navigator.userAgent);
 
 // The app's sign-in settings: auth_config holds mfa_policy and the enabled sign-in methods.
 export async function loadSignInOptions() {
-  const response = await fetch(`/api/apps/public/login-info/by-id/${appId()}`);
+  const response = await fetch(`/api/apps/public/login-info/by-id/${appId()}`, { headers: { "X-App-Id": appId() } });
   if (!response.ok) throw new Error('Unable to load sign-in options');
   return response.json();
 }
