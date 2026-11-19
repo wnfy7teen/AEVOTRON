@@ -2,55 +2,23 @@
   "name": "WorkspaceMember",
   "type": "object",
   "properties": {
-    "workspace_id": {
-      "type": "string"
-    },
-    "user_id": {
-      "type": "string"
-    },
-    "role": {
-      "type": "string",
-      "enum": [
-        "owner",
-        "admin",
-        "member"
-      ]
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "invited",
-        "active",
-        "revoked"
-      ]
-    }
+    "workspace_id": { "type": "string" },
+    "owner_user_id": { "type": "string", "description": "Workspace owner ID; set by trusted backend code" },
+    "user_id": { "type": "string" },
+    "role": { "type": "string", "enum": ["owner", "admin", "member"] },
+    "status": { "type": "string", "enum": ["invited", "active", "revoked"] }
   },
-  "required": [
-    "workspace_id",
-    "user_id",
-    "role",
-    "status"
-  ],
+  "required": ["workspace_id", "owner_user_id", "user_id", "role", "status"],
   "rls": {
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
+    "create": { "user_condition": { "role": "admin" } },
     "read": {
-      "user_condition": {
-        "role": "admin"
-      }
+      "$or": [
+        { "data.owner_user_id": "{{user.id}}" },
+        { "data.user_id": "{{user.id}}" },
+        { "user_condition": { "role": "admin" } }
+      ]
     },
-    "update": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
+    "update": { "user_condition": { "role": "admin" } },
+    "delete": { "user_condition": { "role": "admin" } }
   }
 }
