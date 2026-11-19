@@ -1,6 +1,6 @@
 import "./landing.css";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Sun, Moon, Cloud } from "lucide-react";
 import { useState } from "react";
 
 type FeatureVisualProps = { variant: "routing" | "control" | "integration" };
@@ -45,17 +45,24 @@ const features: Feature[] = [
 export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [theme, setTheme] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-theme") || "gray" : "gray");
+  useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
   };
-  return <main className="av-site">
+  return <main className="av-site" data-theme={theme}>
     <header className="av-header"><div className="av-nav-wrap">
       <Link to="/" className="av-brand" aria-label="AEVOTRON — главная"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
       <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label="Основная навигация">
         <a href="#platform" onClick={() => setMenuOpen(false)}>Платформа</a><a href="#security" onClick={() => setMenuOpen(false)}>Безопасность</a><a href="#developers" onClick={() => setMenuOpen(false)}>Разработчикам</a>
       </nav>
       <div className="av-nav-actions"><Link to="/login" className="av-login">Войти</Link><Link to="/register" className="av-nav-cta">Начать работу <ArrowRight size={15} /></Link></div>
+      <div className="av-theme-switch" role="group" aria-label="Тема оформления">
+        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label="Белая тема" aria-pressed={theme === "light"} title="Белая"><Sun size={16} /><span>Белая</span></button>
+        <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label="Тёмная тема" aria-pressed={theme === "dark"} title="Тёмная"><Moon size={16} /><span>Тёмная</span></button>
+        <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label="Серая тема" aria-pressed={theme === "gray"} title="Серая"><Cloud size={16} /><span>Серая</span></button>
+      </div>
       <button className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
     <section className="av-hero" id="platform">
