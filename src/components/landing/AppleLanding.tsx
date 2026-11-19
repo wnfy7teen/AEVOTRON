@@ -141,7 +141,6 @@ export default function AppleLanding() {
   useEffect(() => {
     const controlExample = document.querySelector(".av-site .av-control");
     if (!controlExample) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let observer: IntersectionObserver | undefined;
     let timer: number | undefined;
     let cancelled = false;
