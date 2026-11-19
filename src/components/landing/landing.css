@@ -829,3 +829,61 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
     height: 16px;
   }
 }
+
+
+/* Mobile: make the API key management preview fit narrow screens without clipping. */
+@media (max-width: 520px) {
+  .av-site .av-control-inner {
+    margin: 20px 14px 17px;
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 13px;
+  }
+
+  .av-site .av-control-inner > div:first-child {
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .av-site .av-control-inner strong {
+    max-width: 100%;
+    font-size: clamp(10px, 3.1vw, 11px);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .av-site .av-control-inner span {
+    line-height: 1.45;
+  }
+
+  .av-site .av-key-status {
+    align-self: flex-start;
+    min-height: 32px;
+  }
+
+  .av-site .av-permissions {
+    margin: 0 14px;
+    gap: 6px;
+  }
+
+  .av-site .av-permissions b {
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .av-site .av-control-footer {
+    margin: 21px 14px 0;
+    padding: 13px 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 6px 12px;
+    line-height: 1.45;
+  }
+
+  .av-site .av-control-footer > span,
+  .av-site .av-control-footer > strong {
+    min-width: 0;
+  }
+}
