@@ -72,6 +72,6 @@ export default function AppleLanding() {
       <FeatureVisual variant={feature.variant} />
     </section>)}
     <section className="av-final-cta"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
-    <footer className="av-footer"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
+    <footer className="av-footer"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><div className="av-footer-contact"><strong>Разработчик: Kristofer Biksan</strong><a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram: @web3ResearchCN</a><a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
   </main>;
 }
