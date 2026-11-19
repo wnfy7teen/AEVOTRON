@@ -908,3 +908,19 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   opacity: 0;
   transition: opacity 0s;
 }
+
+/* Give the API key protection badge a clearer green success surface. */
+.av-site .av-key-status {
+  background: #dff5e5;
+  color: #176b3a;
+}
+.av-site .av-key-status svg {
+  color: #23834b;
+}
+.av-site[data-theme="dark"] .av-key-status {
+  background: #173b2a;
+  color: #9be3b1;
+}
+.av-site[data-theme="dark"] .av-key-status svg {
+  color: #80d99d;
+}
