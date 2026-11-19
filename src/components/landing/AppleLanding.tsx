@@ -119,7 +119,34 @@ export default function AppleLanding() {
       <FeatureVisual variant={feature.variant} />
     </section>)}
     <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
-    <footer className="av-footer av-reveal"><Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link><span>Единый интерфейс для AI-моделей.</span><div><Link to="/login">Войти</Link><Link to="/register">Регистрация</Link></div><div className="av-footer-contact"><strong>Developed by Kristofer Biksan</strong><a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram: @web3ResearchCN</a><a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a></div><small>© {new Date().getFullYear()} AEVOTRON</small></footer>
+    <footer className="av-footer av-reveal">
+      <div className="av-footer-main">
+        <div className="av-footer-brand">
+          <Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
+          <p>Единый интерфейс для AI-моделей.</p>
+        </div>
+        <div className="av-footer-column">
+          <span className="av-footer-heading">РАЗДЕЛЫ</span>
+          <a href="#platform">Платформа</a>
+          <a href="#security">Безопасность</a>
+          <a href="#developers">Разработчикам</a>
+        </div>
+        <div className="av-footer-column">
+          <span className="av-footer-heading">АККАУНТ</span>
+          <Link to="/login">Войти</Link>
+          <Link to="/register">Регистрация</Link>
+        </div>
+        <div className="av-footer-column av-footer-contact">
+          <span className="av-footer-heading">СВЯЗАТЬСЯ</span>
+          <a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram · @web3ResearchCN</a>
+          <a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a>
+        </div>
+      </div>
+      <div className="av-footer-bottom">
+        <small>© {new Date().getFullYear()} AEVOTRON. Все права защищены.</small>
+        <span>Developed by <strong>Kristofer Biksan</strong></span>
+      </div>
+    </footer>
   </main>
   {typeof document !== "undefined" && createPortal(
     <aside className="av-section-nav is-visible" data-theme={theme} aria-label="Навигация по разделам">
