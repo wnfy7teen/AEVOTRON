@@ -1,22 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireUser } from "@/lib/auth-middleware";
-
-const validateWorkspaceInput = (input) => {
-  const name = typeof input?.name === "string" ? input.name.trim() : "Personal workspace";
-
-  if (!name || name.length > 80) {
-    throw new Error("Workspace name must be between 1 and 80 characters.");
-  }
-
-  return { name };
-};
-
-const toPublicWorkspace = (workspace) => ({
-  id: workspace.id,
-  name: workspace.name,
-  region: workspace.region,
-  status: workspace.status,
-});
+import { toPublicWorkspace, validateWorkspaceInput } from "@/lib/workspace.validation";
 
 /**
  * Returns the signed-in user's personal workspace, creating it on first use.
@@ -30,7 +14,7 @@ export const getOrCreateMyWorkspace = createServerFn({ method: "POST" })
     const userId = context.user.id;
     const entities = context.getBase44().asServiceRole.entities;
 
-    let workspaces = await entities.Workspace.filter(
+    const workspaces = await entities.Workspace.filter(
       { owner_user_id: userId },
       "-created_date",
       1,
