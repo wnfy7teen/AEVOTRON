@@ -339,6 +339,8 @@ const dictionaries = {
     "Beta: OpenAI text chat only; no streaming, tool calls, embeddings or multimodal requests. Limit: 30 requests/minute per key (best-effort, not atomic).": "Бета: только текстовый чат OpenAI; потоковая передача, вызовы инструментов, эмбеддинги и мультимодальные запросы пока не поддерживаются. Лимит — 30 запросов в минуту на ключ (предварительный, без атомарной гарантии).",
     "Available to your OpenAI key": "Доступно вашему ключу OpenAI",
     "Connect OpenAI to discover models": "Подключите OpenAI, чтобы увидеть модели",
+    "Your models. One API.": "Ваши модели. Один API.",
+    "Connect OpenAI once. Route text chat requests through a single API.": "Подключите OpenAI один раз и направляйте текстовые запросы через единый API.",
   },
   zh: {
     "Sign in": "登录",
@@ -827,6 +829,8 @@ export function LanguageProvider({ children }) {
     "Beta: OpenAI text chat only; no streaming, tool calls, embeddings or multimodal requests. Limit: 30 requests/minute per key (best-effort, not atomic).": "测试版：仅支持 OpenAI 文本聊天；暂不支持流式传输、工具调用、嵌入和多模态请求。每个密钥每分钟最多 30 次请求（尽力限制，非原子保证）。",
     "Available to your OpenAI key": "您的 OpenAI 密钥可用",
     "Connect OpenAI to discover models": "连接 OpenAI 以查看模型",
+    "Your models. One API.": "您的模型，一个 API。",
+    "Connect OpenAI once. Route text chat requests through a single API.": "只需连接一次 OpenAI，即可通过统一 API 路由文本聊天请求。",
   }, []);
   useEffect(() => {
     applyTranslations(language);
