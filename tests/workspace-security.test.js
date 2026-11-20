@@ -12,6 +12,7 @@ test("workspace ownership cannot be changed by a regular user", async () => {
     user_condition: { role: "admin" },
   });
   assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
+  assert.deepEqual(schema.rls.delete, { user_condition: { role: "admin" } });
 });
 
 test("workspace membership mutations are restricted to trusted backend role", async () => {
