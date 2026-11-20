@@ -3,6 +3,11 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { getOrCreateMyWorkspace } from "@/lib/workspace.functions";
+const invokeFunction = async (name, payload) => {
+  const response = await base44.functions.invoke(name, payload);
+  return response?.data ?? response;
+};
+
 import { Activity, ArrowDownUp, ArrowUpRight, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/_authed/dashboard")({
@@ -38,7 +43,7 @@ function HomePage() {
   const workspaceLabel = workspaceQuery.data?.name ?? (workspaceQuery.isPending ? "Loading workspace…" : "Workspace unavailable");
   const usageQuery = useQuery({
     queryKey: ["usage-summary"],
-    queryFn: () => base44.functions.invoke("usage", { action: "summary" }),
+    queryFn: () => invokeFunction("usage", { action: "summary" }),
     staleTime: 30_000,
     retry: 1,
   });
@@ -90,11 +95,11 @@ function ProviderConnections() {
   const [error, setError] = useState("");
   const query = useQuery({
     queryKey: ["provider-connections"],
-    queryFn: () => base44.functions.invoke("provider-connections", { action: "list" }),
+    queryFn: () => invokeFunction("provider-connections", { action: "list" }),
     retry: 1,
   });
   const connect = useMutation({
-    mutationFn: (secret) => base44.functions.invoke("provider-connections", {
+    mutationFn: (secret) => invokeFunction("provider-connections", {
       action: "connect", provider_code: "openai", credential: secret,
     }),
     onSuccess: () => {
@@ -104,14 +109,14 @@ function ProviderConnections() {
     onError: (err) => setError(err?.message || "Could not connect this provider. Check the key and try again."),
   });
   const test = useMutation({
-    mutationFn: (connectionId) => base44.functions.invoke("provider-connections", {
+    mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "test", connection_id: connectionId,
     }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
     onError: (err) => setError(err?.message || "The connection test failed."),
   });
   const revoke = useMutation({
-    mutationFn: (connectionId) => base44.functions.invoke("provider-connections", {
+    mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "revoke", connection_id: connectionId,
     }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
@@ -198,11 +203,11 @@ function ApiKeyManager() {
   const [copied, setCopied] = useState(false);
   const query = useQuery({
     queryKey: ["aevotron-api-keys"],
-    queryFn: () => base44.functions.invoke("api-keys", { action: "list" }),
+    queryFn: () => invokeFunction("api-keys", { action: "list" }),
     retry: 1,
   });
   const create = useMutation({
-    mutationFn: () => base44.functions.invoke("api-keys", {
+    mutationFn: () => invokeFunction("api-keys", {
       action: "create", name: name.trim(), expires_in_days: Number(expiry),
     }),
     onSuccess: (result) => {
@@ -215,7 +220,7 @@ function ApiKeyManager() {
     onError: (err) => setError(err?.message || "Could not create the API key."),
   });
   const revoke = useMutation({
-    mutationFn: (keyId) => base44.functions.invoke("api-keys", { action: "revoke", key_id: keyId }),
+    mutationFn: (keyId) => invokeFunction("api-keys", { action: "revoke", key_id: keyId }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aevotron-api-keys"] }),
     onError: (err) => setError(err?.message || "Could not revoke the API key."),
   });
@@ -281,7 +286,7 @@ function ApiKeyManager() {
 function UsageDashboard() {
   const query = useQuery({
     queryKey: ["usage-events"],
-    queryFn: () => base44.functions.invoke("usage", { action: "events" }),
+    queryFn: () => invokeFunction("usage", { action: "events" }),
     staleTime: 30_000,
     retry: 1,
   });
