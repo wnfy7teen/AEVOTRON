@@ -129,3 +129,10 @@ test("gateway API bearer keys are not reused as Base44 session credentials", asy
   assert.match(source, /serviceHeaders\.delete\("authorization"\)/);
   assert.match(source, /createClientFromRequest\(serviceRequest\)/);
 });
+
+test("expired API keys are reported as expired without exposing their hash", async () => {
+  const source = await backendFunction("api-keys");
+  assert.match(source, /status: key\.status === "active"/);
+  assert.match(source, /Date\.parse\(key\.expires_at\) <= Date\.now\(\)/);
+  assert.doesNotMatch(source, /return json\(\{ keys: rows/);
+});
