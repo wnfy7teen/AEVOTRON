@@ -137,3 +137,15 @@ test("expired API keys are reported as expired without exposing their hash", asy
   assert.match(source, /Date\.parse\(key\.expires_at\) <= Date\.now\(\)/);
   assert.doesNotMatch(source, /return json\(\{ keys: rows/);
 });
+
+test("Vercel routes Base44 functions to the app subdomain, not the blocked platform host", async () => {
+  const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.equal(
+    config.rewrites[0].destination,
+    "https://model-hub-5539d9ce.base44.app/api/apps/6afee6f0926a08905539d9ce/functions/gateway",
+  );
+  assert.equal(
+    config.rewrites[1].destination,
+    "https://model-hub-5539d9ce.base44.app/api/apps/:appId/functions/:functionName",
+  );
+});
