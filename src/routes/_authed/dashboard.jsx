@@ -115,6 +115,7 @@ function ProviderConnections() {
     mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "test", connection_id: connectionId,
     }),
+    onSuccess: () => setError(""),
     onError: (err) => setError(err?.message || "The connection test failed."),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
   });
@@ -122,7 +123,7 @@ function ProviderConnections() {
     mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "revoke", connection_id: connectionId,
     }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
+    onSuccess: () => { setError(""); queryClient.invalidateQueries({ queryKey: ["provider-connections"] }); },
     onError: (err) => setError(err?.message || "Could not revoke this connection."),
   });
   const openai = query.data?.connections?.find((item) => item.provider_code === "openai");
