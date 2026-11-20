@@ -110,7 +110,7 @@ Deno.serve(async (req) => {
 
     const input = await req.json();
     const action = input?.action;
-    if (!["list", "connect", "test", "revoke"].includes(action)) {
+    if (!["list", "connect", "test", "revoke", "models"].includes(action)) {
       return json({ error: { code: "INVALID_ACTION" } }, 400);
     }
 
@@ -122,6 +122,38 @@ Deno.serve(async (req) => {
       const rows = await entities.ProviderConnection.filter(filter, "-created_date", 100, 0,
         ["id", "provider_code", "display_name", "status", "last_tested_at", "created_date"]);
       return json({ connections: rows });
+    }
+
+    if (action === "models") {
+      const connections = await entities.ProviderConnection.filter(
+        { ...filter, provider_code: "openai", status: "active" }, "-created_date", 1, 0,
+        ["id", "credential_ciphertext", "credential_key_version"],
+      );
+      const connection = connections[0];
+      if (!connection?.credential_ciphertext) return json({ connected: false, models: [] });
+      const credential = await decryptCredential(
+        connection.credential_ciphertext, user.id, workspace.id, "openai",
+      );
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+      let response;
+      try {
+        response = await fetch("https://api.openai.com/v1/models", {
+          headers: { Authorization: `Bearer ${credential}` }, signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timeout);
+      }
+      if (!response.ok) return json({ error: { code: "MODEL_LIST_FAILED" } }, 502);
+      const result = await response.json();
+      const excluded = /transcribe|audio|tts|realtime|embedding|moderation|dall-e|image|video/i;
+      const models = (Array.isArray(result?.data) ? result.data : [])
+        .filter((model) => typeof model.id === "string" &&
+          /^(gpt-|o[1-4](?:-|$)|chatgpt-)/i.test(model.id) && !excluded.test(model.id))
+        .map((model) => ({ id: model.id, owned_by: model.owned_by || "openai" }))
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .slice(0, 100);
+      return json({ connected: true, models });
     }
 
     if (action === "connect") {
