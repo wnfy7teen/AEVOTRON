@@ -1,0 +1,41 @@
+name: Docker build verification
+
+on:
+  push:
+    branches:
+      - chore/docker-parallel
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker-build:
+    name: Build and verify in Docker
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build verification image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: aevotron:docker-check
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify generated application artifacts
+        run: docker run --rm aevotron:docker-check
