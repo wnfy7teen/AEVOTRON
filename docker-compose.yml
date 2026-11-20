@@ -1,0 +1,11 @@
+services:
+  build-check:
+    image: aevotron:docker-check
+    build:
+      context: .
+      dockerfile: Dockerfile
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
