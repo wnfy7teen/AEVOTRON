@@ -1,0 +1,22 @@
+# Dependencies and generated build output
+node_modules
+dist
+.wrangler
+.tanstack
+coverage
+
+# Git and local tooling
+.git
+.github
+.vscode
+.idea
+
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+base44/.app.jsonc
+
+# Logs and OS files
+*.log
+.DS_Store
