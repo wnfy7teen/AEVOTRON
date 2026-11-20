@@ -1,0 +1,15 @@
+services:
+  aevotron-docker-preview:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aevotron:docker-preview
+    container_name: aevotron-docker-preview
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+    ports:
+      # Deliberately local-only; does not bind a public interface.
+      - "127.0.0.1:3001:3000"
+    restart: unless-stopped
