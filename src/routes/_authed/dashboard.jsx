@@ -36,6 +36,12 @@ function HomePage() {
     retry: 1,
   });
   const workspaceLabel = workspaceQuery.data?.name ?? (workspaceQuery.isPending ? "Loading workspace…" : "Workspace unavailable");
+  const usageQuery = useQuery({
+    queryKey: ["usage-summary"],
+    queryFn: () => base44.functions.invoke("usage", { action: "summary" }),
+    staleTime: 30_000,
+    retry: 1,
+  });
   const [section, setSection] = useState("Overview");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All models");
@@ -60,7 +66,7 @@ function HomePage() {
         <div className="mh-content">
           {section === "Overview" && <>
             <div className="mh-page-heading"><div><div className="mh-eyebrow"><span className="mh-live-dot"/> AI INFRASTRUCTURE, SIMPLIFIED</div><h1>One API. Every model.</h1><p>Connect your providers once. Build with the models you need.</p></div><button className="mh-button mh-button-primary" onClick={() => setSection("Providers")}><Plus size={16}/> Connect provider</button></div>
-            <div className="mh-stats"><Stat icon={Activity} label="Requests this month" value="0" note="Ready when you are"/><Stat icon={Cpu} label="Models available" value="8" note="Across 6 model families"/><Stat icon={Zap} label="Avg. latency" value="—" note="No requests yet"/><Stat icon={CreditCard} label="Your API spend" value="$0.00" note="BYOK · no platform markup"/></div>
+            <div className="mh-stats"><Stat icon={Activity} label="Requests (30 days)" value={usageQuery.data?.summary?.requests ?? "—"} note="Recorded by the gateway"/><Stat icon={Cpu} label="Models in catalog" value="8" note="Catalog preview"/><Stat icon={Zap} label="Avg. latency" value={usageQuery.data?.summary?.average_latency_ms ? `${usageQuery.data.summary.average_latency_ms} ms` : "—"} note="Last 30 days"/><Stat icon={CreditCard} label="Provider billing" value="Direct" note="Billed by OpenAI"/></div>
             <div className="mh-section-heading"><div><h2>Get started</h2><p>Three steps to your first API call.</p></div><span className="mh-step-count">0 of 3 complete</span></div>
             <div className="mh-steps"><Step number="01" title="Connect a provider" desc="Add your own API key. It stays private and is never shown in the browser again." action="Add provider" onClick={() => setSection("Providers")} icon={KeyRound}/><Step number="02" title="Create a ModelHub key" desc="Generate a single key for your apps and services to authenticate requests." action="Create API key" onClick={() => setSection("API keys")} icon={LockKeyhole}/><Step number="03" title="Make your first request" desc="Use our OpenAI-compatible endpoint with any supported model." action="View quickstart" onClick={() => setSection("Quickstart")} icon={Code2}/></div>
             <div className="mh-bottom-grid"><div className="mh-panel"><div className="mh-panel-heading"><div><h3>Popular models</h3><p>Start exploring the catalog</p></div><button className="mh-text-link" onClick={() => setSection("Model catalog")}>View all <ArrowUpRight size={14}/></button></div>{models.slice(0,4).map(m => <ModelRow key={m.name} model={m} onClick={() => {setSelected(m.name);setSection("Model catalog")}}/>)}</div><div className="mh-panel mh-code-panel"><div className="mh-panel-heading"><div><h3>Quick API example</h3><p>OpenAI-compatible interface</p></div><span className="mh-code-language">cURL</span></div><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? "Copied" : "Copy example"}</button></div></div>
@@ -69,7 +75,7 @@ function HomePage() {
           {section === "Model catalog" && <><div className="mh-page-heading"><div><div className="mh-eyebrow">DISCOVER</div><h1>Model catalog</h1><p>Explore model families and choose the right engine for your workload.</p></div></div><div className="mh-toolbar"><div className="mh-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search models or providers..."/></div><select value={filter} onChange={e=>setFilter(e.target.value)}><option>All models</option><option>Chat</option><option>Audio</option><option>Image</option></select><button className="mh-button mh-button-quiet"><ArrowDownUp size={15}/> Sort</button></div><div className="mh-catalog-layout"><div className="mh-panel mh-model-list"><div className="mh-list-header"><span>MODEL</span><span>CONTEXT</span><span>ACCESS</span></div>{filtered.map(m=><button key={m.name} className={`mh-model-row ${selected===m.name?"selected":""}`} onClick={()=>setSelected(m.name)}><span className={`mh-provider-dot ${m.color}`}/><span className="mh-model-name"><strong>{m.name}</strong><small>{m.provider}</small></span><span className="mh-model-context">{m.context}</span><span className={`mh-status ${m.status==="BYOK"?"byok":"planned"}`}>{m.status}</span></button>)}{filtered.length===0&&<div className="mh-empty">No models match your search.</div>}</div><div className="mh-panel mh-model-detail"><div className="mh-detail-top"><span className={`mh-provider-dot large ${active.color}`}/><span className="mh-status byok">{active.status}</span></div><h2>{active.name}</h2><p>{active.provider} · {active.type} model</p><div className="mh-detail-stats"><div><small>Context window</small><strong>{active.context}</strong></div><div><small>Speed</small><strong>{active.speed}</strong></div><div><small>Pricing</small><strong>{active.price}</strong></div></div><div className="mh-tags">{active.tags.map(t=><span key={t}>{t}</span>)}</div><div className="mh-detail-info"><ShieldCheck size={16}/> Bring your own provider key to use this model.</div><button className="mh-button mh-button-primary full" onClick={()=>setSection("Providers")}>Connect {active.provider} <ArrowUpRight size={15}/></button></div></div></>}
           {section === "Providers" && <ProviderConnections/>}
           {section === "API keys" && <ApiKeyManager/>}
-          {section === "Usage & logs" && <><div className="mh-page-heading"><div><div className="mh-eyebrow">OBSERVABILITY</div><h1>Usage & logs</h1><p>Monitor requests, latency, token counts and provider errors.</p></div></div><div className="mh-stats"><Stat icon={Activity} label="Requests" value="0" note="All time"/><Stat icon={Cpu} label="Tokens" value="0" note="Input + output"/><Stat icon={Zap} label="Avg. latency" value="—" note="No traffic yet"/><Stat icon={ShieldCheck} label="Error rate" value="0%" note="No traffic yet"/></div><div className="mh-panel mh-empty-panel"><div className="mh-empty-icon"><Activity size={23}/></div><h3>No activity recorded</h3><p>Once the gateway backend is connected, every request will be recorded here with redacted metadata.</p></div></>}
+          {section === "Usage & logs" && <UsageDashboard/>}
           {(section === "Quickstart" || section === "API reference") && <><div className="mh-page-heading"><div><div className="mh-eyebrow">DEVELOPERS</div><h1>{section === "Quickstart" ? "Quickstart" : "API reference"}</h1><p>One endpoint and a familiar request format to get started.</p></div></div><div className="mh-panel mh-docs"><div className="mh-docs-title"><Terminal size={18}/><h3>Chat completions</h3><span className="mh-method">POST</span></div><div className="mh-endpoint">https://api.modelhub.dev/v1/chat/completions</div><p>Compatible request shape for chat models. The public endpoint is a planned interface; live routing is not enabled in this scaffold.</p><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied?<Check size={14}/>:<Copy size={14}/>} {copied?"Copied":"Copy cURL"}</button><div className="mh-doc-warning"><CircleHelp size={15}/> Demo only: do not send production traffic or real credentials to this placeholder endpoint.</div></div></>}
           {section === "Preferences" && <div className="mh-page-heading"><div><div className="mh-eyebrow">WORKSPACE</div><h1>Preferences</h1><p>Workspace settings and regional defaults will be available here.</p></div></div>}
         </div>
@@ -267,6 +273,52 @@ function ApiKeyManager() {
                 {key.status === "active" && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {setError("");revoke.mutate(key.id);}}>Revoke</button>}</div>
             </div>
           ))}</div>}
+      </div>
+    </>
+  );
+}
+
+function UsageDashboard() {
+  const query = useQuery({
+    queryKey: ["usage-events"],
+    queryFn: () => base44.functions.invoke("usage", { action: "events" }),
+    staleTime: 30_000,
+    retry: 1,
+  });
+  const summary = query.data?.summary;
+  const events = query.data?.events || [];
+
+  return (
+    <>
+      <div className="mh-page-heading">
+        <div><div className="mh-eyebrow">OBSERVABILITY</div><h1>Usage & logs</h1>
+          <p>Recent gateway activity, token counts, latency and provider errors. Prompts and responses are not stored.</p></div>
+      </div>
+      <div className="mh-stats">
+        <Stat icon={Activity} label="Requests" value={summary?.requests ?? "—"} note="Last 30 days"/>
+        <Stat icon={Cpu} label="Tokens" value={summary?.tokens ?? "—"} note="Input + output"/>
+        <Stat icon={Zap} label="Avg. latency" value={summary?.average_latency_ms ? `${summary.average_latency_ms} ms` : "—"} note="Successful and failed calls"/>
+        <Stat icon={ShieldCheck} label="Error rate" value={summary ? `${summary.error_rate}%` : "—"} note="Last 30 days"/>
+      </div>
+      <div className="mh-panel mh-usage-panel">
+        <div className="mh-panel-heading"><div><h3>Recent requests</h3><p>Metadata only · latest 50 events</p></div>
+          <span className="mh-step-count">{events.length} events</span></div>
+        {query.isLoading ? <div className="mh-empty">Loading usage records…</div> :
+          query.isError ? <div className="mh-inline-error">Could not load usage records. Refresh the page and try again.</div> :
+          !events.length ? <div className="mh-empty">No gateway requests have been recorded yet.</div> :
+          <div className="mh-usage-table-wrap"><table className="mh-usage-table">
+            <thead><tr><th>TIME</th><th>MODEL</th><th>TOKENS</th><th>LATENCY</th><th>STATUS</th></tr></thead>
+            <tbody>{events.map((event) => (
+              <tr key={event.id}>
+                <td>{event.created_at ? new Date(event.created_at).toLocaleString() : "—"}</td>
+                <td><strong>{event.model_id}</strong><small>{event.provider_code}</small></td>
+                <td>{event.input_tokens + event.output_tokens}</td>
+                <td>{event.latency_ms ? `${event.latency_ms} ms` : "—"}</td>
+                <td><span className={`mh-status ${event.status_code >= 400 ? "planned" : "byok"}`}>{event.status_code || "—"}</span>
+                  {event.error_code && <small className="mh-usage-error-code">{event.error_code}</small>}</td>
+              </tr>
+            ))}</tbody>
+          </table></div>}
       </div>
     </>
   );
