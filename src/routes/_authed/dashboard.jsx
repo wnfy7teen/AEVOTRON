@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { getOrCreateMyWorkspace } from "@/lib/workspace.functions";
 import { Activity, ArrowDownUp, ArrowUpRight, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap } from "lucide-react";
 
 const invokeFunction = async (name, payload) => {
@@ -24,19 +23,13 @@ const providers = [
 ];
 
 function HomePage() {
-  const workspaceQuery = useQuery({
-    queryKey: ["workspace", "current"],
-    queryFn: () => getOrCreateMyWorkspace({ data: { name: "Personal workspace" } }),
-    staleTime: 60_000,
-    retry: 1,
-  });
-  const workspaceLabel = workspaceQuery.data?.name ?? (workspaceQuery.isPending ? "Loading workspace…" : "Workspace unavailable");
   const usageQuery = useQuery({
     queryKey: ["usage-summary"],
     queryFn: () => invokeFunction("usage", { action: "summary" }),
     staleTime: 30_000,
     retry: 1,
   });
+  const workspaceLabel = usageQuery.data?.workspace?.name ?? (usageQuery.isPending ? "Loading workspace…" : "Workspace unavailable");
   const modelQuery = useQuery({
     queryKey: ["provider-models"],
     queryFn: () => invokeFunction("provider-connections", { action: "models" }),
