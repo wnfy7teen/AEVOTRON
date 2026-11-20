@@ -38,4 +38,4 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Smoke-test the running container
-        run: ./docker-verify.sh
+        run: sh ./docker-verify.sh
