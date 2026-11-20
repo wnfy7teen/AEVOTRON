@@ -13,6 +13,9 @@ test("workspace ownership cannot be changed by a regular user", async () => {
   });
   assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
   assert.deepEqual(schema.rls.delete, { user_condition: { role: "admin" } });
+  for (const operation of ["create", "read", "update"]) {
+    assert.ok(schema.rls[operation].$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
+  }
 });
 
 test("workspace membership mutations are restricted to trusted backend role", async () => {
@@ -21,6 +24,7 @@ test("workspace membership mutations are restricted to trusted backend role", as
     assert.deepEqual(schema.rls[operation], { user_condition: { role: "admin" } });
   }
   assert.ok(schema.rls.read.$or.some((rule) => rule["data.user_id"] === "{{user.id}}"));
+  assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
 });
 
 test("provider credentials and API key hashes are admin-only fields", async () => {
@@ -32,6 +36,12 @@ test("provider credentials and API key hashes are admin-only fields", async () =
   }
   assert.deepEqual(apiKey.properties.key_hash.rls.read, { user_condition: { role: "admin" } });
   assert.deepEqual(apiKey.properties.key_hash.rls.write, { user_condition: { role: "admin" } });
+  for (const schema of [provider, apiKey]) {
+    for (const operation of ["create", "update", "delete"]) {
+      assert.deepEqual(schema.rls[operation], { user_condition: { role: "admin" } });
+    }
+    assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
+  }
 });
 
 test("usage and audit events are append-only", async () => {
@@ -40,5 +50,6 @@ test("usage and audit events are append-only", async () => {
     assert.equal(schema.rls.update, false);
     assert.equal(schema.rls.delete, false);
     assert.deepEqual(schema.rls.create, { user_condition: { role: "admin" } });
+    assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
   }
 });
