@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
         name,
         key_prefix: token.slice(0, 16),
         key_hash: keyHash,
-        scopes_json: JSON.stringify(["chat.completions", "models.read"]),
+        scopes_json: JSON.stringify(["chat.completions"]),
         expires_at: expiresAt,
         status: "active",
       });
