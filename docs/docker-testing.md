@@ -1,45 +1,58 @@
-# Docker build verification
+# Docker preview
 
-This workflow builds AEVOTRON in an isolated Node.js 22 container and verifies the
-artifacts produced by the existing TanStack Start / Nitro / Cloudflare build.
+This is a parallel, local Docker runtime for AEVOTRON. It does not replace or
+modify the Vercel deployment.
 
-It is intentionally a **build-and-artifact check**, not a replacement runtime.
-The app uses Base44 platform integration and a Worker-oriented server build;
-serving only `dist/client` with Nginx would drop server-rendered routes and
-server functions. A separate runtime container must be validated against the
-actual Worker runtime and Base44 platform requirements before it is introduced.
+The current Vite build log confirms that Nitro selects the `node-server` preset
+and emits a runnable `.output/server/index.mjs` plus public assets in
+`.output/public`. The Docker image runs that Nitro server; it does not serve
+only the client folder with Nginx, which would break SSR and server routes.
 
-## Local check
+## Local preview
 
 Requirements: Docker Engine and the Docker Compose plugin.
 
 ```sh
-docker compose build build-check
-docker compose run --rm --no-build build-check
+docker compose up --build -d
 ```
 
-The Docker build runs, in order:
+Open http://localhost:3000. To stop it:
 
-1. `npm install --no-audit --no-fund` (same install strategy as the existing CI;
-   this repository currently has no committed npm lockfile).
-2. `npm test`.
-3. `npm run lint`.
-4. `npm run build`.
-5. A separate verification stage checks that client assets, server output and
-   `.wrangler/deploy/config.json` were generated and that JS/CSS bundles exist.
+```sh
+docker compose down
+```
 
-The image does not publish, deploy, change DNS, access Vercel aliases, or require
-production secrets. It is safe to build locally or in GitHub Actions.
+To build and run the HTTP smoke test manually:
+
+```sh
+docker build -t aevotron:docker-preview .
+./docker-verify.sh
+```
+
+The image build runs `npm install --no-audit --no-fund`, `npm test`,
+`npm run lint` and `npm run build`. The runtime image contains only Nitro's
+generated `.output` directory and runs as the unprivileged `node` user.
+
+This repository currently has no committed npm lockfile, so the dependency
+install follows the existing CI's `npm install` strategy rather than
+`npm ci`.
+
+## Platform-dependent features
+
+The public landing page can be smoke-tested without production credentials.
+Features that call Base44 platform APIs, use platform-injected request headers,
+or depend on Base44-managed secrets may not work in a standalone local
+container until their supported standalone configuration is established.
+Do not copy production secrets into the image or commit them to the repository.
 
 ## GitHub Actions
 
-The `Docker build verification` workflow runs on pushes to
-`chore/docker-parallel`, on pull requests targeting `main`, and manually via
-`workflow_dispatch`. It builds the image and runs its artifact checks. It does
-not push the image to a registry.
+The `Docker build verification` workflow builds the image and runs
+`docker-verify.sh`, which starts the container and checks that the homepage
+returns HTML over HTTP. It does not push an image to a registry or deploy it.
 
 ## Production boundary
 
-Vercel remains the serving platform. Do not attach a production domain, add
-production secrets, or change DNS as part of this experiment. A separate
-runtime/deployment proposal is required after this build check passes.
+Vercel remains the production serving platform. This branch does not change
+production domains, DNS, aliases, environment variables, or deployment settings.
+A separate reviewed change is required before any production migration.
