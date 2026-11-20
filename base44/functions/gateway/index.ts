@@ -126,13 +126,18 @@ Deno.serve(async (req) => {
     entities = base44.asServiceRole.entities;
     const hash = await hashToken(token);
     const keys = await entities.ApiKey.filter({ key_hash: hash, status: "active" }, "-created_date", 1, 0,
-      ["id", "owner_user_id", "workspace_id", "expires_at", "status"]);
+      ["id", "owner_user_id", "workspace_id", "expires_at", "status", "scopes_json"]);
     const apiKey = keys[0];
     if (!apiKey) {
       return safeError("invalid_api_key", "The API key is invalid or revoked.", 401);
     }
     if (apiKey.expires_at && Date.parse(apiKey.expires_at) <= Date.now()) {
       return safeError("expired_api_key", "The API key has expired.", 401);
+    }
+    let scopes = [];
+    try { scopes = JSON.parse(apiKey.scopes_json || "[]"); } catch { scopes = []; }
+    if (!Array.isArray(scopes) || !scopes.includes("chat.completions")) {
+      return safeError("insufficient_scope", "This API key does not allow chat completions.", 403);
     }
     ownerId = apiKey.owner_user_id;
     workspaceId = apiKey.workspace_id;
@@ -142,6 +147,29 @@ Deno.serve(async (req) => {
       { id: workspaceId, owner_user_id: ownerId, status: "active" }, "-created_date", 1, 0, ["id"],
     );
     if (!workspaces.length) return safeError("workspace_unavailable", "The workspace is unavailable.", 403);
+
+    // Best-effort per-key guard. Base44 entity CRUD has no atomic counter, so this is
+    // not a distributed concurrency limit; a durable atomic limiter is required at scale.
+    const recentUsage = await entities.UsageEvent.filter(
+      { workspace_id: workspaceId, owner_user_id: ownerId, api_key_id: keyId },
+      "-created_date", 30, 0, ["created_at"],
+    );
+    const minuteAgo = Date.now() - 60_000;
+    const recentCount = recentUsage.filter((event) => {
+      const timestamp = Date.parse(event.created_at || event.created_date || "");
+      return Number.isFinite(timestamp) && timestamp >= minuteAgo;
+    }).length;
+    if (recentCount >= 30) {
+      await entities.UsageEvent.create({
+        workspace_id: workspaceId, owner_user_id: ownerId, api_key_id: keyId,
+        model_id: input.model, provider_code: providerCode, request_id: rid,
+        input_tokens: 0, output_tokens: 0, latency_ms: Date.now() - started,
+        status_code: 429, error_code: "rate_limit_exceeded", created_at: now(),
+      });
+      return json({
+        error: { message: "Rate limit exceeded. Try again in a minute.", type: "aevotron_error", code: "rate_limit_exceeded" },
+      }, 429, { "Retry-After": "60", "x-request-id": rid });
+    }
 
     const connections = await entities.ProviderConnection.filter(
       { workspace_id: workspaceId, owner_user_id: ownerId, provider_code: providerCode, status: "active" },
