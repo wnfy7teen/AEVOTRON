@@ -706,6 +706,9 @@ const dictionaries = {
 };
 
 const landingTranslations = {
+  "AEVOTRON — главная": { en: "AEVOTRON — Home", ru: "AEVOTRON — главная", zh: "AEVOTRON — 首页" },
+  "Основная навигация": { en: "Main navigation", ru: "Основная навигация", zh: "主导航" },
+  "Навигация по разделам": { en: "Section navigation", ru: "Навигация по разделам", zh: "分区导航" },
   "Platform": { en: "Platform", ru: "Платформа", zh: "平台" },
   "Security": { en: "Security", ru: "Безопасность", zh: "安全" },
   "Developers": { en: "Developers", ru: "Разработчикам", zh: "开发者" },
