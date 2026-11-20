@@ -886,7 +886,7 @@ export function LanguageSwitcher() {
       <button type="button" className="av-language-trigger" aria-label="Language" aria-expanded={open}
         onClick={() => setOpen((value) => !value)}>
         <span className="av-language-globe">文</span>
-        <span className="av-language-current" data-language={current.code}>{current.native}</span>
+        <span className="av-language-current" data-language={current.code}>{current.code.toUpperCase()}</span>
         <ChevronDown size={14} className={open ? "is-open" : ""} />
       </button>
     </div>
