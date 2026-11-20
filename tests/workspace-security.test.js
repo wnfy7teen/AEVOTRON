@@ -94,6 +94,7 @@ test("gateway accepts only bounded OpenAI chat requests and never logs prompts",
 test("usage analytics are workspace-scoped and never persist prompt content", async () => {
   const source = await backendFunction("usage");
   assert.match(source, /owner_user_id: user\.id, workspace_id: workspace\.id/);
+  assert.match(source, /workspace: \{ id: workspace\.id, name: workspace\.name/);
   assert.match(source, /"input_tokens", "output_tokens"/);
   assert.match(source, /"latency_ms", "status_code", "error_code"/);
   assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
