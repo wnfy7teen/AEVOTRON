@@ -84,8 +84,14 @@ Deno.serve(async (req) => {
     const filter = { owner_user_id: user.id, workspace_id: workspace.id };
 
     if (action === "list") {
-      const keys = await entities.ApiKey.filter(filter, "-created_date", 100, 0,
+      const rows = await entities.ApiKey.filter(filter, "-created_date", 100, 0,
         ["id", "name", "key_prefix", "scopes_json", "last_used_at", "expires_at", "revoked_at", "status", "created_date"]);
+      const keys = rows.map((key) => ({
+        ...key,
+        status: key.status === "active" && key.expires_at && Date.parse(key.expires_at) <= Date.now()
+          ? "expired"
+          : key.status,
+      }));
       return json({ keys });
     }
 
