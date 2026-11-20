@@ -2,27 +2,28 @@ import "./landing.css";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Moon, Cloud } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 import { createPortal } from "react-dom";
 
-type FeatureVisualProps = { variant: "routing" | "control" | "integration" };
+type FeatureVisualProps = { variant: "routing" | "control" | "integration"; t: (value: string) => string };
 
-function FeatureVisual({ variant }: FeatureVisualProps) {
+function FeatureVisual({ variant, t }: FeatureVisualProps) {
   if (variant === "routing") {
-    return <div className="av-visual av-routing" aria-label="Схема единого API и подключённых моделей">
-      <div className="av-api-node"><span className="av-node-mark">A</span><strong>AEVOTRON API</strong><small>Единая точка доступа</small><code>POST /v1/chat/completions</code></div>
+    return <div className="av-visual av-routing" aria-label={t("Схема единого API и подключённых моделей")}>
+      <div className="av-api-node"><span className="av-node-mark">A</span><strong>AEVOTRON API</strong><small>{t("Единая точка доступа")}</small><code>POST /v1/chat/completions</code></div>
       <div className="av-routing-lines"><i /><i /><i /></div>
-      <div className="av-provider-stack">{["OpenAI", "Anthropic", "Google"].map((name, index) => <div className="av-provider" key={name}><span className={"av-provider-symbol av-symbol-" + index}>{name[0]}</span><strong>{name}</strong><span className="av-provider-state"><Check size={13} /> Подключено</span></div>)}</div>
+      <div className="av-provider-stack">{["OpenAI", "Anthropic", "Google"].map((name, index) => <div className="av-provider" key={name}><span className={"av-provider-symbol av-symbol-" + index}>{name[0]}</span><strong>{name}</strong><span className="av-provider-state"><Check size={13} /> {t("Подключено")}</span></div>)}</div>
     </div>;
   }
   if (variant === "control") {
-    return <div className="av-visual av-control" aria-label="Интерфейс управления API-ключами">
-      <div className="av-window-bar"><span /><span /><span /><small>Безопасность · API-ключи</small></div>
-      <div className="av-control-inner"><div><small>АКТИВНЫЙ КЛЮЧ</small><strong>sk-live-••••••••••••8F2A</strong><span>Создан сегодня · Полный доступ</span></div><div className="av-key-status"><ShieldCheck size={18} /> Защищён</div></div>
-      <div className="av-permissions"><span>Разрешения</span><b>Chat completions</b><b>Embeddings</b><b>Usage</b></div>
-      <div className="av-control-footer"><span>Последнее использование</span><strong>2 минуты назад</strong></div>
+    return <div className="av-visual av-control" aria-label={t("Интерфейс управления API-ключами")}>
+      <div className="av-window-bar"><span /><span /><span /><small>{t("Безопасность · API-ключи")}</small></div>
+      <div className="av-control-inner"><div><small>{t("АКТИВНЫЙ КЛЮЧ")}</small><strong>sk-live-••••••••••••8F2A</strong><span>{t("Создан сегодня · Полный доступ")}</span></div><div className="av-key-status"><ShieldCheck size={18} /> {t("Защищён")}</div></div>
+      <div className="av-permissions"><span>{t("Разрешения")}</span><b>{t("Chat completions")}</b><b>{t("Embeddings")}</b><b>{t("Usage")}</b></div>
+      <div className="av-control-footer"><span>{t("Последнее использование")}</span><strong>{t("2 минуты назад")}</strong></div>
     </div>;
   }
-  return <div className="av-visual av-code" aria-label="Пример запроса к API AEVOTRON">
+  return <div className="av-visual av-code" aria-label={t("Пример запроса к API AEVOTRON")}>
     <div className="av-window-bar"><span /><span /><span /><small>request.ts</small></div>
     <pre><span className="av-code-muted">const</span> response = <span className="av-code-blue">await</span> fetch(</pre>
     <pre>  <span className="av-code-green">"https://api.aevotron.com/v1/chat/completions"</span>,</pre>
@@ -44,6 +45,7 @@ const features: Feature[] = [
 ];
 
 export default function AppleLanding() {
+  const { language, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
@@ -137,7 +139,7 @@ export default function AppleLanding() {
       if (timer !== undefined) window.clearTimeout(timer);
       observer?.disconnect();
     };
-  }, []);
+  }, [language]);
   useEffect(() => {
     const controlExample = document.querySelector(".av-site .av-control");
     if (!controlExample) return;
@@ -203,7 +205,7 @@ export default function AppleLanding() {
       if (timer !== undefined) window.clearTimeout(timer);
       observer?.disconnect();
     };
-  }, []);
+  }, [language]);
   useEffect(() => {
     const sectionIds = ["platform", "security", "developers"];
     const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -246,8 +248,8 @@ export default function AppleLanding() {
     </section>
     <section className="av-intro av-reveal"><p>ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ</p><h2>Меньше связующего кода.<br />Больше времени на продукт.</h2></section>
     {features.map((feature, index) => <section className={"av-feature av-reveal " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
-      <div className="av-feature-copy"><span className="av-eyebrow">{feature.eyebrow}</span><h2>{feature.title}</h2><p>{feature.description}</p>{index === 2 && <button className="av-inline-link" onClick={copyEndpoint}>{copied ? <><Check size={15} /> Скопировано</> : <><Copy size={15} /> Скопировать адрес API</>}</button>}</div>
-      <FeatureVisual variant={feature.variant} />
+      <div className="av-feature-copy"><span className="av-eyebrow">{t(feature.eyebrow)}</span><h2>{t(feature.title)}</h2><p>{t(feature.description)}</p>{index === 2 && <button className="av-inline-link" onClick={copyEndpoint}>{copied ? <><Check size={15} /> Скопировано</> : <><Copy size={15} /> Скопировать адрес API</>}</button>}</div>
+      <FeatureVisual key={`${feature.variant}-${language}`} variant={feature.variant} t={t} />
     </section>)}
     <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
     <footer className="av-footer av-reveal">
