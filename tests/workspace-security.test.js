@@ -113,3 +113,12 @@ test("API key management bounds active keys and rejects control characters in na
   assert.match(source, /activeKeys\.length >= 20/);
   assert.match(source, /code < 32 \|\| code === 127/);
 });
+
+test("provider model discovery is owner-scoped and uses the encrypted OpenAI connection", async () => {
+  const source = await backendFunction("provider-connections");
+  assert.match(source, /action === "models"/);
+  assert.match(source, /decryptCredential\(/);
+  assert.match(source, /https:\/\/api\.openai\.com\/v1\/models/);
+  assert.match(source, /chatgpt-/);
+  assert.doesNotMatch(source, /return json\(\{[^}]*credential_ciphertext/s);
+});
