@@ -107,3 +107,9 @@ test("gateway checks API key scopes and applies a documented per-key request gua
   assert.match(source, /rate_limit_exceeded/);
   assert.match(source, /not a distributed concurrency limit/);
 });
+
+test("API key management bounds active keys and rejects control characters in names", async () => {
+  const source = await backendFunction("api-keys");
+  assert.match(source, /activeKeys\.length >= 20/);
+  assert.match(source, /code < 32 \|\| code === 127/);
+});
