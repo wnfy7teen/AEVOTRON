@@ -8,7 +8,7 @@ const now = () => new Date().toISOString();
 async function ensureWorkspace(base44, user) {
   const entities = base44.asServiceRole.entities;
   const rows = await entities.Workspace.filter(
-    { owner_user_id: user.id }, "-created_date", 1, 0, ["id", "owner_user_id", "status"],
+    { owner_user_id: user.id }, "-created_date", 1, 0, ["id", "owner_user_id", "name", "region", "status"],
   );
   let workspace = rows[0];
   if (!workspace) {
@@ -81,7 +81,11 @@ Deno.serve(async (req) => {
       created_at: event.created_at || event.created_date || null,
     }));
 
-    return json({ summary, events: input.action === "events" ? events : [] });
+    return json({
+      workspace: { id: workspace.id, name: workspace.name, region: workspace.region, status: workspace.status },
+      summary,
+      events: input.action === "events" ? events : [],
+    });
   } catch {
     return json({ error: { code: "INTERNAL_ERROR", message: "Usage data could not be loaded." } }, 500);
   }
