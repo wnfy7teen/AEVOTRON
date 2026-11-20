@@ -935,3 +935,26 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 .av-site[data-theme="dark"] .av-header {
   background-color: rgba(17, 21, 27, .97);
 }
+
+
+/* Desktop header: remove backdrop filtering entirely for pixel-sharp text and icons. */
+.av-site .av-header {
+  background: #e7eaee !important;
+  background-color: #e7eaee !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  isolation: isolate;
+}
+.av-site[data-theme="dark"] .av-header {
+  background: #11151b !important;
+  background-color: #11151b !important;
+}
+.av-site .av-header,
+.av-site .av-header * {
+  -webkit-filter: none;
+  filter: none;
+  text-shadow: none;
+}
