@@ -53,3 +53,39 @@ test("usage and audit events are append-only", async () => {
     assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
   }
 });
+
+const backendFunction = async (name) => readFile(
+  new URL(`../base44/functions/${name}/index.ts`, import.meta.url),
+  "utf8",
+);
+
+test("provider credentials are validated and encrypted before persistence", async () => {
+  const source = await backendFunction("provider-connections");
+  assert.match(source, /https:\/\/api\.openai\.com\/v1\/models/);
+  assert.match(source, /AES-GCM/);
+  assert.match(source, /Deno\.env\.get\("AEVOTRON_MASTER_KEY"\)/);
+  assert.match(source, /credential_ciphertext: ciphertext/);
+  assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
+  assert.doesNotMatch(source, /return json\(\{[^}]*credential_ciphertext/s);
+});
+
+test("AEVOTRON API keys are random, HMAC-hashed and only returned at creation", async () => {
+  const source = await backendFunction("api-keys");
+  assert.match(source, /crypto\.getRandomValues/);
+  assert.match(source, /name: "HMAC"/);
+  assert.match(source, /key_hash: keyHash/);
+  assert.match(source, /key: token/);
+  assert.match(source, /This key is shown once/);
+  assert.doesNotMatch(source, /localStorage/);
+});
+
+test("gateway accepts only bounded OpenAI chat requests and never logs prompts", async () => {
+  const source = await backendFunction("gateway");
+  assert.match(source, /https:\/\/api\.openai\.com\/v1\/chat\/completions/);
+  assert.match(source, /raw\.length > 65536/);
+  assert.match(source, /input\.stream === true/);
+  assert.match(source, /input\.messages\.length > 50/);
+  assert.match(source, /Authorization: `Bearer ${credential}`/);
+  assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
+  assert.doesNotMatch(source, /prompt:\s*input\.messages/);
+});
