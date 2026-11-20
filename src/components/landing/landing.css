@@ -924,3 +924,14 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 .av-site[data-theme="dark"] .av-key-status svg {
   color: #80d99d;
 }
+
+
+/* Crisp sticky header: reduce backdrop blur to avoid soft text rendering on desktop. */
+.av-site .av-header {
+  background-color: rgba(231, 234, 238, .97);
+  backdrop-filter: saturate(150%) blur(6px);
+  -webkit-backdrop-filter: saturate(150%) blur(6px);
+}
+.av-site[data-theme="dark"] .av-header {
+  background-color: rgba(17, 21, 27, .97);
+}
