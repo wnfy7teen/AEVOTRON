@@ -4,11 +4,11 @@
 
 - The Vercel application serves the dashboard and proxies Base44 function calls.
 - Base44 app: `ModelHub` (`6afee6f0926a08905539d9ce`).
-- Base44 app domain: `https://model-hub-5539d9ce.base44.app`.
+- Expected Base44 default host: `https://model-hub-5539d9ce.base44.app` (must be confirmed from the published URL after approval).
 - Base44 backend functions are deployed separately from the Vercel frontend.
 - Vercel rewrites `/api/apps/:appId/functions/:functionName` to the Base44 app domain and routes `/v1/chat/completions` to the `gateway` function.
 
-The Base44 app has not been published yet. Its visibility is configured as `public_with_login`; publishing it is a separate action and must be approved before the default app domain can be treated as a live endpoint. Vercel Production is not changed by this branch.
+The Base44 app has not been published yet. Its visibility is configured as `public_with_login`; publishing it is a separate action and must be approved before the default app domain can be confirmed and treated as a live endpoint. Vercel Production is not changed by this branch.
 
 ## Backend functions
 
