@@ -98,3 +98,12 @@ test("usage analytics are workspace-scoped and never persist prompt content", as
   assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
   assert.doesNotMatch(source, /messages|prompt|completion_content/i);
 });
+
+test("gateway checks API key scopes and applies a documented per-key request guard", async () => {
+  const source = await backendFunction("gateway");
+  assert.match(source, /scopes\.includes\("chat\.completions"\)/);
+  assert.match(source, /recentUsage = await entities\.UsageEvent\.filter/);
+  assert.match(source, /recentCount >= 30/);
+  assert.match(source, /rate_limit_exceeded/);
+  assert.match(source, /not a distributed concurrency limit/);
+});
