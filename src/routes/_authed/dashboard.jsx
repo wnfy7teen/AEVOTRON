@@ -279,7 +279,7 @@ function ApiKeyManager() {
               <div className="mh-key-main"><strong>{key.name}</strong><code>{key.key_prefix}••••••••••</code>
                 <small>Created {key.created_date ? new Date(key.created_date).toLocaleDateString() : "recently"} · Expires {key.expires_at ? new Date(key.expires_at).toLocaleDateString() : "Never"}</small></div>
               <div className="mh-key-actions"><span className={`mh-status ${key.status === "active" ? "byok" : "planned"}`}>{key.status}</span>
-                {key.status === "active" && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {setError("");revoke.mutate(key.id);}}>Revoke</button>}</div>
+                {["active", "expired"].includes(key.status) && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {setError("");revoke.mutate(key.id);}}>Revoke</button>}</div>
             </div>
           ))}</div>}
       </div>
