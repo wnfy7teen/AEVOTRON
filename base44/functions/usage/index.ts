@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     const workspace = await ensureWorkspace(base44, user);
     const rows = await base44.asServiceRole.entities.UsageEvent.filter(
       { owner_user_id: user.id, workspace_id: workspace.id },
-      "-created_date", 500, 0,
+      "-created_date", 5000, 0,
       ["id", "request_id", "model_id", "provider_code", "input_tokens", "output_tokens",
         "latency_ms", "status_code", "error_code", "created_at"],
     );
