@@ -59,7 +59,7 @@ function HomePage() {
     <div className="mh-shell">
       <aside className={`mh-sidebar ${mobileNav ? "mh-sidebar-open" : ""}`}>
         <div className="mh-brand"><div className="mh-brand-mark"><Command size={19}/></div><span>model<span className="mh-brand-accent">hub</span></span><span className="mh-beta">BETA</span></div>
-        <div className="mh-workspace"><div className="mh-workspace-icon">C</div><div><strong>{workspaceLabel}</strong><small>{workspaceQuery.data?.region?.toUpperCase() ?? "Personal workspace"}</small></div><ChevronDown size={15}/></div>
+        <div className="mh-workspace"><div className="mh-workspace-icon">C</div><div><strong>{workspaceLabel}</strong><small>{usageQuery.data?.workspace?.region?.toUpperCase() ?? "Personal workspace"}</small></div><ChevronDown size={15}/></div>
         {nav.map(group => <div className="mh-nav-group" key={group.label}><div className="mh-nav-label">{group.label}</div>{group.items.map(item => <button key={item.name} className={`mh-nav-item ${section === item.name ? "active" : ""}`} onClick={() => {setSection(item.name);setMobileNav(false)}}><item.icon size={17}/><span>{item.name}</span>{item.name === "API keys" && <span className="mh-nav-count">0</span>}</button>)}</div>)}
         <div className="mh-sidebar-bottom"><div className="mh-usage-mini"><div className="mh-usage-top"><span>Free plan</span><span>0 / 1,000 req</span></div><div className="mh-progress"><i/></div><small>Bring your own provider keys to get started.</small></div><button className="mh-profile"><div className="mh-avatar">C</div><div><strong>Christopher</strong><small>Personal account</small></div><Settings2 size={16}/></button></div>
       </aside>
