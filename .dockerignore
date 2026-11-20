@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+.output
+dist
+.wrangler
+.tanstack
+coverage
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
