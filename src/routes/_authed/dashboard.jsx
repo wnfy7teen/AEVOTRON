@@ -115,8 +115,8 @@ function ProviderConnections() {
     mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "test", connection_id: connectionId,
     }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
     onError: (err) => setError(err?.message || "The connection test failed."),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
   });
   const revoke = useMutation({
     mutationFn: (connectionId) => invokeFunction("provider-connections", {
@@ -158,11 +158,11 @@ function ProviderConnections() {
             </span>}
         </div>
         {query.isError && <div className="mh-inline-error">Could not load provider connections. Refresh the page and try again.</div>}
-        {openai?.status === "active" ? (
+        {openai && ["active", "error"].includes(openai.status) ? (
           <div className="mh-connected-row">
             <div><strong>API credential protected</strong><small>Last checked: {openai.last_tested_at ? new Date(openai.last_tested_at).toLocaleString() : "Not checked"}</small></div>
             <div className="mh-connection-actions">
-              <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? "Testing…" : "Test connection"} </button>
+              <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? "Testing…" : openai.status === "error" ? "Retry test" : "Test connection"} </button>
               <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {setError("");revoke.mutate(openai.id);}}>Revoke</button>
             </div>
           </div>
