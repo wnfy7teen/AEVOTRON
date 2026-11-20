@@ -85,7 +85,7 @@ test("gateway accepts only bounded OpenAI chat requests and never logs prompts",
   assert.match(source, /raw\.length > 65536/);
   assert.match(source, /input\.stream === true/);
   assert.match(source, /input\.messages\.length > 50/);
-  assert.match(source, /Authorization: `Bearer ${credential}`/);
+  assert.ok(source.includes("Authorization: `Bearer ${credential}`"));
   assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
   assert.doesNotMatch(source, /prompt:\s*input\.messages/);
 });
