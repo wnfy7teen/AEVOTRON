@@ -706,6 +706,10 @@ const dictionaries = {
 };
 
 const landingTranslations = {
+  "Platform": { en: "Platform", ru: "Платформа", zh: "平台" },
+  "Security": { en: "Security", ru: "Безопасность", zh: "安全" },
+  "Developers": { en: "Developers", ru: "Разработчикам", zh: "开发者" },
+  "ЯЗЫК ИНТЕРФЕЙСА": { en: "INTERFACE LANGUAGE", ru: "ЯЗЫК ИНТЕРФЕЙСА", zh: "界面语言" },
   "НА СТРАНИЦЕ": { en: "ON THIS PAGE", zh: "本页导航" },
   "РАЗДЕЛЫ": { en: "SECTIONS", zh: "页面导航" },
   "АККАУНТ": { en: "ACCOUNT", zh: "账户" },
@@ -886,7 +890,7 @@ export function LanguageSwitcher() {
       <button type="button" className="av-language-trigger" aria-label="Language" aria-expanded={open}
         onClick={() => setOpen((value) => !value)}>
         <span className="av-language-globe">文</span>
-        <span className="av-language-current" data-language={current.code}>{current.code.toUpperCase()}</span>
+        <span className="av-language-current" data-language={current.code} data-no-translate>{current.code.toUpperCase()}</span>
         <ChevronDown size={14} className={open ? "is-open" : ""} />
       </button>
     </div>
