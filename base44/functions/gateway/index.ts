@@ -122,7 +122,12 @@ Deno.serve(async (req) => {
   let entities = null;
 
   try {
-    const base44 = createClientFromRequest(req);
+    const serviceHeaders = new Headers(req.headers);
+    serviceHeaders.delete("authorization");
+    serviceHeaders.delete("content-length");
+    serviceHeaders.delete("content-type");
+    const serviceRequest = new Request(req.url, { method: req.method, headers: serviceHeaders });
+    const base44 = createClientFromRequest(serviceRequest);
     entities = base44.asServiceRole.entities;
     const hash = await hashToken(token);
     const keys = await entities.ApiKey.filter({ key_hash: hash, status: "active" }, "-created_date", 1, 0,
