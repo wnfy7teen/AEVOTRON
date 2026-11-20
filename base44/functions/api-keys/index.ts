@@ -91,7 +91,16 @@ Deno.serve(async (req) => {
 
     if (action === "create") {
       const name = typeof input.name === "string" ? input.name.trim() : "";
-      if (!name || name.length > 60) return json({ error: { code: "INVALID_KEY_NAME" } }, 400);
+      if (!name || name.length > 60 || Array.from(name).some((char) => {
+        const code = char.charCodeAt(0);
+        return code < 32 || code === 127;
+      })) {
+        return json({ error: { code: "INVALID_KEY_NAME" } }, 400);
+      }
+      const activeKeys = await entities.ApiKey.filter({ ...filter, status: "active" }, "-created_date", 20, 0, ["id"]);
+      if (activeKeys.length >= 20) {
+        return json({ error: { code: "ACTIVE_KEY_LIMIT", message: "A workspace can have at most 20 active API keys." } }, 409);
+      }
       const expiresIn = input.expires_in_days === undefined ? 90 : Number(input.expires_in_days);
       if (![30, 90, 365].includes(expiresIn)) {
         return json({ error: { code: "INVALID_EXPIRY" } }, 400);
