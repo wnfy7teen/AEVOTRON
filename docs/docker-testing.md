@@ -26,10 +26,10 @@ To build and run the HTTP smoke test manually:
 
 ```sh
 docker build -t aevotron:docker-preview .
-./docker-verify.sh
+sh docker-verify.sh
 ```
 
-The image build runs `npm install --no-audit --no-fund`, `npm test`,
+The Docker build runs `npm install --no-audit --no-fund`, `npm test`,
 `npm run lint` and `npm run build`. The runtime image contains only Nitro's
 generated `.output` directory and runs as the unprivileged `node` user.
 
@@ -48,8 +48,9 @@ Do not copy production secrets into the image or commit them to the repository.
 ## GitHub Actions
 
 The `Docker build verification` workflow builds the image and runs
-`docker-verify.sh`, which starts the container and checks that the homepage
-returns HTML over HTTP. It does not push an image to a registry or deploy it.
+`docker-verify.sh` through the POSIX shell. The script starts the container
+and checks that the homepage returns HTML over HTTP. It does not push an image
+to a registry or deploy it.
 
 ## Production boundary
 
