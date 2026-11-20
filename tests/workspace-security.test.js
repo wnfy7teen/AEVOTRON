@@ -123,3 +123,9 @@ test("provider model discovery is owner-scoped and uses the encrypted OpenAI con
   assert.match(source, /chatgpt-/);
   assert.doesNotMatch(source, /return json\(\{[^}]*credential_ciphertext/s);
 });
+
+test("gateway API bearer keys are not reused as Base44 session credentials", async () => {
+  const source = await backendFunction("gateway");
+  assert.match(source, /serviceHeaders\.delete\("authorization"\)/);
+  assert.match(source, /createClientFromRequest\(serviceRequest\)/);
+});
