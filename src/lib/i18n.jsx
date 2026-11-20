@@ -258,7 +258,7 @@ const dictionaries = {
     "Copy the key below.": "Скопируйте ключ ниже.",
     "In your authenticator app, add an account and paste the key.": "В приложении-аутентификаторе добавьте аккаунт и вставьте ключ.",
     "Come back here and enter the code the app shows.": "Вернитесь сюда и введите код из приложения.",
-    "Back": "Назад"
+    "Back": "Назад",
     "Connect your own provider accounts. Credentials stay encrypted on the server.": "Подключайте собственные аккаунты провайдеров. Учётные данные хранятся на сервере в зашифрованном виде.",
     "Your key is sent directly to the secure backend over HTTPS, validated with the provider and encrypted before it is stored. It is never returned to this page.": "Ключ передаётся защищённому серверу по HTTPS, проверяется у провайдера и шифруется перед сохранением. Он никогда не возвращается на эту страницу.",
     "GPT models and OpenAI-compatible chat completions": "Модели GPT и чат-запросы, совместимые с OpenAI",
