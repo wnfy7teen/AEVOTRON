@@ -74,6 +74,7 @@ test("AEVOTRON API keys are random, HMAC-hashed and only returned at creation", 
   assert.match(source, /crypto\.getRandomValues/);
   assert.match(source, /name: "HMAC"/);
   assert.match(source, /key_hash: keyHash/);
+  assert.match(source, /scopes_json: JSON\.stringify\(\["chat\.completions"\]\)/);
   assert.match(source, /key: token/);
   assert.match(source, /This key is shown once/);
   assert.doesNotMatch(source, /localStorage/);
