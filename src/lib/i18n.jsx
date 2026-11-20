@@ -619,7 +619,7 @@ const dictionaries = {
     "Developer: Kristofer Biksan": "开发者：Kristofer Biksan",
     "Telegram": "Telegram",
     "Close menu": "关闭菜单",
-    "Open menu": "打开菜单"
+    "Open menu": "打开菜单",
     "Connect your own provider accounts. Credentials stay encrypted on the server.": "连接您自己的服务商账户。凭据将在服务器端加密保存。",
     "Your key is sent directly to the secure backend over HTTPS, validated with the provider and encrypted before it is stored. It is never returned to this page.": "您的密钥通过 HTTPS 发送至安全后端，经服务商验证后加密存储，不会再次返回到此页面。",
     "GPT models and OpenAI-compatible chat completions": "GPT 模型及兼容 OpenAI 的聊天补全接口",
