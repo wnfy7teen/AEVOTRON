@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 
 const LanguageContext = createContext({ language: "en", setLanguage: () => {}, t: (value) => value });
@@ -806,60 +806,112 @@ const translateText = (value, language) => {
   return result;
 };
 
+// Keep both the source text and the last translated value. React can reuse a
+// text node and replace its contents; when that happens, refresh the source
+// instead of translating stale text from a previous render.
 const originalText = new WeakMap();
 const originalAttributes = new WeakMap();
 
 function applyTranslations(language) {
   if (typeof document === "undefined") return;
   document.documentElement.lang = language === "zh" ? "zh-CN" : language;
+
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const nodes = [];
   while (walker.nextNode()) nodes.push(walker.currentNode);
+
   nodes.forEach((node) => {
-    if (!originalText.has(node)) originalText.set(node, node.nodeValue);
-    if (!node.parentElement?.closest("[data-no-translate]")) {
-      const next = translateText(originalText.get(node), language);
-      if (next !== node.nodeValue) node.nodeValue = next;
+    const current = node.nodeValue ?? "";
+    let state = originalText.get(node);
+    if (!state || current !== state.translated) {
+      state = { source: current, translated: current };
     }
+
+    if (node.parentElement?.closest("[data-no-translate]")) {
+      state.source = current;
+      state.translated = current;
+      originalText.set(node, state);
+      return;
+    }
+
+    const next = translateText(state.source, language);
+    if (next !== current) node.nodeValue = next;
+    state.translated = next;
+    originalText.set(node, state);
   });
+
   document.querySelectorAll("input[placeholder], textarea[placeholder], [aria-label], [title]").forEach((element) => {
     ["placeholder", "aria-label", "title"].forEach((attribute) => {
-      const key = attribute;
+      const current = element.getAttribute(attribute);
+      if (current === null) return;
+
       let originals = originalAttributes.get(element);
-      if (!originals) { originals = {}; originalAttributes.set(element, originals); }
-      if (originals[key] === undefined) originals[key] = element.getAttribute(attribute);
-      const value = originals[key];
-      if (value) {
-        const next = translateText(value, language);
-        if (element.getAttribute(attribute) !== next) element.setAttribute(attribute, next);
+      if (!originals) {
+        originals = {};
+        originalAttributes.set(element, originals);
       }
+
+      let state = originals[attribute];
+      if (!state || current !== state.translated) {
+        state = { source: current, translated: current };
+      }
+
+      if (element.closest("[data-no-translate]")) {
+        state.source = current;
+        state.translated = current;
+        originals[attribute] = state;
+        return;
+      }
+
+      const next = translateText(state.source, language);
+      if (next !== current) element.setAttribute(attribute, next);
+      state.translated = next;
+      originals[attribute] = state;
     });
   });
 }
 
 export function LanguageProvider({ children }) {
   const [language, setLanguageState] = useState("en");
+
   useEffect(() => {
-    const saved = window.localStorage.getItem("aevotron-language");
-    const initial = supported.includes(saved) ? saved : "en";
-    setLanguageState(initial);
+    try {
+      const saved = window.localStorage.getItem("aevotron-language");
+      if (supported.includes(saved)) setLanguageState(saved);
+    } catch {
+      // Language switching still works for this session when storage is blocked.
+    }
   }, []);
+
   useEffect(() => {
     applyTranslations(language);
     const observer = new MutationObserver(() => applyTranslations(language));
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "title", "placeholder"] });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ["aria-label", "title", "placeholder"],
+    });
     return () => observer.disconnect();
   }, [language]);
+
   const setLanguage = (next) => {
     if (!supported.includes(next)) return;
-    window.localStorage.setItem("aevotron-language", next);
+    try {
+      window.localStorage.setItem("aevotron-language", next);
+    } catch {
+      // Keep the in-memory selection even when localStorage is unavailable.
+    }
     setLanguageState(next);
   };
+
   const value = useMemo(() => ({
     language,
     setLanguage,
     t: (value) => translateText(value, language),
   }), [language]);
+
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
@@ -870,31 +922,78 @@ export function useLanguage() {
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
+  const switcherRef = useRef(null);
+  const triggerRef = useRef(null);
   const options = [
     { code: "en", label: "English", native: "EN" },
     { code: "ru", label: "Русский", native: "RU" },
     { code: "zh", label: "简体中文", native: "中文" },
   ];
   const current = options.find((option) => option.code === language) ?? options[0];
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (!switcherRef.current?.contains(event.target)) setOpen(false);
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
+  const selectLanguage = (next) => {
+    setLanguage(next);
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
   return (
-    <div className="av-language-switcher" data-open={open}>
-      {open && <div className="av-language-menu" role="listbox" aria-label="Language">
-        <span className="av-language-menu-title">ЯЗЫК ИНТЕРФЕЙСА</span>
-        {options.map((option) => (
-          <button key={option.code} type="button" role="option" aria-selected={language === option.code}
-            className={language === option.code ? "active" : ""}
-            onClick={() => { setLanguage(option.code); setOpen(false); }}>
-            <span className="av-language-native">{option.native}</span>
-            <span>{option.label}</span>
-            {language === option.code && <Check size={15} />}
-          </button>
-        ))}
-      </div>}
-      <button type="button" className="av-language-trigger" aria-label="Language" aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}>
-        <span className="av-language-globe">文</span>
-        <span className="av-language-current" data-language={current.code} data-no-translate>{current.code.toUpperCase()}</span>
-        <ChevronDown size={14} className={open ? "is-open" : ""} />
+    <div ref={switcherRef} className="av-language-switcher" data-open={open}>
+      {open && (
+        <div id="av-language-menu" className="av-language-menu" role="listbox" aria-label="Language">
+          <span className="av-language-menu-title">ЯЗЫК ИНТЕРФЕЙСА</span>
+          {options.map((option) => (
+            <button
+              key={option.code}
+              type="button"
+              role="option"
+              aria-selected={language === option.code}
+              className={language === option.code ? "active" : ""}
+              onClick={() => selectLanguage(option.code)}
+            >
+              <span className="av-language-native">{option.native}</span>
+              <span>{option.label}</span>
+              {language === option.code && <Check size={15} />}
+            </button>
+          ))}
+        </div>
+      )}
+      <button
+        ref={triggerRef}
+        type="button"
+        className="av-language-trigger"
+        aria-label="Language"
+        aria-haspopup="listbox"
+        aria-controls="av-language-menu"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="av-language-globe" aria-hidden="true">文</span>
+        <span className="av-language-current" data-language={current.code} data-no-translate>
+          {current.code.toUpperCase()}
+        </span>
+        <ChevronDown size={14} className={open ? "is-open" : ""} aria-hidden="true" />
       </button>
     </div>
   );
