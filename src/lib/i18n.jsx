@@ -716,6 +716,10 @@ const landingTranslations = {
   "Единая точка доступа": { en: "Single access point", zh: "统一接入点" },
   "Подключено": { en: "Connected", zh: "已连接" },
   "Интерфейс управления API-ключами": { en: "API key management interface", zh: "API 密钥管理界面" },
+  "API 密钥管理界面": { en: "API key management interface", ru: "Интерфейс управления API-ключами", zh: "API 密钥管理界面" },
+  "Chat completions": { en: "Chat completions", ru: "Завершение чата", zh: "聊天补全" },
+  "Embeddings": { en: "Embeddings", ru: "Эмбеддинги", zh: "嵌入" },
+  "Usage": { en: "Usage", ru: "Использование", zh: "用量" },
   "Безопасность · API-ключи": { en: "Security · API keys", zh: "安全 · API 密钥" },
   "АКТИВНЫЙ КЛЮЧ": { en: "ACTIVE KEY", zh: "当前密钥" },
   "Создан сегодня · Полный доступ": { en: "Created today · Full access", zh: "今天创建 · 完全访问权限" },
@@ -773,15 +777,16 @@ const landingTranslations = {
 const supported = ["en", "ru", "zh"];
 const translateText = (value, language) => {
   if (!value) return value;
-  const trimmed = value.trim();
+  const originalTrimmed = value.trim();
+  const trimmed = originalTrimmed.replace(/\u00a0/g, " ");
   const landingTranslation = landingTranslations[trimmed];
   if (landingTranslation) {
     const translated = landingTranslation[language] ?? trimmed;
-    return value.replace(trimmed, translated);
+    return value.replace(originalTrimmed, translated);
   }
   if (language === "en") return value;
   const dictionary = dictionaries[language];
-  if (dictionary[trimmed]) return value.replace(trimmed, dictionary[trimmed]);
+  if (dictionary[trimmed]) return value.replace(originalTrimmed, dictionary[trimmed]);
   let result = value;
   for (const [source, target] of Object.entries(dictionary).sort((a, b) => b[0].length - a[0].length)) {
     if (source.includes(" ")) {
@@ -835,7 +840,7 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     applyTranslations(language);
     const observer = new MutationObserver(() => applyTranslations(language));
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "title", "placeholder"] });
     return () => observer.disconnect();
   }, [language]);
   const setLanguage = (next) => {
@@ -881,7 +886,7 @@ export function LanguageSwitcher() {
       <button type="button" className="av-language-trigger" aria-label="Language" aria-expanded={open}
         onClick={() => setOpen((value) => !value)}>
         <span className="av-language-globe">文</span>
-        <span className="av-language-current">{current.native}</span>
+        <span className="av-language-current" data-language={current.code}>{current.native}</span>
         <ChevronDown size={14} className={open ? "is-open" : ""} />
       </button>
     </div>
