@@ -1,10 +1,19 @@
 services:
-  build-check:
-    image: aevotron:docker-check
+  aevotron:
+    image: aevotron:docker-preview
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: "3000"
+    restart: unless-stopped
     read_only: true
+    tmpfs:
+      - /tmp
     security_opt:
       - no-new-privileges:true
     cap_drop:
