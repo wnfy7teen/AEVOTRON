@@ -134,5 +134,16 @@
   "Export": "Export",
   "Retry": "Retry",
   "Branch here": "Branch here",
-  "Could not create a branch.": "Could not create a branch."
+  "Could not create a branch.": "Could not create a branch.",
+  "A maximum of five text attachments is allowed.": "A maximum of five text attachments is allowed.",
+  "This file type is not supported yet. Use plain text or source code files.": "This file type is not supported yet. Use plain text or source code files.",
+  "Each text attachment must be 512 KB or smaller.": "Each text attachment must be 512 KB or smaller.",
+  "This file does not appear to be valid UTF-8 text.": "This file does not appear to be valid UTF-8 text.",
+  "The combined text from attachments is limited to 12,000 characters.": "The combined text from attachments is limited to 12,000 characters.",
+  "Could not read this attachment.": "Could not read this attachment.",
+  "The message and attachments exceed the 20,000 character limit.": "The message and attachments exceed the 20,000 character limit.",
+  "Remove attachment": "Remove attachment",
+  "Reading files…": "Reading files…",
+  "Attach": "Attach",
+  "Only plain text and source code files are parsed locally in this version.": "Only plain text and source code files are parsed locally in this version."
 }

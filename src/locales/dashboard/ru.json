@@ -134,5 +134,16 @@
   "Export": "Экспортировать",
   "Retry": "Повторить",
   "Branch here": "Создать ветку отсюда",
-  "Could not create a branch.": "Не удалось создать ветку диалога."
+  "Could not create a branch.": "Не удалось создать ветку диалога.",
+  "A maximum of five text attachments is allowed.": "Можно прикрепить не более пяти текстовых файлов.",
+  "This file type is not supported yet. Use plain text or source code files.": "Этот формат пока не поддерживается. Используйте обычный текстовый файл или файл с исходным кодом.",
+  "Each text attachment must be 512 KB or smaller.": "Размер каждого текстового файла не должен превышать 512 КБ.",
+  "This file does not appear to be valid UTF-8 text.": "Файл не похож на корректный текст в кодировке UTF-8.",
+  "The combined text from attachments is limited to 12,000 characters.": "Общий объём текста вложений ограничен 12 000 символами.",
+  "Could not read this attachment.": "Не удалось прочитать вложение.",
+  "The message and attachments exceed the 20,000 character limit.": "Сообщение вместе с вложениями превышает лимит в 20 000 символов.",
+  "Remove attachment": "Удалить вложение",
+  "Reading files…": "Читаем файлы…",
+  "Attach": "Прикрепить",
+  "Only plain text and source code files are parsed locally in this version.": "В этой версии локально обрабатываются только обычные текстовые файлы и исходный код."
 }

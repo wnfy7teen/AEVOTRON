@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download, GitBranch } from "lucide-react";
+import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download, GitBranch, Paperclip } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -49,6 +49,9 @@ function WorkspaceChat() {
   const activeModel = models.find((model) => model.id === selectedModel) || models[0] || null;
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
+  const [attachments, setAttachments] = useState([]);
+  const [fileError, setFileError] = useState("");
+  const [isProcessingFiles, setIsProcessingFiles] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -68,6 +71,7 @@ function WorkspaceChat() {
   const compareControllersRef = useRef([]);
   const abortRef = useRef(null);
   const composerRef = useRef(null);
+  const fileInputRef = useRef(null);
   const contextEstimate = useMemo(() => estimateTokens(messages), [messages]);
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 
@@ -99,6 +103,36 @@ function WorkspaceChat() {
     });
     return () => { current = false; };
   }, [activeConversation, demoMode, t]);
+
+  const addFiles = async (fileList) => {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    setFileError("");
+    setIsProcessingFiles(true);
+    const allowed = new Set(["txt","md","markdown","csv","tsv","json","yaml","yml","xml","html","css","js","jsx","ts","tsx","py","go","rs","java","kt","sql","sh","bash","log","toml","ini","env.example"]);
+    const currentCount = attachments.length;
+    let totalCharacters = attachments.reduce((sum, item) => sum + item.text.length, 0);
+    const accepted = [];
+    try {
+      for (const file of files) {
+        if (currentCount + accepted.length >= 5) { setFileError(t("A maximum of five text attachments is allowed.")); break; }
+        const extension = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
+        if (!allowed.has(extension)) { setFileError(t("This file type is not supported yet. Use plain text or source code files.")); continue; }
+        if (file.size > 512 * 1024) { setFileError(t("Each text attachment must be 512 KB or smaller.")); continue; }
+        const text = await file.text();
+        const controlCharacters = (text.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
+        if (controlCharacters > Math.max(2, text.length * 0.01)) { setFileError(t("This file does not appear to be valid UTF-8 text.")); continue; }
+        if (totalCharacters + text.length > 12_000) { setFileError(t("The combined text from attachments is limited to 12,000 characters.")); continue; }
+        totalCharacters += text.length;
+        accepted.push({ id: crypto.randomUUID(), name: file.name, size: file.size, text, tokens: Math.ceil(text.length / 4) });
+      }
+      if (accepted.length) setAttachments((items) => [...items, ...accepted].slice(0,5));
+    } catch (error) {
+      setFileError(error.message || t("Could not read this attachment."));
+    } finally {
+      setIsProcessingFiles(false);
+    }
+  };
 
   const updateAssistant = (id, updater, conversationId) => {
     if (activeConversationRef.current === conversationId) {
@@ -149,11 +183,14 @@ function WorkspaceChat() {
   const send = async (event) => {
     event?.preventDefault?.();
     const value = draft.trim();
-    if (!value || isStreaming || !activeModel || demoMode) return;
+    if ((!value && !attachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
+    const fileContext = attachments.map((file) => "[Attachment: " + file.name + "]\\n" + file.text + "\\n[End attachment]").join("\\n\\n");
+    const prompt = [value, fileContext].filter(Boolean).join("\\n\\n");
+    if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
     if (!demoMode && (!sessionId || sessionId === "current")) {
       try {
-        const created = await api.workspace.createChat({ title: value.slice(0, 100), model_id: activeModel.id });
+        const created = await api.workspace.createChat({ title: (value || attachments[0]?.name || t("New conversation")).slice(0, 100), model_id: activeModel.id });
         sessionId = created.session.id;
         skipSessionLoadRef.current = sessionId;
         activeConversationRef.current = sessionId;
@@ -164,10 +201,12 @@ function WorkspaceChat() {
         return;
       }
     }
-    const userMessage = { id: crypto.randomUUID(), role: "user", content: value, createdAt: Date.now() };
+    const userMessage = { id: crypto.randomUUID(), role: "user", content: prompt, createdAt: Date.now() };
     const next = [...messages, userMessage];
     setMessages(next);
     setDraft("");
+    setAttachments([]);
+    setFileError("");
     setConversations((items) => items.map((item) => item.id === sessionId
       ? { ...item, messages: next, title: item.title === t("New conversation") ? value.slice(0, 44) : item.title } : item));
     await generate(next, { sessionId });
@@ -221,6 +260,8 @@ function WorkspaceChat() {
     setMessages([]);
     setMetrics(null);
     setDraft("");
+    setAttachments([]);
+    setFileError("");
   };
 
   const selectConversation = (id) => {
@@ -230,6 +271,8 @@ function WorkspaceChat() {
     activeConversationRef.current = id;
     setActiveConversation(id);
     setMessages(conversations.find((item) => item.id === id)?.messages || []);
+    setAttachments([]);
+    setFileError("");
     setMetrics(null);
 
   };
@@ -404,9 +447,12 @@ function WorkspaceChat() {
             {messages.length === 0 ? <div className="aw-empty-state"><div className="aw-empty-icon"><Sparkles size={22}/></div><h2>{t("A clear space for your next idea.")}</h2><p>{t("Ask a question, explore an idea, or work through a technical problem.")}</p><div className="aw-prompt-suggestions">{[t("Explain a complex concept simply"),t("Review this code for potential issues"),t("Help me plan a technical project")].map((item) => <button key={item} type="button" onClick={() => {setDraft(item);composerRef.current?.focus();}} disabled={demoMode || !activeModel}>{item}<ArrowUp size={14}/></button>)}</div></div> : messages.map((message) => <article key={message.id} className={"aw-message aw-message-" + message.role}><div className="aw-message-avatar">{message.role === "assistant" ? <Bot size={16}/> : <span>Y</span>}</div><div className="aw-message-body"><div className="aw-message-meta"><strong>{message.role === "assistant" ? (activeModel?.provider_model_id || t("Assistant")) : t("You")}</strong>{message.role === "assistant" && <span>{providerName}</span>}</div>{editingId === message.id ? <div className="aw-edit-box"><textarea value={editValue} onChange={(event) => setEditValue(event.target.value)} rows={4}/><div><button type="button" onClick={() => setEditingId(null)}>{t("Cancel")}</button><button type="button" onClick={() => saveEdit(message.id)}>{t("Save and resend")}</button></div></div> : <div className="aw-message-content">{message.role === "assistant" && message.content ? <ReactMarkdown>{message.content}</ReactMarkdown> : message.content || (isStreaming && message.role === "assistant" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null)}{message.error && <p className="aw-message-error">{message.error}</p>}{message.role === "assistant" && message.error && !isStreaming && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Retry")}</button>}</div>}{message.role === "user" && !isStreaming && message.id === messages.filter((item) => item.role === "user").slice(-1)[0]?.id && <button className="aw-message-action" type="button" onClick={() => {setEditingId(message.id);setEditValue(message.content);}}><Pencil size={13}/>{t("Edit")}</button>}{message.role === "user" && !isStreaming && !demoMode && <button className="aw-message-action" type="button" onClick={() => branchFromMessage(message)}><GitBranch size={13}/>{t("Branch here")}</button>}{message.role === "assistant" && message.content && !isStreaming && message.id === messages[messages.length - 1]?.id && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Regenerate")}</button>}</div></article>)}
           </div>
 
-          <form className="aw-composer" onSubmit={send}>
-            <textarea ref={composerRef} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {if (event.key === "Enter" && !event.shiftKey) {event.preventDefault();send();}}} placeholder={demoMode ? t("Live chat is disabled in demo mode") : t("Message AEVOTRON…")} aria-label={t("Message AEVOTRON")} rows={2} disabled={demoMode || !activeModel || isStreaming}/>
-            <div className="aw-composer-bottom"><span>{t("Enter to send · Shift + Enter for a new line")}</span>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={!draft.trim() || !activeModel || demoMode}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
+          <form className="aw-composer" onSubmit={send} onDragOver={(event) => event.preventDefault()} onDrop={(event) => {event.preventDefault();addFiles(event.dataTransfer?.files);}}>
+            <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
+            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className="aw-attachment-chip" key={file.id}><FileText size={13}/><span>{file.name} · ~{file.tokens} {t("tokens")}</span><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => setAttachments((items) => items.filter((item) => item.id !== file.id))}><X size={12}/></button></span>)}</div>}
+            {fileError && <div className="aw-file-error" role="alert">{fileError}</div>}
+            <textarea ref={composerRef} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {if (event.key === "Enter" && !event.shiftKey) {event.preventDefault();send();}}} onPaste={(event) => {const files = Array.from(event.clipboardData?.files || []);if(files.length){event.preventDefault();addFiles(files);}}} placeholder={demoMode ? t("Live chat is disabled in demo mode") : t("Message AEVOTRON…")} aria-label={t("Message AEVOTRON")} rows={2} disabled={demoMode || !activeModel || isStreaming}/>
+            <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach")}</button><span>{t("Enter to send · Shift + Enter for a new line")}</span></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !attachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
           </form>
 
           <div className="aw-statusbar">
@@ -417,7 +463,7 @@ function WorkspaceChat() {
             <div className="aw-status-metric"><Sparkles size={13}/><span>{t("Output speed")}: {tokenRate === "—" ? "—" : (metrics?.usage ? "" : "~") + tokenRate + " tok/s"}</span></div>
             <div className="aw-status-cost">{t("Cost")}: {t("Not reported")}</div>
           </div>
-          <p className="aw-disclaimer">{t("Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.")}</p>
+          <p className="aw-disclaimer">{t("Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.")} {t("Only plain text and source code files are parsed locally in this version.")}</p>
         </section>
       </main>
     </div>

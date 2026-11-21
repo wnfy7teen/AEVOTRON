@@ -134,5 +134,16 @@
   "Export": "导出",
   "Retry": "重试",
   "Branch here": "从此处创建分支",
-  "Could not create a branch.": "无法创建对话分支。"
+  "Could not create a branch.": "无法创建对话分支。",
+  "A maximum of five text attachments is allowed.": "最多可添加五个文本附件。",
+  "This file type is not supported yet. Use plain text or source code files.": "暂不支持此文件类型。请使用纯文本或源代码文件。",
+  "Each text attachment must be 512 KB or smaller.": "每个文本附件不得超过 512 KB。",
+  "This file does not appear to be valid UTF-8 text.": "此文件似乎不是有效的 UTF-8 文本。",
+  "The combined text from attachments is limited to 12,000 characters.": "所有附件的文本总长度限制为 12,000 个字符。",
+  "Could not read this attachment.": "无法读取此附件。",
+  "The message and attachments exceed the 20,000 character limit.": "消息与附件总长度超过 20,000 个字符的限制。",
+  "Remove attachment": "移除附件",
+  "Reading files…": "正在读取文件…",
+  "Attach": "添加附件",
+  "Only plain text and source code files are parsed locally in this version.": "当前版本仅在本地解析纯文本和源代码文件。"
 }
