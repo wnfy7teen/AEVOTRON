@@ -1,5 +1,6 @@
 import http from "node:http";
-import { randomUUID, createHash } from "node:crypto";
+import { randomUUID, randomInt, createHash } from "node:crypto";
+import QRCode from "qrcode";
 import { pool, migrate, transaction } from "./db.js";
 import {
   apiKeyHash, createApiKey, decryptSecret, encryptSecret, hashPassword,
@@ -157,7 +158,7 @@ function publicUser(user) {
   return { id: user.id, email: user.email, display_name: user.display_name, email_verified: Boolean(user.email_verified_at) };
 }
 async function createVerification(user) {
-  const token = randomToken(32);
+  const token = String(randomInt(100000, 1_000_000));
   await pool.query(
     "INSERT INTO email_verification_tokens(user_id,token_hash,expires_at) VALUES($1,$2,now()+interval '30 minutes')",
     [user.id, sha256(token)],
@@ -166,7 +167,7 @@ async function createVerification(user) {
   const sent = await sendActionEmail({
     to: user.email,
     subject: "Verify your AEVOTRON account",
-    text: `Verify your email by opening: ${link}`,
+    text: `Your AEVOTRON verification code is ${token}. It expires in 30 minutes. Or open: ${link}`,
     html: `<p>Verify your AEVOTRON account:</p><p><a href="${escapeHtml(link)}">Verify email</a></p>`,
   });
   return sent ? null : token;
@@ -250,7 +251,7 @@ async function handle(req, res) {
   if (req.method === "POST" && path === "/api/v1/auth/verify-email") {
     await rateLimit(req, "verify-email", 10, 900);
     const token = String(body.token || "");
-    if (token.length < 32 || token.length > 200) return fail(res, 400, "INVALID_TOKEN", "Verification link is invalid or expired.");
+    if (!/^\\d{6}$/.test(token)) return fail(res, 400, "INVALID_TOKEN", "Verification code is invalid or expired.");
     const result = await pool.query(
       `UPDATE email_verification_tokens SET consumed_at=now()
        WHERE token_hash=$1 AND consumed_at IS NULL AND expires_at>now()
