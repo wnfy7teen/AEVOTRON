@@ -14,7 +14,7 @@ const FULL_CODE = "Enter the full 6-digit code";
 // Sets up one method: method is "totp" (authenticator app) or "sms" (text messages).
 // onDone receives the server's result once the code is confirmed; onBack leaves the setup.
 export function MfaMethodSetup({ session, method, onDone, onBack, signInPath }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [setup, setSetup] = useState(null);
   const [step, setStep] = useState("start");
   const [countryCode, setCountryCode] = useState(defaultDialCode);
