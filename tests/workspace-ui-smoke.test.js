@@ -95,7 +95,7 @@ test("read-only preview does not call account MFA or password mutation endpoints
   const mfa = source.split("function MfaSettings({ preview = false })")[1]?.split("\\nconst SETTINGS_DEFAULTS")[0] || "";
   assert.match(mfa, /if \(preview\) \{/);
   assert.match(mfa, /Authenticator setup is unavailable in the read-only preview/);
-  assert.match(source, /<MfaSettings preview=\{preview\}\\/>/);
+  assert.ok(source.includes("<MfaSettings preview={preview}/>"));
   const securityPanel = source.split('{tab==="Security" &&')[1]?.split('{tab==="Notifications" &&')[0] || "";
   assert.match(securityPanel, /Password changes are disabled in the read-only preview/);
   assert.match(securityPanel, /preview \? <div className="mh-callout av-settings-notice"/);
