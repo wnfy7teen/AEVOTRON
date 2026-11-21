@@ -151,3 +151,38 @@ it("resolves locale from cookie before weighted Accept-Language preferences", as
   assert.equal(resolveRequestLocale("aevotron-language=fr", "ru-RU,ru;q=0.9"), "ru");
   assert.equal(resolveRequestLocale("", "fr-FR, de-DE;q=0.8"), "en");
 });
+
+it("keeps domain namespace catalogs aligned across supported locales", async () => {
+  for (const namespace of ["dashboard", "landing", "auth"]) {
+    const catalogs = await Promise.all(["en", "ru", "zh"].map((language) =>
+      readFile(new URL(`../src/locales/${namespace}/${language}.json`, import.meta.url), "utf8").then(JSON.parse)
+    ));
+    const keys = Object.keys(catalogs[0]).sort();
+    assert.ok(keys.length > 0, `${namespace} namespace must not be empty`);
+    assert.deepEqual(Object.keys(catalogs[1]).sort(), keys, `${namespace} Russian keys must match English`);
+    assert.deepEqual(Object.keys(catalogs[2]).sort(), keys, `${namespace} Chinese keys must match English`);
+    for (const [index, catalog] of catalogs.entries()) {
+      for (const [key, value] of Object.entries(catalog)) {
+        assert.equal(typeof value, "string", `${namespace} locale ${index} key ${key} must be a string`);
+        assert.ok(value.trim(), `${namespace} locale ${index} key ${key} must not be empty`);
+      }
+    }
+  }
+});
+
+it("migrates landing and authentication UI to domain namespaces with legacy fallback", async () => {
+  const [config, landing, login, register, verification] = await Promise.all([
+    readFile(new URL("../src/i18n.ts", import.meta.url), "utf8"),
+    readFile(new URL("../src/components/landing/AppleLanding.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/components/auth/LoginPage.jsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/components/auth/RegisterPage.jsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/routes/verify-email.jsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(config, /landing: landingEn/);
+  assert.match(config, /auth: authEn/);
+  assert.match(config, /fallbackNS: "translation"/);
+  assert.match(landing, /useLanguage\(\["landing", "translation"\]\)/);
+  assert.match(login, /useTranslation\(\["auth", "translation"\]\)/);
+  assert.match(register, /useTranslation\(\["auth", "translation"\]\)/);
+  assert.match(verification, /useTranslation\(\["auth", "translation"\]\)/);
+});
