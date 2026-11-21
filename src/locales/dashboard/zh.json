@@ -132,5 +132,7 @@
   "input": "输入",
   "output": "输出",
   "Export": "导出",
-  "Retry": "重试"
+  "Retry": "重试",
+  "Branch here": "从此处创建分支",
+  "Could not create a branch.": "无法创建对话分支。"
 }

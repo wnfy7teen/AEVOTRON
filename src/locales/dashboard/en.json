@@ -132,5 +132,7 @@
   "input": "input",
   "output": "output",
   "Export": "Export",
-  "Retry": "Retry"
+  "Retry": "Retry",
+  "Branch here": "Branch here",
+  "Could not create a branch.": "Could not create a branch."
 }
