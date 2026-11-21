@@ -677,7 +677,26 @@ async function handle(req, res) {
       return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
     }
     const result = await upstream.json();
-    return json(res, 200, { models: normalizeProviderModels(provider.code, result.data || []) });
+    const normalized = normalizeProviderModels(provider.code, result.data || []);
+    const catalogRows = await pool.query(
+      "SELECT provider_model_id,display_name,modality,context_window,capabilities,pricing_reference,status FROM models WHERE provider_code=$1",
+      [provider.code],
+    );
+    const catalog = new Map(catalogRows.rows.map((row) => [row.provider_model_id, row]));
+    const models = normalized.map((model) => {
+      const metadata = catalog.get(model.provider_model_id);
+      if (!metadata) return { ...model, context_window: null, capabilities: {}, pricing_reference: null, modality: "chat", catalog_status: "unlisted" };
+      return {
+        ...model,
+        display_name: metadata.display_name,
+        modality: metadata.modality,
+        context_window: metadata.context_window,
+        capabilities: metadata.capabilities || {},
+        pricing_reference: metadata.pricing_reference,
+        catalog_status: metadata.status,
+      };
+    });
+    return json(res, 200, { models });
   }
   if (req.method === "GET" && path === "/api/v1/providers") {
     const user = await requireUser(req, res); if (!user) return;
