@@ -1,62 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireUser } from "@/lib/auth-middleware";
+import { getRequest } from "@tanstack/react-start/server";
 import { toPublicWorkspace, validateWorkspaceInput } from "@/lib/workspace.validation";
 
-/**
- * Returns the signed-in user's personal workspace, creating it on first use.
- * All writes use Base44 service role from the server; callers cannot supply owner IDs,
- * workspace IDs, roles, or membership status.
- *
- * IMPORTANT: Base44's documented entity CRUD has no atomic upsert/unique constraint.
- * The read-then-create flow is retry-safe after partial failure, but concurrent first
- * requests can still create duplicate workspaces or owner memberships. Do not treat
- * this provisioning path as production race-safe until an atomic platform primitive
- * is available and used here.
- */
 export const getOrCreateMyWorkspace = createServerFn({ method: "POST" })
-  .middleware([requireUser])
   .validator(validateWorkspaceInput)
-  .handler(async ({ data, context }) => {
-    const userId = context.user.id;
-    const entities = context.getBase44().asServiceRole.entities;
-
-    const workspaces = await entities.Workspace.filter(
-      { owner_user_id: userId },
-      "-created_date",
-      1,
-      0,
-      ["id", "owner_user_id", "name", "region", "status"],
-    );
-
-    let workspace = workspaces[0];
-
-    if (!workspace) {
-      workspace = await entities.Workspace.create({
-        owner_user_id: userId,
-        name: data.name,
-        region: "global",
-        status: "active",
-      });
+  .handler(async () => {
+    const request = getRequest();
+    const origin = process.env.API_INTERNAL_URL || new URL(request.url).origin;
+    const response = await fetch(new URL("/api/v1/workspaces/current", origin), {
+      headers: { cookie: request.headers.get("cookie") || "" },
+      signal: AbortSignal.timeout(10_000),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const error = new Error(result.error?.message || "Workspace could not be loaded.");
+      error.status = response.status;
+      throw error;
     }
-
-    // Repair a missing owner membership if an earlier request failed between writes.
-    const memberships = await entities.WorkspaceMember.filter(
-      { workspace_id: workspace.id, user_id: userId, status: "active" },
-      "-created_date",
-      1,
-      0,
-      ["id", "workspace_id", "user_id", "status"],
-    );
-
-    if (memberships.length === 0) {
-      await entities.WorkspaceMember.create({
-        workspace_id: workspace.id,
-        owner_user_id: userId,
-        user_id: userId,
-        role: "owner",
-        status: "active",
-      });
-    }
-
-    return toPublicWorkspace(workspace);
+    return toPublicWorkspace(result.workspace);
   });
