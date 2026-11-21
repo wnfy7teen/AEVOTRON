@@ -941,6 +941,9 @@ const workspaceTranslations = {
   "Usage": { ru: "Использование", zh: "用量统计" },
   "Developed by": { ru: "Разработано", zh: "开发者" },
   "Telegram · @web3ResearchCN": { ru: "Telegram · @web3ResearchCN", zh: "Telegram · @web3ResearchCN" },
+  "Switch to light theme": { ru: "Переключить на светлую тему", zh: "切换到浅色主题" },
+  "Switch to dark theme": { ru: "Переключить на тёмную тему", zh: "切换到深色主题" },
+  "Светлая тема": { en: "Light theme", ru: "Светлая тема", zh: "浅色主题" },
 };
 
 const landingTranslations = {
