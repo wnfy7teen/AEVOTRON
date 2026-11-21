@@ -46,6 +46,9 @@ test("AI Workspace discloses estimates instead of inventing provider usage and c
   const route = await read("src/routes/_authed/workspace.jsx");
   assert.match(route, /estimateTokens/);
   assert.match(route, /selectContextMessages/);
+  assert.match(route, /workspace-chat-usage/);
+  assert.match(route, /Session usage/);
+  assert.match(route, /sessionUsage\\.usage_estimated/);
   assert.match(route, /shouldAutoScrollRef/);
   assert.match(route, /threadRef/);
   assert.match(route, /favoriteModels/);
