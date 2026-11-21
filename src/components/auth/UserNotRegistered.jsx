@@ -6,7 +6,7 @@ import { AuthLayout } from "./AuthLayout";
 
 // Signed in to Base44, but not a user of this app (invite-only apps).
 export function UserNotRegistered() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const { logout } = useAuth();
   return (
     <AuthLayout icon={UserX} title={t("Access not granted")} subtitle={t("Your account is not registered for this app.")}>
