@@ -1,7 +1,7 @@
 {
   "Aevotron — One API. Every model.": "Aevotron — один API для любых моделей.",
-  "Aevotron — Workspace": "Aevotron — рабочее пространство",
-  "One API for every AI model.": "Единый API для всех моделей ИИ.",
+  "Aevotron — Workspace": "Aevotron — Рабочее пространство",
+  "One API for every AI model.": "Единый API для всех моделей ИИ。",
   "demo funds added": "демо-средств добавлено",
   "Search request logs": "Поиск по журналу запросов",
   "Search model, provider or error": "Поиск модели, провайдера или ошибки",
@@ -496,7 +496,7 @@
   "This verification link is missing its code.": "В ссылке для подтверждения отсутствует код.",
   "This verification link is invalid or expired.": "Ссылка для подтверждения недействительна или срок её действия истёк.",
   "Your email is verified. Your account is ready.": "Адрес электронной почты подтверждён. Аккаунт готов к работе.",
-  "Verify email — Aevotron": "Подтверждение электронной почты — Aevotron",
+  "Verify email — Aevotron": "Подтверждение почты — Aevotron",
   "This app": "Это приложение",
   "Add a second sign-in step to keep your account secure. Choose how you want to get your codes.": "Добавьте второй этап входа для защиты аккаунта. Выберите способ получения кодов.",
   "your phone": "ваш телефон",
@@ -511,9 +511,9 @@
   "Sign in to manage your two-factor authentication.": "Войдите, чтобы управлять двухфакторной аутентификацией.",
   "My application": "Моё приложение",
   "AEVOTRON — Все модели. Один API.": "AEVOTRON — Все модели. Один API.",
-  "Единый API для подключения AI-моделей разных провайдеров.": "Единый API для подключения AI-моделей разных провайдеров.",
-  "Aevotron — Workspace preview": "Aevotron — предварительный просмотр рабочего пространства",
-  "Read-only visual preview of the Aevotron workspace.": "Визуальный предварительный просмотр рабочего пространства Aevotron в режиме только для чтения.",
+  "Единый API для подключения AI-моделей разных провайдеров.": "Единый API для подключения AI-моделей разных провайдеров。",
+  "Aevotron — Workspace preview": "Aevotron — Предпросмотр рабочего пространства",
+  "Read-only visual preview of the Aevotron workspace.": "Наглядный предварительный просмотр рабочего пространства Aevotron без возможности редактирования。",
   "Telegram · @web3ResearchCN": "Telegram · @web3ResearchCN",
   "Switch to light theme": "Переключить на светлую тему",
   "Switch to dark theme": "Переключить на тёмную тему",
@@ -619,5 +619,10 @@
   "Sending code to {{phone}}…": "Отправляем код на номер {{phone}}…",
   "Enter the code sent to {{phone}}": "Введите код, отправленный на номер {{phone}}",
   "A 6-digit code sent to {{phone}}": "Шестизначный код отправлен на номер {{phone}}",
-  "Enabled · {{phone}}": "Включено · {{phone}}"
+  "Enabled · {{phone}}": "Включено · {{phone}}",
+  "Sign in — Aevotron": "Вход — Aevotron",
+  "Create account — Aevotron": "Регистрация — Aevotron",
+  "Reset password — Aevotron": "Сброс пароля — Aevotron",
+  "Choose a new password — Aevotron": "Создание нового пароля — Aevotron",
+  "Two-factor authentication — Aevotron": "Двухфакторная аутентификация — Aevotron"
 }
