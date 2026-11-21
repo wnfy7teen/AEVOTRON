@@ -1,5 +1,6 @@
+import React, { act } from "react";
+import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { createAppI18n, LANGUAGE_STORAGE_KEY } from "@/i18n";
 
@@ -14,20 +15,36 @@ function LanguageProbe() {
   );
 }
 
+let container;
+let root;
+
 describe("application i18n", () => {
-  beforeEach(() => localStorage.clear());
-  afterEach(() => cleanup());
+  beforeEach(() => {
+    localStorage.clear();
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(async () => {
+    if (root) await act(async () => root.unmount());
+    container?.remove();
+    root = null;
+  });
 
   it("rerenders translated React content immediately when the language changes", async () => {
     const instance = createAppI18n(localStorage);
-    render(<I18nextProvider i18n={instance}><LanguageProbe /></I18nextProvider>);
+    await act(async () => {
+      root.render(<I18nextProvider i18n={instance}><LanguageProbe /></I18nextProvider>);
+    });
 
-    expect(screen.getByTestId("translated").textContent).toBe("Welcome back");
-    fireEvent.click(screen.getByRole("button", { name: "Switch to Russian" }));
-    await waitFor(() => expect(screen.getByTestId("translated").textContent).toBe("С возвращением"));
+    expect(container.querySelector('[data-testid="translated"]').textContent).toBe("Welcome back");
+    await act(async () => instance.changeLanguage("ru"));
+    expect(container.querySelector('[data-testid="translated"]').textContent).toBe("С возвращением");
 
-    fireEvent.click(screen.getByRole("button", { name: "Switch to Chinese" }));
-    await waitFor(() => expect(screen.getByTestId("translated").textContent).toBe("欢迎回来"));
+    await act(async () => instance.changeLanguage("zh"));
+    expect(container.querySelector('[data-testid="translated"]').textContent).toBe("欢迎回来");
   });
 
   it("persists the selected locale and restores it for a fresh page instance", async () => {
