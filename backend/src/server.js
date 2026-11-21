@@ -267,6 +267,19 @@ async function handle(req, res) {
     return json(res, 200, { user: publicUser(user.rows[0]) });
   }
 
+  if (req.method === "POST" && path === "/api/v1/auth/resend-verification") {
+    await rateLimit(req, "resend-verification", 3, 900);
+    const email = normalizeEmail(body.email);
+    const result = await pool.query("SELECT id,email,email_verified_at FROM users WHERE email_normalized=$1 AND status=$2", [email, "active"]);
+    if (result.rowCount && !result.rows[0].email_verified_at) {
+      await pool.query("UPDATE email_verification_tokens SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL", [result.rows[0].id]);
+      try {
+        const token = await createVerification(result.rows[0]);
+        return json(res, 200, { message: "If the account needs verification, a new code was sent.", ...(token ? { development_verification_code: token } : {}) });
+      } catch (error) { process.stderr.write("[aevotron-api] verification email failed: " + error.message + "\\n"); }
+    }
+    return json(res, 200, { message: "If the account needs verification, a new code was sent." });
+  }
   if (req.method === "POST" && path === "/api/v1/auth/login") {
     await rateLimit(req, "login", 10, 900);
     const email = normalizeEmail(body.email);
@@ -538,6 +551,19 @@ async function handle(req, res) {
     return json(res, 200, { events: rows.rows });
   }
 
+  if (req.method === "GET" && path === "/api/v1/providers/openai/models") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const provider = await pool.query("SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status=$4", [workspace.id, user.id, "openai", "active"]);
+    if (!provider.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect OpenAI first.");
+    const aad = "provider:openai:" + user.id + ":" + workspace.id;
+    const credential = decryptSecret(provider.rows[0].credential_ciphertext, aad);
+    const upstream = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
+    if (!upstream.ok) return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", "OpenAI model list could not be loaded.");
+    const result = await upstream.json();
+    const found = (result.data || []).filter((item) => /^(gpt-|chatgpt-)/i.test(item.id)).map((item) => ({ id: item.id, owned_by: item.owned_by || "OpenAI" }));
+    return json(res, 200, { models: found });
+  }
   if (req.method === "GET" && path === "/api/v1/models") {
     const user = await requireUser(req, res); if (!user) return;
     const rows = await pool.query(
