@@ -1,5 +1,3 @@
-import { base44 } from "@/api/base44Client";
-
 export async function loginWithMfa(email, password) {
   const response = await fetch("/api/v1/auth/login", {
     method: "POST",
