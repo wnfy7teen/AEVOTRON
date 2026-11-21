@@ -121,7 +121,7 @@ it("uses request-scoped locale resolution and does not mutate the DOM with an ob
   assert.match(serverLocale, /accept-language/);
   assert.doesNotMatch(dashboard, /Модель с усиленным пошаговым рассуждением/);
   assert.match(dashboard, /useTranslation\(\["dashboard", "translation"\]\)/);
-  assert.match(dashboard, /t\(describeModel\(model.id\)\)/);
+  assert.match(dashboard, /t\(describeModel\(model.provider_model_id \|\| model.id\)\)/);
 });
 
 it("formats numbers, currencies, dates and relative time using the active locale", async () => {
