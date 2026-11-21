@@ -45,7 +45,7 @@ const features: Feature[] = [
 ];
 
 export default function AppleLanding() {
-  const { language, t } = useLanguage();
+  const { language, t } = useLanguage(["landing", "translation"]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
