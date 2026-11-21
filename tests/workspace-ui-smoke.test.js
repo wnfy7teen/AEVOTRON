@@ -108,17 +108,17 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   assert.match(css, /:disabled/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
-  assert.match(css, /@media \\(max-width: 560px\\)/);
+  assert.match(css, /@media \(max-width: 560px\)/);
 });
 
  
-test("all workspace native select controls use the shared modern dropdown theme", async () => {
+test("workspace dropdown menus share responsive light and dark styling", async () => {
   const css = await read("src/apple-style.css");
-  assert.match(css, /\.apple-app select,[\s\S]*?-webkit-appearance: none !important/);
-  assert.match(css, /background-position: right 13px center/);
-  assert.match(css, /\.apple-app\[data-theme="dark"\] select option/);
-  assert.match(css, /\.apple-app select:focus-visible/);
-  assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.apple-app select/);
+  assert.match(css, /\.av-dropdown-trigger/);
+  assert.match(css, /\.av-dropdown-menu/);
+  assert.match(css, /\.av-dropdown-option\.is-selected/);
+  assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
+  assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
 });
 
 \ntest("workspace uses accessible custom dropdowns instead of native select popups", async () => {
