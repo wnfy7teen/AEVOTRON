@@ -763,5 +763,6 @@
   "EXAMPLE REQUEST": "请求示例",
   "Make your first API call": "发起您的第一个 API 请求",
   "What a successful request returns.": "成功请求的返回示例。",
-  "Rate limits and error handling.": "速率限制与错误处理。"
+  "Rate limits and error handling.": "速率限制与错误处理。",
+  "Billing role": "账单权限"
 }
