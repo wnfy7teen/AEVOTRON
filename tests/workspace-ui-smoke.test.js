@@ -48,7 +48,7 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /api\.auth\.mfaConfirm/);
   assert.match(source, /api\.auth\.mfaDisable/);
   assert.match(source, /api\.auth\.sessions\(\)/);
-  assert.match(source, /api\.auth\.revokeSession\(session\.id\)/);
+  assert.match(source, /api\.auth\.revokeSession\(sessionId\)/);
   assert.match(source, /api\.auth\.changePassword\(/);
   assert.match(source, /sessionsQuery\.data\.current_session_id/);
   assert.match(source, /Password updated\. Other sessions were signed out\./);
