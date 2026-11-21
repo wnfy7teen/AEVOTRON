@@ -755,5 +755,13 @@
   "Go to next page": "Перейти на следующую страницу",
   "Toggle Sidebar": "Свернуть или развернуть боковую панель",
   "breadcrumb": "Навигационная цепочка",
-  "More": "Ещё"
+  "More": "Ещё",
+  "Account": "Аккаунт",
+  "A single, OpenAI-compatible endpoint for text chat requests.": "Единый endpoint, совместимый с OpenAI, для текстовых запросов чата。",
+  "Send your workspace key with every request.": "Передавайте ключ рабочего пространства с каждым запросом。",
+  "Required fields for a chat completion.": "Обязательные поля для запроса генерации ответа в чате。",
+  "EXAMPLE REQUEST": "ПРИМЕР ЗАПРОСА",
+  "Make your first API call": "Выполните первый API-запрос",
+  "What a successful request returns.": "Пример успешного ответа на запрос。",
+  "Rate limits and error handling.": "Ограничения частоты запросов и обработка ошибок。"
 }
