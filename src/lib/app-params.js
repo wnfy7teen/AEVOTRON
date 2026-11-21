@@ -1,21 +1,5 @@
-import { getAccessToken } from "@base44/sdk";
-
-const isBrowser = typeof window !== "undefined";
-
-const isClearAccessTokenRequested = () =>
-  isBrowser && new URLSearchParams(window.location.search).get("clear_access_token") === "true";
-
-const clearStoredAccessToken = () => {
-  window.localStorage.removeItem("base44_access_token");
-  window.localStorage.removeItem("token");
-};
-
+// Base44 runtime configuration has been retired from the self-hosted application.
+// The frontend talks to the same-origin /api/v1 endpoints through HttpOnly cookies.
 export function getAppParams() {
-  if (isClearAccessTokenRequested()) clearStoredAccessToken();
-  return {
-    appId: import.meta.env.VITE_BASE44_APP_ID,
-    token: isBrowser ? getAccessToken() : null,
-    functionsVersion: (isBrowser && new URLSearchParams(window.location.search).get("functions_version")?.trim()) || import.meta.env.VITE_BASE44_FUNCTIONS_VERSION,
-    appBaseUrl: import.meta.env.VITE_BASE44_APP_BASE_URL,
-  };
+  return { appId: null, token: null, functionsVersion: null, appBaseUrl: null };
 }
