@@ -783,5 +783,7 @@
   "Could not load models from your provider. Test the connection and refresh.": "无法加载服务商模型。请测试连接后重试。",
   "Connect a provider to load the chat models available to your API key.": "连接服务提供商以加载 API 密钥可用的聊天模型。",
   "Connect a provider to discover the models available to your account.": "连接服务提供商以查看账户可用的模型。",
-  "Billed by the connected provider": "由已连接的服务提供商计费"
+  "Billed by the connected provider": "由已连接的服务提供商计费",
+  "AEVOTRON — AI Workspace": "AEVOTRON — AI 工作空间",
+  "Chat with connected AI models.": "与已连接的 AI 模型对话。"
 }
