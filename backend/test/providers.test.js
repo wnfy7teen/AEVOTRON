@@ -35,3 +35,14 @@ test("provider model IDs are namespaced and non-chat Groq models are excluded", 
   ]);
   assert.deepEqual(openai.map((model) => model.id), ["openai/gpt-4o-mini"]);
 });
+
+import { readFile } from "node:fs/promises";
+
+test("server routes provider credentials and chat requests through the selected adapter", async () => {
+  const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
+  assert.match(server, /providers\\\/(openai\|groq)/);
+  assert.match(server, /provider:\\" \+ provider\.code \+ \":\" \+ user\.id \+ \":\" \+ workspace\.id/);
+  assert.match(server, /providerConfig\.baseUrl \+ \\"\\/chat\\/completions/);
+  assert.match(server, /modelMatch = body\.model\.match\(\/\^\(openai\|groq\)\\\//);
+  assert.doesNotMatch(server, /provider_code='openai' AND status='active'\\\)\s*;/);
+});
