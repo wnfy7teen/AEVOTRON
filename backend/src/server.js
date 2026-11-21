@@ -3,7 +3,7 @@ import { randomUUID, createHash } from "node:crypto";
 import { pool, migrate, transaction } from "./db.js";
 import {
   apiKeyHash, createApiKey, decryptSecret, encryptSecret, hashPassword,
-  newTotpSecret, randomToken, sha256, totpCode, totpUri, verifyPassword, verifyTotp,
+  newTotpSecret, randomToken, sha256, totpUri, verifyPassword, verifyTotp,
 } from "./security.js";
 import { mailConfigured, sendActionEmail } from "./mailer.js";
 
@@ -237,7 +237,13 @@ async function handle(req, res) {
       return row;
     });
     if (!user) return fail(res, 409, "ACCOUNT_EXISTS", "An account with this email already exists.");
-    const verificationToken = await createVerification(user);
+    let verificationToken;
+    try {
+      verificationToken = await createVerification(user);
+    } catch (error) {
+      await pool.query("DELETE FROM users WHERE id=$1", [user.id]);
+      throw error;
+    }
     return json(res, 201, { message: "Check your email to verify your account.", ...(verificationToken ? { development_verification_token: verificationToken } : {}) });
   }
 
@@ -319,7 +325,10 @@ async function handle(req, res) {
     const email = normalizeEmail(body.email);
     if (validEmail(email)) {
       const result = await pool.query("SELECT id,email FROM users WHERE email_normalized=$1 AND status='active'", [email]);
-      if (result.rowCount) await createPasswordReset(result.rows[0]);
+      if (result.rowCount) {
+        try { await createPasswordReset(result.rows[0]); }
+        catch (error) { process.stderr.write(`[aevotron-api] password reset email failed: ${error.message}\n`); }
+      }
     }
     return json(res, 200, { message: "If the account exists, a password reset link will be sent." });
   }
@@ -549,9 +558,14 @@ async function handle(req, res) {
     const started = Date.now();
     try {
       await client.query("BEGIN");
-      await client.query("SELECT pg_advisory_xact_lock(hashtext($1))", [key.id]);
-      const recent = await client.query("SELECT count(*)::int AS n FROM usage_events WHERE api_key_id=$1 AND created_at>=now()-interval '1 minute'", [key.id]);
-      if (recent.rows[0].n >= 30) {
+      const windowStart = new Date(Math.floor(Date.now() / 60_000) * 60_000);
+      const rate = await client.query(
+        `INSERT INTO api_key_rate_limits(api_key_id,window_start,hits) VALUES($1,$2,1)
+         ON CONFLICT(api_key_id,window_start) DO UPDATE SET hits=api_key_rate_limits.hits+1
+         RETURNING hits`,
+        [key.id, windowStart],
+      );
+      if (rate.rows[0].hits > 30) {
         await client.query(
           "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,request_id,status_code,error_code,latency_ms) VALUES($1,$2,$3,$4,429,'rate_limit_exceeded',$5)",
           [key.workspace_id,key.owner_user_id,key.id,requestId,Date.now()-started],
@@ -637,6 +651,9 @@ const server = http.createServer(async (req, res) => {
 });
 
 await migrate();
+encryptSecret("startup-check", "aevotron:startup-check"); // Fail fast if the encryption master key is missing or malformed.
+await pool.query("DELETE FROM rate_limit_buckets WHERE window_start < now() - interval '2 days'");
+await pool.query("DELETE FROM api_key_rate_limits WHERE window_start < now() - interval '2 days'");
 server.listen(PORT, HOST, () => process.stdout.write(`AEVOTRON API listening on ${HOST}:${PORT}\n`));
 
 async function shutdown() {
