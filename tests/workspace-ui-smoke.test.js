@@ -208,3 +208,13 @@ test("Sonner success and error notifications remain readable above the workspace
   assert.match(css, /color: #f1f5fa !important/);
   assert.match(css, /z-index: 10050 !important/);
 });
+
+
+test("workspace topbar keeps menu, breadcrumb and actions aligned without overflow", async () => {
+  const css = await read("src/apple-style.css");
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(dashboard, /<main className="mh-main">[\\s\\S]*?<header className="mh-topbar">[\\s\\S]*?className="mh-breadcrumb"[\\s\\S]*?className="mh-top-actions"/);
+  assert.match(css, /\\.mh-topbar\\s*\\{[^}]*display:flex;[^}]*align-items:center;[^}]*justify-content:space-between;/);
+  assert.match(css, /\\.mh-top-actions\\s*\\{[^}]*display:flex;[^}]*align-items:center;/);
+  assert.match(css, /@media\\(max-width:760px\\)[\\s\\S]*?\\.mh-mobile-menu\\{display:flex\\}[\\s\\S]*?\\.mh-breadcrumb\\{flex:1;min-width:0\\}/);
+});
