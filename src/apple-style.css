@@ -746,3 +746,9 @@ body:has(.apple-app[data-theme="dark"] .mh-shell) {
   .apple-app .av-pagination>div { width:100%; }
   .apple-app .av-pagination .mh-button { flex:1; }
 }
+
+
+/* Local-preview settings disclosure */
+.apple-app .av-settings-notice{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;margin-bottom:18px;font-size:13px;line-height:1.55}
+.apple-app .av-settings-notice>svg{flex:0 0 auto;margin-top:2px}
+.apple-app .av-settings-notice strong{display:inline}
