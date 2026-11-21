@@ -102,6 +102,17 @@ test("read-only preview does not call account MFA or password mutation endpoints
 });
 
 
+test("global theme and language controls follow the selected light or dark theme", async () => {
+  const theme = await read("src/lib/ThemeSwitcher.jsx");
+  const css = await read("src/apple-style.css");
+  assert.match(theme, /document\.documentElement\.dataset\.theme = theme/);
+  assert.match(theme, /element\.dataset\.theme = theme/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-theme-trigger/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-trigger/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu button\.active/);
+});
+
 test("workspace interaction polish covers keyboard focus, disabled controls and reduced motion", async () => {
   const css = await read("src/apple-style.css");
   assert.match(css, /:focus-visible/);

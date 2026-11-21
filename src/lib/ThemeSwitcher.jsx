@@ -9,6 +9,7 @@ export function ThemeSwitcher() {
   });
   useEffect(() => {
     document.querySelectorAll(".apple-app").forEach((element) => { element.dataset.theme = theme; });
+    document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
     try { window.localStorage.setItem("aevotron-theme", theme); } catch { /* session-only */ }
   }, [theme]);
