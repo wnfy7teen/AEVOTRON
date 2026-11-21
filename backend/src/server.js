@@ -488,13 +488,21 @@ async function handle(req, res) {
     const credential = String(body.api_key || "");
     if (!credential.startsWith("sk-") || credential.length < 20 || credential.length > 500) return fail(res, 400, "INVALID_PROVIDER_KEY", "Enter a valid OpenAI API key.");
     const workspace = await currentWorkspace(user);
-    const ciphertext = encryptSecret(credential, `provider:openai:${user.id}:${workspace.id}`);
+    let providerCheck;
+    try {
+      providerCheck = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
+    } catch {
+      return fail(res, 502, "PROVIDER_UNREACHABLE", "OpenAI could not be reached. Try again.");
+    }
+    if (!providerCheck.ok) {
+      await providerCheck.body?.cancel().catch(() => {});
+      return fail(res, 422, "PROVIDER_AUTH_FAILED", "OpenAI rejected this API key.");
+    }
+    const aad = "provider:openai:" + user.id + ":" + workspace.id;
+    const ciphertext = encryptSecret(credential, aad);
     const result = await pool.query(
-      `INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status)
-       VALUES($1,$2,'openai','OpenAI',$3,'pending')
-       ON CONFLICT(workspace_id,provider_code) DO UPDATE SET credential_ciphertext=EXCLUDED.credential_ciphertext,status='pending',updated_at=now()
-       RETURNING id,provider_code,display_name,status,last_tested_at`,
-      [workspace.id, user.id, ciphertext],
+      "INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status,last_tested_at) VALUES($1,$2,$3,$4,$5,$6,now()) ON CONFLICT(workspace_id,provider_code) DO UPDATE SET credential_ciphertext=EXCLUDED.credential_ciphertext,status=EXCLUDED.status,last_tested_at=now(),updated_at=now() RETURNING id,provider_code,display_name,status,last_tested_at",
+      [workspace.id, user.id, "openai", "OpenAI", ciphertext, "active"],
     );
     return json(res, 201, { connection: result.rows[0] });
   }
