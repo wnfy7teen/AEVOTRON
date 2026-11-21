@@ -18,7 +18,7 @@ test("settings screen includes profile, security, notification, billing, API, ap
   }
   assert.match(source, /aevotron-workspace-settings/);
   assert.match(source, /aevotron-avatar/);
-  assert.match(source, /aria-checked=\{\!\!settings\[key\]\}/);
+  assert.match(source, /aria-checked=\{!!settings\[key\]\}/);
   assert.match(source, /role="dialog"/);
   assert.match(source, /Type DELETE to confirm/);
 });
