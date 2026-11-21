@@ -711,5 +711,7 @@
   "Errors use a JSON error object with a code and message. Requests are limited to 30 per minute per API key. A rate-limited request returns HTTP 429.": "错误以包含 code 和 message 的 JSON 对象返回。每个 API 密钥每分钟最多可请求 30 次。超过限制时将返回 HTTP 429。",
   "Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.": "当前仅支持文本聊天。此预览版本暂不支持流式传输、工具调用、嵌入和多模态请求。",
   "Billing": "账单",
-  "Notifications": "通知"
+  "Notifications": "通知",
+  "Send your first request": "发送您的第一个请求",
+  "This preview supports OpenAI text chat only. Streaming, tool calls, embeddings and multimodal requests are not available yet.": "此预览版本仅支持 OpenAI 文本聊天，暂不支持流式传输、工具调用、嵌入和多模态请求。"
 }
