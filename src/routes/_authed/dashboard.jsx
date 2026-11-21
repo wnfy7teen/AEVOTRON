@@ -151,23 +151,43 @@ function HomePage({ preview = false }) {
                 <button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy cURL")}</button>
                 <div className="mh-doc-warning"><CircleHelp size={15}/>{t("This preview supports OpenAI text chat only. Streaming, tool calls, embeddings and multimodal requests are not available yet.")}</div>
               </div>
-            </div> : <div className="mh-panel mh-docs mh-api-reference">
-              <div className="mh-docs-title"><BookOpen size={18}/><h3>{t("Chat completions")}</h3><span className="mh-method">POST</span></div>
-              <div className="mh-api-reference-row"><span>{t("Request URL")}</span><code>{apiEndpoint}</code></div>
-              <div className="mh-api-reference-row"><span>{t("Authentication")}</span><code>Authorization: Bearer YOUR_AEVOTRON_KEY</code></div>
-              <div className="mh-api-reference-row"><span>{t("Content type")}</span><code>application/json</code></div>
-              <h4>{t("Request body")}</h4>
-              <table className="mh-api-params"><thead><tr><th>{t("Parameter")}</th><th>{t("Type")}</th><th>{t("Description")}</th></tr></thead><tbody>
-                <tr><td><code>model</code></td><td>string</td><td>{t("Model identifier available to your connected provider.")}</td></tr>
-                <tr><td><code>messages</code></td><td>array</td><td>{t("Conversation messages with role and content fields.")}</td></tr>
-              </tbody></table>
-              <h4>{t("Example request")}</h4>
-              <pre className="mh-code"><code>{code}</code></pre>
-              <button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy cURL")}</button>
-              <h4>{t("Response")}</h4>
-              <p>{t("On success, the endpoint returns a standard OpenAI-compatible chat completion JSON response, including the response ID, model, choices and usage when supplied by the provider.")}</p>
-              <h4>{t("Errors and limits")}</h4>
-              <p>{t("Errors use a JSON error object with a code and message. Requests are limited to 30 per minute per API key. A rate-limited request returns HTTP 429.")}</p>
+            </div> : <div className="mh-api-docs">
+              <section className="mh-api-hero">
+                <div className="mh-api-hero-top"><span className="mh-api-kicker"><Code2 size={14}/> {t("API reference")}</span><span className="mh-api-version">v1 · PREVIEW</span></div>
+                <div className="mh-api-hero-main"><div><h2>{t("Chat completions")}</h2><p>{t("A single, OpenAI-compatible endpoint for text chat requests.")}</p></div><span className="mh-api-method">POST</span></div>
+                <div className="mh-api-url"><span>{apiEndpoint}</span><button type="button" aria-label={t("Copy cURL")} onClick={async()=>{try{await navigator.clipboard.writeText(apiEndpoint);toast.success(t("Copied"));}catch{toast.error(t("Could not copy"));}}}><Copy size={15}/></button></div>
+              </section>
+              <div className="mh-api-doc-grid">
+                <section className="mh-panel mh-api-card">
+                  <div className="mh-api-card-heading"><span className="mh-api-icon"><LockKeyhole size={17}/></span><div><h3>{t("Authentication")}</h3><p>{t("Send your workspace key with every request.")}</p></div></div>
+                  <div className="mh-api-code-line"><code>Authorization: Bearer YOUR_AEVOTRON_KEY</code></div>
+                  <div className="mh-api-meta-row"><span>{t("Content type")}</span><code>application/json</code></div>
+                </section>
+                <section className="mh-panel mh-api-card">
+                  <div className="mh-api-card-heading"><span className="mh-api-icon"><SlidersHorizontal size={17}/></span><div><h3>{t("Request body")}</h3><p>{t("Required fields for a chat completion.")}</p></div></div>
+                  <div className="mh-api-params-wrap"><table className="mh-api-params"><thead><tr><th>{t("Parameter")}</th><th>{t("Type")}</th><th>{t("Description")}</th></tr></thead><tbody>
+                    <tr><td><code>model</code></td><td><span className="mh-api-type">string</span></td><td>{t("Model identifier available to your connected provider.")}</td></tr>
+                    <tr><td><code>messages</code></td><td><span className="mh-api-type">array</span></td><td>{t("Conversation messages with role and content fields.")}</td></tr>
+                  </tbody></table></div>
+                </section>
+              </div>
+              <section className="mh-panel mh-api-example">
+                <div className="mh-api-section-head"><div><span className="mh-api-overline">{t("EXAMPLE REQUEST")}</span><h3>{t("Make your first API call")}</h3></div><span className="mh-api-language">cURL</span></div>
+                <pre className="mh-code"><code>{code}</code></pre>
+                <button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy cURL")}</button>
+              </section>
+              <div className="mh-api-doc-grid mh-api-bottom-grid">
+                <section className="mh-panel mh-api-card">
+                  <div className="mh-api-card-heading"><span className="mh-api-icon success"><Check size={17}/></span><div><h3>{t("Response")}</h3><p>{t("What a successful request returns.")}</p></div></div>
+                  <p>{t("On success, the endpoint returns a standard OpenAI-compatible chat completion JSON response, including the response ID, model, choices and usage when supplied by the provider.")}</p>
+                  <div className="mh-api-response-chips"><code>id</code><code>model</code><code>choices</code><code>usage</code></div>
+                </section>
+                <section className="mh-panel mh-api-card">
+                  <div className="mh-api-card-heading"><span className="mh-api-icon warning"><CircleHelp size={17}/></span><div><h3>{t("Errors and limits")}</h3><p>{t("Rate limits and error handling.")}</p></div></div>
+                  <p>{t("Errors use a JSON error object with a code and message. Requests are limited to 30 per minute per API key. A rate-limited request returns HTTP 429.")}</p>
+                  <div className="mh-api-limit"><strong>429</strong><span>HTTP · Too Many Requests</span><small>30 requests / min / API key</small></div>
+                </section>
+              </div>
               <div className="mh-doc-warning"><CircleHelp size={15}/>{t("Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.")}</div>
             </div>}
           </>}
