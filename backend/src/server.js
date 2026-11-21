@@ -722,6 +722,18 @@ async function handle(req, res) {
     return json(res, 200, { models: rows.rows });
   }
 
+  const chatUsageRoute = path.match(/^\\/api\\/v1\\/workspace\\/chats\\/([0-9a-f-]{36})\\/usage$/i);
+  if (chatUsageRoute && req.method === "GET") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const usage = await pool.query(
+      "SELECT total_input_tokens,total_output_tokens,request_count,usage_estimated,estimated_cost,currency FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+      [chatUsageRoute[1],workspace.id,user.id],
+    );
+    if (!usage.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    return json(res, 200, { usage: usage.rows[0] });
+  }
+
   if (req.method === "GET" && path === "/api/v1/workspace/chats") {
     const user = await requireUser(req, res); if (!user) return;
     const workspace = await currentWorkspace(user);
@@ -982,8 +994,9 @@ async function handle(req, res) {
           const event = JSON.parse(payload);
           const providerUsage = event.usage || event.x_groq?.usage;
           if (providerUsage) {
-            inputTokens = Number(providerUsage.prompt_tokens || providerUsage.input_tokens || inputTokens);
-            outputTokens = Number(providerUsage.completion_tokens || providerUsage.output_tokens || outputTokens);
+            hasProviderUsage = true;
+            inputTokens = Number(providerUsage.prompt_tokens ?? providerUsage.input_tokens ?? inputTokens);
+            outputTokens = Number(providerUsage.completion_tokens ?? providerUsage.output_tokens ?? outputTokens);
           }
           const delta = event.choices?.[0]?.delta?.content;
           if (typeof delta === "string" && assistantContent.length < 200_000) {
@@ -1046,6 +1059,17 @@ async function handle(req, res) {
               [chatSessionId,workspace.id,user.id,assistantContent,body.model,assistantMetadata],
             );
         await saveAssistant.catch((error) => process.stderr.write("[aevotron-api] workspace message write failed: " + error.message + "\n"));
+      }
+      if (!hasProviderUsage) {
+        inputTokens = Math.ceil(body.messages.reduce((sum, message) => sum + String(message.content || "").length, 0) / 4);
+        outputTokens = Math.ceil(assistantContent.length / 4);
+        usageEstimated = true;
+      }
+      if (chatSessionId) {
+        await pool.query(
+          "UPDATE workspace_chat_sessions SET total_input_tokens=total_input_tokens+$4,total_output_tokens=total_output_tokens+$5,request_count=request_count+1,usage_estimated=usage_estimated OR $6,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+          [chatSessionId,workspace.id,user.id,inputTokens,outputTokens,usageEstimated],
+        ).catch((error) => process.stderr.write("[aevotron-api] workspace usage aggregate failed: " + error.message + "\\n"));
       }
       await pool.query(
         "INSERT INTO usage_events(workspace_id,owner_user_id,request_id,model_id,provider_code,input_tokens,output_tokens,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",

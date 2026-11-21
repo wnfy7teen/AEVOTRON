@@ -198,9 +198,21 @@ CREATE TABLE IF NOT EXISTS workspace_chat_sessions (
   owner_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(120) NOT NULL DEFAULT 'New conversation',
   model_id TEXT,
+  total_input_tokens BIGINT NOT NULL DEFAULT 0,
+  total_output_tokens BIGINT NOT NULL DEFAULT 0,
+  request_count INTEGER NOT NULL DEFAULT 0,
+  usage_estimated BOOLEAN NOT NULL DEFAULT false,
+  estimated_cost NUMERIC(18,8),
+  currency TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS total_input_tokens BIGINT NOT NULL DEFAULT 0;
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS total_output_tokens BIGINT NOT NULL DEFAULT 0;
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS request_count INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS usage_estimated BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS estimated_cost NUMERIC(18,8);
+ALTER TABLE workspace_chat_sessions ADD COLUMN IF NOT EXISTS currency TEXT;
 CREATE INDEX IF NOT EXISTS workspace_chat_sessions_owner_idx
   ON workspace_chat_sessions(workspace_id, owner_user_id, updated_at DESC);
 
