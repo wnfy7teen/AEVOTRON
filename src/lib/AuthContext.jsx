@@ -16,6 +16,7 @@ export const authQuery = queryOptions({
   },
   staleTime: Infinity,
   retry: false,
+  enabled: typeof window !== "undefined",
 });
 
 const AuthContext = createContext(null);
