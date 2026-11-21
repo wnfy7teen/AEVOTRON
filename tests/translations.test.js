@@ -140,3 +140,14 @@ it("formats numbers, currencies, dates and relative time using the active locale
   assert.ok(formatRelativeTime(-1, "day", "ru").length > 0);
   assert.equal(formatDate("not-a-date", "en"), "");
 });
+
+it("resolves locale from cookie before weighted Accept-Language preferences", async () => {
+  const { readLocaleCookie, negotiateAcceptLanguage, resolveRequestLocale } = await import("../src/lib/locale.js");
+  assert.equal(readLocaleCookie("theme=dark; aevotron-language=ru%2DRU"), "ru-RU");
+  assert.equal(readLocaleCookie("theme=dark"), null);
+  assert.equal(negotiateAcceptLanguage("fr-FR, zh-CN;q=0.8, ru-RU;q=0.9"), "ru");
+  assert.equal(negotiateAcceptLanguage("fr-FR, zh-CN;q=0.9, en-US;q=0.8"), "zh");
+  assert.equal(resolveRequestLocale("aevotron-language=zh", "ru-RU,ru;q=0.9"), "zh");
+  assert.equal(resolveRequestLocale("aevotron-language=fr", "ru-RU,ru;q=0.9"), "ru");
+  assert.equal(resolveRequestLocale("", "fr-FR, de-DE;q=0.8"), "en");
+});
