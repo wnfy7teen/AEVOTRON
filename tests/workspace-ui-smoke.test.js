@@ -134,7 +134,10 @@ test("workspace uses accessible custom dropdowns instead of native select popups
   assert.match(component, /ArrowDown/);
   assert.match(component, /Home/);
   assert.match(component, /Escape/);
-  assert.match(component, /pointerdown/);\n  assert.match(component, /typeaheadRef/);\n  assert.match(component, /toLocaleLowerCase/);\n  assert.match(component, /event.key === "Enter"/);
+  assert.match(component, /pointerdown/);
+  assert.match(component, /typeaheadRef/);
+  assert.match(component, /toLocaleLowerCase/);
+  assert.match(component, /event.key === "Enter"/);
   assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
 });
@@ -146,7 +149,7 @@ test("all application routes and components avoid native select popups", async (
     for (const entry of entries) {
       const relative = directory + "/" + entry.name;
       if (entry.isDirectory()) files.push(...await collect(relative));
-      else if (/\\.(jsx|tsx)$/.test(entry.name)) files.push(relative);
+      else if (/\.(jsx|tsx)$/.test(entry.name)) files.push(relative);
     }
     return files;
   };
@@ -154,7 +157,7 @@ test("all application routes and components avoid native select popups", async (
   const nativeSelects = [];
   for (const file of files) {
     const source = await read(file);
-    if (/<select(?:\\s|>)/.test(source)) nativeSelects.push(file);
+    if (/<select(?:\s|>)/.test(source)) nativeSelects.push(file);
   }
   assert.deepEqual(nativeSelects, [], `Native select controls remain in: ${nativeSelects.join(", ")}`);
 });
