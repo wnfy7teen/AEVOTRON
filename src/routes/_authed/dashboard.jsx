@@ -202,6 +202,7 @@ function HomePage({ preview = false }) {
   );
 }
 function ProviderConnections() {
+  const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
   const queryClient = useQueryClient();
   const [credential, setCredential] = useState("");
@@ -309,6 +310,7 @@ function ProviderConnections() {
 }
 
 function ApiKeyManager() {
+  const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
   const queryClient = useQueryClient();
   const [name, setName] = useState("My application");
@@ -397,6 +399,7 @@ function ApiKeyManager() {
 }
 
 function UsageDashboard() {
+  const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
   const query = useQuery({
     queryKey: ["usage-events"],
@@ -552,7 +555,8 @@ function readSettings() {
   try { return { ...SETTINGS_DEFAULTS, ...JSON.parse(window.localStorage.getItem("aevotron-workspace-settings") || "{}") }; }
   catch { return SETTINGS_DEFAULTS; }
 }
-function WorkspaceSettings({ preview = false, account }) {
+function WorkspaceSettings({
+  const { language: currentLanguage } = useLanguage(); preview = false, account }) {
   const { t } = useTranslation(["dashboard", "translation"]);
   const [settings, setSettings] = useState(readSettings);
   const [currentPassword, setCurrentPassword] = useState("");
