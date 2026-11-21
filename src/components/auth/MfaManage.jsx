@@ -16,7 +16,7 @@ const SMS_RESEND_SECONDS = 30;
 // lasts a few minutes, so an expired one sends the user back through /mfa.
 // The helper also offers session.forgetDevices(code, method) for a "forget remembered devices" control.
 export function MfaManage({ session, returnTo }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [status, setStatus] = useState(null);
   const [view, setView] = useState({ name: "list" });
   const [error, setError] = useState(null);
@@ -79,7 +79,7 @@ export function MfaManage({ session, returnTo }) {
 
 // Disables a method after a fresh code from that same method.
 function Disable({ session, method, onDone, onBack }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [code, setCode] = useState("");
   const [codeSent, setCodeSent] = useState(method === "totp");
   const [error, setError] = useState(null);
