@@ -309,6 +309,16 @@ function UsageDashboard() {
   });
   const summary = query.data?.summary;
   const events = query.data?.events || [];
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const filteredEvents = useMemo(() => events.filter((event) => {
+    const text = `${event.model_id || ""} ${event.provider_code || ""} ${event.error_code || ""}`.toLowerCase();
+    const matchesStatus = statusFilter === "all" || (statusFilter === "success" ? event.status_code < 400 : event.status_code >= 400);
+    return text.includes(searchText.toLowerCase()) && matchesStatus;
+  }), [events, searchText, statusFilter]);
+  const pageCount = Math.max(1, Math.ceil(filteredEvents.length / 10));
+  const visibleEvents = filteredEvents.slice((page - 1) * 10, page * 10);
 
   return (
     <>
@@ -324,13 +334,14 @@ function UsageDashboard() {
       </div>
       <div className="mh-panel mh-usage-panel">
         <div className="mh-panel-heading"><div><h3>Recent requests</h3><p>Metadata only · latest 50 events</p></div>
-          <span className="mh-step-count">{events.length} events</span></div>
+          <span className="mh-step-count">{filteredEvents.length} matching events</span></div>
+        <div className="mh-toolbar av-logs-toolbar"><div className="mh-search"><Search size={16}/><input aria-label="Search request logs" value={searchText} onChange={event=>{setSearchText(event.target.value);setPage(1);}} placeholder="Search model, provider or error"/></div><select aria-label="Filter request status" value={statusFilter} onChange={event=>{setStatusFilter(event.target.value);setPage(1);}}><option value="all">All statuses</option><option value="success">Successful</option><option value="error">Errors</option></select></div>
         {query.isLoading ? <div className="mh-empty">Loading usage records…</div> :
           query.isError ? <div className="mh-inline-error">Could not load usage records. Refresh the page and try again.</div> :
           !events.length ? <div className="mh-empty">No gateway requests have been recorded yet.</div> :
           <div className="mh-usage-table-wrap"><table className="mh-usage-table">
             <thead><tr><th>TIME</th><th>MODEL</th><th>TOKENS</th><th>LATENCY</th><th>STATUS</th></tr></thead>
-            <tbody>{events.map((event) => (
+            <tbody>{visibleEvents.map((event) => (
               <tr key={event.id}>
                 <td>{event.created_at ? new Date(event.created_at).toLocaleString() : "—"}</td>
                 <td><strong>{event.model_id}</strong><small>{event.provider_code}</small></td>
@@ -340,7 +351,7 @@ function UsageDashboard() {
                   {event.error_code && <small className="mh-usage-error-code">{event.error_code}</small>}</td>
               </tr>
             ))}</tbody>
-          </table></div>}
+          </table><div className="av-pagination"><span>Page {page} of {pageCount}</span><div><button className="mh-button mh-button-quiet" disabled={page<=1} onClick={()=>setPage(value=>Math.max(1,value-1))}>Previous</button><button className="mh-button mh-button-quiet" disabled={page>=pageCount} onClick={()=>setPage(value=>Math.min(pageCount,value+1))}>Next</button></div></div></div>}
       </div>
     </>
   );
