@@ -742,5 +742,8 @@
   "Confirm and enable": "Confirm and enable",
   "Verifying…": "Verifying…",
   "Disabling…": "Disabling…",
-  "Time zone": "Time zone"
+  "Time zone": "Time zone",
+  "{{count}} matching events": "{{count}} matching events",
+  "Русский": "Русский",
+  "简体中文": "简体中文"
 }
