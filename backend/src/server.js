@@ -14,6 +14,7 @@ const SESSION_DAYS = 30;
 const JSON_LIMIT = 64 * 1024;
 const cookieName = "aevotron_session";
 const now = () => new Date();
+let lastRateLimitCleanupMinute = 0;
 const json = (res, status, data, headers = {}) => {
   const body = JSON.stringify(data);
   res.writeHead(status, {
@@ -75,7 +76,13 @@ function assertSameOrigin(req) {
   }
 }
 async function rateLimit(req, key, limit, windowSeconds) {
-  const ip = req.socket.remoteAddress || "unknown";
+  const ip = String(req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  const minute = Math.floor(Date.now() / 60_000);
+  if (minute !== lastRateLimitCleanupMinute) {
+    lastRateLimitCleanupMinute = minute;
+    await pool.query("DELETE FROM rate_limit_buckets WHERE window_start < now() - interval '2 days'").catch(() => {});
+    await pool.query("DELETE FROM api_key_rate_limits WHERE window_start < now() - interval '2 days'").catch(() => {});
+  }
   const bucket = `${key}:${hashIp(ip).toString("hex")}`;
   const start = new Date(Math.floor(Date.now() / (windowSeconds * 1000)) * windowSeconds * 1000);
   const result = await pool.query(
@@ -114,7 +121,7 @@ async function createSession(user, req, res) {
   const expires = new Date(Date.now() + SESSION_DAYS * 86400_000);
   await pool.query(
     "INSERT INTO sessions(user_id,token_hash,user_agent,ip_hash,expires_at) VALUES($1,$2,$3,$4,$5)",
-    [user.id, sha256(token), String(req.headers["user-agent"] || "").slice(0, 500), hashIp(req.socket.remoteAddress), expires],
+    [user.id, sha256(token), String(req.headers["user-agent"] || "").slice(0, 500), hashIp(req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.socket.remoteAddress), expires],
   );
   res.setHeader("set-cookie", cookieHeader(token, SESSION_DAYS * 86400));
 }
@@ -318,7 +325,8 @@ async function handle(req, res) {
     if (!factor.rowCount) return fail(res, 401, "MFA_NOT_CONFIGURED", "Authenticator is not configured.");
     const secret = decryptSecret(factor.rows[0].secret_ciphertext, `totp:${challenge.rows[0].user_id}`);
     if (!verifyTotp(secret, body.code)) return fail(res, 401, "INVALID_MFA_CODE", "The authenticator code is invalid.");
-    await pool.query("UPDATE mfa_challenges SET consumed_at=now() WHERE id=$1", [challenge.rows[0].id]);
+    const consumed = await pool.query("UPDATE mfa_challenges SET consumed_at=now() WHERE id=$1 AND consumed_at IS NULL AND expires_at>now() RETURNING id", [challenge.rows[0].id]);
+    if (!consumed.rowCount) return fail(res, 401, "MFA_CHALLENGE_EXPIRED", "Sign in again to continue.");
     await createSession(challenge.rows[0], req, res);
     return json(res, 200, { user: publicUser(challenge.rows[0]) });
   }
