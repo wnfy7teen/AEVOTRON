@@ -76,6 +76,7 @@ export default function AppleLanding() {
     return () => observer.disconnect();
   }, []);
   useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const codeExample = document.querySelector(".av-site .av-code");
     if (!codeExample) return;
     let observer: IntersectionObserver | undefined;
@@ -141,6 +142,7 @@ export default function AppleLanding() {
     };
   }, [language]);
   useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const controlExample = document.querySelector(".av-site .av-control");
     if (!controlExample) return;
     let observer: IntersectionObserver | undefined;
@@ -236,7 +238,7 @@ export default function AppleLanding() {
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label="Тёмная тема" aria-pressed={theme === "dark"} title="Тёмная"><Moon size={16} /><span>Тёмная</span></button>
         <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label="Серая тема" aria-pressed={theme === "gray"} title="Серая"><Cloud size={16} /><span>Серая</span></button>
       </div>
-      <button className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
+      <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
     <section className="av-hero av-reveal" id="platform">
       <div className="av-hero-kicker"><span /> ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ</div>
