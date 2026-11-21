@@ -107,6 +107,15 @@ it("keeps all audited page labels, model descriptions and fallback screens trans
     "Email verified",
     "Verification failed",
     "Verify email",
+    "Verifying your email address…",
+    "This verification link is missing its code.",
+    "This verification link is invalid or expired.",
+    "Your email is verified. Your account is ready.",
+    "Verify email — Aevotron",
+    "Enter a code from your authenticator app",
+    "Sign in to manage your two-factor authentication.",
+    "Use an app like Google Authenticator or Duo to generate secure sign-in codes.",
+    "Verify with a code sent to your phone",
     "Back to registration",
     "Access not granted",
     "Your account is not registered for this app.",
@@ -157,6 +166,7 @@ it("localizes page metadata, accessibility labels, currency and dates", async ()
   assert.match(i18n, /meta\[name=description\]/);
   assert.match(i18n, /"alt"/);
   assert.match(i18n, /attributeFilter: \["aria-label", "title", "placeholder", "alt", "content"\]/);
+  assert.match(i18n, /closest\("\[data-no-translate\], pre, code, script, style"\)/);
   assert.match(dashboard, /new Intl\.NumberFormat\(locale, \{ style: "currency", currency: "USD" \}\)/);
   assert.match(dashboard, /new Intl\.DateTimeFormat\(locale/);
   assert.match(dashboard, /"ru-RU"/);
