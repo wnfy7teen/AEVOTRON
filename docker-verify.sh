@@ -56,3 +56,20 @@ done < "$ASSET_LIST"
 
 printf 'Docker runtime smoke test passed: homepage returned HTML.\n'
 printf 'Local JS/CSS assets fetched successfully: %s\n' "$asset_count"
+
+# Smoke-test every currently declared application page route.
+for route in /login /register /forgot-password /reset-password /mfa /dashboard; do
+  ROUTE_FILE="$(mktemp)"
+  if ! curl -fsSL "http://127.0.0.1:4173$route" -o "$ROUTE_FILE"; then
+    printf 'Docker smoke test failed: route returned an HTTP error: %s\n' "$route" >&2
+    rm -f "$ROUTE_FILE"
+    exit 1
+  fi
+  if ! grep -Eiq '<!doctype html|<html([[:space:]>])' "$ROUTE_FILE"; then
+    printf 'Docker smoke test failed: route did not return HTML: %s\n' "$route" >&2
+    rm -f "$ROUTE_FILE"
+    exit 1
+  fi
+  rm -f "$ROUTE_FILE"
+  printf 'Route OK: %s\n' "$route"
+done
