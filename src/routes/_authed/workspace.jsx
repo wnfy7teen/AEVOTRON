@@ -7,7 +7,6 @@ import { ArrowUp, Bot, ChevronDown, CircleStop, Clock3, Command, FileText, Messa
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
-import { LanguageSwitcher } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authed/workspace")({
   head: () => ({ meta: [{ title: "AEVOTRON — AI Workspace" }, { name: "description", content: "A focused workspace for connected AI models." }] }),
@@ -169,7 +168,7 @@ function WorkspaceChat() {
       <main className="aw-main">
         <header className="aw-topbar">
           <div className="aw-topbar-title"><span>{t("Workspace")}</span><span className="aw-slash">/</span><strong>{t("AI chat")}</strong></div>
-          <div className="aw-topbar-actions"><span className="aw-connection-state"><i/> {demoMode ? t("Demo mode") : t("Session protected")}</span><LanguageSwitcher/><ThemeSwitcher/></div>
+          <div className="aw-topbar-actions"><span className="aw-connection-state"><i/> {demoMode ? t("Demo mode") : t("Session protected")}</span><ThemeSwitcher/></div>
         </header>
 
         <section className="aw-content">
