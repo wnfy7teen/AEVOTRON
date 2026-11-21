@@ -6,6 +6,9 @@ import zh from "./locales/zh.json";
 import dashboardEn from "./locales/dashboard/en.json";
 import dashboardRu from "./locales/dashboard/ru.json";
 import dashboardZh from "./locales/dashboard/zh.json";
+import landingEn from "./locales/landing/en.json";
+import landingRu from "./locales/landing/ru.json";
+import landingZh from "./locales/landing/zh.json";
 
 export const LANGUAGE_STORAGE_KEY = "aevotron-language";
 export const LANGUAGE_COOKIE_KEY = "aevotron-language";
@@ -13,9 +16,9 @@ export const supportedLanguages = ["en", "ru", "zh"] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 const resources = {
-  en: { translation: en, dashboard: dashboardEn },
-  ru: { translation: ru, dashboard: dashboardRu },
-  zh: { translation: zh, dashboard: dashboardZh },
+  en: { translation: en, dashboard: dashboardEn, landing: landingEn },
+  ru: { translation: ru, dashboard: dashboardRu, landing: landingRu },
+  zh: { translation: zh, dashboard: dashboardZh, landing: landingZh },
 };
 
 export function normalizeLanguage(value: string | null | undefined): SupportedLanguage {
@@ -51,7 +54,7 @@ export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
     defaultNS: "translation",
-    ns: ["translation", "dashboard"],
+    ns: ["translation", "dashboard", "landing"],
     fallbackNS: "translation",
     keySeparator: false,
     interpolation: { escapeValue: false },
