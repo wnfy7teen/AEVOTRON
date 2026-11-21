@@ -22,13 +22,15 @@ const auth = {
     return result.user;
   },
   async register({ email, password, display_name }) {
-    return request("/api/v1/auth/register", { method: "POST", body: { email, password, display_name } });
+    const result = await request("/api/v1/auth/register", { method: "POST", body: { email, password, display_name } });
+    return { ...result, development_verification_code: result.development_verification_token };
   },
   async verifyOtp({ email, otpCode }) {
     return request("/api/v1/auth/verify-email", { method: "POST", body: { email, token: otpCode } });
   },
   async resendOtp(email) {
-    return request("/api/v1/auth/resend-verification", { method: "POST", body: { email } });
+    const result = await request("/api/v1/auth/resend-verification", { method: "POST", body: { email } });
+    return { ...result, development_verification_code: result.development_verification_token };
   },
   async resetPasswordRequest(email) {
     return request("/api/v1/auth/password/forgot", { method: "POST", body: { email } });
