@@ -148,6 +148,10 @@ it("resolves locale from cookie before weighted Accept-Language preferences", as
   assert.equal(readLocaleCookie("theme=dark"), null);
   assert.equal(negotiateAcceptLanguage("fr-FR, zh-CN;q=0.8, ru-RU;q=0.9"), "ru");
   assert.equal(negotiateAcceptLanguage("fr-FR, zh-CN;q=0.9, en-US;q=0.8"), "zh");
+  assert.equal(negotiateAcceptLanguage("zh-CN;q=1.5, ru-RU;q=0.8"), "ru");
+  assert.equal(negotiateAcceptLanguage("zh-CN;q=-0.1, ru-RU;q=0.8"), "ru");
+  assert.equal(negotiateAcceptLanguage("zh-CN;Q=0.9, ru-RU;q=0.8"), "zh");
+  assert.equal(negotiateAcceptLanguage("zh-CN;q=invalid, ru-RU;q=0.8"), "ru");
   assert.equal(resolveRequestLocale("aevotron-language=zh", "ru-RU,ru;q=0.9"), "zh");
   assert.equal(resolveRequestLocale("aevotron-language=fr", "ru-RU,ru;q=0.9"), "ru");
   assert.equal(resolveRequestLocale("", "fr-FR, de-DE;q=0.8"), "en");
