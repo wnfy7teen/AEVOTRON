@@ -46,3 +46,14 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /Server-side MFA is not changed\./);
   assert.match(source, /Preview session removed from this list/);
 });
+
+test("credential revocations require confirmation and frontend actions map to backend routes", async () => {
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  const client = await read("src/api/client.js");
+  assert.match(dashboard, /Revoke this API key\?/);
+  assert.match(dashboard, /Revoke the OpenAI provider connection\?/);
+  assert.match(client, /\/api\/v1\/api-keys\//);
+  assert.match(client, /expires_at/);
+  assert.match(client, /api_key: payload\.credential/);
+  assert.match(client, /\/api\/v1\/providers\/openai/);
+});
