@@ -709,5 +709,7 @@
   "On success, the endpoint returns a standard OpenAI-compatible chat completion JSON response, including the response ID, model, choices and usage when supplied by the provider.": "При успешном выполнении endpoint возвращает JSON-ответ в формате OpenAI Chat Completions: идентификатор запроса, модель, варианты ответа и данные об использовании, если их передал провайдер.",
   "Errors and limits": "Ошибки и ограничения",
   "Errors use a JSON error object with a code and message. Requests are limited to 30 per minute per API key. A rate-limited request returns HTTP 429.": "Ошибки возвращаются в JSON-объекте с кодом и описанием. Для каждого API-ключа действует ограничение 30 запросов в минуту. При превышении лимита возвращается HTTP 429.",
-  "Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.": "Сейчас поддерживается только текстовый чат. Потоковая передача, вызовы инструментов, эмбеддинги и мультимодальные запросы в этой версии недоступны."
+  "Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.": "Сейчас поддерживается только текстовый чат. Потоковая передача, вызовы инструментов, эмбеддинги и мультимодальные запросы в этой версии недоступны.",
+  "Billing": "Платежи",
+  "Notifications": "Уведомления"
 }
