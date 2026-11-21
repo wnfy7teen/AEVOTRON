@@ -6,6 +6,8 @@ export function Dropdown({ value, onChange, options = [], disabled = false, id, 
   const rootRef = useRef(null);
   const triggerRef = useRef(null);
   const optionRefs = useRef([]);
+  const typeaheadRef = useRef("");
+  const typeaheadTimerRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const normalized = options.map((option) => typeof option === "string" ? { value: option, label: option } : option);
@@ -75,8 +77,23 @@ export function Dropdown({ value, onChange, options = [], disabled = false, id, 
       event.preventDefault();
       setOpen(false);
       triggerRef.current?.focus();
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (normalized[activeIndex]) choose(normalized[activeIndex]);
     } else if (event.key === "Tab") {
       setOpen(false);
+    } else if (event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey) {
+      const nextQuery = (typeaheadRef.current + event.key).toLocaleLowerCase();
+      typeaheadRef.current = nextQuery;
+      clearTimeout(typeaheadTimerRef.current);
+      typeaheadTimerRef.current = setTimeout(() => { typeaheadRef.current = ""; }, 650);
+      const start = Math.max(0, enabledIndexes.indexOf(activeIndex));
+      const ordered = [...enabledIndexes.slice(start), ...enabledIndexes.slice(0, start)];
+      const match = ordered.find((index) => String(normalized[index].label).toLocaleLowerCase().startsWith(nextQuery));
+      if (match !== undefined) {
+        event.preventDefault();
+        setActiveIndex(match);
+      }
     }
   };
 
