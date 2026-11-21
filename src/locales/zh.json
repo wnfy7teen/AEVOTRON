@@ -742,5 +742,8 @@
   "Confirm and enable": "确认并启用",
   "Verifying…": "正在验证…",
   "Disabling…": "正在停用…",
-  "Time zone": "时区"
+  "Time zone": "时区",
+  "{{count}} matching events": "{{count}} 条匹配事件",
+  "Русский": "俄语",
+  "简体中文": "简体中文"
 }
