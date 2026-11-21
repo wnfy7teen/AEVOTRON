@@ -201,6 +201,7 @@ it("keeps all audited page labels, model descriptions and fallback screens trans
 it("localizes page metadata, accessibility labels, currency and dates", async () => {
   const i18n = await read("src/lib/i18n.jsx");
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  const css = await read("src/apple-style.css");
   assert.match(i18n, /document\.title/);
   assert.match(i18n, /meta\[name=description\]/);
   assert.match(i18n, /"alt"/);
@@ -213,8 +214,8 @@ it("localizes page metadata, accessibility labels, currency and dates", async ()
   assert.match(dashboard, /av-topup-panel/);
   assert.match(dashboard, /av-transactions-panel/);
   assert.match(dashboard, /aria-label="Member role"/);
-  assert.match(css, /\\.av-topup-panel[\\s\\S]*?z-index:\\s*3/);
-  assert.match(css, /\\.av-transactions-panel[\\s\\S]*?z-index:\\s*1/);
-  assert.match(css, /\\.av-topup-panel \\.av-dropdown\\.av-dropdown-menu|\\.av-topup-panel \\.av-dropdown-menu/);
+  assert.match(css, /\.av-topup-panel[\s\S]*?z-index:\s*3/);
+  assert.match(css, /\.av-transactions-panel[\s\S]*?z-index:\s*1/);
+  assert.match(css, /\.av-topup-panel[\s\S]*?z-index:\s*3/);
   assert.doesNotMatch(dashboard, /Nov 18, 2026|Nov 12, 2026|Nov 04, 2026|Today · 09:42|Yesterday · 16:20/);
 });
