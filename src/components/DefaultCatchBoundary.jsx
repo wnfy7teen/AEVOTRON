@@ -2,7 +2,8 @@ import { ErrorComponent, Link, rootRouteId, useMatch, useRouter } from "@tanstac
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 
-export function DefaultCatchBoundary({ error }) {\n  const { t } = useTranslation();
+export function DefaultCatchBoundary({ error }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const isRoot = useMatch({ strict: false, select: (state) => state.id === rootRouteId });
 
@@ -11,7 +12,7 @@ export function DefaultCatchBoundary({ error }) {\n  const { t } = useTranslatio
       <ErrorComponent error={error} />
       <div className="flex gap-2">
         <Button variant="outline" onClick={() => router.invalidate()}>
-          Try again
+          {t("Try again")}
         </Button>
         <Button asChild>{isRoot ? <Link to="/">{t("Home")}</Link> : <Link to="/" onClick={(e) => { e.preventDefault(); window.history.back(); }}>{t("Go back")}</Link>}</Button>
       </div>
