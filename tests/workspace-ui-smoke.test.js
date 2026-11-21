@@ -60,3 +60,13 @@ test("credential revocations require confirmation and frontend actions map to ba
   assert.match(client, /api_key: payload\.credential/);
   assert.match(client, /\/api\/v1\/providers\/openai/);
 });
+
+
+test("workspace profile displays authenticated identity instead of placeholder account data", async () => {
+  const source = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(source, /queryFn: \(\) => api\.auth\.me\(\)/);
+  assert.match(source, /accountQuery\.data\?\.display_name/);
+  assert.match(source, /<input readOnly value=\{account\?\.display_name/);
+  assert.match(source, /<input readOnly value=\{account\?\.email/);
+  assert.doesNotMatch(source, /name: "Christopher", email: "christopher@example\.com"/);
+});
