@@ -130,6 +130,9 @@ const workspace = {
   async getChat(sessionId) {
     return request("/api/v1/workspace/chats/" + encodeURIComponent(sessionId));
   },
+  async getChatUsage(sessionId) {
+    return request("/api/v1/workspace/chats/" + encodeURIComponent(sessionId) + "/usage");
+  },
   async renameChat(sessionId, title) {
     return request("/api/v1/workspace/chats/" + encodeURIComponent(sessionId), { method: "PATCH", body: { title } });
   },
