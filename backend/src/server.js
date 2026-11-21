@@ -360,7 +360,7 @@ async function handle(req, res) {
     return json(res, 200, { current_session_id: user.session_id, sessions: result.rows });
   }
 
-  const sessionMatch = path.match(/^\\/api\\/v1\\/auth\\/sessions\\/([0-9a-f-]{36})$/i);
+  const sessionMatch = path.match(/^\/api\/v1\/auth\/sessions\/([0-9a-f-]{36})$/i);
   if (req.method === "DELETE" && sessionMatch) {
     const user = await requireUser(req, res); if (!user) return;
     if (sessionMatch[1] === user.session_id) {
