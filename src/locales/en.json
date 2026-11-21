@@ -763,5 +763,6 @@
   "EXAMPLE REQUEST": "EXAMPLE REQUEST",
   "Make your first API call": "Make your first API call",
   "What a successful request returns.": "What a successful request returns.",
-  "Rate limits and error handling.": "Rate limits and error handling."
+  "Rate limits and error handling.": "Rate limits and error handling.",
+  "Billing role": "Billing role"
 }
