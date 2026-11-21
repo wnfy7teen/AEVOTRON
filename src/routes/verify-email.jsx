@@ -7,7 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 function VerifyEmailPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState(t("Verifying your email address…"));
 
