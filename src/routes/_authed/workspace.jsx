@@ -259,7 +259,6 @@ function WorkspaceChat() {
         onDelta: (delta) => updateAssistant(assistantId, (item) => ({ ...item, content: item.content + delta }), sessionId),
       });
       setMetrics(result);
-      if (sessionId && sessionId !== "current") queryClient.invalidateQueries({ queryKey: ["workspace-chat-usage", sessionId] });
       if (result.sessionId && result.sessionId !== sessionId) {
         activeConversationRef.current = result.sessionId;
         setActiveConversation(result.sessionId);
@@ -269,6 +268,7 @@ function WorkspaceChat() {
         updateAssistant(assistantId, (item) => ({ ...item, error: error.message || t("The response could not be completed.") }), sessionId);
       }
     } finally {
+      if (sessionId && sessionId !== "current") queryClient.invalidateQueries({ queryKey: ["workspace-chat-usage", sessionId] });
       abortRef.current = null;
       setIsStreaming(false);
     }
