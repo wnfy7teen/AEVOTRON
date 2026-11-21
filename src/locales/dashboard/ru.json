@@ -115,5 +115,16 @@
   "No model selected": "Модель не выбрана",
   "Rename conversation": "Переименовать диалог",
   "Save": "Сохранить",
-  "Could not rename this conversation.": "Не удалось переименовать диалог."
+  "Could not rename this conversation.": "Не удалось переименовать диалог.",
+  "Compare models": "Сравнить модели",
+  "Compare model responses": "Сравнение ответов моделей",
+  "Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.": "Отправьте один запрос 2–4 подключённым моделям параллельно. Каждый запрос оплачивается по тарифам своего провайдера.",
+  "models selected": "моделей выбрано",
+  "Stop comparison": "Остановить сравнение",
+  "Compare now": "Сравнить сейчас",
+  "Generating…": "Генерация…",
+  "Complete": "Готово",
+  "Stopped": "Остановлено",
+  "Failed": "Ошибка",
+  "Enter a prompt or send a message before comparing models.": "Введите запрос или отправьте сообщение, прежде чем сравнивать модели."
 }

@@ -115,5 +115,16 @@
   "No model selected": "未选择模型",
   "Rename conversation": "重命名对话",
   "Save": "保存",
-  "Could not rename this conversation.": "无法重命名此对话。"
+  "Could not rename this conversation.": "无法重命名此对话。",
+  "Compare models": "比较模型",
+  "Compare model responses": "模型回答对比",
+  "Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.": "将相同提示并行发送给 2–4 个已连接模型。每个请求均由对应服务商计费。",
+  "models selected": "个模型已选",
+  "Stop comparison": "停止比较",
+  "Compare now": "开始比较",
+  "Generating…": "生成中…",
+  "Complete": "已完成",
+  "Stopped": "已停止",
+  "Failed": "失败",
+  "Enter a prompt or send a message before comparing models.": "请先输入提示或发送消息，再比较模型。"
 }

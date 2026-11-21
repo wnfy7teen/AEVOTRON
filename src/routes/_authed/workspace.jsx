@@ -61,6 +61,11 @@ function WorkspaceChat() {
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState("");
   const [metrics, setMetrics] = useState(null);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [compareSelection, setCompareSelection] = useState([]);
+  const [compareResults, setCompareResults] = useState([]);
+  const [isComparing, setIsComparing] = useState(false);
+  const compareControllersRef = useRef([]);
   const abortRef = useRef(null);
   const composerRef = useRef(null);
   const contextEstimate = useMemo(() => estimateTokens(messages), [messages]);
@@ -257,6 +262,51 @@ function WorkspaceChat() {
     if (!demoMode) sessionsQuery.refetch();
   };
 
+  const toggleCompareModel = (modelId) => {
+    setCompareSelection((selected) => selected.includes(modelId)
+      ? selected.filter((id) => id !== modelId)
+      : selected.length < 4 ? [...selected, modelId] : selected);
+  };
+
+  const stopComparison = () => compareControllersRef.current.forEach((controller) => controller.abort());
+
+  const runComparison = async () => {
+    if (demoMode || isComparing || compareSelection.length < 2 || compareSelection.length > 4) return;
+    const draftValue = draft.trim();
+    const lastUserIndex = messages.map((item) => item.role).lastIndexOf("user");
+    const history = lastUserIndex >= 0 ? messages.slice(0, lastUserIndex + 1) : [];
+    const comparisonMessages = draftValue ? [...history, { role: "user", content: draftValue }] : history;
+    if (!comparisonMessages.length) {
+      setChatError(t("Enter a prompt or send a message before comparing models."));
+      return;
+    }
+    const selected = models.filter((model) => compareSelection.includes(model.id));
+    const controllers = selected.map(() => new AbortController());
+    compareControllersRef.current = controllers;
+    setCompareResults(selected.map((model) => ({ modelId: model.id, content: "", status: "streaming", metrics: null, error: null })));
+    setIsComparing(true);
+    setChatError("");
+    await Promise.allSettled(selected.map(async (model, index) => {
+      try {
+        const result = await api.workspace.streamChat({
+          model: model.id,
+          messages: comparisonMessages.map(({ role, content }) => ({ role, content })),
+          persist_conversation: false,
+          persist_user_message: false,
+          signal: controllers[index].signal,
+          onDelta: (delta) => setCompareResults((items) => items.map((item) => item.modelId === model.id
+            ? { ...item, content: item.content + delta } : item)),
+        });
+        setCompareResults((items) => items.map((item) => item.modelId === model.id ? { ...item, status: "complete", metrics: result } : item));
+      } catch (error) {
+        setCompareResults((items) => items.map((item) => item.modelId === model.id
+          ? { ...item, status: error.name === "AbortError" ? "cancelled" : "error", error: error.name === "AbortError" ? null : error.message } : item));
+      }
+    }));
+    compareControllersRef.current = [];
+    setIsComparing(false);
+  };
+
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
   const tokenRate = outputTokens && metrics?.elapsedMs ? (outputTokens / (metrics.elapsedMs / 1000)).toFixed(1) : "—";
@@ -289,13 +339,22 @@ function WorkspaceChat() {
         <section className="aw-content">
           <div className="aw-chat-heading">
             <div><div className="aw-eyebrow">{t("MODEL WORKSPACE")}</div><h1>{t("What would you like to work on?")}</h1><p>{t("Choose a connected model and start a focused conversation.")}</p></div>
-            <div className="aw-model-picker">
-              <label htmlFor="aw-model-select">{t("MODEL")}</label>
-              <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{models.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</select><ChevronDown size={14}/></div>
-              <small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small>
+            <div className="aw-heading-controls">
+              <button className="aw-compare-toggle" type="button" onClick={() => {setCompareOpen((open) => !open);setCompareSelection((selected) => selected.length ? selected : models.slice(0,2).map((model) => model.id));}} disabled={models.length < 2 || demoMode || isStreaming}>{t("Compare models")} <span>2–4</span></button>
+              <div className="aw-model-picker">
+                <label htmlFor="aw-model-select">{t("MODEL")}</label>
+                <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{models.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</select><ChevronDown size={14}/></div>
+                <small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small>
+              </div>
             </div>
           </div>
 
+          {compareOpen && <section className="aw-compare-panel">
+            <div className="aw-compare-heading"><div><strong>{t("Compare model responses")}</strong><p>{t("Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.")}</p></div><button type="button" onClick={() => {if(isComparing)stopComparison();setCompareOpen(false);}} aria-label={t("Close")}>×</button></div>
+            <div className="aw-compare-models">{models.map((model) => <label key={model.id} className={compareSelection.includes(model.id) ? "is-selected" : ""}><input type="checkbox" checked={compareSelection.includes(model.id)} onChange={() => toggleCompareModel(model.id)} disabled={isComparing || (!compareSelection.includes(model.id) && compareSelection.length >= 4)}/><span><strong>{model.provider_code}</strong><small>{model.provider_model_id || model.id}</small></span></label>)}</div>
+            <div className="aw-compare-actions"><span>{compareSelection.length} / 4 {t("models selected")}</span>{isComparing ? <button type="button" className="aw-compare-stop" onClick={stopComparison}><CircleStop size={14}/>{t("Stop comparison")}</button> : <button type="button" onClick={runComparison} disabled={compareSelection.length < 2 || !draft.trim() && !messages.some((item) => item.role === "user")}>{t("Compare now")}</button>}</div>
+            {compareResults.length > 0 && <div className="aw-compare-results">{compareResults.map((item) => {const model=models.find((entry) => entry.id === item.modelId);return <article key={item.modelId} className="aw-compare-result"><div className="aw-compare-result-title"><strong>{model?.provider_model_id || item.modelId}</strong><span>{item.status === "streaming" ? t("Generating…") : item.status === "complete" ? t("Complete") : item.status === "cancelled" ? t("Stopped") : t("Failed")}</span></div><div className="aw-message-content">{item.content ? <ReactMarkdown>{item.content}</ReactMarkdown> : item.status === "streaming" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null}{item.error && <p className="aw-message-error">{item.error}</p>}</div>{item.metrics && <small>{t("TTFT")}: {item.metrics.ttftMs ?? "—"} ms · {t("Cost")}: {t("Not reported")}</small>}</article>;})}</div>}
+          </section>}
           {chatError && <div className="aw-notice is-warning" role="alert"><X size={16}/><span>{chatError}</span><button type="button" onClick={() => setChatError("")}>{t("Dismiss")}</button></div>}
           {demoMode && <div className="aw-notice" role="status"><Sparkles size={16}/><span>{t("This is a local demo session. Connect a real account and provider to send live requests.")}</span><a href="/dashboard">{t("Open providers")}</a></div>}
           {!demoMode && modelQuery.isError && <div className="aw-notice is-warning" role="alert"><X size={16}/><span>{t("Could not load your connected models.")}</span><a href="/dashboard">{t("Manage providers")}</a></div>}

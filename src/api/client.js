@@ -136,7 +136,7 @@ const workspace = {
   async deleteChat(sessionId) {
     return request("/api/v1/workspace/chats/" + encodeURIComponent(sessionId), { method: "DELETE", body: {} });
   },
-  async streamChat({ model, messages, session_id, persist_user_message = true, max_tokens, temperature, top_p, signal, onDelta, onUsage }) {
+  async streamChat({ model, messages, session_id, persist_user_message = true, persist_conversation = true, max_tokens, temperature, top_p, signal, onDelta, onUsage }) {
     const startedAt = performance.now();
     let firstTokenAt = null;
     let outputCharacters = 0;
@@ -146,7 +146,7 @@ const workspace = {
       credentials: "include",
       headers: { "content-type": "application/json", accept: "text/event-stream" },
       body: JSON.stringify({
-        model, messages, stream: true, persist_user_message,
+        model, messages, stream: true, persist_user_message, persist_conversation,
         ...(session_id ? { session_id } : {}),
         ...(max_tokens !== undefined ? { max_tokens } : {}),
         ...(temperature !== undefined ? { temperature } : {}),

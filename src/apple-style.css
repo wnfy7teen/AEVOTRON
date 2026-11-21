@@ -2761,3 +2761,38 @@ html[data-theme="dark"] .aw-history-delete:hover { background:#3b292b; color:#f1
 html[data-theme="dark"] .aw-history-rename:hover { background:#203545; color:#a9d7e9; }
 html[data-theme="dark"] .aw-history-rename-save { background:#1e3a32; color:#8ed5b4; }
 html[data-theme="dark"] .aw-history-rename-input { border-color:#456b7e; background:#192733; color:#dbe6ee; }
+
+.aw-heading-controls { display:flex; align-items:flex-end; flex-direction:column; gap:9px; width:270px; flex:0 0 270px; }
+.aw-heading-controls .aw-model-picker { width:100%; flex-basis:auto; }
+.aw-compare-toggle { display:flex; align-items:center; gap:8px; padding:6px 9px; border:1px solid #dce5ed; border-radius:7px; background:#fff; color:#536b7d; font-size:10px; font-weight:600; cursor:pointer; }
+.aw-compare-toggle span { padding:2px 5px; border-radius:4px; background:#edf4f8; color:#4d7b91; font-size:9px; }
+.aw-compare-toggle:disabled { opacity:.5; cursor:not-allowed; }
+.aw-compare-panel { margin:0 0 18px; padding:15px; border:1px solid #dce6ed; border-radius:12px; background:#fff; }
+.aw-compare-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.aw-compare-heading strong { color:#26384a; font-size:13px; }
+.aw-compare-heading p { margin:5px 0 0; color:#8592a0; font-size:11px; line-height:1.5; }
+.aw-compare-heading > button { display:grid; width:26px; height:26px; place-items:center; border:0; border-radius:6px; background:#f1f5f7; color:#758493; cursor:pointer; }
+.aw-compare-models { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:7px; margin-top:14px; }
+.aw-compare-models label { display:flex; align-items:center; gap:8px; min-width:0; padding:9px; border:1px solid #e5ebf0; border-radius:8px; background:#fbfcfd; cursor:pointer; }
+.aw-compare-models label.is-selected { border-color:#a8cedd; background:#f2f9fc; }
+.aw-compare-models input { accent-color:#087da8; }
+.aw-compare-models span { display:flex; min-width:0; flex-direction:column; gap:3px; }
+.aw-compare-models strong { color:#52697b; font-size:10px; text-transform:uppercase; }
+.aw-compare-models small { overflow:hidden; color:#34495c; font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
+.aw-compare-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; color:#8794a1; font-size:10px; }
+.aw-compare-actions button { display:inline-flex; align-items:center; gap:7px; min-height:32px; padding:0 11px; border:0; border-radius:7px; background:#087da8; color:#fff; font-size:10px; font-weight:600; cursor:pointer; }
+.aw-compare-actions button:disabled { opacity:.45; cursor:not-allowed; }
+.aw-compare-actions .aw-compare-stop { background:#f8eeee; color:#a34a4a; }
+.aw-compare-results { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin-top:14px; }
+.aw-compare-result { min-width:0; padding:12px; border:1px solid #e5ebf0; border-radius:9px; background:#fbfcfd; }
+.aw-compare-result-title { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px; }
+.aw-compare-result-title strong { overflow:hidden; color:#30465a; font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
+.aw-compare-result-title span,.aw-compare-result > small { color:#8794a1; font-size:9px; }
+.aw-compare-result .aw-message-content { font-size:11px; }
+html[data-theme="dark"] .aw-compare-toggle,html[data-theme="dark"] .aw-compare-panel { border-color:#304252; background:#192733; color:#c5d2dc; }
+html[data-theme="dark"] .aw-compare-heading strong,html[data-theme="dark"] .aw-compare-result-title strong { color:#e0e9f0; }
+html[data-theme="dark"] .aw-compare-models label,html[data-theme="dark"] .aw-compare-result { border-color:#304252; background:#16242f; }
+html[data-theme="dark"] .aw-compare-models label.is-selected { border-color:#456b7e; background:#1b3545; }
+html[data-theme="dark"] .aw-compare-models small { color:#c7d5df; }
+html[data-theme="dark"] .aw-compare-heading p,html[data-theme="dark"] .aw-compare-result-title span { color:#9aabba; }
+@media (max-width:720px) { .aw-heading-controls { width:100%; flex-basis:auto; align-items:stretch; } .aw-compare-toggle { align-self:flex-end; } .aw-compare-results { grid-template-columns:1fr; } }

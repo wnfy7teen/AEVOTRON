@@ -115,5 +115,16 @@
   "No model selected": "No model selected",
   "Rename conversation": "Rename conversation",
   "Save": "Save",
-  "Could not rename this conversation.": "Could not rename this conversation."
+  "Could not rename this conversation.": "Could not rename this conversation.",
+  "Compare models": "Compare models",
+  "Compare model responses": "Compare model responses",
+  "Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.": "Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.",
+  "models selected": "models selected",
+  "Stop comparison": "Stop comparison",
+  "Compare now": "Compare now",
+  "Generating…": "Generating…",
+  "Complete": "Complete",
+  "Stopped": "Stopped",
+  "Failed": "Failed",
+  "Enter a prompt or send a message before comparing models.": "Enter a prompt or send a message before comparing models."
 }
