@@ -801,6 +801,10 @@ async function handle(req, res) {
     const [, providerCode, providerModel] = modelMatch;
     const providerConfig = getProvider(providerCode);
     if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    if (body.persist_conversation !== undefined && typeof body.persist_conversation !== "boolean") {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "The persistence option must be a boolean.");
+    }
+    const persistConversation = body.persist_conversation !== false;
     if (body.session_id !== undefined && (typeof body.session_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.session_id))) {
       return fail(res, 400, "INVALID_CHAT_SESSION", "The conversation identifier is invalid.");
     }
@@ -808,30 +812,35 @@ async function handle(req, res) {
       return fail(res, 400, "INVALID_MESSAGES", "The latest conversation message must be from the user.");
     }
     const workspace = await currentWorkspace(user);
-    let chatSessionId = body.session_id || null;
-    if (chatSessionId) {
-      const ownedSession = await pool.query(
-        "SELECT id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
-        [chatSessionId,workspace.id,user.id],
-      );
-      if (!ownedSession.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
-    } else {
-      const firstPrompt = body.messages[body.messages.length - 1].content.trim().slice(0, 100);
-      const createdSession = await pool.query(
-        "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id",
-        [workspace.id,user.id,firstPrompt || "New conversation",body.model],
-      );
-      chatSessionId = createdSession.rows[0].id;
+    let chatSessionId = null;
+    if (persistConversation) {
+      chatSessionId = body.session_id || null;
+      if (chatSessionId) {
+        const ownedSession = await pool.query(
+          "SELECT id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+          [chatSessionId,workspace.id,user.id],
+        );
+        if (!ownedSession.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+      } else {
+        const firstPrompt = body.messages[body.messages.length - 1].content.trim().slice(0, 100);
+        const createdSession = await pool.query(
+          "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id",
+          [workspace.id,user.id,firstPrompt || "New conversation",body.model],
+        );
+        chatSessionId = createdSession.rows[0].id;
+      }
+      if (body.persist_user_message !== false) {
+        const latestPrompt = body.messages[body.messages.length - 1].content;
+        await pool.query(
+          "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
+          [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
+        );
+      }
+      await pool.query("UPDATE workspace_chat_sessions SET model_id=$4,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+        [chatSessionId,workspace.id,user.id,body.model]);
+    } else if (body.session_id !== undefined) {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "Non-persistent requests cannot target a saved conversation.");
     }
-    if (body.persist_user_message !== false) {
-      const latestPrompt = body.messages[body.messages.length - 1].content;
-      await pool.query(
-        "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
-        [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
-      );
-    }
-    await pool.query("UPDATE workspace_chat_sessions SET model_id=$4,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
-      [chatSessionId,workspace.id,user.id,body.model]);
     await rateLimit(req, "workspace-chat:" + user.id, 20, 60);
     const savedProvider = await pool.query(
       "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
@@ -891,7 +900,7 @@ async function handle(req, res) {
         connection: "keep-alive",
         "x-content-type-options": "nosniff",
         "x-request-id": requestId,
-        "x-chat-session-id": chatSessionId,
+        ...(chatSessionId ? { "x-chat-session-id": chatSessionId } : {}),
         "x-accel-buffering": "no",
       });
       const reader = upstream.body.getReader();
@@ -956,7 +965,7 @@ async function handle(req, res) {
       }
     } finally {
       res.removeListener("close", onResponseClose);
-      if (assistantContent) {
+      if (assistantContent && chatSessionId) {
         await pool.query(
           "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,'assistant',$4,$5,$6::jsonb)",
           [chatSessionId,workspace.id,user.id,assistantContent,body.model,JSON.stringify({ partial: responseStatus !== 200 })],

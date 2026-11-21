@@ -19,6 +19,8 @@ test("Workspace chat is session-authenticated and streams through connected prov
   assert.match(route, /workspace_chat_messages/);
   assert.match(route, /x-chat-session-id/);
   assert.match(route, /body\.session_id/);
+  assert.match(route, /persist_conversation/);
+  assert.match(route, /Non-persistent requests cannot target a saved conversation/);
   assert.doesNotMatch(route, /parseApiKeyBearer|mh_live_/);
 });
 
