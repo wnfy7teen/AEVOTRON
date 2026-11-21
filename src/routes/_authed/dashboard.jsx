@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/client";
@@ -358,6 +358,80 @@ function UsageDashboard() {
 }
 
 
+function MfaSettings() {
+  const [enabled, setEnabled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [enrollment, setEnrollment] = useState(null);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+
+  const refresh = async () => {
+    const result = await api.auth.mfaStatus();
+    setEnabled((result.methods || []).includes("totp"));
+  };
+  useEffect(() => {
+    let mounted = true;
+    api.auth.mfaStatus()
+      .then((result) => { if (mounted) setEnabled((result.methods || []).includes("totp")); })
+      .catch((err) => { if (mounted) setError(err.message || "Could not load MFA status."); })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  }, []);
+
+  const start = async () => {
+    setBusy(true); setError("");
+    try {
+      const result = await api.auth.mfaEnroll();
+      setEnrollment(result);
+      setCode("");
+    } catch (err) { setError(err.message || "Could not start authenticator setup."); }
+    finally { setBusy(false); }
+  };
+  const confirm = async (event) => {
+    event.preventDefault();
+    if (!/^\\d{6}$/.test(code)) { setError("Enter the 6-digit code from your authenticator app."); return; }
+    setBusy(true); setError("");
+    try {
+      await api.auth.mfaConfirm(code);
+      setEnrollment(null); setCode("");
+      await refresh();
+      toast.success("Two-factor authentication enabled");
+    } catch (err) { setError(err.message || "Could not verify the authenticator code."); }
+    finally { setBusy(false); }
+  };
+  const disable = async (event) => {
+    event.preventDefault();
+    if (!/^\\d{6}$/.test(code)) { setError("Enter the current 6-digit authenticator code."); return; }
+    setBusy(true); setError("");
+    try {
+      await api.auth.mfaDisable(code);
+      setCode(""); setEnrollment(null);
+      await refresh();
+      toast.success("Two-factor authentication disabled");
+    } catch (err) { setError(err.message || "Could not disable two-factor authentication."); }
+    finally { setBusy(false); }
+  };
+
+  return <div className="av-mfa-settings">
+    <div className="av-settings-heading"><h3>Two-factor authentication</h3><p>Protect sign-ins with a time-based code from an authenticator app.</p></div>
+    <div className="av-session-row"><div><strong>{loading ? "Checking account security…" : enabled ? "Authenticator enabled" : "Authenticator not enabled"}</strong><small>{enabled ? "A one-time code is required during sign-in." : "Use an authenticator app such as 1Password, Authy or Google Authenticator."}</small></div><span className={`mh-status ${enabled ? "byok" : "planned"}`}>{loading ? "Checking" : enabled ? "Enabled" : "Disabled"}</span></div>
+    {!loading && !enabled && !enrollment && <button className="mh-button mh-button-primary" type="button" disabled={busy} onClick={start}>{busy ? "Starting…" : "Set up authenticator"}</button>}
+    {enrollment && <form className="av-mfa-enrollment" onSubmit={confirm}>
+      <p>Scan this QR code with your authenticator app, then enter the generated 6-digit code to confirm setup.</p>
+      {enrollment.qr_code && <img className="av-mfa-qr" src={enrollment.qr_code} alt="Authenticator setup QR code"/>}
+      <label className="av-setting-field"><span>Manual setup key</span><input readOnly value={enrollment.secret_formatted || enrollment.secret || ""}/></label>
+      <label className="av-setting-field"><span>Authenticator code</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\\D/g,"").slice(0,6))} placeholder="000000"/></label>
+      <div className="av-modal-actions"><button className="mh-button mh-button-quiet" type="button" disabled={busy} onClick={()=>{setEnrollment(null);setCode("");}}>Cancel</button><button className="mh-button mh-button-primary" type="submit" disabled={busy || code.length!==6}>{busy ? "Verifying…" : "Confirm and enable"}</button></div>
+    </form>}
+    {enabled && <form className="av-mfa-enrollment" onSubmit={disable}>
+      <label className="av-setting-field"><span>Current authenticator code to disable MFA</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\\D/g,"").slice(0,6))} placeholder="000000"/></label>
+      <button className="mh-button mh-button-danger" type="submit" disabled={busy || code.length!==6}>{busy ? "Disabling…" : "Disable two-factor authentication"}</button>
+    </form>}
+    {error && <div className="mh-inline-error" role="alert">{error}</div>}
+  </div>;
+}
+
 const SETTINGS_DEFAULTS = {
   name: "Christopher", email: "christopher@example.com", timezone: "Europe/Amsterdam", language: "English",
   twoFactor: true, emailSecurity: true, emailUsage: true, pushUsage: false, inAppProduct: true,
@@ -396,13 +470,13 @@ function WorkspaceSettings() {
   const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{label}</strong><small>{description}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
   const select = (label,key,options) => <label className="av-setting-field"><span>{label}</span><select value={settings[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option} value={option}>{option}</option>)}</select></label>;
   return <div className="av-settings">
-    <div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>Local preview settings.</strong> These preferences are saved only in this browser. Password changes, two-factor authentication, session management, billing, webhooks and API restrictions are not applied to the server.</span></div>
+    <div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>Local preview settings.</strong> These preferences are saved only in this browser. Password changes, session management, billing, webhooks and API restrictions are not applied to the server. Two-factor authentication below is connected to the account security API.</span></div>
     <div className="mh-page-heading"><div><div className="mh-eyebrow">ACCOUNT</div><h1>Settings</h1><p>Manage your account, security and workspace defaults.</p></div></div>
     <div className="av-settings-layout">
       <nav className="av-settings-tabs" aria-label="Settings sections">{tabs.map(item=><button type="button" key={item.name} className={tab===item.name?"active":""} onClick={()=>setTab(item.name)}><item.icon size={16}/>{item.name}</button>)}</nav>
       <section className="mh-panel av-settings-panel">
         {tab==="Profile" && <><div className="av-settings-heading"><h2>Profile</h2><p>Your personal details and regional preferences.</p></div><div className="av-avatar-editor"><div className="av-avatar-preview">{avatar ? <img src={avatar} alt="Profile avatar"/> : "C"}</div><div><strong>Profile photo</strong><small>JPG, PNG or WebP · up to 2 MB</small><label className="mh-button mh-button-quiet av-upload-button">Upload photo<input type="file" accept="image/*" onChange={uploadAvatar}/></label></div></div><div className="av-settings-grid">{field("Full name","name")}{field("Email address","email")}{select("Time zone","timezone",["Europe/Amsterdam","Europe/London","Europe/Berlin","Europe/Moscow","America/New_York","Asia/Tokyo","UTC"])}{select("Language","language",["English","Русский","简体中文"])}</div></>}
-        {tab==="Security" && <><div className="av-settings-heading"><h2>Security</h2><p>Protect your account and review active access.</p></div>{toggle("Two-factor authentication","twoFactor","Local preview preference only. Server-side MFA is not changed.")}<div className="av-settings-subtitle">Password</div><form className="av-settings-grid" onSubmit={e=>{e.preventDefault();toast.success("Password change request saved in demo mode");}}><label className="av-setting-field"><span>Current password</span><input type="password" required minLength="12" autoComplete="current-password"/></label><label className="av-setting-field"><span>New password</span><input type="password" required minLength="12" autoComplete="new-password"/></label><button className="mh-button mh-button-primary" type="submit">Update password</button></form><div className="av-settings-subtitle">Active sessions</div>{sessionList.map(session=><div className="av-session-row" key={session.id}><div><strong>{session.name}</strong><small>{session.detail}</small></div>{session.current?<span className="mh-status byok">Current</span>:<button className="mh-button mh-button-danger" onClick={()=>{setSessionList(list=>list.filter(item=>item.id!==session.id));toast.success("Preview session removed from this list");}}>End session</button>}</div>)}<div className="av-settings-subtitle">Recent sign-ins</div>{logins.map(item=><div className="av-session-row" key={item.when}><div><strong>{item.device}</strong><small>{item.when} · {item.where}</small></div><ShieldCheck size={17}/></div>)}</>}
+        {tab==="Security" && <><div className="av-settings-heading"><h2>Security</h2><p>Protect your account and review active access.</p></div><MfaSettings/><div className="av-settings-subtitle">Password</div><form className="av-settings-grid" onSubmit={e=>{e.preventDefault();toast.success("Password change request saved in demo mode");}}><label className="av-setting-field"><span>Current password</span><input type="password" required minLength="12" autoComplete="current-password"/></label><label className="av-setting-field"><span>New password</span><input type="password" required minLength="12" autoComplete="new-password"/></label><button className="mh-button mh-button-primary" type="submit">Update password</button></form><div className="av-settings-subtitle">Active sessions</div>{sessionList.map(session=><div className="av-session-row" key={session.id}><div><strong>{session.name}</strong><small>{session.detail}</small></div>{session.current?<span className="mh-status byok">Current</span>:<button className="mh-button mh-button-danger" onClick={()=>{setSessionList(list=>list.filter(item=>item.id!==session.id));toast.success("Preview session removed from this list");}}>End session</button>}</div>)}<div className="av-settings-subtitle">Recent sign-ins</div>{logins.map(item=><div className="av-session-row" key={item.when}><div><strong>{item.device}</strong><small>{item.when} · {item.where}</small></div><ShieldCheck size={17}/></div>)}</>}
         {tab==="Notifications" && <><div className="av-settings-heading"><h2>Notifications</h2><p>Choose which events can reach you.</p></div>{toggle("Security alerts","emailSecurity","Important sign-in and account security events by email.")}{toggle("Usage summaries","emailUsage","Periodic usage and spend summaries by email.")}{toggle("Push notifications","pushUsage","Browser notifications for important account events.")}{toggle("In-app product updates","inAppProduct","Service announcements and product changes.")}</>}
         {tab==="Billing" && <><div className="av-settings-heading"><h2>Billing preferences</h2><p>Configure spending safeguards. Changes are stored locally in this preview.</p></div>{select("Billing currency","currency",["USD","EUR","GBP","RUB"])}{toggle("Automatic top-up","autoTopUp","Automatically add funds when your balance is low (demo).")}{field("Monthly spending limit (USD)","monthlyLimit")}</>}
         {tab==="API" && <><div className="av-settings-heading"><h2>API controls</h2><p>Set request limits and trusted destinations.</p></div>{field("Requests per minute","requestLimit")}{field("IP allowlist (comma-separated)","ipWhitelist","203.0.113.10, 198.51.100.0/24")}{field("Webhook URL","webhookUrl","https://example.com/webhooks/aevotron")}<button className="mh-button mh-button-quiet" onClick={()=>{if(settings.webhookUrl && !/^https:\/\//i.test(settings.webhookUrl)){toast.error("Webhook URL must use HTTPS");return;}toast.success("API controls saved");}}>Validate and save API controls</button></>}
