@@ -13,11 +13,6 @@ export const Route = createFileRoute("/_authed/workspace")({
   component: WorkspaceChat,
 });
 
-const demoModels = [
-  { id: "openai/gpt-4o-mini", provider_model_id: "gpt-4o-mini", provider_code: "openai", owned_by: "OpenAI" },
-  { id: "openai/gpt-4o", provider_model_id: "gpt-4o", provider_code: "openai", owned_by: "OpenAI" },
-  { id: "groq/llama-3.3-70b-versatile", provider_model_id: "llama-3.3-70b-versatile", provider_code: "groq", owned_by: "Meta" },
-];
 
 function estimateTokens(messages) {
   return messages.reduce((total, message) => total + Math.ceil(String(message.content || "").length / 4), 0);
@@ -53,13 +48,14 @@ function WorkspaceChat() {
   const modelQuery = useQuery({
     queryKey: ["workspace-chat-models"],
     queryFn: async () => {
-      const result = await api.functions.invoke("provider-connections", { action: "models" });
+      const result = demoMode
+        ? await api.groq.models()
+        : await api.functions.invoke("provider-connections", { action: "models" });
       return result?.models || [];
     },
-    enabled: !demoMode,
+    enabled: true,
     retry: false,
     staleTime: 60_000,
-    initialData: demoMode ? demoModels : undefined,
   });
   const models = modelQuery.data || [];
   const [selectedModel, setSelectedModel] = useState("");
@@ -236,7 +232,7 @@ function WorkspaceChat() {
   };
 
   const generate = async (baseMessages, { sessionId = activeConversation, persistUserMessage = true, replaceLastUserMessage = false } = {}) => {
-    if (!activeModel || demoMode) return;
+    if (!activeModel) return;
     const assistantId = crypto.randomUUID();
     const assistant = { id: assistantId, role: "assistant", content: "", createdAt: Date.now() };
     const nextMessages = [...baseMessages, assistant];
@@ -247,7 +243,8 @@ function WorkspaceChat() {
     abortRef.current = controller;
     setIsStreaming(true);
     try {
-      const result = await api.workspace.streamChat({
+      const streamChat = demoMode ? api.groq.streamChat : api.workspace.streamChat;
+      const result = await streamChat({
         model: activeModel.id,
         session_id: demoMode ? undefined : sessionId,
         persist_user_message: persistUserMessage,
@@ -277,7 +274,7 @@ function WorkspaceChat() {
   const send = async (event) => {
     event?.preventDefault?.();
     const value = draft.trim();
-    if ((!value && !selectedAttachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
+    if ((!value && !selectedAttachments.length) || isStreaming || isProcessingFiles || !activeModel) return;
     const fileContext = selectedAttachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n]/g, "_").replaceAll("[", "_").replaceAll("]", "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
     const prompt = [value, fileContext].filter(Boolean).join("\n\n");
     const sentAttachmentIds = new Set(selectedAttachments.map((file) => file.id));
