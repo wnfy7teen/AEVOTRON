@@ -47,12 +47,13 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /api\.auth\.mfaEnroll/);
   assert.match(source, /api\.auth\.mfaConfirm/);
   assert.match(source, /api\.auth\.mfaDisable/);
-  assert.match(source, /Session management is not connected yet/);
-  assert.match(source, /Sign-in history is not available yet/);
-  assert.match(source, /Password changes are not available here yet/);
+  assert.match(source, /api\.auth\.sessions\(\)/);
+  assert.match(source, /api\.auth\.revokeSession\(session\.id\)/);
+  assert.match(source, /api\.auth\.changePassword\(/);
+  assert.match(source, /sessionsQuery\.data\.current_session_id/);
+  assert.match(source, /other_sessions_revoked/);
   const securityPanel = source.split('{tab==="Security" &&')[1]?.split('{tab==="Notifications" &&')[0] || "";
-  assert.doesNotMatch(securityPanel, /Kerkrade, NL|Safari · iPhone|christopher@example\.com/);
-  assert.doesNotMatch(source, /Password change request saved in demo mode/);
+  assert.doesNotMatch(securityPanel, /Kerkrade, NL|Safari · iPhone|christopher@example\.com|saved in demo mode/);
 });
 
 test("credential revocations require confirmation and frontend actions map to backend routes", async () => {
@@ -74,4 +75,17 @@ test("workspace profile displays authenticated identity instead of placeholder a
   assert.match(source, /<input readOnly value=\{account\?\.display_name/);
   assert.match(source, /<input readOnly value=\{account\?\.email/);
   assert.doesNotMatch(source, /name: "Christopher", email: "christopher@example\.com"/);
+});
+
+
+test("account security UI calls authenticated password and session endpoints", async () => {
+  const client = await read("src/api/client.js");
+  const backend = await read("backend/src/server.js");
+  assert.match(client, /\/api\/v1\/auth\/sessions/);
+  assert.match(client, /\/api\/v1\/auth\/password\/change/);
+  assert.match(backend, /path === "\/api\/v1\/auth\/sessions"/);
+  assert.match(backend, /path === "\/api\/v1\/auth\/password\/change"/);
+  assert.match(backend, /DELETE FROM sessions WHERE id=\$1 AND user_id=\$2/);
+  assert.match(backend, /verifyTotp\(secret, body\.mfa_code\)/);
+  assert.match(backend, /DELETE FROM sessions WHERE user_id=\$1 AND id<>\$2/);
 });
