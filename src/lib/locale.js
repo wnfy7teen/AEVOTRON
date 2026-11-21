@@ -15,8 +15,8 @@ export function readLocaleCookie(cookieHeader, name = "aevotron-language") {
 export function negotiateAcceptLanguage(header) {
   const preferences = String(header || "").split(",").map((part, index) => {
     const [tag, ...params] = part.trim().split(";");
-    const qualityParam = params.map((param) => param.trim()).find((param) => /^q\\s*=/i.test(param));
-    const qualityValue = qualityParam?.match(/^q\\s*=\\s*(.*)$/i)?.[1];
+    const qualityParam = params.map((param) => param.trim()).find((param) => /^q\s*=/i.test(param));
+    const qualityValue = qualityParam?.match(/^q\s*=\s*(.*)$/i)?.[1];
     const quality = qualityParam ? Number(qualityValue) : 1;
     const validQuality = Number.isFinite(quality) && quality >= 0 && quality <= 1 ? quality : 0;
     return { locale: normalizeSupportedLocale(tag), quality: validQuality, index };
