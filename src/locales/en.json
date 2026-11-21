@@ -779,5 +779,9 @@
   "Connect a provider to load the models available to your account.": "Connect a provider to load the models available to your account.",
   "Revoke the Groq provider connection? Requests using it will stop working.": "Revoke the Groq provider connection? Requests using it will stop working.",
   "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} is connected. Your credential is encrypted and hidden.",
-  "Could not revoke this provider connection.": "Could not revoke this provider connection."
+  "Could not revoke this provider connection.": "Could not revoke this provider connection.",
+  "Could not load models from your provider. Test the connection and refresh.": "Could not load models from your provider. Test the connection and refresh.",
+  "Connect a provider to load the chat models available to your API key.": "Connect a provider to load the chat models available to your API key.",
+  "Connect a provider to discover the models available to your account.": "Connect a provider to discover the models available to your account.",
+  "Billed by the connected provider": "Billed by the connected provider"
 }
