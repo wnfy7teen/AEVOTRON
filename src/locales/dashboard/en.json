@@ -53,5 +53,8 @@
   "One API. Your provider accounts.": "One API. Your provider accounts.",
   "AEVOTRON routes requests to the selected provider. Model access and charges are controlled by that provider account.": "AEVOTRON routes requests to the selected provider. Model access and charges are controlled by that provider account.",
   "Read the quickstart": "Read the quickstart",
-  "You": "You"
+  "You": "You",
+  "General": "General",
+  "Lightweight": "Lightweight",
+  "Direct": "Direct"
 }
