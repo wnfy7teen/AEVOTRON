@@ -1,12 +1,10 @@
 import {
   createCipheriv, createDecipheriv, createHash, createHmac, randomBytes,
-  scrypt as scryptCallback, timingSafeEqual, createHash as hash,
+  scrypt as scryptCallback, timingSafeEqual,
 } from "node:crypto";
 import { promisify } from "node:util";
 
 const scrypt = promisify(scryptCallback);
-const encoder = new TextEncoder();
-
 export const sha256 = (value) => createHash("sha256").update(value).digest();
 export const randomToken = (bytes = 32) => randomBytes(bytes).toString("base64url");
 export const safeEqual = (a, b) => {
@@ -67,10 +65,6 @@ export function createApiKey() {
   const secret = randomBytes(32).toString("base64url");
   const token = `mh_live_${secret}`;
   return { token, prefix: token.slice(0, 15), hash: apiKeyHash(token) };
-}
-
-export function createTotpSecret() {
-  return randomBytes(20).toString("base32");
 }
 
 const BASE32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
