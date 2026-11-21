@@ -8,7 +8,6 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/i18n.functions";
 import { normalizeLanguage, translateForLanguage } from "@/i18n";
-import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 
@@ -42,7 +41,6 @@ function RootComponent() {
         <DocumentMetadataSync />
         <Toaster />
         <LanguageSwitcher />
-        <ThemeSwitcher />
       </AuthProvider>
     </LanguageProvider>
   );
