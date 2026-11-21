@@ -350,6 +350,7 @@ function WorkspaceChat() {
     setMetrics(null);
     setDraft("");
     setAttachments([]);
+    setSelectedAttachmentIds([]);
     setFileError("");
   };
 
@@ -363,6 +364,7 @@ function WorkspaceChat() {
     shouldAutoScrollRef.current = true;
     setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setAttachments([]);
+    setSelectedAttachmentIds([]);
     setFileError("");
     setMetrics(null);
 
