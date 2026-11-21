@@ -47,3 +47,16 @@ test("Workspace chat sessions are scoped to the authenticated user and workspace
   assert.match(routes, /CHAT_NOT_FOUND/);
   assert.match(routes, /DELETE FROM workspace_chat_sessions/);
 });
+
+test("Conversation branching copies only an owned prefix ending at a user message", async () => {
+  const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
+  const start = server.indexOf("const chatBranchRoute");
+  const end = server.indexOf("const chatSessionRoute", start);
+  const route = server.slice(start, end);
+  assert.match(route, /requireUser\(req, res\)/);
+  assert.match(route, /workspace-chat-branch:/);
+  assert.match(route, /owner_user_id=\$[0-9]/);
+  assert.match(route, /role='user'/);
+  assert.match(route, /created_at < \$[0-9]/);
+  assert.match(route, /INSERT INTO workspace_chat_messages/);
+});

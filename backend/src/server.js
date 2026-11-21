@@ -756,6 +756,7 @@ async function handle(req, res) {
       return fail(res, 400, "INVALID_BRANCH_MESSAGE", "Select a saved user message to branch from.");
     }
     const workspace = await currentWorkspace(user);
+    await rateLimit(req, "workspace-chat-branch:" + user.id, 20, 60);
     const source = await pool.query(
       "SELECT id,title,model_id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
       [chatBranchRoute[1],workspace.id,user.id],
