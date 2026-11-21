@@ -63,6 +63,7 @@ test("Conversation branching copies only an owned prefix ending at a user messag
   assert.match(route, /role='user'/);
   assert.match(route, /created_at < \$[0-9]/);
   assert.match(route, /INSERT INTO workspace_chat_messages/);
+  assert.match(route, /metadata,created_at\) SELECT/);
 });
 
 test("Workspace chat accepts a bounded larger context while other API payloads keep the default limit", async () => {

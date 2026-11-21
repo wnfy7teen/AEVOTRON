@@ -776,7 +776,7 @@ async function handle(req, res) {
       [workspace.id,user.id,title,source.rows[0].model_id],
     );
     await pool.query(
-      "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) SELECT $4,$2,$3,role,content,model_id,metadata FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 AND (created_at < $5 OR (created_at = $5 AND id <= $6)) ORDER BY created_at,id",
+      "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata,created_at) SELECT $4,$2,$3,role,content,model_id,metadata,created_at FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 AND (created_at < $5 OR (created_at = $5 AND id <= $6)) ORDER BY created_at,id",
       [chatBranchRoute[1],workspace.id,user.id,created.rows[0].id,target.rows[0].created_at,body.message_id],
     );
     const messages = await pool.query(

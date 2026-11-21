@@ -23,6 +23,22 @@ function estimateTokens(messages) {
   return messages.reduce((total, message) => total + Math.ceil(String(message.content || "").length / 4), 0);
 }
 
+function selectContextMessages(messages, tokenBudget = 24_000) {
+  const systemMessages = messages.filter((message) => message.role === "system").slice(0,5);
+  const history = messages.filter((message) => message.role !== "system");
+  const availableSlots = Math.max(1, 50 - systemMessages.length);
+  const selected = [];
+  let usedTokens = 0;
+  for (let index = history.length - 1; index >= 0 && selected.length < availableSlots; index -= 1) {
+    const message = history[index];
+    const messageTokens = Math.ceil(String(message.content || "").length / 4);
+    if (selected.length && usedTokens + messageTokens > tokenBudget) break;
+    selected.unshift(message);
+    usedTokens += messageTokens;
+  }
+  return [...systemMessages, ...selected];
+}
+
 function WorkspaceChat() {
   const { t } = useTranslation(["dashboard", "translation"]);
   const demoMode = Boolean(readDemoUser());
@@ -72,7 +88,13 @@ function WorkspaceChat() {
   const abortRef = useRef(null);
   const composerRef = useRef(null);
   const fileInputRef = useRef(null);
-  const contextEstimate = useMemo(() => estimateTokens(messages), [messages]);
+  const modelContextLimit = Number(activeModel?.context_window || 0);
+  const contextBudget = Number.isFinite(modelContextLimit) && modelContextLimit > 0
+    ? Math.max(512, Math.min(24_000, modelContextLimit - 4_096))
+    : 24_000;
+  const contextMessages = useMemo(() => selectContextMessages(messages, contextBudget), [messages, contextBudget]);
+  const contextEstimate = useMemo(() => estimateTokens(contextMessages), [contextMessages]);
+  const contextTruncated = contextMessages.length < messages.length;
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 
   useEffect(() => {
@@ -164,7 +186,7 @@ function WorkspaceChat() {
         persist_user_message: persistUserMessage,
         replace_last_user_message: replaceLastUserMessage,
         message_id: [...baseMessages].reverse().find((item) => item.role === "user")?.id,
-        messages: baseMessages.map(({ role, content }) => ({ role, content })),
+        messages: selectContextMessages(baseMessages, contextBudget).map(({ role, content }) => ({ role, content })),
         signal: controller.signal,
         onDelta: (delta) => updateAssistant(assistantId, (item) => ({ ...item, content: item.content + delta }), sessionId),
       });
@@ -355,7 +377,7 @@ function WorkspaceChat() {
       try {
         const result = await api.workspace.streamChat({
           model: model.id,
-          messages: comparisonMessages.map(({ role, content }) => ({ role, content })),
+          messages: selectContextMessages(comparisonMessages, contextBudget).map(({ role, content }) => ({ role, content })),
           persist_conversation: false,
           persist_user_message: false,
           signal: controllers[index].signal,
@@ -383,8 +405,10 @@ function WorkspaceChat() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
+    document.body.appendChild(anchor);
     anchor.download = (title.replace(/[\\/:*?"<>|]+/g, "-").trim().slice(0,80) || "aevotron-conversation") + ".md";
     anchor.click();
+    anchor.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 0);
   };
 
@@ -392,9 +416,10 @@ function WorkspaceChat() {
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
   const generationMs = metrics?.elapsedMs ? Math.max(1, metrics.elapsedMs - (metrics.ttftMs || 0)) : 0;
   const tokenRate = outputTokens && generationMs ? (outputTokens / (generationMs / 1000)).toFixed(1) : "—";
-  const contextLimit = Number(activeModel?.context_window || 0);
+  const contextLimit = modelContextLimit;
+  const contextRemaining = contextLimit ? Math.max(0, contextLimit - contextEstimate) : null;
   const contextLabel = contextLimit
-    ? "~" + contextEstimate.toLocaleString() + " / " + contextLimit.toLocaleString() + " " + t("tokens")
+    ? "~" + contextEstimate.toLocaleString() + " / " + contextLimit.toLocaleString() + " " + t("tokens") + " · ~" + contextRemaining.toLocaleString() + " " + t("remaining")
     : "~" + contextEstimate.toLocaleString() + " " + t("tokens") + " · " + t("limit unknown");
 
   return (
@@ -460,7 +485,7 @@ function WorkspaceChat() {
 
           <div className="aw-statusbar">
             <div className="aw-status-model"><Bot size={14}/><strong>{activeModel?.provider_model_id || t("No model selected")}</strong><span>{providerName}</span></div>
-            <div className="aw-status-metric"><FileText size={13}/><span>{t("Context estimate")}: {contextLabel}</span></div>
+            <div className="aw-status-metric"><FileText size={13}/><span>{t("Context estimate")}: {contextLabel}</span></div>{contextTruncated && <span className="aw-context-trimmed">{t("Older messages omitted from this request")}</span>}
             <div className="aw-status-metric"><Clock3 size={13}/><span>{t("TTFT")}: {metrics?.ttftMs != null ? metrics.ttftMs + " ms" : "—"}</span></div>
             {metrics?.usage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Provider usage")}: {metrics.usage.prompt_tokens ?? metrics.usage.input_tokens ?? "—"} {t("input")} / {metrics.usage.completion_tokens ?? metrics.usage.output_tokens ?? "—"} {t("output")}</span></div>}
             <div className="aw-status-metric"><Sparkles size={13}/><span>{t("Output speed")}: {tokenRate === "—" ? "—" : (metrics?.usage ? "" : "~") + tokenRate + " tok/s"}</span></div>

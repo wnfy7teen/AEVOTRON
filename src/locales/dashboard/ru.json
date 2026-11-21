@@ -145,5 +145,7 @@
   "Remove attachment": "Удалить вложение",
   "Reading files…": "Читаем файлы…",
   "Attach": "Прикрепить",
-  "Only plain text and source code files are parsed locally in this version.": "В этой версии локально обрабатываются только обычные текстовые файлы и исходный код."
+  "Only plain text and source code files are parsed locally in this version.": "В этой версии локально обрабатываются только обычные текстовые файлы и исходный код.",
+  "remaining": "осталось",
+  "Older messages omitted from this request": "Старые сообщения не включены в этот запрос"
 }

@@ -2815,3 +2815,6 @@ html[data-theme="dark"] .aw-export-button { border-color:#304252; background:#19
 html[data-theme="dark"] .aw-attachment-chip,html[data-theme="dark"] .aw-attach-button { border-color:#304252; background:#192733; color:#b5c5d1; }
 html[data-theme="dark"] .aw-file-error { color:#e7a1a1; }
 @media (max-width:520px) { .aw-composer-tools { align-items:flex-start; flex-direction:column; gap:5px; } }
+
+.aw-context-trimmed { color:#a17b43; font-size:9px; }
+html[data-theme="dark"] .aw-context-trimmed { color:#d5b77d; }

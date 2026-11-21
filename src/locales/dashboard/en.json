@@ -145,5 +145,7 @@
   "Remove attachment": "Remove attachment",
   "Reading files…": "Reading files…",
   "Attach": "Attach",
-  "Only plain text and source code files are parsed locally in this version.": "Only plain text and source code files are parsed locally in this version."
+  "Only plain text and source code files are parsed locally in this version.": "Only plain text and source code files are parsed locally in this version.",
+  "remaining": "remaining",
+  "Older messages omitted from this request": "Older messages omitted from this request"
 }

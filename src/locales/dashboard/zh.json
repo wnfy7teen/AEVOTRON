@@ -145,5 +145,7 @@
   "Remove attachment": "移除附件",
   "Reading files…": "正在读取文件…",
   "Attach": "添加附件",
-  "Only plain text and source code files are parsed locally in this version.": "当前版本仅在本地解析纯文本和源代码文件。"
+  "Only plain text and source code files are parsed locally in this version.": "当前版本仅在本地解析纯文本和源代码文件。",
+  "remaining": "剩余",
+  "Older messages omitted from this request": "此请求未包含较早的消息"
 }

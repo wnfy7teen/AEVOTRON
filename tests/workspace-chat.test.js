@@ -44,6 +44,9 @@ test("AI Workspace route uses the session-authenticated streaming client", async
 test("AI Workspace discloses estimates instead of inventing provider usage and cost", async () => {
   const route = await read("src/routes/_authed/workspace.jsx");
   assert.match(route, /estimateTokens/);
+  assert.match(route, /selectContextMessages/);
+  assert.match(route, /tokenBudget = 24_000/);
+  assert.match(route, /Older messages omitted from this request/);
   assert.match(route, /Not reported/);
   assert.match(route, /Cost and context limits are not inferred/);
   assert.match(route, /context_window/);
