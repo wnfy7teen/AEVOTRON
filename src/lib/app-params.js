@@ -1,5 +1,4 @@
-// Base44 runtime configuration has been retired from the self-hosted application.
-// The frontend talks to the same-origin /api/v1 endpoints through HttpOnly cookies.
+// Public app configuration is now same-origin; no platform-specific app ID or access token is required.
 export function getAppParams() {
   return { appId: null, token: null, functionsVersion: null, appBaseUrl: null };
 }
