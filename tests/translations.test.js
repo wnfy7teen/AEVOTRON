@@ -7,7 +7,7 @@ const readJson = async (language) => JSON.parse(await readFile(new URL(`../src/l
 it("keeps the English, Russian and Chinese locale catalogs structurally identical", async () => {
   const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map(readJson));
   const keys = Object.keys(en).sort();
-  assert.ok(keys.length >= 600, "Locale catalogs must include the migrated application vocabulary");
+  assert.ok(keys.length >= 780, "Locale catalogs must include the complete application vocabulary and plural forms");
   assert.deepEqual(Object.keys(ru).sort(), keys, "Russian locale must contain exactly the English key set");
   assert.deepEqual(Object.keys(zh).sort(), keys, "Chinese locale must contain exactly the English key set");
 
@@ -71,4 +71,51 @@ it("wires application pages and shared UI controls to react-i18next", async () =
     assert.match(component, /useTranslation/);
     assert.match(component, /t\(/);
   }
+});
+
+
+it("keeps model descriptions translated and validates locale punctuation", async () => {
+  const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map(readJson));
+  const modelKeys = [
+    "model.description.gpt4o", "model.description.gpt4oMini", "model.description.gpt41",
+    "model.description.gpt41Mini", "model.description.gpt41Nano", "model.description.o3",
+    "model.description.o3Mini", "model.description.o4Mini", "model.description.reasoning",
+    "model.description.lightweight", "model.description.default",
+  ];
+  for (const key of modelKeys) {
+    assert.ok(en[key], `Missing English model description: ${key}`);
+    assert.ok(ru[key], `Missing Russian model description: ${key}`);
+    assert.ok(zh[key], `Missing Chinese model description: ${key}`);
+  }
+  for (const [key, value] of Object.entries(ru)) {
+    assert.ok(!value.includes("。"), `Chinese full stop found in Russian translation: ${key}`);
+  }
+  for (const [key, value] of Object.entries(zh)) {
+    assert.ok(!value.includes("..."), `ASCII ellipsis found in Chinese translation: ${key}`);
+  }
+  for (const language of [en, ru, zh]) {
+    for (const form of ["one", "few", "many", "other"]) {
+      assert.ok(language[`i18n.test.item_${form}`], `Missing plural form: ${form}`);
+    }
+  }
+});
+
+it("uses request-scoped locale resolution and does not mutate the DOM with an observer", async () => {
+  const [config, provider, root, serverLocale, dashboard] = await Promise.all([
+    readFile(new URL("../src/i18n.ts", import.meta.url), "utf8"),
+    readFile(new URL("../src/lib/i18n.jsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/routes/__root.jsx", import.meta.url), "utf8"),
+    readFile(new URL("../src/lib/i18n.functions.js", import.meta.url), "utf8"),
+    readFile(new URL("../src/routes/_authed/dashboard.jsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(config, /createInstance\(/);
+  assert.doesNotMatch(config, /new MutationObserver/);
+  assert.match(provider, /initialLanguage/);
+  assert.match(provider, /persistLanguageCookie/);
+  assert.match(root, /getRequestLocale/);
+  assert.match(root, /<html lang=/);
+  assert.match(serverLocale, /getRequestHeader\("cookie"\)/);
+  assert.match(serverLocale, /accept-language/);
+  assert.doesNotMatch(dashboard, /Модель с усиленным пошаговым рассуждением/);
+  assert.match(dashboard, /t\(describeModel\(model.id\)\)/);
 });
