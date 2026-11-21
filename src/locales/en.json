@@ -614,5 +614,10 @@
   "Welcome": "Welcome",
   "Resend in {{count}}s": "Resend in {{count}}s",
   "This app requires multi-factor authentication": "This app requires multi-factor authentication",
-  "A 6-digit code sent to": "A 6-digit code sent to"
+  "A 6-digit code sent to": "A 6-digit code sent to",
+  "{{appName}} requires multi-factor authentication": "{{appName}} requires multi-factor authentication",
+  "Sending code to {{phone}}…": "Sending code to {{phone}}…",
+  "Enter the code sent to {{phone}}": "Enter the code sent to {{phone}}",
+  "A 6-digit code sent to {{phone}}": "A 6-digit code sent to {{phone}}",
+  "Enabled · {{phone}}": "Enabled · {{phone}}"
 }
