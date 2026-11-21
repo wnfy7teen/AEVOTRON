@@ -88,8 +88,11 @@ test("Workspace chat usage is authenticated, session-scoped, and explicitly dist
   const streamStart = server.indexOf('if (req.method === "POST" && path === "/api/v1/workspace/chat/completions") {');
   const streamEnd = server.indexOf('if (req.method === "POST" && (path === "/api/v1/chat/completions"', streamStart);
   const stream = server.slice(streamStart, streamEnd);
-  assert.match(stream, /let hasProviderUsage = false/);
+  assert.match(stream, /let hasProviderInputUsage = false/);
+  assert.match(stream, /let hasProviderOutputUsage = false/);
   assert.match(stream, /let usageEstimated = false/);
   assert.match(stream, /usageEstimated = true/);
+  assert.match(stream, /if \(!hasProviderInputUsage\)/);
+  assert.match(stream, /if \(!hasProviderOutputUsage\)/);
   assert.match(stream, /UPDATE workspace_chat_sessions SET total_input_tokens/);
 });
