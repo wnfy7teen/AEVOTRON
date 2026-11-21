@@ -55,11 +55,10 @@ function WorkspaceChat() {
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 
   const updateAssistant = (id, updater) => {
-    setMessages((current) => {
-      const next = current.map((item) => item.id === id ? updater(item) : item);
-      setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: next } : item));
-      return next;
-    });
+    setMessages((current) => current.map((item) => item.id === id ? updater(item) : item));
+    setConversations((items) => items.map((conversation) => conversation.id === activeConversation
+      ? { ...conversation, messages: conversation.messages.map((item) => item.id === id ? updater(item) : item) }
+      : conversation));
   };
 
   const generate = async (baseMessages) => {
@@ -132,7 +131,7 @@ function WorkspaceChat() {
     const id = crypto.randomUUID();
     setConversations((items) => [{ id, title: t("New conversation"), messages: [] }, ...items]);
     setActiveConversation(id);
-    setMessages(conversations.find((item) => item.id === id)?.messages || []);
+    setMessages([]);
     setMetrics(null);
     setDraft("");
   };
@@ -141,7 +140,7 @@ function WorkspaceChat() {
     if (id === activeConversation) return;
     if (isStreaming) stop();
     setActiveConversation(id);
-    setMessages([]);
+    setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setMetrics(null);
   };
 
