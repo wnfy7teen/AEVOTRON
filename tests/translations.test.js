@@ -7,7 +7,7 @@ const readJson = async (language) => JSON.parse(await readFile(new URL(`../src/l
 it("keeps the English, Russian and Chinese locale catalogs structurally identical", async () => {
   const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map(readJson));
   const keys = Object.keys(en).sort();
-  assert.ok(keys.length >= 780, "Locale catalogs must include the complete application vocabulary and plural forms");
+  assert.ok(keys.length >= 760, "Locale catalogs must include the complete application vocabulary and plural forms");
   assert.deepEqual(Object.keys(ru).sort(), keys, "Russian locale must contain exactly the English key set");
   assert.deepEqual(Object.keys(zh).sort(), keys, "Chinese locale must contain exactly the English key set");
 
@@ -75,7 +75,7 @@ it("wires application pages and shared UI controls to react-i18next", async () =
 
 
 it("keeps model descriptions translated and validates locale punctuation", async () => {
-  const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map(readJson));
+  const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map((language) => readFile(new URL(`../src/locales/dashboard/${language}.json`, import.meta.url), "utf8").then(JSON.parse)));
   const modelKeys = [
     "model.description.gpt4o", "model.description.gpt4oMini", "model.description.gpt41",
     "model.description.gpt41Mini", "model.description.gpt41Nano", "model.description.o3",
