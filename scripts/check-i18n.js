@@ -92,11 +92,14 @@ async function main(){
   }
   const sourceKeys=await collectKeys();
 
+  const sourceKeysToAdd={};
   for(const ns of NAMESPACES){
-    for(const [key,location] of sourceKeys[ns]){
+    sourceKeysToAdd[ns]=new Map([...sourceKeys[ns]].filter(([key]) =>
+      ns==="translation" || !LANGUAGES.some(l=>Object.hasOwn(catalogs.translation[l],key))
+    ));
+    for(const [key,location] of sourceKeysToAdd[ns]){
       const inDomain=LANGUAGES.some(l=>Object.hasOwn(catalogs[ns][l],key));
-      const inRoot=ns!=="translation"&&LANGUAGES.some(l=>Object.hasOwn(catalogs.translation[l],key));
-      if(!inDomain&&!inRoot&&!humanKey(key)){
+      if(!inDomain&&!humanKey(key)){
         report.unresolved.push({namespace:ns,key,reason:"Missing source key is not readable English; automatic fallback is unsafe.",...location});
       }
     }
@@ -106,14 +109,14 @@ async function main(){
   for(const ns of NAMESPACES){
     const before=Object.fromEntries(LANGUAGES.map(l=>[l,JSON.stringify(catalogs[ns][l],null,2)+"\n"]));
     const keys=new Set(LANGUAGES.flatMap(l=>Object.keys(catalogs[ns][l])));
-    for(const key of sourceKeys[ns].keys())keys.add(key);
+    for(const key of sourceKeysToAdd[ns].keys())keys.add(key);
     const nsReport={keyCount:keys.size,added:[],fallback:[],placeholders:[],interpolation:[],unresolved:[]};
 
     for(const key of [...keys].sort()){
       const original=Object.fromEntries(LANGUAGES.map(l=>[l,catalogs[ns][l][key]]));
       let sourceLang=usable(original.en)?"en":usable(original.ru)?"ru":null;
       let sourceText=sourceLang?original[sourceLang]:null;
-      const location=sourceKeys[ns].get(key);
+      const location=sourceKeysToAdd[ns].get(key);
 
       if(!sourceText&&location&&humanKey(key)){
         sourceLang="en";sourceText=key;
