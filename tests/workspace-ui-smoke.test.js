@@ -64,7 +64,7 @@ test("credential revocations require confirmation and frontend actions map to ba
   assert.match(client, /\/api\/v1\/api-keys\//);
   assert.match(client, /expires_at/);
   assert.match(client, /api_key: payload\.credential/);
-  assert.match(client, /\/api\/v1\/providers\/openai/);
+  assert.match(client, /"\/api\/v1\/providers\/" \+ providerCode/);
 });
 
 
@@ -160,7 +160,7 @@ test("dashboard buttons and forms have explicit actions and native validation", 
   for (const [index, tag] of forms.entries()) {
     assert.ok(/\bonSubmit\s*=/.test(tag), `Form ${index + 1} must handle submission`);
   }
-  assert.match(source, /id="openai-key-help"/);
+  assert.match(source, /provider\.code === "openai" \? "openai-key-help" : provider\.code \+ "-key-help"/);
   assert.match(source, /Teammate email address/);
   assert.match(source, /already in the workspace/);
   assert.match(source, /minLength=\{1\} required autoComplete="off"/);
