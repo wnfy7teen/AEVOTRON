@@ -8,5 +8,7 @@ export const Route = createFileRoute("/workspace-preview")({
       { name: "description", content: "Read-only visual preview of the Aevotron workspace." },
     ],
   }),
-  component: PreviewDashboard,
+  // Keep the imported dashboard component behind a route-local wrapper.
+  // TanStack/Vite route splitting must not inline its private HomePage reference.
+  component: () => <PreviewDashboard />,
 });
