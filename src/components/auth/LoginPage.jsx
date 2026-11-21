@@ -14,7 +14,7 @@ import { isDemoAuthEnabled, useAuth } from "@/lib/AuthContext";
 // The /login page. ?returnTo= (or the platform's ?from_url=) is where the visitor
 // goes after signing in — the login gate and the MCP consent page send people here with it.
 export function LoginPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const { signInDemo } = useAuth();
   const returnTo = safeReturnTo();
   const [email, setEmail] = useState("");
