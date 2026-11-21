@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import base44 from "@base44/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import react from "@vitejs/plugin-react";
@@ -7,7 +6,7 @@ import { defineConfig } from "vite";
 
 // Bundle runtime dependencies consistently for the browser and SSR server.
 // React and the TanStack Start/Router framework are handled by their own plugins.
-const NOT_PREBUNDLED = new Set(["react", "react-dom", "@base44/vite-plugin", "@tanstack/react-start", "@tanstack/react-router", "@tanstack/react-router-ssr-query", "tailwindcss-animate"]);
+const NOT_PREBUNDLED = new Set(["react", "react-dom", "@tanstack/react-start", "@tanstack/react-router", "@tanstack/react-router-ssr-query", "tailwindcss-animate"]);
 const { dependencies } = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8"));
 // The SDK's realtime transports: not direct dependencies, but app code importing one would otherwise be a new one.
 const SDK_TRANSPORTS = ["partysocket", "socket.io-client"];
@@ -33,14 +32,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    base44({
-      hmrNotifier: true,
-      navigationNotifier: true,
-      // This is a public landing page; anonymous visitors must not trigger the
-      // platform's authenticated app-usage logging endpoint.
-      analyticsTracker: false,
-      visualEditAgent: true,
-    }),
     tanstackStart({ srcDirectory: "src" }),
     nitro(),
     react(),
