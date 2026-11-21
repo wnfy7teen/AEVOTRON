@@ -38,7 +38,8 @@ export function RegisterPage() {
     }
     setBusy(true);
     try {
-      await base44.auth.register({ email, password });
+      const result = await base44.auth.register({ email, password });
+      setOtpCode(result.development_verification_code || "");
       setStep("otp");
     } catch (err) {
       setError(err.message || "Registration failed");
@@ -71,7 +72,8 @@ export function RegisterPage() {
   async function resend() {
     setError("");
     try {
-      await base44.auth.resendOtp(email);
+      const result = await base44.auth.resendOtp(email);
+      if (result.development_verification_code) setOtpCode(result.development_verification_code);
       toast("Code sent", { description: "Check your email for the new code." });
     } catch (err) {
       if (isAlreadyVerified(err)) setStep("already_verified");
@@ -143,14 +145,14 @@ export function RegisterPage() {
           <Label htmlFor="register-password">Password</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="register-password" type="password" autoComplete="new-password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10" disabled={busy} required />
+            <Input id="register-password" type="password" autoComplete="new-password" minLength={12} placeholder="At least 12 characters" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10" disabled={busy} required />
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="register-confirm">Confirm password</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="register-confirm" type="password" autoComplete="new-password" placeholder="••••••••" value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" disabled={busy} required />
+            <Input id="register-confirm" type="password" autoComplete="new-password" minLength={12} placeholder="At least 12 characters" value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" disabled={busy} required />
           </div>
         </div>
         <SubmitButton busy={busy} busyLabel="Creating account...">
