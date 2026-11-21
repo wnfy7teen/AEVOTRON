@@ -16,7 +16,8 @@ export function LanguageProvider({ children, initialLanguage = "en" }) {
     if (typeof document === "undefined") return;
     const hasLocaleCookie = document.cookie.split(";").some((part) => part.trim().startsWith(`${LANGUAGE_STORAGE_KEY}=`));
     if (hasLocaleCookie) return;
-    const savedLocale = getBrowserStorage()?.getItem(LANGUAGE_STORAGE_KEY);
+    let savedLocale = null;
+    try { savedLocale = getBrowserStorage()?.getItem(LANGUAGE_STORAGE_KEY) || null; } catch { /* Cookie persistence still works without localStorage. */ }
     const preferredLocale = savedLocale ? normalizeLanguage(savedLocale) : normalizeLanguage(initialLanguage);
     persistLanguageCookie(preferredLocale);
     if (preferredLocale !== normalizeLanguage(initialLanguage)) {
