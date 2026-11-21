@@ -52,7 +52,7 @@ async function isAccessAuthorized(request) {
     const claims = decodeJwtPart(encodedPayload);
     if (header.alg !== "RS256" || !header.kid) return false;
 
-    const issuer = `https://${teamDomain}/cdn-cgi/access/get-identity`;
+    const issuer = `https://${teamDomain}`;
     const now = Math.floor(Date.now() / 1000);
     const audiences = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
     if (claims.iss !== issuer || !audiences.includes(audience) ||
