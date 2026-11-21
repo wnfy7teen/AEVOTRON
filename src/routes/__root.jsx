@@ -75,6 +75,7 @@ function DocumentMetadataSync() {
       "/mfa": ["Two-factor authentication — Aevotron", "Unified API infrastructure for AI models."],
       "/verify-email": ["Verify email — Aevotron", "Unified API infrastructure for AI models."],
       "/dashboard": ["Aevotron — Workspace", "One API for every AI model."],
+      "/workspace": ["AEVOTRON — AI Workspace", "Chat with connected AI models."],
     };
     const [titleKey, descriptionKey] = metadata[pathname] || ["Aevotron — One API. Every model.", "Unified API infrastructure for AI models."];
     document.title = t(titleKey);
