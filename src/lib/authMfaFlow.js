@@ -68,3 +68,7 @@ export async function signInToManageMfa(email, password) {
 export async function signInWithProvider() {
   throw new Error("Social sign-in is not configured on the self-hosted backend yet.");
 }
+
+export async function loadSignInOptions() {
+  return { name: "AEVOTRON" };
+}
