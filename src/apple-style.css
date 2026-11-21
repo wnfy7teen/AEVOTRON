@@ -1810,3 +1810,40 @@ html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
   .apple-app .mh-catalog-controls { grid-template-columns: minmax(0,1fr); }
   .apple-app .mh-catalog-controls>.mh-button { width: 100%; }
 }
+
+
+/* Keep the appearance control visible in the workspace header. */
+.apple-app .mh-top-actions .av-theme-trigger {
+  position: static;
+  min-height: 36px;
+  padding: 0 11px;
+  gap: 7px;
+  border: 1px solid #dfe4ea;
+  border-radius: 8px;
+  background: #fff;
+  color: #344256;
+  box-shadow: none;
+  backdrop-filter: none;
+  font-size: 11px;
+}
+.apple-app .mh-top-actions .av-theme-trigger:hover {
+  border-color: #a8bfd5;
+  background: #f6f9fc;
+}
+.apple-app .mh-top-actions .av-theme-trigger svg { color: #397db5; }
+.apple-app[data-theme="dark"] .mh-top-actions .av-theme-trigger {
+  border-color: #3a4655;
+  background: #202833;
+  color: #edf2f8;
+}
+.apple-app[data-theme="dark"] .mh-top-actions .av-theme-trigger:hover { background: #293545; }
+.apple-app[data-theme="dark"] .mh-top-actions .av-theme-trigger svg { color: #8fc5ff; }
+@media (max-width: 600px) {
+  .apple-app .mh-top-actions .av-theme-trigger {
+    width: 36px;
+    min-width: 36px;
+    padding: 0;
+    gap: 0;
+  }
+  .apple-app .mh-top-actions .av-theme-trigger span { display: none; }
+}
