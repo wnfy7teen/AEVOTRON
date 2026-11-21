@@ -21,6 +21,10 @@ const auth = {
     const result = await request("/api/v1/auth/me");
     return result.user;
   },
+  async mfaStatus() { return request("/api/v1/auth/mfa/status"); },
+  async mfaEnroll() { return request("/api/v1/auth/mfa/enroll", { method: "POST", body: {} }); },
+  async mfaConfirm(code) { return request("/api/v1/auth/mfa/confirm", { method: "POST", body: { code } }); },
+  async mfaDisable(code) { return request("/api/v1/auth/mfa/disable", { method: "POST", body: { code } }); },
   async register({ email, password, display_name }) {
     const result = await request("/api/v1/auth/register", { method: "POST", body: { email, password, display_name } });
     return { ...result, development_verification_code: result.development_verification_token };
