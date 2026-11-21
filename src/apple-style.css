@@ -1647,3 +1647,14 @@ html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
   .apple-app .mh-api-section-head h3 { font-size:14px; }
 }
 @media (prefers-reduced-motion:reduce) { .apple-app .mh-api-url button { transition:none; } }
+\n
+/* Hide the browser scrollbar in the workspace sidebar without disabling scrolling. */
+.apple-app .mh-sidebar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.apple-app .mh-sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
