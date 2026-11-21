@@ -18,6 +18,10 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
+# The API edge must preserve the public host proxy's client address for rate limiting.
+grep -Fq 'proxy_set_header X-Real-IP $http_x_real_ip;' docker/nginx-api.conf
+grep -Fq 'proxy_set_header X-Forwarded-For $http_x_forwarded_for;' docker/nginx-api.conf
+
 # Ephemeral CI-only secrets. Nothing is written to the repository or image.
 export POSTGRES_PASSWORD="$(openssl rand -hex 24)"
 export AEVOTRON_MASTER_KEY="$(openssl rand -base64 32)"
