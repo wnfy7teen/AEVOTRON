@@ -56,6 +56,7 @@ function WorkspaceChat() {
   const [conversations, setConversations] = useState([{ id: "current", title: t("New conversation"), messages: [] }]);
   const [activeConversation, setActiveConversation] = useState("current");
   const activeConversationRef = useRef("current");
+  const skipSessionLoadRef = useRef(null);
   const [chatError, setChatError] = useState("");
   const [metrics, setMetrics] = useState(null);
   const abortRef = useRef(null);
@@ -79,6 +80,7 @@ function WorkspaceChat() {
 
   useEffect(() => {
     if (demoMode || !activeConversation || activeConversation === "current") return undefined;
+    if (skipSessionLoadRef.current === activeConversation) { skipSessionLoadRef.current = null; return undefined; }
     let current = true;
     api.workspace.getChat(activeConversation).then((result) => {
       if (!current || activeConversationRef.current !== activeConversation) return;
@@ -144,6 +146,7 @@ function WorkspaceChat() {
       try {
         const created = await api.workspace.createChat({ title: value.slice(0, 100), model_id: activeModel.id });
         sessionId = created.session.id;
+        skipSessionLoadRef.current = sessionId;
         activeConversationRef.current = sessionId;
         setActiveConversation(sessionId);
         setConversations((items) => [{ ...created.session, messages: [] }, ...items.filter((item) => item.id !== sessionId)]);
@@ -197,6 +200,7 @@ function WorkspaceChat() {
         const created = await api.workspace.createChat({ title: t("New conversation"), model_id: activeModel?.id });
         const session = { ...created.session, messages: [] };
         setConversations((items) => [session, ...items.filter((item) => item.id !== session.id)]);
+        skipSessionLoadRef.current = session.id;
         activeConversationRef.current = session.id;
         setActiveConversation(session.id);
         sessionsQuery.refetch();
@@ -218,18 +222,7 @@ function WorkspaceChat() {
     setActiveConversation(id);
     setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setMetrics(null);
-    if (!demoMode && id !== "current") {
-      try {
-        const result = await api.workspace.getChat(id);
-        if (activeConversationRef.current === id) {
-          const loaded = result.messages || [];
-          setMessages(loaded);
-          setConversations((items) => items.map((item) => item.id === id ? { ...item, ...result.session, messages: loaded } : item));
-        }
-      } catch (error) {
-        if (activeConversationRef.current === id) setChatError(error.message || t("Could not load this conversation."));
-      }
-    }
+
   };
 
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
