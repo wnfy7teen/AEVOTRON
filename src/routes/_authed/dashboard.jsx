@@ -17,7 +17,7 @@ const invokeFunction = async (name, payload) => {
 };
 
 export const Route = createFileRoute("/_authed/dashboard")({
-  head: () => ({ meta: [{ title: "Aevotron — Workspace" }, { name: "description", content: "One API for every AI model." }] }),
+  head: () => ({ meta: [{ title: i18n.t("Aevotron — Workspace") }, { name: "description", content: i18n.t("One API for every AI model.") }] }),
   // Keep HomePage in this module: PreviewDashboard also reuses it on a public preview route.
   // An inline wrapper prevents route auto-splitting from moving the component out of this module.
   component: () => <HomePage />,
@@ -113,7 +113,7 @@ function HomePage({ preview = false }) {
         <div className="mh-brand"><div className="mh-brand-mark"><Command size={19}/></div><span>AEVOTRON</span><span className="mh-beta">BETA</span></div>
         <div className="mh-workspace"><div className="mh-workspace-icon">C</div><div><strong>{workspaceLabel}</strong><small>{usageQuery.data?.workspace?.region?.toUpperCase() ?? t("Personal workspace")}</small></div><ChevronDown size={15}/></div>
         {nav.map(group => <div className="mh-nav-group" key={group.label}><div className="mh-nav-label">{t(group.label)}</div>{group.items.map(item => <button key={item.name}  className={`mh-nav-item ${section === item.name ? "active" : ""}`} onClick={() => {setSection(item.name);setMobileNav(false)}}><item.icon size={17}/><span>{t(item.name)}</span>{item.name === "API keys" && <span className="mh-nav-count">0</span>}</button>)}</div>)}
-        <div className="mh-sidebar-bottom"><div className="mh-usage-mini"><div className="mh-usage-top"><span>{t("Free plan")}</span><span>0 / 1,000 req</span></div><div className="mh-progress"><i/></div><small>{t("Bring your own provider keys to get started.")}</small></div><button className="mh-profile" type="button" aria-label={t("Open workspace preferences")} onClick={() => {setSection("Preferences");setMobileNav(false)}}><div className="mh-avatar">{accountInitial}</div><div><strong>{accountName}</strong><small>{accountQuery.data?.email || (preview ? "Read-only preview" : "Account profile")}</small></div><Settings2 size={16}/></button></div>
+        <div className="mh-sidebar-bottom"><div className="mh-usage-mini"><div className="mh-usage-top"><span>{t("Free plan")}</span><span>0 / 1,000 req</span></div><div className="mh-progress"><i/></div><small>{t("Bring your own provider keys to get started.")}</small></div><button className="mh-profile" type="button" aria-label={t("Open workspace preferences")} onClick={() => {setSection("Preferences");setMobileNav(false)}}><div className="mh-avatar">{accountInitial}</div><div><strong>{accountName}</strong><small>{accountQuery.data?.email || (preview ? t("Read-only preview") : t("Account profile"))}</small></div><Settings2 size={16}/></button></div>
       </aside>
       <main className="mh-main">
         <header className="mh-topbar"><button className="mh-mobile-menu" type="button" aria-label={mobileNav ? "Close navigation" : "Open navigation"} aria-expanded={mobileNav} onClick={() => setMobileNav(!mobileNav)}><Menu size={20}/></button><div className="mh-breadcrumb">{t("Workspace")} <span>/</span> <strong>{t(section)}</strong></div><div className="mh-top-actions"><div className="mh-region"><Globe2 size={14}/> {t("Global")} <ChevronDown size={13}/></div><button className="mh-icon-button" type="button" aria-label={t("Open API reference")} title={t("API reference")} onClick={() => setSection("API reference")}><CircleHelp size={17}/></button><div className="mh-avatar small">{accountInitial}</div></div></header>
@@ -127,7 +127,7 @@ function HomePage({ preview = false }) {
             <div className="mh-bottom-grid"><div className="mh-panel"><div className="mh-panel-heading"><div><h3>{t("Popular models")}</h3><p>{t("Start exploring the catalog")}</p></div><button className="mh-text-link" onClick={() => setSection("Model catalog")}>{t("View all")} <ArrowUpRight size={14}/></button></div>{models.slice(0,4).map(m => <ModelRow key={m.name} model={m} disabled={preview} onClick={() => {setSelected(m.name);setSection("Model catalog")}}/>)}{models.length === 0 && <div className="mh-empty">{modelQuery.isLoading ? "Loading models from OpenAI…" : "Connect OpenAI to load the models available to your account."}</div>}</div><div className="mh-panel mh-code-panel"><div className="mh-panel-heading"><div><h3>{t("Quick API example")}</h3><p>{t("OpenAI-compatible interface")}</p></div><span className="mh-code-language">cURL</span></div><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy example")}</button></div></div>
             <div className="mh-trust-note"><ShieldCheck size={17}/><span><strong>{t("Your keys, your control.")}</strong> {t("Provider credentials are sent over HTTPS, encrypted before storage and never shown again.")}</span></div>
           </>}
-          {section === "Model catalog" && <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("DISCOVER")}</div><h1>{t("Model catalog")}</h1><p>{t("Live chat models available to your connected OpenAI account.")}</p></div></div><div className="mh-toolbar"><div className="mh-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t("Search models...")}/></div><Dropdown aria-label={t("Filter models")} value={filter} onChange={setFilter} options={[{value:"All models",label:"All models"},{value:"Chat",label:"Chat"}]}/><button className="mh-button mh-button-quiet" onClick={() => modelQuery.refetch()} disabled={modelQuery.isFetching}><ArrowDownUp size={15}/> {modelQuery.isFetching ? t("Refreshing…") : t("Refresh")}</button></div><div className="mh-catalog-layout"><div className="mh-panel mh-model-list"><div className="mh-list-header"><span>{t("MODEL")}</span><span>{t("CONTEXT")}</span><span>{t("ACCESS")}</span></div>{filtered.map(m=><button key={m.name} className={`mh-model-row ${selected===m.name?"selected":""}`} onClick={()=>setSelected(m.name)}><span className={`mh-provider-dot ${m.color}`}/><span className="mh-model-name"><strong>{m.name}</strong><small>{m.provider}</small><small className="mh-model-description">{m.description}</small></span><span className="mh-model-context">{m.context}</span><span className="mh-status byok">BYOK</span></button>)}{modelQuery.isLoading && <div className="mh-empty">{t("Loading models from OpenAI…")}</div>}{modelQuery.isError && <div className="mh-inline-error">{t("Could not load models from OpenAI. Test your provider connection and refresh.")}</div>}{!modelQuery.isLoading && !modelQuery.isError && models.length===0 && <div className="mh-empty">{t("Connect OpenAI to load the chat models available to your API key.")}</div>}{models.length>0 && filtered.length===0 && <div className="mh-empty">{t("No models match your search.")}</div>}</div><div className="mh-panel mh-model-detail">{active ? <><div className="mh-detail-top"><span className="mh-provider-dot large green"/><span className="mh-status byok">BYOK</span></div><h2>{active.name}</h2><p className="mh-model-description-detail">{active.description}</p><div className="mh-detail-stats"><div><small>{t("Context window")}</small><strong>{active.context}</strong></div><div><small>{t("Availability")}</small><strong>{t("From provider")}</strong></div><div><small>{t("Pricing")}</small><strong>{active.price}</strong></div></div><div className="mh-tags">{active.tags.map(t=><span key={t}>{t}</span>)}</div><div className="mh-detail-info"><ShieldCheck size={16}/> {t("Available through your connected OpenAI account. Provider billing applies.")}</div><button className="mh-button mh-button-primary full" onClick={()=>setSection("Quickstart")}>{t("View API example")} <ArrowUpRight size={15}/></button></> : <div className="mh-empty">{t("Connect OpenAI to discover the models available to your account.")}</div>}</div></div></>}{section === "Providers" && <ProviderConnections/>}
+          {section === "Model catalog" && <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("DISCOVER")}</div><h1>{t("Model catalog")}</h1><p>{t("Live chat models available to your connected OpenAI account.")}</p></div></div><div className="mh-toolbar"><div className="mh-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t("Search models...")}/></div><Dropdown aria-label={t("Filter models")} value={filter} onChange={setFilter} options={[{value:"All models",label:t("All models")},{value:"Chat",label:t("Chat")}]}/><button className="mh-button mh-button-quiet" onClick={() => modelQuery.refetch()} disabled={modelQuery.isFetching}><ArrowDownUp size={15}/> {modelQuery.isFetching ? t("Refreshing…") : t("Refresh")}</button></div><div className="mh-catalog-layout"><div className="mh-panel mh-model-list"><div className="mh-list-header"><span>{t("MODEL")}</span><span>{t("CONTEXT")}</span><span>{t("ACCESS")}</span></div>{filtered.map(m=><button key={m.name} className={`mh-model-row ${selected===m.name?"selected":""}`} onClick={()=>setSelected(m.name)}><span className={`mh-provider-dot ${m.color}`}/><span className="mh-model-name"><strong>{m.name}</strong><small>{m.provider}</small><small className="mh-model-description">{m.description}</small></span><span className="mh-model-context">{m.context}</span><span className="mh-status byok">BYOK</span></button>)}{modelQuery.isLoading && <div className="mh-empty">{t("Loading models from OpenAI…")}</div>}{modelQuery.isError && <div className="mh-inline-error">{t("Could not load models from OpenAI. Test your provider connection and refresh.")}</div>}{!modelQuery.isLoading && !modelQuery.isError && models.length===0 && <div className="mh-empty">{t("Connect OpenAI to load the chat models available to your API key.")}</div>}{models.length>0 && filtered.length===0 && <div className="mh-empty">{t("No models match your search.")}</div>}</div><div className="mh-panel mh-model-detail">{active ? <><div className="mh-detail-top"><span className="mh-provider-dot large green"/><span className="mh-status byok">BYOK</span></div><h2>{active.name}</h2><p className="mh-model-description-detail">{active.description}</p><div className="mh-detail-stats"><div><small>{t("Context window")}</small><strong>{active.context}</strong></div><div><small>{t("Availability")}</small><strong>{t("From provider")}</strong></div><div><small>{t("Pricing")}</small><strong>{active.price}</strong></div></div><div className="mh-tags">{active.tags.map(t=><span key={t}>{t}</span>)}</div><div className="mh-detail-info"><ShieldCheck size={16}/> {t("Available through your connected OpenAI account. Provider billing applies.")}</div><button className="mh-button mh-button-primary full" onClick={()=>setSection("Quickstart")}>{t("View API example")} <ArrowUpRight size={15}/></button></> : <div className="mh-empty">{t("Connect OpenAI to discover the models available to your account.")}</div>}</div></div></>}{section === "Providers" && <ProviderConnections/>}
           {section === "API keys" && <ApiKeyManager/>}
           {section === "Usage & logs" && <UsageDashboard/>}
           {(section === "Quickstart" || section === "API reference") && <>
@@ -198,14 +198,14 @@ function ProviderConnections() {
       setError("");
       queryClient.invalidateQueries({ queryKey: ["provider-connections"] });
     },
-    onError: (err) => setError(err?.message || "Could not connect this provider. Check the key and try again."),
+    onError: (err) => setError(err?.message || t("Could not connect this provider. Check the key and try again.")),
   });
   const test = useMutation({
     mutationFn: (connectionId) => invokeFunction("provider-connections", {
       action: "test", connection_id: connectionId,
     }),
     onSuccess: () => setError(""),
-    onError: (err) => setError(err?.message || "The connection test failed."),
+    onError: (err) => setError(err?.message || t("The connection test failed.")),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
   });
   const revoke = useMutation({
@@ -213,7 +213,7 @@ function ProviderConnections() {
       action: "revoke", connection_id: connectionId,
     }),
     onSuccess: () => { setError(""); queryClient.invalidateQueries({ queryKey: ["provider-connections"] }); },
-    onError: (err) => setError(err?.message || "Could not revoke this connection."),
+    onError: (err) => setError(err?.message || t("Could not revoke this connection.")),
   });
   const openai = query.data?.connections?.find((item) => item.provider_code === "openai");
   const busy = connect.isPending || test.isPending || revoke.isPending;
@@ -252,7 +252,7 @@ function ProviderConnections() {
           <div className="mh-connected-row">
             <div><strong>{t("API credential protected")}</strong><small>Last checked: {openai.last_tested_at ? t("Last checked: {{date}}", { date: new Date(openai.last_tested_at).toLocaleString() }) : t("Not checked")}</small></div>
             <div className="mh-connection-actions">
-              <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? "Testing…" : openai.status === "error" ? "Retry test" : "Test connection"} </button>
+              <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? t("Testing…") : openai.status === "error" ? t("Retry test") : t("Test connection")} </button>
               <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {if (!window.confirm(t("Revoke the OpenAI provider connection? Requests using it will stop working."))) return;setError("");revoke.mutate(openai.id);}}>{t("Revoke")}</button>
             </div>
           </div>
@@ -265,7 +265,7 @@ function ProviderConnections() {
             <div className="mh-field-help" id="openai-key-help"><LockKeyhole size={14}/> {t("Never paste this key into support chats or public repositories.")}</div>
             <div className="mh-provider-form-actions">
               <button className="mh-button mh-button-primary" type="submit" disabled={!credential.trim() || busy}>
-                {connect.isPending ? "Validating and encrypting…" : "Connect OpenAI"}
+                {connect.isPending ? t("Validating and encrypting…") : t("Connect OpenAI")}
               </button>
             </div>
           </form>
@@ -310,19 +310,19 @@ function ApiKeyManager() {
       setError("");
       queryClient.invalidateQueries({ queryKey: ["aevotron-api-keys"] });
     },
-    onError: (err) => setError(err?.message || "Could not create the API key."),
+    onError: (err) => setError(err?.message || t("Could not create the API key.")),
   });
   const revoke = useMutation({
     mutationFn: (keyId) => invokeFunction("api-keys", { action: "revoke", key_id: keyId }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["aevotron-api-keys"] }),
-    onError: (err) => setError(err?.message || "Could not revoke the API key."),
+    onError: (err) => setError(err?.message || t("Could not revoke the API key.")),
   });
   const copyKey = async () => {
     try {
       await navigator.clipboard.writeText(revealedKey);
       setCopied(true);
     } catch {
-      setError("Clipboard access is unavailable. Select and copy the key manually.");
+      setError(t("Clipboard access is unavailable. Select and copy the key manually."));
     }
   };
 
@@ -337,7 +337,7 @@ function ApiKeyManager() {
         <p>{t("This key is shown only once. Copy it now and store it in your password manager.")}</p>
         <div className="mh-secret-value"><code>{revealedKey}</code></div>
         <div className="mh-secret-actions">
-          <button className="mh-button mh-button-primary" onClick={copyKey}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? "Copied" : "Copy key"}</button>
+          <button className="mh-button mh-button-primary" onClick={copyKey}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy key")}</button>
           <button className="mh-button mh-button-quiet" onClick={() => setRevealedKey("")}>{t("I saved it")}</button>
         </div>
       </div>}
@@ -348,23 +348,23 @@ function ApiKeyManager() {
             <input id="api-key-name" className="mh-field" value={name} onChange={(event) => setName(event.target.value)}
               maxLength={60} minLength={1} required autoComplete="off" placeholder={t("My application")} /></div>
           <div className="mh-key-form-expiry"><label className="mh-field-label" htmlFor="api-key-expiry-trigger">{t("Expires in")}</label>
-            <Dropdown id="api-key-expiry" aria-label={t("Expires in")} value={expiry} onChange={setExpiry} options={[{value:"30",label:"30 days"},{value:"90",label:"90 days"},{value:"365",label:"1 year"}]}/></div>
+            <Dropdown id="api-key-expiry" aria-label={t("Expires in")} value={expiry} onChange={setExpiry} options={[{value:"30",label:t("30 days")},{value:"90",label:t("90 days")},{value:"365",label:t("1 year")}]}/></div>
           <button className="mh-button mh-button-primary" type="submit" disabled={!name.trim() || create.isPending}>
-            {create.isPending ? "Creating…" : <><Plus size={15}/> {t("Create key")}</>}
+            {create.isPending ? t("Creating…") : <><Plus size={15}/> {t("Create key")}</>}
           </button>
         </form>
         {error && <div className="mh-inline-error" role="alert">{error}</div>}
       </div>
       <div className="mh-panel mh-key-list-panel">
         <div className="mh-panel-heading"><div><h3>{t("Existing keys")}</h3><p>{t("Revoke a key immediately if it is no longer needed.")}</p></div>
-          <span className="mh-step-count">{query.data?.keys?.length ?? 0} total</span></div>
+          <span className="mh-step-count">{t("{{count}} total", { count: query.data?.keys?.length ?? 0 })}</span></div>
         {query.isLoading ? <div className="mh-empty">{t("Loading API keys…")}</div> :
           query.isError ? <div className="mh-inline-error">{t("Could not load API keys. Refresh the page and try again.")}</div> :
           !query.data?.keys?.length ? <div className="mh-empty">{t("No API keys have been created yet.")}</div> :
           <div className="mh-key-list">{query.data.keys.map((key) => (
             <div className="mh-key-row" key={key.id}>
               <div className="mh-key-main"><strong>{key.name}</strong><code>{key.key_prefix}••••••••••</code>
-                <small>Created {key.created_date ? new Date(key.created_date).toLocaleDateString() : "recently"} · Expires {key.expires_at ? new Date(key.expires_at).toLocaleDateString() : "Never"}</small></div>
+                <small>{t("Created")} {key.created_date ? new Date(key.created_date).toLocaleDateString() : t("recently")} · {t("Expires")} {key.expires_at ? new Date(key.expires_at).toLocaleDateString() : t("Never")}</small></div>
               <div className="mh-key-actions"><span className={`mh-status ${key.status === "active" ? "byok" : "planned"}`}>{t(key.status)}</span>
                 {["active", "expired"].includes(key.status) && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {if (!window.confirm(t("Revoke this API key? Applications using it will lose access immediately."))) return;setError("");revoke.mutate(key.id);}}>{t("Revoke")}</button>}</div>
             </div>
@@ -401,15 +401,15 @@ function UsageDashboard() {
           <p>{t("Recent gateway activity, token counts, latency and provider errors. Prompts and responses are not stored.")}</p></div>
       </div>
       <div className="mh-stats">
-        <Stat icon={Activity} label="Requests" value={summary?.requests ?? "—"} note="Last 30 days"/>
-        <Stat icon={Cpu} label="Tokens" value={summary?.tokens ?? "—"} note="Input + output"/>
-        <Stat icon={Zap} label="Avg. latency" value={summary?.average_latency_ms ? `${summary.average_latency_ms} ms` : "—"} note="Successful and failed calls"/>
-        <Stat icon={ShieldCheck} label="Error rate" value={summary ? `${summary.error_rate}%` : "—"} note="Last 30 days"/>
+        <Stat icon={Activity} label={t("Requests")} value={summary?.requests ?? "—"} note={t("Last 30 days")}/>
+        <Stat icon={Cpu} label={t("Tokens")} value={summary?.tokens ?? "—"} note={t("Input + output")}/>
+        <Stat icon={Zap} label={t("Avg. latency")} value={summary?.average_latency_ms ? `${summary.average_latency_ms} ms` : "—"} note={t("Successful and failed calls")}/>
+        <Stat icon={ShieldCheck} label={t("Error rate")} value={summary ? `${summary.error_rate}%` : "—"} note={t("Last 30 days")}/>
       </div>
       <div className="mh-panel mh-usage-panel">
         <div className="mh-panel-heading"><div><h3>{t("Recent requests")}</h3><p>{t("Metadata only · latest 50 events")}</p></div>
-          <span className="mh-step-count">{filteredEvents.length} matching events</span></div>
-        <div className="mh-toolbar av-logs-toolbar"><div className="mh-search"><Search size={16}/><input aria-label={t("Search request logs")} value={searchText} onChange={event=>{setSearchText(event.target.value);setPage(1);}} placeholder={t("Search model, provider or error")}/></div><Dropdown aria-label={t("Filter request status")} value={statusFilter} onChange={value=>{setStatusFilter(value);setPage(1);}} options={[{value:"all",label:"All statuses"},{value:"success",label:"Successful"},{value:"error",label:"Errors"}]}/></div>
+          <span className="mh-step-count">{t("{{count}} matching events", { count: filteredEvents.length })}</span></div>
+        <div className="mh-toolbar av-logs-toolbar"><div className="mh-search"><Search size={16}/><input aria-label={t("Search request logs")} value={searchText} onChange={event=>{setSearchText(event.target.value);setPage(1);}} placeholder={t("Search model, provider or error")}/></div><Dropdown aria-label={t("Filter request status")} value={statusFilter} onChange={value=>{setStatusFilter(value);setPage(1);}} options={[{value:"all",label:t("All statuses")},{value:"success",label:t("Successful")},{value:"error",label:t("Errors")}]}/></div>
         {query.isLoading ? <div className="mh-empty">{t("Loading usage records…")}</div> :
           query.isError ? <div className="mh-inline-error">{t("Could not load usage records. Refresh the page and try again.")}</div> :
           !events.length ? <div className="mh-empty">{t("No gateway requests have been recorded yet.")}</div> :
@@ -425,7 +425,7 @@ function UsageDashboard() {
                   {event.error_code && <small className="mh-usage-error-code">{event.error_code}</small>}</td>
               </tr>
             ))}</tbody>
-          </table><div className="av-pagination"><span>Page {page} of {pageCount}</span><div><button className="mh-button mh-button-quiet" disabled={page<=1} onClick={()=>setPage(value=>Math.max(1,value-1))}>{t("Previous")}</button><button className="mh-button mh-button-quiet" disabled={page>=pageCount} onClick={()=>setPage(value=>Math.min(pageCount,value+1))}>{t("Next")}</button></div></div></div>}
+          </table><div className="av-pagination"><span>{t("Page {{page}} of {{pageCount}}", { page, pageCount })}</span><div><button className="mh-button mh-button-quiet" disabled={page<=1} onClick={()=>setPage(value=>Math.max(1,value-1))}>{t("Previous")}</button><button className="mh-button mh-button-quiet" disabled={page>=pageCount} onClick={()=>setPage(value=>Math.min(pageCount,value+1))}>{t("Next")}</button></div></div></div>}
       </div>
     </>
   );
@@ -452,7 +452,7 @@ function MfaSettings({ preview = false }) {
     let mounted = true;
     api.auth.mfaStatus()
       .then((result) => { if (mounted) setEnabled((result.methods || []).includes("totp")); })
-      .catch((err) => { if (mounted) setError(err.message || "Could not load MFA status."); })
+      .catch((err) => { if (mounted) setError(err.message || t("Could not load MFA status.")); })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, [preview]);
@@ -470,48 +470,48 @@ function MfaSettings({ preview = false }) {
       const result = await api.auth.mfaEnroll();
       setEnrollment(result);
       setCode("");
-    } catch (err) { setError(err.message || "Could not start authenticator setup."); }
+    } catch (err) { setError(err.message || t("Could not start authenticator setup.")); }
     finally { setBusy(false); }
   };
   const confirm = async (event) => {
     event.preventDefault();
-    if (!/^\d{6}$/.test(code)) { setError("Enter the 6-digit code from your authenticator app."); return; }
+    if (!/^\d{6}$/.test(code)) { setError(t("Enter the 6-digit code from your authenticator app.")); return; }
     setBusy(true); setError("");
     try {
       await api.auth.mfaConfirm(code);
       setEnrollment(null); setCode("");
       await refresh();
-      toast.success("Two-factor authentication enabled");
-    } catch (err) { setError(err.message || "Could not verify the authenticator code."); }
+      toast.success(t("Two-factor authentication enabled"));
+    } catch (err) { setError(err.message || t("Could not verify the authenticator code.")); }
     finally { setBusy(false); }
   };
   const disable = async (event) => {
     event.preventDefault();
-    if (!/^\d{6}$/.test(code)) { setError("Enter the current 6-digit authenticator code."); return; }
+    if (!/^\d{6}$/.test(code)) { setError(t("Enter the current 6-digit authenticator code.")); return; }
     setBusy(true); setError("");
     try {
       await api.auth.mfaDisable(code);
       setCode(""); setEnrollment(null);
       await refresh();
-      toast.success("Two-factor authentication disabled");
-    } catch (err) { setError(err.message || "Could not disable two-factor authentication."); }
+      toast.success(t("Two-factor authentication disabled"));
+    } catch (err) { setError(err.message || t("Could not disable two-factor authentication.")); }
     finally { setBusy(false); }
   };
 
   return <div className="av-mfa-settings">
     <div className="av-settings-heading"><h3>{t("Two-factor authentication")}</h3><p>{t("Protect sign-ins with a time-based code from an authenticator app.")}</p></div>
-    <div className="av-session-row"><div><strong>{loading ? t("Checking account security…") : enabled ? t("Authenticator enabled") : t("Authenticator not enabled")}</strong><small>{enabled ? t("A one-time code is required during sign-in.") : t("Use an authenticator app such as 1Password, Authy or Google Authenticator.")}</small></div><span className={`mh-status ${enabled ? "byok" : "planned"}`}>{loading ? "Checking" : enabled ? "Enabled" : "Disabled"}</span></div>
-    {!loading && !enabled && !enrollment && <button className="mh-button mh-button-primary" type="button" disabled={busy} onClick={start}>{busy ? "Starting…" : "Set up authenticator"}</button>}
+    <div className="av-session-row"><div><strong>{loading ? t("Checking account security…") : enabled ? t("Authenticator enabled") : t("Authenticator not enabled")}</strong><small>{enabled ? t("A one-time code is required during sign-in.") : t("Use an authenticator app such as 1Password, Authy or Google Authenticator.")}</small></div><span className={`mh-status ${enabled ? "byok" : "planned"}`}>{loading ? t("Checking") : enabled ? t("Enabled") : t("Disabled")}</span></div>
+    {!loading && !enabled && !enrollment && <button className="mh-button mh-button-primary" type="button" disabled={busy} onClick={start}>{busy ? t("Starting…") : t("Set up authenticator")}</button>}
     {enrollment && <form className="av-mfa-enrollment" onSubmit={confirm}>
       <p>{t("Scan this QR code with your authenticator app, then enter the generated 6-digit code to confirm setup.")}</p>
       {enrollment.qr_code && <img className="av-mfa-qr" src={enrollment.qr_code} alt={t("Authenticator setup QR code")}/>}
       <label className="av-setting-field"><span>{t("Manual setup key")}</span><input readOnly value={enrollment.secret_formatted || enrollment.secret || ""}/></label>
       <label className="av-setting-field"><span>{t("Authenticator code")}</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} pattern="[0-9]{6}" required value={code} onChange={event=>setCode(event.target.value.replace(/\D/g,"").slice(0,6))} placeholder="000000"/></label>
-      <div className="av-modal-actions"><button className="mh-button mh-button-quiet" type="button" disabled={busy} onClick={()=>{setEnrollment(null);setCode("");}}>{t("Cancel")}</button><button className="mh-button mh-button-primary" type="submit" disabled={busy || code.length!==6}>{busy ? "Verifying…" : "Confirm and enable"}</button></div>
+      <div className="av-modal-actions"><button className="mh-button mh-button-quiet" type="button" disabled={busy} onClick={()=>{setEnrollment(null);setCode("");}}>{t("Cancel")}</button><button className="mh-button mh-button-primary" type="submit" disabled={busy || code.length!==6}>{busy ? t("Verifying…") : t("Confirm and enable")}</button></div>
     </form>}
     {enabled && <form className="av-mfa-enrollment" onSubmit={disable}>
       <label className="av-setting-field"><span>{t("Current authenticator code to disable MFA")}</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} pattern="[0-9]{6}" required value={code} onChange={event=>setCode(event.target.value.replace(/\D/g,"").slice(0,6))} placeholder="000000"/></label>
-      <button className="mh-button mh-button-danger" type="submit" disabled={busy || code.length!==6}>{busy ? "Disabling…" : "Disable two-factor authentication"}</button>
+      <button className="mh-button mh-button-danger" type="submit" disabled={busy || code.length!==6}>{busy ? t("Disabling…") : t("Disable two-factor authentication")}</button>
     </form>}
     {error && <div className="mh-inline-error" role="alert">{error}</div>}
   </div>;
@@ -585,7 +585,7 @@ function WorkspaceSettings({ preview = false, account }) {
   const tabs = [{name:"Profile",icon:UserRound},{name:"Security",icon:Shield},{name:"Notifications",icon:Bell},{name:"Billing",icon:Wallet},{name:"API",icon:SlidersHorizontal},{name:"Appearance",icon:Palette},{name:"Danger zone",icon:Trash2}];
   const field = (label,key,placeholder="") => <label className="av-setting-field"><span>{t(label)}</span><input type={key === "email" ? "email" : key === "monthlyLimit" || key === "requestLimit" ? "number" : "text"} min={key === "monthlyLimit" || key === "requestLimit" ? "1" : undefined} value={settings[key] ?? ""} placeholder={placeholder ? t(placeholder) : undefined} onChange={e=>update(key,e.target.value)}/></label>;
   const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{t(label)}</strong><small>{t(description)}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
-  const select = (label,key,options) => <label className="av-setting-field"><span>{t(label)}</span><Dropdown aria-label={t(label)} value={settings[key]} onChange={value=>update(key,value)} options={options.map(option=>({value:option,label:option}))}/></label>;
+  const select = (label,key,options) => <label className="av-setting-field"><span>{t(label)}</span><Dropdown aria-label={t(label)} value={settings[key]} onChange={value=>update(key,value)} options={options.map(option=>({value:option,label:t(option)}))}/></label>;
   return <div className="av-settings">
     <div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>{t("Account settings status.")}</strong> {t("Profile identity is read from your account. Password changes, active-session revocation and two-factor authentication use the account API. Appearance, regional preferences and avatar are stored in this browser; billing, notification delivery, webhooks and API restrictions are not yet connected to server-side settings.")}</span></div>
     <div className="mh-page-heading"><div><div className="mh-eyebrow">{t("ACCOUNT")}</div><h1>{t("Settings")}</h1><p>{t("Manage your account, security and workspace defaults.")} {preview ? t("Sample account data is shown in this read-only preview.") : t("Identity details are read from your signed-in account.")}</p></div></div>
