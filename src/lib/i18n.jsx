@@ -15,8 +15,8 @@ export function LanguageProvider({ children, initialLanguage = "en" }) {
   return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
 }
 
-export function useLanguage() {
-  const { t, i18n: activeI18n } = useTranslation();
+export function useLanguage(namespaces) {
+  const { t, i18n: activeI18n } = useTranslation(namespaces);
   const language = normalizeLanguage(activeI18n.resolvedLanguage || activeI18n.language);
   const setLanguage = useMemo(() => (next) => {
     if (!supportedLanguages.includes(next)) return Promise.resolve();
