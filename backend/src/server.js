@@ -28,7 +28,7 @@ const json = (res, status, data, headers = {}) => {
   });
   res.end(body);
 };
-const fail = (res, status, code, message) => json(res, status, { error: { code, message } });
+const fail = (res, status, code, message, headers = {}) => json(res, status, { error: { code, message } }, headers);
 const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
 const validEmail = (value) => value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (c) => ({
