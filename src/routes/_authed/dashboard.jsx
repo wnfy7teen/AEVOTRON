@@ -5,6 +5,7 @@ import i18n from "@/i18n";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/client";
+import { readDemoUser } from "@/lib/AuthContext";
 import { useLanguage } from "@/lib/i18n";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { Activity, ArrowDownUp, ArrowUpRight, Bell, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap, Users, Wallet, UserRound, Shield, SlidersHorizontal, Palette, Trash2, Sun, Moon, Monitor, Mail, Webhook, Clock, X, CircleDollarSign } from "lucide-react";
@@ -59,7 +60,7 @@ function HomePage({ preview = false }) {
   const currentLanguage = activeI18n.resolvedLanguage || activeI18n.language;
   const accountQuery = useQuery({
     queryKey: ["workspace-account-profile"],
-    queryFn: () => api.auth.me(),
+    queryFn: () => readDemoUser() || api.auth.me(),
     staleTime: 60_000,
     retry: false,
     enabled: !preview,
