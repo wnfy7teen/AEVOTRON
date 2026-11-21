@@ -510,8 +510,8 @@
   "sign in again": "sign in again",
   "Sign in to manage your two-factor authentication.": "Sign in to manage your two-factor authentication.",
   "My application": "My application",
-  "AEVOTRON — Все модели. Один API.": "AEVOTRON — All models. One API.",
-  "Единый API для подключения AI-моделей разных провайдеров.": "One API for connecting AI models from different providers.",
+  "AEVOTRON — Все модели. Один API.": "AEVOTRON — Every model. One API.",
+  "Единый API для подключения AI-моделей разных провайдеров.": "A unified API for connecting AI models from multiple providers.",
   "Aevotron — Workspace preview": "Aevotron — Workspace preview",
   "Read-only visual preview of the Aevotron workspace.": "Read-only visual preview of the Aevotron workspace.",
   "Telegram · @web3ResearchCN": "Telegram · @web3ResearchCN",
@@ -619,5 +619,10 @@
   "Sending code to {{phone}}…": "Sending code to {{phone}}…",
   "Enter the code sent to {{phone}}": "Enter the code sent to {{phone}}",
   "A 6-digit code sent to {{phone}}": "A 6-digit code sent to {{phone}}",
-  "Enabled · {{phone}}": "Enabled · {{phone}}"
+  "Enabled · {{phone}}": "Enabled · {{phone}}",
+  "Sign in — Aevotron": "Sign in — Aevotron",
+  "Create account — Aevotron": "Create account — Aevotron",
+  "Reset password — Aevotron": "Reset password — Aevotron",
+  "Choose a new password — Aevotron": "Choose a new password — Aevotron",
+  "Two-factor authentication — Aevotron": "Two-factor authentication — Aevotron"
 }
