@@ -1,7 +1,8 @@
 import { ErrorComponent, Link, rootRouteId, useMatch, useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
-export function DefaultCatchBoundary({ error }) {
+export function DefaultCatchBoundary({ error }) {\n  const { t } = useTranslation();
   const router = useRouter();
   const isRoot = useMatch({ strict: false, select: (state) => state.id === rootRouteId });
 
@@ -12,7 +13,7 @@ export function DefaultCatchBoundary({ error }) {
         <Button variant="outline" onClick={() => router.invalidate()}>
           Try again
         </Button>
-        <Button asChild>{isRoot ? <Link to="/">Home</Link> : <Link to="/" onClick={(e) => { e.preventDefault(); window.history.back(); }}>Go back</Link>}</Button>
+        <Button asChild>{isRoot ? <Link to="/">{t("Home")}</Link> : <Link to="/" onClick={(e) => { e.preventDefault(); window.history.back(); }}>{t("Go back")}</Link>}</Button>
       </div>
     </div>
   );
