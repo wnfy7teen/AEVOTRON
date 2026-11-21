@@ -190,3 +190,30 @@ CREATE TABLE IF NOT EXISTS api_key_rate_limits (
   hits INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY(api_key_id, window_start)
 );
+
+
+CREATE TABLE IF NOT EXISTS workspace_chat_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  owner_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(120) NOT NULL DEFAULT 'New conversation',
+  model_id TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS workspace_chat_sessions_owner_idx
+  ON workspace_chat_sessions(workspace_id, owner_user_id, updated_at DESC);
+
+CREATE TABLE IF NOT EXISTS workspace_chat_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id UUID NOT NULL REFERENCES workspace_chat_sessions(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  owner_user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  role TEXT NOT NULL CHECK (role IN ('user','assistant','system')),
+  content TEXT NOT NULL CHECK (char_length(content) <= 200000),
+  model_id TEXT,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS workspace_chat_messages_session_idx
+  ON workspace_chat_messages(session_id, created_at);
