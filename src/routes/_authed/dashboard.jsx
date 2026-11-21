@@ -83,17 +83,20 @@ function HomePage({ preview = false }) {
     retry: 1,
     enabled: !preview,
     initialData: preview ? { models: [
-      { id: "gpt-4o-mini", owned_by: "openai" },
-      { id: "gpt-4o", owned_by: "openai" },
-      { id: "o3-mini", owned_by: "openai" },
-      { id: "gpt-4.1-mini", owned_by: "openai" },
+      { id: "openai/gpt-4o-mini", provider_model_id: "gpt-4o-mini", provider_code: "openai", owned_by: "OpenAI" },
+      { id: "openai/gpt-4o", provider_model_id: "gpt-4o", provider_code: "openai", owned_by: "OpenAI" },
+      { id: "groq/llama-3.3-70b-versatile", provider_model_id: "llama-3.3-70b-versatile", provider_code: "groq", owned_by: "Meta" },
+      { id: "groq/openai/gpt-oss-20b", provider_model_id: "openai/gpt-oss-20b", provider_code: "groq", owned_by: "OpenAI" },
     ] } : undefined,
   });
-  const models = useMemo(() => (modelQuery.data?.models || []).map((model) => ({
-    name: model.id, description: t(describeModel(model.id)), provider: "OpenAI", type: "Chat", context: "Provider-defined",
-    speed: "Provider API", price: "Direct provider billing",
-    tags: [model.owned_by || "OpenAI"], color: "green", status: "BYOK",
-  })), [modelQuery.data, activeI18n.resolvedLanguage]);
+  const models = useMemo(() => (modelQuery.data?.models || []).map((model) => {
+    const provider = model.provider_code === "groq" ? "Groq" : "OpenAI";
+    return {
+      name: model.id, description: t(describeModel(model.provider_model_id || model.id)), provider, type: "Chat", context: "Provider-defined",
+      speed: "Provider API", price: "Direct provider billing",
+      tags: [model.owned_by || provider], color: model.provider_code === "groq" ? "orange" : "green", status: "BYOK",
+    };
+  }), [modelQuery.data, activeI18n.resolvedLanguage]);
   const [section, setSection] = useState("Overview");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All models");
@@ -122,11 +125,11 @@ function HomePage({ preview = false }) {
         <div className="mh-content">
           {preview && <div className="mh-preview-banner"><span className="mh-preview-dot"/><div><strong>{t("Workspace preview")}</strong><small>{t("Sample data · Read-only mode · No account or backend connection required")}</small></div><span className="mh-preview-label">PREVIEW</span></div>}
           {section === "Overview" && <>
-            <div className="mh-page-heading"><div><div className="mh-eyebrow"><span className="mh-live-dot"/> {t("AI INFRASTRUCTURE, SIMPLIFIED")}</div><h1>{t("Your models. One API.")}</h1><p>{t("Connect OpenAI once. Route text chat requests through a single API.")}</p></div><button className="mh-button mh-button-primary" disabled={preview} onClick={() => setSection("Providers")}><Plus size={16}/> {t("Connect provider")}</button></div>
-            <div className="mh-stats"><Stat icon={Activity} label="Requests (30 days)" value={usageQuery.data?.summary?.requests ?? "—"} note="Recorded by the gateway"/><Stat icon={Cpu} label="Models in catalog" value={modelQuery.isLoading ? "…" : models.length} note={models.length ? "Available to your OpenAI key" : "Connect OpenAI to discover models"}/><Stat icon={Zap} label="Avg. latency" value={usageQuery.data?.summary?.average_latency_ms ? `${usageQuery.data.summary.average_latency_ms} ms` : "—"} note="Last 30 days"/><Stat icon={CreditCard} label="Provider billing" value="Direct" note="Billed by OpenAI"/></div>
+            <div className="mh-page-heading"><div><div className="mh-eyebrow"><span className="mh-live-dot"/> {t("AI INFRASTRUCTURE, SIMPLIFIED")}</div><h1>{t("Your models. One API.")}</h1><p>{t("Connect your AI providers once. Route text chat requests through a single API.")}</p></div><button className="mh-button mh-button-primary" disabled={preview} onClick={() => setSection("Providers")}><Plus size={16}/> {t("Connect provider")}</button></div>
+            <div className="mh-stats"><Stat icon={Activity} label="Requests (30 days)" value={usageQuery.data?.summary?.requests ?? "—"} note="Recorded by the gateway"/><Stat icon={Cpu} label="Models in catalog" value={modelQuery.isLoading ? "…" : models.length} note={models.length ? "Available from connected providers" : "Connect a provider to discover models"}/><Stat icon={Zap} label="Avg. latency" value={usageQuery.data?.summary?.average_latency_ms ? `${usageQuery.data.summary.average_latency_ms} ms` : "—"} note="Last 30 days"/><Stat icon={CreditCard} label="Provider billing" value="Direct" note="Billed by OpenAI"/></div>
             <div className="mh-section-heading"><div><h2>{t("Get started")}</h2><p>{t("Three steps to your first API call.")}</p></div><span className="mh-step-count">{t("0 of 3 complete")}</span></div>
             <div className="mh-steps"><Step number="01" title={t("Connect a provider")} desc={t("Add your own API key. It stays private and is never shown in the browser again.")} action={t("Add provider")} onClick={() => setSection("Providers")} icon={KeyRound} disabled={preview}/><Step number="02" title={t("Create an AEVOTRON key")} desc={t("Generate a single key for your apps and services to authenticate requests.")} action={t("Create API key")} onClick={() => setSection("API keys")} icon={LockKeyhole} disabled={preview}/><Step number="03" title={t("Make your first request")} desc={t("Use our OpenAI-compatible endpoint with any supported model.")} action={t("View quickstart")} onClick={() => setSection("Quickstart")} icon={Code2} disabled={preview}/></div>
-            <div className="mh-bottom-grid"><div className="mh-panel"><div className="mh-panel-heading"><div><h3>{t("Popular models")}</h3><p>{t("Start exploring the catalog")}</p></div><button className="mh-text-link" onClick={() => setSection("Model catalog")}>{t("View all")} <ArrowUpRight size={14}/></button></div>{models.slice(0,4).map(m => <ModelRow key={m.name} model={m} disabled={preview} onClick={() => {setSelected(m.name);setSection("Model catalog")}}/>)}{models.length === 0 && <div className="mh-empty">{modelQuery.isLoading ? "Loading models from OpenAI…" : "Connect OpenAI to load the models available to your account."}</div>}</div><div className="mh-panel mh-code-panel"><div className="mh-panel-heading"><div><h3>{t("Quick API example")}</h3><p>{t("OpenAI-compatible interface")}</p></div><span className="mh-code-language">cURL</span></div><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy example")}</button></div></div>
+            <div className="mh-bottom-grid"><div className="mh-panel"><div className="mh-panel-heading"><div><h3>{t("Popular models")}</h3><p>{t("Start exploring the catalog")}</p></div><button className="mh-text-link" onClick={() => setSection("Model catalog")}>{t("View all")} <ArrowUpRight size={14}/></button></div>{models.slice(0,4).map(m => <ModelRow key={m.name} model={m} disabled={preview} onClick={() => {setSelected(m.name);setSection("Model catalog")}}/>)}{models.length === 0 && <div className="mh-empty">{modelQuery.isLoading ? "Loading models from OpenAI…" : "Connect a provider to load the models available to your account."}</div>}</div><div className="mh-panel mh-code-panel"><div className="mh-panel-heading"><div><h3>{t("Quick API example")}</h3><p>{t("OpenAI-compatible interface")}</p></div><span className="mh-code-language">cURL</span></div><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied ? <Check size={14}/> : <Copy size={14}/>} {copied ? t("Copied") : t("Copy example")}</button></div></div>
             <div className="mh-trust-note"><ShieldCheck size={17}/><span><strong>{t("Your keys, your control.")}</strong> {t("Provider credentials are sent over HTTPS, encrypted before storage and never shown again.")}</span></div>
           </>}
           {section === "Model catalog" && <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("DISCOVER")}</div><h1>{t("Model catalog")}</h1><p>{t("Live chat models available to your connected OpenAI account.")}</p></div></div><div className="mh-toolbar"><div className="mh-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t("Search models...")}/></div><Dropdown aria-label={t("Filter models")} value={filter} onChange={setFilter} options={[{value:"All models",label:t("All models")},{value:"Chat",label:t("Chat")}]}/><button className="mh-button mh-button-quiet" onClick={() => modelQuery.refetch()} disabled={modelQuery.isFetching}><ArrowDownUp size={15}/> {modelQuery.isFetching ? t("Refreshing…") : t("Refresh")}</button></div><div className="mh-catalog-layout"><div className="mh-panel mh-model-list"><div className="mh-list-header"><span>{t("MODEL")}</span><span>{t("CONTEXT")}</span><span>{t("ACCESS")}</span></div>{filtered.map(m=><button key={m.name} className={`mh-model-row ${selected===m.name?"selected":""}`} onClick={()=>setSelected(m.name)}><span className={`mh-provider-dot ${m.color}`}/><span className="mh-model-name"><strong>{m.name}</strong><small>{m.provider}</small><small className="mh-model-description">{m.description}</small></span><span className="mh-model-context">{m.context}</span><span className="mh-status byok">BYOK</span></button>)}{modelQuery.isLoading && <div className="mh-empty">{t("Loading models from OpenAI…")}</div>}{modelQuery.isError && <div className="mh-inline-error">{t("Could not load models from OpenAI. Test your provider connection and refresh.")}</div>}{!modelQuery.isLoading && !modelQuery.isError && models.length===0 && <div className="mh-empty">{t("Connect OpenAI to load the chat models available to your API key.")}</div>}{models.length>0 && filtered.length===0 && <div className="mh-empty">{t("No models match your search.")}</div>}</div><div className="mh-panel mh-model-detail">{active ? <><div className="mh-detail-top"><span className="mh-provider-dot large green"/><span className="mh-status byok">BYOK</span></div><h2>{active.name}</h2><p className="mh-model-description-detail">{active.description}</p><div className="mh-detail-stats"><div><small>{t("Context window")}</small><strong>{active.context}</strong></div><div><small>{t("Availability")}</small><strong>{t("From provider")}</strong></div><div><small>{t("Pricing")}</small><strong>{active.price}</strong></div></div><div className="mh-tags">{active.tags.map(t=><span key={t}>{t}</span>)}</div><div className="mh-detail-info"><ShieldCheck size={16}/> {t("Available through your connected OpenAI account. Provider billing applies.")}</div><button className="mh-button mh-button-primary full" onClick={()=>setSection("Quickstart")}>{t("View API example")} <ArrowUpRight size={15}/></button></> : <div className="mh-empty">{t("Connect OpenAI to discover the models available to your account.")}</div>}</div></div></>}{section === "Providers" && <ProviderConnections/>}
@@ -206,51 +209,16 @@ function HomePage({ preview = false }) {
 function ProviderConnections() {
   const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
-  const queryClient = useQueryClient();
-  const [credential, setCredential] = useState("");
-  const [error, setError] = useState("");
   const query = useQuery({
     queryKey: ["provider-connections"],
     queryFn: () => invokeFunction("provider-connections", { action: "list" }),
     retry: 1,
   });
-  const connect = useMutation({
-    mutationFn: (secret) => invokeFunction("provider-connections", {
-      action: "connect", provider_code: "openai", credential: secret,
-    }),
-    onSuccess: () => {
-      setError("");
-      queryClient.invalidateQueries({ queryKey: ["provider-connections"] });
-    },
-    onError: (err) => setError(err?.message || t("Could not connect this provider. Check the key and try again.")),
-  });
-  const test = useMutation({
-    mutationFn: (connectionId) => invokeFunction("provider-connections", {
-      action: "test", connection_id: connectionId,
-    }),
-    onSuccess: () => setError(""),
-    onError: (err) => setError(err?.message || t("The connection test failed.")),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
-  });
-  const revoke = useMutation({
-    mutationFn: (connectionId) => invokeFunction("provider-connections", {
-      action: "revoke", connection_id: connectionId,
-    }),
-    onSuccess: () => { setError(""); queryClient.invalidateQueries({ queryKey: ["provider-connections"] }); },
-    onError: (err) => setError(err?.message || t("Could not revoke this connection.")),
-  });
-  const openai = query.data?.connections?.find((item) => item.provider_code === "openai");
-  const busy = connect.isPending || test.isPending || revoke.isPending;
-
-  const submit = (event) => {
-    event.preventDefault();
-    const secret = credential.trim();
-    if (!secret || busy) return;
-    setCredential("");
-    setError("");
-    connect.mutate(secret);
-  };
-
+  const connected = query.data?.connections || [];
+  const supported = [
+    { code: "groq", name: "Groq", detail: "Fast open models and Llama inference", color: "orange", keyLabel: "Groq API key", placeholder: "Paste your Groq API key" },
+    { code: "openai", name: "OpenAI", detail: "GPT models and OpenAI-compatible chat completions", color: "green", keyLabel: "OpenAI API key", placeholder: "Paste your OpenAI API key" },
+  ];
   return (
     <>
       <div className="mh-page-heading">
@@ -263,51 +231,111 @@ function ProviderConnections() {
           <p>{t("Your key is sent directly to the secure backend over HTTPS, validated with the provider and encrypted before it is stored. It is never returned to this page.")}</p>
         </div>
       </div>
-      <div className="mh-panel mh-connection-panel">
-        <div className="mh-panel-heading">
-          <div><h3>OpenAI</h3><p>{t("GPT models and OpenAI-compatible chat completions")}</p></div>
-          {query.isLoading ? <span className="mh-status planned">{t("Loading")}</span> :
-            <span className={`mh-status ${openai?.status === "active" ? "byok" : "planned"}`}>
-              {openai?.status === "active" ? t("Connected") : openai?.status === "error" ? t("Connection error") : t("Not connected")}
-            </span>}
-        </div>
-        {query.isError && <div className="mh-inline-error">{t("Could not load provider connections. Refresh the page and try again.")}</div>}
-        {openai && ["active", "error"].includes(openai.status) ? (
-          <div className="mh-connected-row">
-            <div><strong>{t("API credential protected")}</strong><small>{openai.last_tested_at ? t("Last checked: {{date}}", { date: formatDate(openai.last_tested_at, currentLanguage, { dateStyle: "medium", timeStyle: "short" }) }) : t("Not checked")}</small></div>
-            <div className="mh-connection-actions">
-              <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? t("Testing…") : openai.status === "error" ? t("Retry test") : t("Test connection")} </button>
-              <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {if (!window.confirm(t("Revoke the OpenAI provider connection? Requests using it will stop working."))) return;setError("");revoke.mutate(openai.id);}}>{t("Revoke")}</button>
-            </div>
-          </div>
-        ) : (
-          <form className="mh-provider-form" onSubmit={submit}>
-            <label className="mh-field-label" htmlFor="openai-provider-key">{t("OpenAI API key")}</label>
-            <input id="openai-provider-key" className="mh-field" type="password" value={credential}
-              onChange={(event) => setCredential(event.target.value)} autoComplete="off" spellCheck={false}
-              placeholder={t("Paste your OpenAI API key")} maxLength={500} required aria-describedby="openai-key-help" />
-            <div className="mh-field-help" id="openai-key-help"><LockKeyhole size={14}/> {t("Never paste this key into support chats or public repositories.")}</div>
-            <div className="mh-provider-form-actions">
-              <button className="mh-button mh-button-primary" type="submit" disabled={!credential.trim() || busy}>
-                {connect.isPending ? t("Validating and encrypting…") : t("Connect OpenAI")}
-              </button>
-            </div>
-          </form>
-        )}
-        {error && <div className="mh-inline-error" role="alert">{t(error)}</div>}
-        {connect.isSuccess && <div className="mh-inline-success">{t("OpenAI is connected. Your credential is encrypted and hidden.")}</div>}
-        {revoke.isSuccess && <div className="mh-inline-success">{t("The provider credential has been revoked.")}</div>}
-      </div>
+      {query.isError && <div className="mh-inline-error" role="alert">{t("Could not load provider connections. Refresh the page and try again.")}</div>}
+      {supported.map((provider) => (
+        <ProviderConnectionCard key={provider.code} provider={provider}
+          connection={connected.find((item) => item.provider_code === provider.code)}
+          currentLanguage={currentLanguage} t={t}/>
+      ))}
       <div className="mh-provider-grid mh-provider-grid-muted">
-        {providers.filter((provider) => provider.name !== "OpenAI").map((provider) => (
+        {providers.filter((provider) => !["OpenAI", "Groq"].includes(provider.name)).map((provider) => (
           <div className="mh-provider-card" key={provider.name}>
-            <div className={`mh-provider-logo ${provider.color}`}>{provider.letter}</div>
+            <div className={"mh-provider-logo " + provider.color}>{provider.letter}</div>
             <div className="mh-provider-info"><strong>{provider.name}</strong><small>{t(provider.detail)}</small></div>
             <span className="mh-status planned">{t("Not available yet")}</span>
           </div>
         ))}
       </div>
     </>
+  );
+}
+
+function ProviderConnectionCard({ provider, connection, currentLanguage, t }) {
+  const queryClient = useQueryClient();
+  const [credential, setCredential] = useState("");
+  const [error, setError] = useState("");
+  const connect = useMutation({
+    mutationFn: (secret) => invokeFunction("provider-connections", {
+      action: "connect", provider_code: provider.code, credential: secret,
+    }),
+    onSuccess: () => {
+      setCredential("");
+      setError("");
+      queryClient.invalidateQueries({ queryKey: ["provider-connections"] });
+      queryClient.invalidateQueries({ queryKey: ["provider-models"] });
+    },
+    onError: (err) => setError(err?.message || t("Could not connect this provider. Check the key and try again.")),
+  });
+  const test = useMutation({
+    mutationFn: () => invokeFunction("provider-connections", { action: "test", provider_code: provider.code }),
+    onSuccess: () => { setError(""); queryClient.invalidateQueries({ queryKey: ["provider-connections"] }); },
+    onError: (err) => setError(err?.message || t("The connection test failed.")),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["provider-connections"] }),
+  });
+  const revoke = useMutation({
+    mutationFn: () => invokeFunction("provider-connections", { action: "revoke", provider_code: provider.code }),
+    onSuccess: () => {
+      setError("");
+      queryClient.invalidateQueries({ queryKey: ["provider-connections"] });
+      queryClient.invalidateQueries({ queryKey: ["provider-models"] });
+    },
+    onError: (err) => setError(err?.message || t("Could not revoke this provider connection.")),
+  });
+  const busy = connect.isPending || test.isPending || revoke.isPending;
+  const active = connection && ["active", "error"].includes(connection.status);
+  const submit = (event) => {
+    event.preventDefault();
+    const secret = credential.trim();
+    if (!secret || busy) return;
+    setError("");
+    connect.mutate(secret);
+  };
+  const confirmRevoke = () => {
+    const message = provider.code === "openai"
+      ? t("Revoke the OpenAI provider connection? Requests using it will stop working.")
+      : t("Revoke the Groq provider connection? Requests using it will stop working.");
+    if (!window.confirm(message)) return;
+    setError("");
+    revoke.mutate();
+  };
+  return (
+    <div className="mh-panel mh-connection-panel">
+      <div className="mh-panel-heading">
+        <div><h3>{provider.name}</h3><p>{t(provider.detail)}</p></div>
+        {connect.isPending || test.isPending ? <span className="mh-status planned">{t("Loading")}</span> :
+          <span className={"mh-status " + (connection?.status === "active" ? "byok" : "planned")}>
+            {connection?.status === "active" ? t("Connected") : connection?.status === "error" ? t("Connection error") : t("Not connected")}
+          </span>}
+      </div>
+      {active ? (
+        <div className="mh-connected-row">
+          <div><strong>{t("API credential protected")}</strong><small>{connection.last_tested_at ? t("Last checked: {{date}}", { date: formatDate(connection.last_tested_at, currentLanguage, { dateStyle: "medium", timeStyle: "short" }) }) : t("Not checked")}</small></div>
+          <div className="mh-connection-actions">
+            <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate();}}>
+              {test.isPending ? t("Testing…") : connection.status === "error" ? t("Retry test") : t("Test connection")}
+            </button>
+            <button className="mh-button mh-button-danger" disabled={busy} onClick={confirmRevoke}>{t("Revoke")}</button>
+          </div>
+        </div>
+      ) : (
+        <form className="mh-provider-form" onSubmit={submit}>
+          <label className="mh-field-label" htmlFor={provider.code + "-provider-key"}>{t(provider.keyLabel)}</label>
+          <input id={provider.code + "-provider-key"} className="mh-field" type="password" value={credential}
+            onChange={(event) => setCredential(event.target.value)} autoComplete="off" spellCheck={false}
+            placeholder={t(provider.placeholder)} maxLength={500} required
+            aria-describedby={provider.code === "openai" ? "openai-key-help" : provider.code + "-key-help"} />
+          <div className="mh-field-help" id={provider.code === "openai" ? "openai-key-help" : provider.code + "-key-help"}><LockKeyhole size={14}/> {t("Never paste this key into support chats or public repositories.")}</div>
+          <div className="mh-provider-form-actions">
+            <button className="mh-button mh-button-primary" type="submit" disabled={!credential.trim() || busy}>
+              {connect.isPending ? t("Validating and encrypting…") : t("Connect {{provider}}", { provider: provider.name })}
+            </button>
+          </div>
+        </form>
+      )}
+      {error && <div className="mh-inline-error" role="alert">{t(error)}</div>}
+      {connect.isSuccess && <div className="mh-inline-success">{t("{{provider}} is connected. Your credential is encrypted and hidden.", { provider: provider.name })}</div>}
+      {revoke.isSuccess && <div className="mh-inline-success">{t("The provider credential has been revoked.")}</div>}
+    </div>
   );
 }
 
