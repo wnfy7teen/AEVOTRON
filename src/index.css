@@ -302,3 +302,15 @@ body {
 .mh-usage-table tbody tr:last-child td {
   border-bottom: 0;
 }
+
+
+/* Read-only workspace preview */
+.mh-preview-banner{display:flex;align-items:center;gap:11px;padding:12px 14px;margin-bottom:25px;border:1px solid #354a36;background:linear-gradient(110deg,#17251c,#151d20);border-radius:9px;color:#dce9d9}
+.mh-preview-dot{width:8px;height:8px;border-radius:50%;background:#a8d96b;box-shadow:0 0 0 4px #a8d96b1c;flex:none}
+.mh-preview-banner>div{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.mh-preview-banner strong{font-size:11px;font-weight:700}
+.mh-preview-banner small{font-size:10px;color:#a0b09d}
+.mh-preview-label{font:700 8px 'DM Mono',monospace;letter-spacing:1px;color:#c8e98a;border:1px solid #536746;background:#26351f;border-radius:4px;padding:5px 7px}
+.mh-nav-item:disabled,.mh-text-link:disabled,.mh-popular-row:disabled{cursor:not-allowed;opacity:.58}
+.mh-nav-item:disabled:hover,.mh-popular-row:disabled:hover{background:transparent;transform:none}
+@media(max-width:520px){.mh-preview-banner{align-items:flex-start;gap:9px;padding:11px}.mh-preview-banner small{line-height:1.45}.mh-preview-label{margin-left:auto}}
