@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund --legacy-peer-deps
 
+      - name: Repair and validate translations
+        run: npm run i18n:fix && npm run i18n:check
+
       - name: Run security policy tests
         run: npm test
 
