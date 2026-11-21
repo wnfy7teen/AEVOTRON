@@ -33,7 +33,7 @@ export function SubmitButton({ busy, busyLabel, children, ...props }) {
 export function GoogleButton() { return null; }
 
 export function OrDivider() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   return (
     <div className="relative mb-6">
       <div className="absolute inset-0 flex items-center">
