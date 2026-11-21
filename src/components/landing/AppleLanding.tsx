@@ -238,7 +238,7 @@ export default function AppleLanding() {
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><Moon size={16} /><span>{t("Тёмная")}</span></button>
         <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label={t("Серая тема")} aria-pressed={theme === "gray"} title={t("Серая")}><Cloud size={16} /><span>{t("Серая")}</span></button>
       </div>
-      <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
+      <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? t("Close navigation") : t("Open navigation")}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
     <section className="av-hero av-reveal" id="platform">
       <div className="av-hero-kicker"><span /> {t("ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ")}</div>
