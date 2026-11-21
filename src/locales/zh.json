@@ -132,7 +132,7 @@
   "Reset password": "重置密码",
   "Resetting...": "Resetting...",
   "Send reset link": "Send reset link",
-  "Sending...": "Sending...",
+  "Sending...": "正在发送...",
   "Back to sign in": "返回登录",
   "Continue": "继续",
   "Continue with Google": "使用 Google 继续",
@@ -178,7 +178,7 @@
   "Verification failed. Please try again.": "验证失败，请重试。",
   "Your sign-in expired.": "登录状态已过期。",
   "Sign in again": "重新登录",
-  "Standard message and data rates may apply.": "可能会产生标准短信和数据费用。",
+  "Standard message and data rates may apply.": "可能会产生标准短信和数据流量费用。",
   "Enter the code from your authenticator app": "Enter the code from your authenticator app",
   "Enter the code sent to": "请输入发送至以下号码的验证码：",
   "Sending code to": "正在向以下号码发送验证码：",
@@ -609,7 +609,8 @@
   "you@example.com": "you@example.com",
   "Already verified": "Already verified",
   "Sign out": "退出登录",
-  "Didn't receive a code?": "Didn't receive a code?",
+  "Didn't receive a code?": "没有收到验证码？",
   "Resend in": "Resend in",
-  "Welcome": "Welcome"
+  "Welcome": "Welcome",
+  "Resend in {{count}}s": "{{count}} 秒后重新发送"
 }
