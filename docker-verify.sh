@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-PROJECT_NAME="aevotron-smoke-$"
+PROJECT_NAME="aevotron-smoke"
 API_PROJECT_NAME="${PROJECT_NAME}-api"
 HTML_FILE="$(mktemp)"
 API_FILE="$(mktemp)"
