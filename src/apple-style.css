@@ -1511,3 +1511,21 @@ html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
   .apple-app .mh-main { width:100%; min-height:100vh; min-height:100dvh; margin-left:0; }
 }
 @media (prefers-reduced-motion:reduce) { .apple-app .mh-sidebar { transition-duration:.01ms; } }
+
+
+/* Keep the Add funds menu above the following Transactions panel. */
+.apple-app .av-topup-panel {
+  position: relative;
+  z-index: 3;
+  overflow: visible;
+}
+.apple-app .av-topup-panel .av-dropdown[data-open="true"] {
+  z-index: 130;
+}
+.apple-app .av-topup-panel .av-dropdown-menu {
+  z-index: 131;
+}
+.apple-app .av-transactions-panel {
+  position: relative;
+  z-index: 1;
+}
