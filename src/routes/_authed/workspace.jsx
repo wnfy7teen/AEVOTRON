@@ -65,6 +65,7 @@ function WorkspaceChat() {
   const [modelSearch, setModelSearch] = useState("");
   const [favoriteModels, setFavoriteModels] = useState([]);
   const [recentModels, setRecentModels] = useState([]);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const activeModel = models.find((model) => model.id === selectedModel) || models[0] || null;
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
@@ -115,15 +116,18 @@ function WorkspaceChat() {
       if (Array.isArray(favorites)) setFavoriteModels(favorites.filter((item) => typeof item === "string"));
       if (Array.isArray(recent)) setRecentModels(recent.filter((item) => typeof item === "string").slice(0,8));
     } catch { /* Ignore unavailable or malformed local preference storage. */ }
+    finally { setPreferencesLoaded(true); }
   }, []);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     try { localStorage.setItem("aevotron.workspace.favorites", JSON.stringify(favoriteModels)); } catch { /* Preferences remain in memory. */ }
-  }, [favoriteModels]);
+  }, [favoriteModels, preferencesLoaded]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     try { localStorage.setItem("aevotron.workspace.recent", JSON.stringify(recentModels)); } catch { /* Preferences remain in memory. */ }
-  }, [recentModels]);
+  }, [recentModels, preferencesLoaded]);
 
   useEffect(() => {
     if (!activeModel?.id) return;
