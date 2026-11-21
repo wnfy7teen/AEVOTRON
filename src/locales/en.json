@@ -677,5 +677,15 @@
   "Important updates and account activity.": "Important updates and account activity.",
   "Teammate email address": "Teammate email address",
   "name@company.com": "name@company.com",
-  "Close": "Close"
+  "Close": "Close",
+  "Last checked: {{date}}": "Last checked: {{date}}",
+  "Members and invitations": "Members and invitations",
+  "members and invitations": "members and invitations",
+  "Invitation added to demo team": "Invitation added to demo team",
+  "Billing preferences": "Billing preferences",
+  "API controls": "API controls",
+  "Set request limits and trusted destinations.": "Set request limits and trusted destinations.",
+  "FINANCE": "FINANCE",
+  "COLLABORATION": "COLLABORATION",
+  "ACTIVITY CENTER": "ACTIVITY CENTER"
 }
