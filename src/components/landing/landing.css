@@ -1081,7 +1081,7 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 }
 .av-site .av-header {
   isolation: isolate;
-  contain: paint;
+  overflow: visible;
   opacity: 1 !important;
   transform: none !important;
   box-shadow: 0 1px 0 rgba(15, 23, 32, .08);
