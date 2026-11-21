@@ -177,7 +177,7 @@ function ProviderConnections() {
             <div><strong>API credential protected</strong><small>Last checked: {openai.last_tested_at ? new Date(openai.last_tested_at).toLocaleString() : "Not checked"}</small></div>
             <div className="mh-connection-actions">
               <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? "Testing…" : openai.status === "error" ? "Retry test" : "Test connection"} </button>
-              <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {setError("");revoke.mutate(openai.id);}}>Revoke</button>
+              <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {if (!window.confirm("Revoke the OpenAI provider connection? Requests using it will stop working.")) return;setError("");revoke.mutate(openai.id);}}>Revoke</button>
             </div>
           </div>
         ) : (
@@ -292,7 +292,7 @@ function ApiKeyManager() {
               <div className="mh-key-main"><strong>{key.name}</strong><code>{key.key_prefix}••••••••••</code>
                 <small>Created {key.created_date ? new Date(key.created_date).toLocaleDateString() : "recently"} · Expires {key.expires_at ? new Date(key.expires_at).toLocaleDateString() : "Never"}</small></div>
               <div className="mh-key-actions"><span className={`mh-status ${key.status === "active" ? "byok" : "planned"}`}>{key.status}</span>
-                {["active", "expired"].includes(key.status) && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {setError("");revoke.mutate(key.id);}}>Revoke</button>}</div>
+                {["active", "expired"].includes(key.status) && <button className="mh-button mh-button-danger" disabled={revoke.isPending} onClick={() => {if (!window.confirm("Revoke this API key? Applications using it will lose access immediately.")) return;setError("");revoke.mutate(key.id);}}>Revoke</button>}</div>
             </div>
           ))}</div>}
       </div>
