@@ -22,6 +22,7 @@ const BROWSER_PREBUNDLE = [
 ];
 
 export default defineConfig({
+  resolve: { alias: { "@": new URL("./src", import.meta.url).pathname } },
   optimizeDeps: { include: [...PREBUNDLE, ...BROWSER_PREBUNDLE] },
   environments: {
     ssr: {
