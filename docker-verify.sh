@@ -6,8 +6,13 @@ HTML_FILE="$(mktemp)"
 API_FILE="$(mktemp)"
 ASSET_LIST="$(mktemp)"
 cleanup() {
+  status=$?
+  if [ "$status" -ne 0 ]; then
+    docker compose -p "$PROJECT_NAME" logs --no-color >&2 || true
+  fi
   docker compose -p "$PROJECT_NAME" down -v --remove-orphans >/dev/null 2>&1 || true
   rm -f "$HTML_FILE" "$API_FILE" "$ASSET_LIST"
+  exit "$status"
 }
 trap cleanup EXIT INT TERM
 
@@ -39,7 +44,14 @@ grep -Eiq '<!doctype html|<html([[:space:]>])' "$HTML_FILE" || {
 }
 
 # The self-hosted API must be live and the session-protected route must reject anonymous callers.
-status="$(curl -sS -o "$API_FILE" -w '%{http_code}' http://127.0.0.1:3000/api/v1/auth/me)"
+attempt=0
+status=""
+until [ "$attempt" -ge 40 ]; do
+  status="$(curl -sS -o "$API_FILE" -w '%{http_code}' http://127.0.0.1:3000/api/v1/auth/me || true)"
+  [ "$status" = "401" ] && break
+  attempt=$((attempt + 1))
+  sleep 2
+done
 [ "$status" = "401" ] || {
   printf 'Docker smoke test failed: unauthenticated /api/v1/auth/me returned %s, expected 401.\n' "$status" >&2
   cat "$API_FILE" >&2
