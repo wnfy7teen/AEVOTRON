@@ -38,7 +38,7 @@ services:
       SMTP_FROM: ${SMTP_FROM:-}
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
     restart: unless-stopped
     read_only: true
     tmpfs:
