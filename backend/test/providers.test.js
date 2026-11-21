@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { getProvider, isValidProviderCredential, normalizeProviderModels } from "../src/providers.js";
 
 test("OpenAI and Groq use fixed HTTPS OpenAI-compatible API origins", () => {
@@ -36,13 +37,11 @@ test("provider model IDs are namespaced and non-chat Groq models are excluded", 
   assert.deepEqual(openai.map((model) => model.id), ["openai/gpt-4o-mini"]);
 });
 
-import { readFile } from "node:fs/promises";
-
 test("server routes provider credentials and chat requests through the selected adapter", async () => {
   const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
-  assert.match(server, /providers\\\/(openai\|groq)/);
-  assert.match(server, /provider:\\" \+ provider\.code \+ \":\" \+ user\.id \+ \":\" \+ workspace\.id/);
-  assert.match(server, /providerConfig\.baseUrl \+ \\"\\/chat\\/completions/);
-  assert.match(server, /modelMatch = body\.model\.match\(\/\^\(openai\|groq\)\\\//);
-  assert.doesNotMatch(server, /provider_code='openai' AND status='active'\\\)\s*;/);
+  assert.ok(server.includes("path.match(/^\\/api\\/v1\\/providers\\/(openai|groq)"));
+  assert.ok(server.includes('provider:" + provider.code + ":" + user.id + ":" + workspace.id'));
+  assert.ok(server.includes('providerConfig.baseUrl + "/chat/completions"'));
+  assert.ok(server.includes("body.model.match(/^(openai|groq)\\/(.+)$/)"));
+  assert.ok(!server.includes("provider_code='openai' AND status='active'"));
 });
