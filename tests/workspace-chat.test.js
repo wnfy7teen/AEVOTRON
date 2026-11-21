@@ -35,6 +35,8 @@ test("AI Workspace route uses the session-authenticated streaming client", async
   assert.match(route, /addFiles/);
   assert.match(route, /selectedAttachmentIds/);
   assert.match(route, /selectedAttachments\.map/);
+  assert.match(route, /sentAttachmentIds/);
+  assert.match(route, /filter\(\(file\) => !sentAttachmentIds\.has\(file\.id\)\)/);
   assert.match(route, /Include attachment/);
   assert.match(route, /512 KB/);
   assert.match(route, /12_000/);
