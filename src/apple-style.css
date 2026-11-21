@@ -2752,3 +2752,12 @@ html[data-theme="dark"] .aw-history-select { color:#9aabba; }
 html[data-theme="dark"] .aw-history-select:hover,html[data-theme="dark"] .aw-history-select.is-active { background:#203545; color:#b8e4f5; }
 html[data-theme="dark"] .aw-history-delete:hover { background:#3b292b; color:#f1a9a9; }
 @media (hover:none) { .aw-history-delete { opacity:1; } }
+
+.aw-history-rename,.aw-history-rename-save { display:grid; flex:0 0 27px; width:27px; height:27px; place-items:center; border:0; border-radius:7px; background:transparent; color:#9aa6b2; opacity:0; cursor:pointer; }
+.aw-history-item:hover .aw-history-rename,.aw-history-rename:focus-visible,.aw-history-rename-save { opacity:1; }
+.aw-history-rename:hover { background:#e9f2f7; color:#28718f; }
+.aw-history-rename-save { background:#e8f4ee; color:#25805d; opacity:1; }
+.aw-history-rename-input { flex:1; min-width:0; width:100%; height:32px; padding:0 8px; border:1px solid #9bc8dc; border-radius:7px; outline:0; background:#fff; color:#26384a; font:12px inherit; }
+html[data-theme="dark"] .aw-history-rename:hover { background:#203545; color:#a9d7e9; }
+html[data-theme="dark"] .aw-history-rename-save { background:#1e3a32; color:#8ed5b4; }
+html[data-theme="dark"] .aw-history-rename-input { border-color:#456b7e; background:#192733; color:#dbe6ee; }

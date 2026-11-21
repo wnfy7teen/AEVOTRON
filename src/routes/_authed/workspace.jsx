@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Bot, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X } from "lucide-react";
+import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -58,6 +58,8 @@ function WorkspaceChat() {
   const activeConversationRef = useRef("current");
   const skipSessionLoadRef = useRef(null);
   const [chatError, setChatError] = useState("");
+  const [renamingId, setRenamingId] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
   const [metrics, setMetrics] = useState(null);
   const abortRef = useRef(null);
   const composerRef = useRef(null);
@@ -225,6 +227,17 @@ function WorkspaceChat() {
 
   };
 
+  const saveConversationTitle = async (id) => {
+    const title = renameValue.trim();
+    if (!title || title.length > 120) return;
+    if (!demoMode) {
+      try { await api.workspace.renameChat(id, title); }
+      catch (error) { setChatError(error.message || t("Could not rename this conversation.")); return; }
+    }
+    setConversations((items) => items.map((item) => item.id === id ? { ...item, title } : item));
+    setRenamingId(null);
+  };
+
   const deleteConversation = async (id) => {
     if (isStreaming && id === activeConversation) stop();
     if (!demoMode) {
@@ -256,7 +269,9 @@ function WorkspaceChat() {
         <label className="aw-search"><Search size={15}/><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("Search conversations")} aria-label={t("Search conversations")}/></label>
         <div className="aw-history-label">{t("RECENT")}</div>
         <div className="aw-history">
-          {filteredConversations.map((item) => <div className="aw-history-item" key={item.id}><button type="button" className={"aw-history-select" + (activeConversation === item.id ? " is-active" : "")} onClick={() => selectConversation(item.id)}><MessageSquarePlus size={15}/><span>{item.title}</span></button><button type="button" className="aw-history-delete" aria-label={t("Delete conversation") + ": " + item.title} title={t("Delete conversation")} onClick={() => deleteConversation(item.id)}><X size={13}/></button></div>)}
+          {filteredConversations.map((item) => renamingId === item.id
+            ? <div className="aw-history-item" key={item.id}><input className="aw-history-rename-input" autoFocus value={renameValue} maxLength={120} aria-label={t("Rename conversation")} onChange={(event) => setRenameValue(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") saveConversationTitle(item.id); if (event.key === "Escape") setRenamingId(null); }}/><button type="button" className="aw-history-rename-save" aria-label={t("Save")} onClick={() => saveConversationTitle(item.id)}><Check size={13}/></button></div>
+            : <div className="aw-history-item" key={item.id}><button type="button" className={"aw-history-select" + (activeConversation === item.id ? " is-active" : "")} onClick={() => selectConversation(item.id)}><MessageSquarePlus size={15}/><span>{item.title}</span></button><button type="button" className="aw-history-rename" aria-label={t("Rename conversation") + ": " + item.title} title={t("Rename conversation")} onClick={() => {setRenamingId(item.id);setRenameValue(item.title);}}><Pencil size={12}/></button><button type="button" className="aw-history-delete" aria-label={t("Delete conversation") + ": " + item.title} title={t("Delete conversation")} onClick={() => deleteConversation(item.id)}><X size={13}/></button></div>)}
           {filteredConversations.length === 0 && <p className="aw-history-empty">{t("No conversations found")}</p>}
         </div>
         <div className="aw-sidebar-bottom">

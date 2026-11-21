@@ -112,5 +112,8 @@
   "Could not create a conversation.": "Не удалось создать диалог.",
   "Edit": "Изменить",
   "Regenerate": "Сгенерировать заново",
-  "No model selected": "Модель не выбрана"
+  "No model selected": "Модель не выбрана",
+  "Rename conversation": "Переименовать диалог",
+  "Save": "Сохранить",
+  "Could not rename this conversation.": "Не удалось переименовать диалог."
 }

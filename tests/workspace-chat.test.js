@@ -12,6 +12,8 @@ test("AI Workspace route uses the session-authenticated streaming client", async
   assert.match(route, /api\.workspace\.listChats/);
   assert.match(route, /api\.workspace\.getChat/);
   assert.match(route, /api\.workspace\.createChat/);
+  assert.match(route, /api\.workspace\.renameChat/);
+  assert.match(route, /api\.workspace\.deleteChat/);
   assert.match(route, /onDelta:/);
   assert.match(route, /CircleStop/);
   assert.match(route, /onClick=\{stop\}/);

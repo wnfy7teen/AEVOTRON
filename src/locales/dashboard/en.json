@@ -112,5 +112,8 @@
   "Could not create a conversation.": "Could not create a conversation.",
   "Edit": "Edit",
   "Regenerate": "Regenerate",
-  "No model selected": "No model selected"
+  "No model selected": "No model selected",
+  "Rename conversation": "Rename conversation",
+  "Save": "Save",
+  "Could not rename this conversation.": "Could not rename this conversation."
 }
