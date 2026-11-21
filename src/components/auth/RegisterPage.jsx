@@ -20,7 +20,7 @@ const isAlreadyVerified = (err) => err?.status === 400 && /already verified/i.te
  * skipped and loginViaEmailPassword is never called right after register.
  */
 export function RegisterPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const returnTo = safeReturnTo();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
