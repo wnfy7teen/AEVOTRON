@@ -1,18 +1,23 @@
 import React, { useMemo, useRef, useState } from "react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { Check, ChevronDown } from "lucide-react";
-import i18n, { normalizeLanguage, supportedLanguages } from "@/i18n";
+import { createAppI18n, normalizeLanguage, persistLanguageCookie, supportedLanguages } from "@/i18n";
 
-export function LanguageProvider({ children }) {
-  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+export function LanguageProvider({ children, initialLanguage = "en" }) {
+  const [instance] = useState(() => createAppI18n({
+    language: initialLanguage,
+    storage: typeof window !== "undefined" ? window.localStorage : null,
+  }));
+  return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
 }
 
 export function useLanguage() {
   const { t, i18n: activeI18n } = useTranslation();
   const language = normalizeLanguage(activeI18n.resolvedLanguage || activeI18n.language);
   const setLanguage = useMemo(() => (next) => {
-    if (supportedLanguages.includes(next)) return activeI18n.changeLanguage(next);
-    return Promise.resolve();
+    if (!supportedLanguages.includes(next)) return Promise.resolve();
+    persistLanguageCookie(next);
+    return activeI18n.changeLanguage(next);
   }, [activeI18n]);
   return { language, setLanguage, t };
 }
@@ -50,6 +55,7 @@ export function LanguageSwitcher() {
   }, [open]);
 
   const selectLanguage = async (next) => {
+    persistLanguageCookie(next);
     await activeI18n.changeLanguage(next);
     setOpen(false);
     triggerRef.current?.focus();
