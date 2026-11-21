@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 
 export function Dropdown({ value, onChange, options = [], disabled = false, id, className = "", "aria-label": ariaLabel, name }) {
   const generatedId = useId();
-  const menuId = id || `av-dropdown-${generatedId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const menuId = id ? `${id}-menu` : `av-dropdown-${generatedId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const rootRef = useRef(null);
   const triggerRef = useRef(null);
   const optionRefs = useRef([]);
@@ -82,7 +82,7 @@ export function Dropdown({ value, onChange, options = [], disabled = false, id, 
 
   return (
     <div ref={rootRef} className={`av-dropdown ${className}`} data-open={open ? "true" : "false"}>
-      <button ref={triggerRef} id={id} type="button" name={name} className="av-dropdown-trigger"
+      <button ref={triggerRef} id={id ? `${id}-trigger` : undefined} type="button" name={name} className="av-dropdown-trigger"
         aria-label={ariaLabel} aria-haspopup="listbox" aria-expanded={open} aria-controls={menuId}
         disabled={disabled} onClick={() => open ? setOpen(false) : openAt()}
         onKeyDown={onTriggerKeyDown}>
