@@ -71,6 +71,8 @@ function WorkspaceChat() {
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
   const [attachments, setAttachments] = useState([]);
+  const [selectedAttachmentIds, setSelectedAttachmentIds] = useState([]);
+  const selectedAttachments = attachments.filter((file) => selectedAttachmentIds.includes(file.id));
   const [fileError, setFileError] = useState("");
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -205,7 +207,10 @@ function WorkspaceChat() {
         totalCharacters += text.length;
         accepted.push({ id: crypto.randomUUID(), name: file.name, size: file.size, text, tokens: Math.ceil(text.length / 4) });
       }
-      if (accepted.length) setAttachments((items) => [...items, ...accepted].slice(0,5));
+      if (accepted.length) {
+        setAttachments((items) => [...items, ...accepted].slice(0,5));
+        setSelectedAttachmentIds((items) => [...items, ...accepted.map((file) => file.id)]);
+      }
     } catch (error) {
       setFileError(error.message || t("Could not read this attachment."));
     } finally {
@@ -264,14 +269,14 @@ function WorkspaceChat() {
   const send = async (event) => {
     event?.preventDefault?.();
     const value = draft.trim();
-    if ((!value && !attachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
-    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n]/g, "_").replaceAll("[", "_").replaceAll("]", "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
+    if ((!value && !selectedAttachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
+    const fileContext = selectedAttachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n]/g, "_").replaceAll("[", "_").replaceAll("]", "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
     const prompt = [value, fileContext].filter(Boolean).join("\n\n");
     if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
     if (!demoMode && (!sessionId || sessionId === "current")) {
       try {
-        const created = await api.workspace.createChat({ title: (value || attachments[0]?.name || t("New conversation")).slice(0, 100), model_id: activeModel.id });
+        const created = await api.workspace.createChat({ title: (value || selectedAttachments[0]?.name || t("New conversation")).slice(0, 100), model_id: activeModel.id });
         sessionId = created.session.id;
         skipSessionLoadRef.current = sessionId;
         activeConversationRef.current = sessionId;
@@ -288,6 +293,7 @@ function WorkspaceChat() {
     setMessages(next);
     setDraft("");
     setAttachments([]);
+    setSelectedAttachmentIds([]);
     setFileError("");
     setConversations((items) => items.map((item) => item.id === sessionId
       ? { ...item, messages: next, title: item.title === t("New conversation") ? value.slice(0, 44) : item.title } : item));
@@ -543,10 +549,10 @@ function WorkspaceChat() {
 
           <form className="aw-composer" onSubmit={send} onDragOver={(event) => event.preventDefault()} onDrop={(event) => {event.preventDefault();addFiles(event.dataTransfer?.files);}}>
             <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
-            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className="aw-attachment-chip" key={file.id}><FileText size={13}/><span>{file.name} · ~{file.tokens} {t("tokens")}</span><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => setAttachments((items) => items.filter((item) => item.id !== file.id))}><X size={12}/></button></span>)}</div>}
+            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className={"aw-attachment-chip" + (selectedAttachmentIds.includes(file.id) ? " is-selected" : "")} key={file.id}><label className="aw-attachment-select"><input type="checkbox" checked={selectedAttachmentIds.includes(file.id)} aria-label={t("Include attachment") + ": " + file.name} onChange={(event) => setSelectedAttachmentIds((items) => event.target.checked ? [...items, file.id] : items.filter((id) => id !== file.id))}/><FileText size={13}/><span>{file.name} · ~{file.tokens} {t("tokens")}</span></label><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => {setAttachments((items) => items.filter((item) => item.id !== file.id));setSelectedAttachmentIds((items) => items.filter((id) => id !== file.id));}}><X size={12}/></button></span>)}</div>}
             {fileError && <div className="aw-file-error" role="alert">{fileError}</div>}
             <textarea ref={composerRef} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {if (event.key === "Enter" && !event.shiftKey) {event.preventDefault();send();}}} onPaste={(event) => {const files = Array.from(event.clipboardData?.files || []);if(files.length){event.preventDefault();addFiles(files);}}} placeholder={demoMode ? t("Live chat is disabled in demo mode") : t("Message AEVOTRON…")} aria-label={t("Message AEVOTRON")} rows={2} disabled={demoMode || !activeModel || isStreaming}/>
-            <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach")}</button><span>{t("Enter to send · Shift + Enter for a new line")}</span></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !attachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
+            <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach")}</button><span>{t("Enter to send · Shift + Enter for a new line")}</span></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !selectedAttachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
           </form>
 
           <div className="aw-statusbar">
