@@ -17,7 +17,7 @@ function extractObject(source, marker) {
     const char = source[index];
     if (inString) {
       if (escaped) escaped = false;
-      else if (char === "\\\\") escaped = true;
+      else if (char === String.fromCharCode(92)) escaped = true;
       else if (char === quote) inString = false;
       continue;
     }
@@ -34,16 +34,16 @@ function extractObject(source, marker) {
 
 function parseDictionary(block) {
   return new Map(
-    [...block.matchAll(/^\s{4}"((?:[^"\\\\]|\\\\.)*)":\s*"((?:[^"\\\\]|\\\\.)*)"\s*,?$/gm)]
+    [...block.matchAll(/^\s{4}"([^"]+)":\s*"([^"]*)"\s*,?$/gm)]
       .map((match) => [match[1], match[2]]),
   );
 }
 
 function parseLocaleMap(block) {
-  return [...block.matchAll(/^\s{2}"((?:[^"\\\\]|\\\\.)*)":\s*\{([^}]*)\},?$/gm)]
+  return [...block.matchAll(/^\s{2}"([^"]+)":\s*\{([^}]*)\},?$/gm)]
     .map((match) => {
       const locales = Object.fromEntries(
-        [...match[2].matchAll(/\b(en|ru|zh):\s*"((?:[^"\\\\]|\\\\.)*)"/g)]
+        [...match[2].matchAll(/\b(en|ru|zh):\s*"([^"]*)"/g)]
           .map((entry) => [entry[1], entry[2]]),
       );
       return { key: match[1], locales };
