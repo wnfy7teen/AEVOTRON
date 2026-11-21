@@ -2720,3 +2720,23 @@ html[data-theme="dark"] .aw-send-button.is-stop { background:#3b292b; color:#f1a
 @media (prefers-reduced-motion: reduce) {
   .aw-thinking i { animation:none; opacity:.7; }
 }
+
+.aw-message-content > :first-child { margin-top:0; }
+.aw-message-content > :last-child { margin-bottom:0; }
+.aw-message-content p { margin:0 0 10px; }
+.aw-message-content h1,.aw-message-content h2,.aw-message-content h3 { margin:16px 0 8px; color:#25384a; font-size:15px; font-weight:650; }
+.aw-message-content ul,.aw-message-content ol { margin:8px 0 12px; padding-left:22px; }
+.aw-message-content li { margin:4px 0; }
+.aw-message-content blockquote { margin:10px 0; padding:8px 12px; border-left:3px solid #9fc9da; background:#f5f9fb; color:#63788a; }
+.aw-message-content a { color:#087da8; text-decoration:underline; text-underline-offset:2px; }
+.aw-message-content pre { overflow-x:auto; margin:12px 0; padding:13px 14px; border:1px solid #e0e8ee; border-radius:9px; background:#f5f8fa; color:#2d4356; font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace; }
+.aw-message-content :not(pre) > code { padding:2px 5px; border-radius:5px; background:#edf2f5; color:#245a73; font:11px ui-monospace,SFMono-Regular,Menlo,monospace; }
+.aw-message-content table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:12px; }
+.aw-message-content th,.aw-message-content td { padding:7px 10px; border:1px solid #dfe7ed; text-align:left; }
+.aw-message-content th { background:#f2f6f8; color:#40566a; }
+html[data-theme="dark"] .aw-message-content h1,html[data-theme="dark"] .aw-message-content h2,html[data-theme="dark"] .aw-message-content h3 { color:#e0e9f0; }
+html[data-theme="dark"] .aw-message-content blockquote { border-color:#4b7d95; background:#1b2d3a; color:#b2c4d1; }
+html[data-theme="dark"] .aw-message-content pre { border-color:#304252; background:#111d27; color:#d2dee8; }
+html[data-theme="dark"] .aw-message-content :not(pre) > code { background:#243847; color:#b9ddeb; }
+html[data-theme="dark"] .aw-message-content th,html[data-theme="dark"] .aw-message-content td { border-color:#344653; }
+html[data-theme="dark"] .aw-message-content th { background:#20313e; color:#c8d5df; }
