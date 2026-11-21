@@ -575,7 +575,7 @@ function WorkspaceSettings({ preview = false, account }) {
       toast.success(t("Password updated. Other sessions were signed out."));
       queryClient.invalidateQueries({ queryKey: ["auth-sessions"] });
     },
-    onError: (error) => toast.error(error.message || "Could not update password."),
+    onError: (error) => toast.error(t(error.message || "Could not update password.")),
   });
   const revokeSessionMutation = useMutation({
     mutationFn: (sessionId) => api.auth.revokeSession(sessionId),
@@ -583,7 +583,7 @@ function WorkspaceSettings({ preview = false, account }) {
       toast.success(t("Session revoked"));
       queryClient.invalidateQueries({ queryKey: ["auth-sessions"] });
     },
-    onError: (error) => toast.error(error.message || "Could not revoke session."),
+    onError: (error) => toast.error(t(error.message || "Could not revoke session.")),
   });
   const [avatar, setAvatar] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-avatar") || "" : "");
   const [deleteOpen, setDeleteOpen] = useState(false);
