@@ -1,3 +1,5 @@
+import { createFileRoute } from "@tanstack/react-router";
+
 async function proxyChatCompletion({ request }) {
   const baseUrl = process.env.API_INTERNAL_URL || process.env.AEVOTRON_API_URL;
   if (!baseUrl) {
