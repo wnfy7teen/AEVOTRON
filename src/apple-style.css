@@ -1175,3 +1175,30 @@ body:has(.apple-app[data-theme="dark"] .mh-shell) {
 @media (max-width: 560px) {
   .apple-app .av-topup-row .av-dropdown { width: 100%; max-width: none; flex-basis: 100%; }
 }
+
+
+/* Compact model descriptions in catalog, popular list and detail panel. */
+.apple-app .mh-model-description {
+  display: block;
+  max-width: 520px;
+  margin-top: 3px;
+  color: #85858c;
+  font-size: 10px;
+  font-weight: 450;
+  line-height: 1.45;
+  white-space: normal;
+}
+.apple-app .mh-model-description-detail {
+  max-width: 620px;
+  margin: 7px 0 0;
+  color: #737982;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.apple-app[data-theme="dark"] .mh-model-description,
+.apple-app[data-theme="dark"] .mh-model-description-detail {
+  color: #aab6c5;
+}
+@media (max-width: 700px) {
+  .apple-app .mh-model-description { max-width: 100%; }
+}
