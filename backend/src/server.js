@@ -812,7 +812,18 @@ async function handle(req, res) {
         const { done, value } = await reader.read();
         if (done) break;
         if (clientDisconnected) break;
-        res.write(value);
+        if (!res.write(value)) {
+          await new Promise((resolve) => {
+            const onReady = () => {
+              res.removeListener("drain", onReady);
+              res.removeListener("close", onReady);
+              resolve();
+            };
+            res.once("drain", onReady);
+            res.once("close", onReady);
+          });
+        }
+        if (clientDisconnected) break;
         pending += decoder.decode(value, { stream: true });
         const lines = pending.split(/\r?\n/);
         pending = lines.pop() || "";
