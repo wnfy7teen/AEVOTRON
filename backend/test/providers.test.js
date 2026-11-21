@@ -45,3 +45,12 @@ test("server routes provider credentials and chat requests through the selected 
   assert.ok(server.includes("body.model.match(/^(openai|groq)\\/(.+)$/)"));
   assert.ok(!server.includes("provider_code='openai' AND status='active'"));
 });
+
+
+test("connected provider models are enriched only with verified catalog metadata", async () => {
+  const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
+  assert.match(server, /SELECT provider_model_id,display_name,modality,context_window,capabilities,pricing_reference,status FROM models WHERE provider_code=\$1/);
+  assert.match(server, /catalog_status: "unlisted"/);
+  assert.match(server, /context_window: metadata\.context_window/);
+  assert.match(server, /pricing_reference: metadata\.pricing_reference/);
+});
