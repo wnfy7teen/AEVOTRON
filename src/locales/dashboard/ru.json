@@ -153,5 +153,8 @@
   "All connected models": "Все подключённые модели",
   "No models match your search": "Модели не найдены",
   "Pinned": "Закреплено",
-  "Add to favorites": "В избранное"
+  "Add to favorites": "В избранное",
+  "Session usage": "Расход за диалог",
+  "requests": "запросов",
+  "Estimated": "Оценка"
 }
