@@ -390,7 +390,7 @@ function MfaSettings() {
   };
   const confirm = async (event) => {
     event.preventDefault();
-    if (!/^\\d{6}$/.test(code)) { setError("Enter the 6-digit code from your authenticator app."); return; }
+    if (!/^\d{6}$/.test(code)) { setError("Enter the 6-digit code from your authenticator app."); return; }
     setBusy(true); setError("");
     try {
       await api.auth.mfaConfirm(code);
@@ -402,7 +402,7 @@ function MfaSettings() {
   };
   const disable = async (event) => {
     event.preventDefault();
-    if (!/^\\d{6}$/.test(code)) { setError("Enter the current 6-digit authenticator code."); return; }
+    if (!/^\d{6}$/.test(code)) { setError("Enter the current 6-digit authenticator code."); return; }
     setBusy(true); setError("");
     try {
       await api.auth.mfaDisable(code);
@@ -421,11 +421,11 @@ function MfaSettings() {
       <p>Scan this QR code with your authenticator app, then enter the generated 6-digit code to confirm setup.</p>
       {enrollment.qr_code && <img className="av-mfa-qr" src={enrollment.qr_code} alt="Authenticator setup QR code"/>}
       <label className="av-setting-field"><span>Manual setup key</span><input readOnly value={enrollment.secret_formatted || enrollment.secret || ""}/></label>
-      <label className="av-setting-field"><span>Authenticator code</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\\D/g,"").slice(0,6))} placeholder="000000"/></label>
+      <label className="av-setting-field"><span>Authenticator code</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\D/g,"").slice(0,6))} placeholder="000000"/></label>
       <div className="av-modal-actions"><button className="mh-button mh-button-quiet" type="button" disabled={busy} onClick={()=>{setEnrollment(null);setCode("");}}>Cancel</button><button className="mh-button mh-button-primary" type="submit" disabled={busy || code.length!==6}>{busy ? "Verifying…" : "Confirm and enable"}</button></div>
     </form>}
     {enabled && <form className="av-mfa-enrollment" onSubmit={disable}>
-      <label className="av-setting-field"><span>Current authenticator code to disable MFA</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\\D/g,"").slice(0,6))} placeholder="000000"/></label>
+      <label className="av-setting-field"><span>Current authenticator code to disable MFA</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={event=>setCode(event.target.value.replace(/\D/g,"").slice(0,6))} placeholder="000000"/></label>
       <button className="mh-button mh-button-danger" type="submit" disabled={busy || code.length!==6}>{busy ? "Disabling…" : "Disable two-factor authentication"}</button>
     </form>}
     {error && <div className="mh-inline-error" role="alert">{error}</div>}
