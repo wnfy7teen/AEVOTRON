@@ -9,7 +9,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { mfaSession } from "@/lib/authMfaFlow";
 
 export function MfaPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const { isAuthenticated, isLoadingAuth } = useAuth();
   const session = useMemo(() => mfaSession(), []);
 
