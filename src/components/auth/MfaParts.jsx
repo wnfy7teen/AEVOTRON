@@ -52,7 +52,7 @@ export function MfaHeader({ title, description }) {
 // Six digits. Like the built-in code box, any change that leaves six digits, a paste over a full code
 // included, and the Enter key both call onComplete with the code as it stands.
 export function CodeField({ id, label, value, onChange, onComplete, hasError = false }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   return (
     <div className="space-y-2">
       <Label htmlFor={id} className="block text-center font-normal text-muted-foreground">{label ? t(label) : t("Enter the 6-digit code")}</Label>
@@ -71,7 +71,7 @@ export function CodeField({ id, label, value, onChange, onComplete, hasError = f
 
 // "Didn't receive a code? Resend", counting down while a resend isn't allowed yet.
 export function ResendLine({ cooldown, disabled, onResend, error }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   return (
     <div className="space-y-1 text-center">
       <p className="text-sm text-muted-foreground">
@@ -121,7 +121,7 @@ const matchesSearch = (code, search) => {
 
 // A searchable list of dial codes. Typing narrows it, and closing it with one match left picks that one.
 function DialCodePicker({ value, onChange }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [open, setOpen] = useState(false);
   const search = useRef("");
 
@@ -166,7 +166,7 @@ function DialCodePicker({ value, onChange }) {
 // Dial code picker plus the number (digits only, 15 at most). Once 4 digits are in, a number that can't
 // be real is flagged as you type; `error` (from a failed send) takes the place of that message.
 export function PhoneField({ countryCode, onCountryCodeChange, phoneNumber, onPhoneNumberChange, error, onSubmit }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [touched, setTouched] = useState(false);
   const invalid = touched && phoneNumber.length >= 4 && !isPlausiblePhone(`${countryCode}${phoneNumber}`);
   const message = error ?? (invalid ? INVALID_PHONE : null);
@@ -190,7 +190,7 @@ export function PhoneField({ countryCode, onCountryCodeChange, phoneNumber, onPh
 
 // Copies the setup key: an icon next to the key, or with `wide` the full-width "Copy key" button used on phones.
 export function CopyKeyButton({ text, wide = false }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     await navigator.clipboard.writeText(text.replace(/\s/g, ""));
@@ -216,7 +216,7 @@ export function CopyKeyButton({ text, wide = false }) {
 // (signInPath "/mfa" for factor management, whose sign-in lives on that page). The server's
 // wording for that case already says "sign in again", so it is replaced, not repeated.
 export function MfaNotice({ error, signInPath = "/login" }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   if (!error) return null;
   const returnTo = safeReturnTo();
   return (
@@ -234,7 +234,7 @@ export function MfaNotice({ error, signInPath = "/login" }) {
 }
 
 export function RememberDevice({ checked, onChange }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   return (
     <label className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
       <input type="checkbox" className="h-4 w-4 accent-primary" checked={checked} onChange={(e) => onChange(e.target.checked)} />
