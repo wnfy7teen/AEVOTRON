@@ -11,7 +11,9 @@ const invokeFunction = async (name, payload) => {
 
 export const Route = createFileRoute("/_authed/dashboard")({
   head: () => ({ meta: [{ title: "Aevotron — Workspace" }, { name: "description", content: "One API for every AI model." }] }),
-  component: HomePage,
+  // Keep HomePage in this module: PreviewDashboard also reuses it on a public preview route.
+  // An inline wrapper prevents route auto-splitting from moving the component out of this module.
+  component: () => <HomePage />,
 });
 
 const providers = [
