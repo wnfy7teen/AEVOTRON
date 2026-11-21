@@ -636,3 +636,102 @@ body:has(.apple-app[data-theme="dark"] .mh-shell) {
     min-height: 100dvh;
   }
 }
+
+
+/* Workspace settings and local demo sections */
+.apple-app .av-settings { width:100%; }
+.apple-app .av-settings-layout { display:grid; grid-template-columns:190px minmax(0,1fr); gap:18px; align-items:start; }
+.apple-app .av-settings-tabs { display:flex; flex-direction:column; gap:4px; position:sticky; top:18px; }
+.apple-app .av-settings-tabs button { display:flex; align-items:center; gap:10px; min-height:42px; padding:0 12px; border:0; border-radius:10px; background:transparent; color:#667085; text-align:left; font-size:13px; transition:background .2s ease,color .2s ease,transform .2s ease; }
+.apple-app .av-settings-tabs button:hover { background:#e9edf3; color:#1d1d1f; }
+.apple-app .av-settings-tabs button.active { background:#e5f1ff; color:#0066cc; font-weight:650; }
+.apple-app .av-settings-panel { min-width:0; padding:26px; border-radius:16px; }
+.apple-app .av-settings-heading { margin-bottom:22px; }
+.apple-app .av-settings-heading h2 { margin:0; color:#1d1d1f; font-size:20px; letter-spacing:-.45px; }
+.apple-app .av-settings-heading p { margin:6px 0 0; color:#747982; font-size:13px; line-height:1.5; }
+.apple-app .av-settings-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.apple-app .av-setting-field { display:flex; flex-direction:column; gap:7px; min-width:0; }
+.apple-app .av-setting-field>span { color:#51565e; font-size:12px; font-weight:600; }
+.apple-app .av-setting-field input,.apple-app .av-setting-field select,.apple-app .av-topup-row input,.apple-app .av-topup-row select,.apple-app .av-session-row select { width:100%; min-height:42px; border:1px solid #d8dce2; border-radius:9px; background:#fff; color:#1d1d1f; padding:0 12px; font-size:13px; outline:none; }
+.apple-app .av-setting-field input:focus,.apple-app .av-setting-field select:focus,.apple-app .av-topup-row input:focus { border-color:#0071e3; box-shadow:0 0 0 3px #0071e31c; }
+.apple-app .av-avatar-editor { display:flex; align-items:center; gap:15px; padding:0 0 22px; margin-bottom:22px; border-bottom:1px solid #e8eaee; }
+.apple-app .av-avatar-preview { width:64px; height:64px; border-radius:50%; display:grid; place-items:center; overflow:hidden; background:#e5f1ff; color:#0066cc; font-size:23px; font-weight:700; }
+.apple-app .av-avatar-preview img { width:100%; height:100%; object-fit:cover; }
+.apple-app .av-avatar-editor>div:last-child { display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
+.apple-app .av-avatar-editor strong,.apple-app .av-session-row strong,.apple-app .av-notification-row strong { color:#202124; font-size:13px; }
+.apple-app .av-avatar-editor small,.apple-app .av-session-row small { color:#7b818a; font-size:11px; }
+.apple-app .av-upload-button { position:relative; margin-top:5px; min-height:32px; cursor:pointer; }
+.apple-app .av-upload-button input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+.apple-app .av-settings-subtitle { margin:25px 0 12px; padding-top:18px; border-top:1px solid #e8eaee; color:#31343a; font-size:13px; font-weight:700; }
+.apple-app .av-setting-row,.apple-app .av-session-row { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 0; border-bottom:1px solid #eceef1; }
+.apple-app .av-setting-row>div,.apple-app .av-session-row>div { display:flex; flex-direction:column; gap:4px; min-width:0; }
+.apple-app .av-setting-row strong { color:#24262a; font-size:13px; }
+.apple-app .av-setting-row small { color:#7a8089; font-size:11px; line-height:1.45; }
+.apple-app .av-switch { width:46px; height:27px; padding:3px; flex:none; border:0; border-radius:99px; background:#d1d5db; transition:background .2s ease; }
+.apple-app .av-switch span { display:block; width:21px; height:21px; border-radius:50%; background:white; box-shadow:0 1px 3px #0002; transition:transform .22s cubic-bezier(.2,.8,.2,1); }
+.apple-app .av-switch.is-on { background:#34c759; }
+.apple-app .av-switch.is-on span { transform:translateX(19px); }
+.apple-app .av-appearance-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.apple-app .av-appearance-options button { min-height:86px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; border:1px solid #e0e3e8; border-radius:12px; background:#fff; color:#626873; font-size:12px; }
+.apple-app .av-appearance-options button.selected { border-color:#0071e3; background:#f0f7ff; color:#0066cc; box-shadow:inset 0 0 0 1px #0071e3; }
+.apple-app .av-accent-options { display:flex; gap:12px; }
+.apple-app .av-accent-options button { width:30px; height:30px; border:3px solid white; border-radius:50%; box-shadow:0 0 0 1px #cbd0d8; background:#0071e3; }
+.apple-app .av-accent-options button[data-accent="violet"] { background:#8b5cf6; }
+.apple-app .av-accent-options button[data-accent="graphite"] { background:#59616d; }
+.apple-app .av-accent-options button.selected { box-shadow:0 0 0 2px #0071e3; }
+.apple-app .av-danger-card { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:17px; border:1px solid #f0c9cc; border-radius:12px; background:#fffafa; }
+.apple-app .av-danger-card>div { display:flex; flex-direction:column; gap:5px; }
+.apple-app .av-danger-card strong { color:#a12b35; font-size:13px; }
+.apple-app .av-danger-card small { color:#7d6265; font-size:11px; line-height:1.5; max-width:420px; }
+.apple-app .av-modal-backdrop { position:fixed; inset:0; z-index:10020; display:grid; place-items:center; padding:20px; background:#10182866; backdrop-filter:blur(12px); animation:av-fade-in .18s ease both; }
+.apple-app .av-modal { position:relative; width:min(440px,100%); padding:26px; border:1px solid #e5e7eb; border-radius:18px; background:#fff; box-shadow:0 24px 80px #0003; animation:av-modal-in .24s cubic-bezier(.2,.8,.2,1) both; }
+.apple-app .av-modal h2 { margin:0 0 9px; color:#1d1d1f; font-size:20px; }
+.apple-app .av-modal p { color:#6b7280; font-size:13px; line-height:1.55; }
+.apple-app .av-modal-close { position:absolute; top:13px; right:13px; border:0; background:transparent; color:#737b86; }
+.apple-app .av-modal-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:18px; }
+.apple-app .av-mock-panel { margin-top:16px; border-radius:14px; }
+.apple-app .av-topup-row { display:flex; align-items:center; gap:10px; max-width:440px; }
+.apple-app .av-topup-row select { max-width:180px; }
+.apple-app .av-session-row select { width:auto; min-width:120px; }
+.apple-app .av-notification-row { display:flex; align-items:flex-start; gap:13px; padding:17px 0; border-bottom:1px solid #eceef1; }
+.apple-app .av-notification-row>div { flex:1; min-width:0; }
+.apple-app .av-notification-row p { margin:5px 0; color:#656c76; font-size:12px; line-height:1.5; }
+.apple-app .av-notification-row small { color:#8b919a; font-size:10px; }
+.apple-app .av-notification-row.is-read { opacity:.65; }
+.apple-app .av-notification-dot { width:8px; height:8px; margin-top:5px; border-radius:50%; background:#0071e3; flex:none; }
+@keyframes av-fade-in { from{opacity:0} to{opacity:1} }
+@keyframes av-modal-in { from{opacity:0;transform:translateY(10px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+@media(max-width:850px) {
+ .apple-app .av-settings-layout { grid-template-columns:1fr; }
+ .apple-app .av-settings-tabs { position:static; flex-direction:row; overflow-x:auto; padding-bottom:5px; }
+ .apple-app .av-settings-tabs button { flex:none; white-space:nowrap; }
+}
+@media(max-width:560px) {
+ .apple-app .av-settings-panel { padding:17px; }
+ .apple-app .av-settings-grid { grid-template-columns:1fr; }
+ .apple-app .av-danger-card,.apple-app .av-session-row { align-items:flex-start; flex-direction:column; }
+ .apple-app .av-topup-row { align-items:stretch; flex-direction:column; }
+ .apple-app .av-topup-row select { max-width:none; }
+ .apple-app .av-notification-row { flex-wrap:wrap; }
+ .apple-app .av-notification-row>div { flex-basis:calc(100% - 24px); }
+}
+@media(prefers-reduced-motion:reduce) {
+ .apple-app .av-settings-tabs button,.apple-app .av-switch,.apple-app .av-switch span { transition:none; }
+ .apple-app .av-modal-backdrop,.apple-app .av-modal { animation:none; }
+}
+.apple-app[data-theme="dark"] .av-settings-panel,.apple-app[data-theme="dark"] .av-modal { background:#1c1c1e; border-color:#38383a; }
+.apple-app[data-theme="dark"] .av-settings-heading h2,.apple-app[data-theme="dark"] .av-avatar-editor strong,.apple-app[data-theme="dark"] .av-session-row strong,.apple-app[data-theme="dark"] .av-notification-row strong,.apple-app[data-theme="dark"] .av-setting-row strong,.apple-app[data-theme="dark"] .av-modal h2 { color:#f5f5f7; }
+.apple-app[data-theme="dark"] .av-settings-heading p,.apple-app[data-theme="dark"] .av-setting-field>span,.apple-app[data-theme="dark"] .av-setting-row small,.apple-app[data-theme="dark"] .av-session-row small,.apple-app[data-theme="dark"] .av-notification-row p,.apple-app[data-theme="dark"] .av-modal p { color:#a1a1a6; }
+.apple-app[data-theme="dark"] .av-setting-field input,.apple-app[data-theme="dark"] .av-setting-field select,.apple-app[data-theme="dark"] .av-topup-row input,.apple-app[data-theme="dark"] .av-topup-row select,.apple-app[data-theme="dark"] .av-session-row select { background:#2c2c2e; color:#f5f5f7; border-color:#48484a; }
+.apple-app[data-theme="dark"] .av-settings-tabs button { color:#a1a1a6; }
+.apple-app[data-theme="dark"] .av-settings-tabs button.active { background:#173b5d; color:#8cc8ff; }
+.apple-app[data-theme="dark"] .av-settings-tabs button:hover { background:#2c2c2e; }
+.apple-app[data-theme="dark"] .av-avatar-preview { background:#173b5d; color:#8cc8ff; }
+.apple-app[data-theme="dark"] .av-appearance-options button { background:#2c2c2e; border-color:#48484a; color:#d1d1d6; }
+.apple-app[data-theme="dark"] .av-appearance-options button.selected { background:#173b5d; border-color:#0a84ff; color:#8cc8ff; }
+.apple-app[data-theme="dark"] .av-danger-card { background:#2c1c20; border-color:#704047; }
+.apple-app[data-theme="dark"] .av-danger-card strong { color:#ff9da6; }
+.apple-app[data-theme="dark"] .av-danger-card small { color:#d2aeb2; }
+.apple-app[data-theme="dark"] .av-settings-subtitle,.apple-app[data-theme="dark"] .av-setting-row,.apple-app[data-theme="dark"] .av-session-row,.apple-app[data-theme="dark"] .av-notification-row,.apple-app[data-theme="dark"] .av-avatar-editor { border-color:#38383a; color:#f5f5f7; }
+.apple-app[data-theme="dark"] .av-mock-panel { background:#1c1c1e; border-color:#38383a; }
+.apple-app[data-theme="dark"] .av-notification-row small { color:#a1a1a6; }
