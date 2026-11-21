@@ -779,5 +779,9 @@
   "Connect a provider to load the models available to your account.": "连接服务提供商以加载账户可用的模型。",
   "Revoke the Groq provider connection? Requests using it will stop working.": "撤销 Groq 服务商连接？使用该服务商的请求将停止工作。",
   "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} 已连接。凭据已加密并隐藏。",
-  "Could not revoke this provider connection.": "无法撤销此服务商连接。"
+  "Could not revoke this provider connection.": "无法撤销此服务商连接。",
+  "Could not load models from your provider. Test the connection and refresh.": "无法加载服务商模型。请测试连接后重试。",
+  "Connect a provider to load the chat models available to your API key.": "连接服务提供商以加载 API 密钥可用的聊天模型。",
+  "Connect a provider to discover the models available to your account.": "连接服务提供商以查看账户可用的模型。",
+  "Billed by the connected provider": "由已连接的服务提供商计费"
 }
