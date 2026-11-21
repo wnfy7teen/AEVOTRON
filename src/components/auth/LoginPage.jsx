@@ -1,5 +1,6 @@
 import { Lock, LogIn, Mail } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { AuthError, AuthLink, SubmitButton } from "@/components/auth/parts";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { safeReturnTo } from "@/lib/authReturnTo";
 // The /login page. ?returnTo= (or the platform's ?from_url=) is where the visitor
 // goes after signing in — the login gate and the MCP consent page send people here with it.
 export function LoginPage() {
+  const { t } = useTranslation();
   const returnTo = safeReturnTo();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +34,7 @@ export function LoginPage() {
       // A hard redirect: the app re-initializes with the new session.
       window.location.href = returnTo;
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setError(err.message || t("Invalid email or password"));
       setBusy(false);
     }
   }
@@ -41,11 +43,11 @@ export function LoginPage() {
   if (mfaChallenge) return <MfaScreen><MfaFlow challenge={mfaChallenge} returnTo={returnTo} /></MfaScreen>;
 
   return (
-    <AuthLayout icon={LogIn} title="Welcome back" subtitle="Log in to your account">
+    <AuthLayout icon={LogIn} title={t("Welcome back")} subtitle={t("Log in to your account")}>
       <AuthError>{error}</AuthError>
       <form onSubmit={submit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="login-email">Email</Label>
+          <Label htmlFor="login-email">{t("Email")}</Label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input id="login-email" type="email" autoComplete="email" autoFocus placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 pl-10" required />
@@ -53,9 +55,9 @@ export function LoginPage() {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="login-password">Password</Label>
+            <Label htmlFor="login-password">{t("Password")}</Label>
             <AuthLink to="/forgot-password" returnTo={returnTo} className="text-xs text-primary hover:underline">
-              Forgot password?
+              {t("Forgot password?")}
             </AuthLink>
           </div>
           <div className="relative">
@@ -63,14 +65,14 @@ export function LoginPage() {
             <Input id="login-password" type="password" autoComplete="current-password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10" required />
           </div>
         </div>
-        <SubmitButton busy={busy} busyLabel="Logging in...">
-          Log in
+        <SubmitButton busy={busy} busyLabel={t("Logging in...")}>
+          {t("Log in")}
         </SubmitButton>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
+        {t("Don't have an account?")}{" "}
         <AuthLink to="/register" returnTo={returnTo}>
-          Create one
+          {t("Create one")}
         </AuthLink>
       </p>
     </AuthLayout>
