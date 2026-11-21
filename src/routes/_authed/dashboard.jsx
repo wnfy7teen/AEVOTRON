@@ -396,7 +396,7 @@ function WorkspaceSettings() {
   const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{label}</strong><small>{description}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
   const select = (label,key,options) => <label className="av-setting-field"><span>{label}</span><select value={settings[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option} value={option}>{option}</option>)}</select></label>;
   return <div className="av-settings">
-    <div className="mh-inline-warning" role="note"><Shield size={16}/><span><strong>Local preview settings.</strong> These preferences are saved only in this browser. Password changes, two-factor authentication, session management, billing, webhooks and API restrictions are not applied to the server.</span></div>
+    <div className="mh-callout" role="note"><Shield size={16}/><span><strong>Local preview settings.</strong> These preferences are saved only in this browser. Password changes, two-factor authentication, session management, billing, webhooks and API restrictions are not applied to the server.</span></div>
     <div className="mh-page-heading"><div><div className="mh-eyebrow">ACCOUNT</div><h1>Settings</h1><p>Manage your account, security and workspace defaults.</p></div></div>
     <div className="av-settings-layout">
       <nav className="av-settings-tabs" aria-label="Settings sections">{tabs.map(item=><button type="button" key={item.name} className={tab===item.name?"active":""} onClick={()=>setTab(item.name)}><item.icon size={16}/>{item.name}</button>)}</nav>
