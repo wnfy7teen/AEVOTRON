@@ -349,6 +349,61 @@ async function handle(req, res) {
     const user = await sessionUser(req);
     return user ? json(res, 200, { user: publicUser(user) }) : fail(res, 401, "UNAUTHORIZED", "Sign in to continue.");
   }
+  if (req.method === "GET" && path === "/api/v1/auth/sessions") {
+    const user = await requireUser(req, res); if (!user) return;
+    const result = await pool.query(
+      `SELECT id,user_agent,created_at,last_seen_at,expires_at
+       FROM sessions WHERE user_id=$1 AND expires_at>now()
+       ORDER BY last_seen_at DESC LIMIT 25`,
+      [user.id],
+    );
+    return json(res, 200, { current_session_id: user.session_id, sessions: result.rows });
+  }
+
+  const sessionMatch = path.match(/^\\/api\\/v1\\/auth\\/sessions\\/([0-9a-f-]{36})$/i);
+  if (req.method === "DELETE" && sessionMatch) {
+    const user = await requireUser(req, res); if (!user) return;
+    if (sessionMatch[1] === user.session_id) {
+      return fail(res, 400, "CURRENT_SESSION", "Use sign out to end the current session.");
+    }
+    const result = await pool.query(
+      "DELETE FROM sessions WHERE id=$1 AND user_id=$2 RETURNING id",
+      [sessionMatch[1], user.id],
+    );
+    if (!result.rowCount) return fail(res, 404, "SESSION_NOT_FOUND", "Session not found.");
+    return json(res, 200, { success: true });
+  }
+
+  if (req.method === "POST" && path === "/api/v1/auth/password/change") {
+    const user = await requireUser(req, res); if (!user) return;
+    await rateLimit(req, "password-change", 5, 900);
+    const currentPassword = String(body.current_password || "");
+    const nextPassword = body.new_password;
+    if (typeof nextPassword !== "string" || nextPassword.length < 12 || nextPassword.length > 256) {
+      return fail(res, 400, "PASSWORD_POLICY", "New password must contain 12–256 characters.");
+    }
+    const changed = await transaction(async (client) => {
+      const account = await client.query("SELECT password_hash FROM users WHERE id=$1 AND status='active' FOR UPDATE", [user.id]);
+      if (!account.rowCount || !await verifyPassword(currentPassword, account.rows[0].password_hash)) return { error: "INVALID_CURRENT_PASSWORD" };
+      const factor = await client.query(
+        "SELECT secret_ciphertext FROM mfa_factors WHERE user_id=$1 AND type='totp' AND confirmed_at IS NOT NULL",
+        [user.id],
+      );
+      if (factor.rowCount) {
+        const secret = decryptSecret(factor.rows[0].secret_ciphertext, `totp:${user.id}`);
+        if (!verifyTotp(secret, body.mfa_code)) return { error: "INVALID_MFA_CODE" };
+      }
+      const passwordHash = await hashPassword(nextPassword);
+      await client.query("UPDATE users SET password_hash=$2,updated_at=now() WHERE id=$1", [user.id, passwordHash]);
+      await client.query("DELETE FROM sessions WHERE user_id=$1 AND id<>$2", [user.id, user.session_id]);
+      await client.query("UPDATE password_reset_tokens SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL", [user.id]);
+      await client.query("UPDATE mfa_challenges SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL", [user.id]);
+      return { success: true };
+    });
+    if (changed.error === "INVALID_CURRENT_PASSWORD") return fail(res, 401, "INVALID_CURRENT_PASSWORD", "Current password is incorrect.");
+    if (changed.error === "INVALID_MFA_CODE") return fail(res, 401, "INVALID_MFA_CODE", "Enter a valid authenticator code.");
+    return json(res, 200, { success: true, other_sessions_revoked: true });
+  }
 
   if (req.method === "POST" && path === "/api/v1/auth/password/forgot") {
     await rateLimit(req, "password-reset", 5, 3600);
