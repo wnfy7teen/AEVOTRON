@@ -39,3 +39,10 @@ test("settings layout supports narrow screens and reduced motion", async () => {
   assert.match(css, /\.av-settings-tabs/);
   assert.match(css, /\.av-modal-backdrop/);
 });
+
+test("settings clearly disclose local-only security and account controls", async () => {
+  const source = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(source, /Local preview settings\./);
+  assert.match(source, /Server-side MFA is not changed\./);
+  assert.match(source, /Preview session removed from this list/);
+});
