@@ -65,6 +65,7 @@ export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "
     } catch {
       // Storage is optional; the active in-memory locale remains valid.
     }
+    persistLanguageCookie(normalized);
     if (typeof document !== "undefined") {
       document.documentElement.lang = normalized === "zh" ? "zh-CN" : normalized;
     }
