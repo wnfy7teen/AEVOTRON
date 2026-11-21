@@ -1,0 +1,13 @@
+{
+  "model.description.gpt4o": "适用于复杂对话、分析和图像理解的通用多模态模型。",
+  "model.description.gpt4oMini": "适用于日常请求、分类和简短回答的快速经济型模型。",
+  "model.description.gpt41": "适用于复杂指令、分析和长上下文任务的高性能模型。",
+  "model.description.gpt41Mini": "适用于实际任务、助手和文本处理的均衡型模型。",
+  "model.description.gpt41Nano": "针对简单任务优化的轻量模型，速度快且成本低。",
+  "model.description.o3": "适用于多步骤分析、逻辑推理和复杂技术任务的推理模型。",
+  "model.description.o3Mini": "适用于逻辑、数学和编程的紧凑型推理模型。",
+  "model.description.o4Mini": "适用于分析和代码任务的快速推理模型，兼顾速度与准确性。",
+  "model.description.reasoning": "专为复杂分析任务设计的推理模型。",
+  "model.description.lightweight": "适用于快速响应和预算敏感型任务的轻量模型。",
+  "model.description.default": "用于对话、内容生成和分析的文本 AI 模型。"
+}
