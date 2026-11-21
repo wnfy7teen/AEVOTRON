@@ -1,8 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GoogleIcon } from "./GoogleIcon";
-import { signInWithProvider } from "@/lib/authMfaFlow";
 import { returnToSearch } from "@/lib/authReturnTo";
 
 // Small pieces the auth pages share.
@@ -31,19 +29,7 @@ export function SubmitButton({ busy, busyLabel, children, ...props }) {
   );
 }
 
-export function GoogleButton({ returnTo, onError }) {
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      className="mb-6 h-12 w-full text-sm font-medium"
-      onClick={() => signInWithProvider("google", returnTo).catch((err) => onError(err.message || "Unable to sign in with Google"))}
-    >
-      <GoogleIcon className="mr-2 h-5 w-5" />
-      Continue with Google
-    </Button>
-  );
-}
+export function GoogleButton() { return null; }
 
 export function OrDivider() {
   return (
