@@ -167,3 +167,9 @@ test("dashboard buttons and forms have explicit actions and native validation", 
   assert.match(source, /pattern="\[0-9\]\{6\}" required/);
 });
 
+test("ESLint includes the shared UI component library in its source audit", async () => {
+  const config = await read("eslint.config.js");
+  assert.doesNotMatch(config, /src\/components\/ui\/\*\*/);
+  assert.match(config, /files: \["\*\*\/\*\.\{js,jsx\}"\]/);
+});
+
