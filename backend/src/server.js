@@ -722,7 +722,7 @@ async function handle(req, res) {
     return json(res, 200, { models: rows.rows });
   }
 
-  const chatUsageRoute = path.match(/^\\/api\\/v1\\/workspace\\/chats\\/([0-9a-f-]{36})\\/usage$/i);
+  const chatUsageRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})\/usage$/i);
   if (chatUsageRoute && req.method === "GET") {
     const user = await requireUser(req, res); if (!user) return;
     const workspace = await currentWorkspace(user);
