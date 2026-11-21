@@ -66,7 +66,7 @@ export function ResetPasswordPage() {
           <Label htmlFor="reset-confirm">{t("Confirm password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="reset-confirm" type="password" autoComplete="new-password" minLength={12} placeholder="At least 12 characters" value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" required />
+            <Input id="reset-confirm" type="password" autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" required />
           </div>
         </div>
         <SubmitButton busy={busy} busyLabel={t("Resetting...")}>
