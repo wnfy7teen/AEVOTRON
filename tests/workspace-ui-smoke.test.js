@@ -70,7 +70,7 @@ test("credential revocations require confirmation and frontend actions map to ba
 
 test("workspace profile displays authenticated identity instead of placeholder account data", async () => {
   const source = await read("src/routes/_authed/dashboard.jsx");
-  assert.match(source, /queryFn: \(\) => api\.auth\.me\(\)/);
+  assert.match(source, /queryFn: \(\) => readDemoUser\(\) \|\| api\.auth\.me\(\)/);
   assert.match(source, /accountQuery\.data\?\.display_name/);
   assert.match(source, /<input readOnly value=\{account\?\.display_name/);
   assert.match(source, /<input readOnly value=\{account\?\.email/);
@@ -137,7 +137,7 @@ test("workspace dropdown menus share responsive light and dark styling", async (
 test("popular model list has explicit readable layout and contrast in light and dark themes", async () => {
   const css = await read("src/apple-style.css");
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
-  assert.match(dashboard, /<h3>Popular models<\/h3>/);
+  assert.match(dashboard, /<h3>\{t\("Popular models"\)\}<\/h3>/);
   assert.match(dashboard, /className="mh-popular-row"/);
   assert.match(css, /\.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row \{/);
   assert.match(css, /grid-template-columns: 9px minmax\(0, 1fr\) auto 16px/);
