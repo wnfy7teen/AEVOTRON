@@ -157,5 +157,11 @@
   "Session usage": "会话用量",
   "requests": "次请求",
   "Estimated": "估算",
-  "Include attachment": "包含此附件"
+  "Include attachment": "包含此附件",
+  "context tokens": "上下文令牌",
+  "Vision": "视觉",
+  "Tools": "工具",
+  "Streaming": "流式输出",
+  "Streaming unavailable": "不支持流式输出",
+  "Model metadata not verified": "模型元数据尚未验证"
 }
