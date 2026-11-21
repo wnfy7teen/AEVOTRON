@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
 import appCss from "@/index.css?url";
+import appleCss from "@/apple-style.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createRootRoute({
       { title: "Aevotron — One API. Every model." },
       { name: "description", content: "Unified API infrastructure for AI models." },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [{ rel: "stylesheet", href: appCss }, { rel: "stylesheet", href: appleCss }],
   }),
   errorComponent: DefaultCatchBoundary,
   notFoundComponent: () => <NotFound />,
@@ -27,7 +28,7 @@ function RootComponent() {
   return (
     <LanguageProvider>
       <AuthProvider>
-        <div key={pathname} className="app-route-transition"><Outlet /></div>
+        <div key={pathname} className="apple-app app-route-transition"><Outlet /></div>
         <Toaster />
         <LanguageSwitcher />
       </AuthProvider>
