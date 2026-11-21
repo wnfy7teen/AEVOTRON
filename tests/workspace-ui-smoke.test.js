@@ -47,7 +47,11 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /api\.auth\.mfaEnroll/);
   assert.match(source, /api\.auth\.mfaConfirm/);
   assert.match(source, /api\.auth\.mfaDisable/);
-  assert.match(source, /Preview session removed from this list/);
+  assert.match(source, /Session management is not connected yet/);
+  assert.match(source, /Sign-in history is not available yet/);
+  assert.match(source, /Password changes are not available here yet/);
+  assert.doesNotMatch(source, /Kerkrade, NL|Safari · iPhone|christopher@example\.com/);
+  assert.doesNotMatch(source, /Password change request saved in demo mode/);
 });
 
 test("credential revocations require confirmation and frontend actions map to backend routes", async () => {
