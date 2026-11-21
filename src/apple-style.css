@@ -205,3 +205,153 @@ body:has(.apple-app .min-h-screen.bg-background) {
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 }
+
+
+/* Global language control: it is rendered by the app shell on every route. */
+.apple-app ~ .av-language-switcher,
+body > .av-language-switcher,
+.av-language-switcher {
+  position: fixed;
+  right: 22px;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.av-language-trigger {
+  min-width: 82px;
+  min-height: 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #d6dce4;
+  border-radius: 999px;
+  background: rgba(255,255,255,.97);
+  color: #263442;
+  box-shadow: 0 8px 28px rgba(25,38,52,.16);
+  backdrop-filter: blur(18px);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.av-language-trigger:hover { border-color: #80b8ef; background: #f7fbff; }
+.av-language-globe { color: #0877d1; font-size: 18px; line-height: 1; }
+.av-language-trigger > svg { color: #667789; transition: transform .2s ease; }
+.av-language-trigger > svg.is-open { transform: rotate(180deg); }
+.av-language-menu {
+  width: 232px;
+  padding: 10px;
+  border: 1px solid #dce2e9;
+  border-radius: 16px;
+  background: rgba(255,255,255,.99);
+  color: #263442;
+  box-shadow: 0 18px 55px rgba(25,38,52,.2);
+  backdrop-filter: blur(22px);
+}
+.av-language-menu-title {
+  display: block;
+  padding: 9px 11px 10px;
+  color: #687789;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .08em;
+}
+.av-language-menu button {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #344454;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.av-language-menu button:hover { background: #edf5fc; }
+.av-language-menu button.active { background: #e5f2ff; color: #075f9f; }
+.av-language-menu button > svg { margin-left: auto; color: #0877d1; }
+.av-language-native {
+  min-width: 35px;
+  min-height: 27px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 7px;
+  background: #f0f3f6;
+  color: #536273;
+  font-size: 12px;
+  font-weight: 750;
+}
+.av-language-menu button.active .av-language-native { background: #d5e9f8; color: #075f9f; }
+
+/* Workspace typography: keep secondary information readable without enlarging code. */
+.apple-app .mh-nav-label { font-size: 11px; }
+.apple-app .mh-nav-item { min-height: 43px; font-size: 14px; }
+.apple-app .mh-workspace strong, .apple-app .mh-profile strong { font-size: 13px; }
+.apple-app .mh-workspace small, .apple-app .mh-profile small { font-size: 11px; }
+.apple-app .mh-usage-top { font-size: 12px; }
+.apple-app .mh-usage-mini small { font-size: 11px; }
+.apple-app .mh-breadcrumb { font-size: 13px; }
+.apple-app .mh-region { font-size: 12px; }
+.apple-app .mh-preview-banner strong { font-size: 14px; }
+.apple-app .mh-preview-banner small { font-size: 12px; line-height: 1.5; }
+.apple-app .mh-eyebrow { font-size: 11px; }
+.apple-app .mh-page-heading p { font-size: 15px; line-height: 1.65; }
+.apple-app .mh-button { min-height: 42px; font-size: 13px; }
+.apple-app .mh-stat-label { font-size: 13px; }
+.apple-app .mh-stat-note { font-size: 11px; line-height: 1.45; }
+.apple-app .mh-section-heading p { font-size: 13px; }
+.apple-app .mh-step-count { font-size: 11px; }
+.apple-app .mh-step h3 { font-size: 15px; }
+.apple-app .mh-step p { font-size: 13px; line-height: 1.6; }
+.apple-app .mh-step-action, .apple-app .mh-text-link { font-size: 13px; }
+.apple-app .mh-panel-heading h3 { font-size: 16px; }
+.apple-app .mh-panel-heading p { font-size: 13px; line-height: 1.5; }
+.apple-app .mh-model-name strong, .apple-app .mh-popular-row strong { font-size: 13px; }
+.apple-app .mh-model-name small, .apple-app .mh-model-context, .apple-app .mh-popular-row small { font-size: 12px; }
+.apple-app .mh-popular-price { font-size: 11px; }
+.apple-app .mh-status { font-size: 10px; }
+.apple-app .mh-copy-button { min-height: 38px; font-size: 12px; }
+.apple-app .mh-trust-note { font-size: 12px; }
+.apple-app .mh-search input, .apple-app .mh-toolbar select, .apple-app .mh-field { font-size: 13px; }
+.apple-app .mh-list-header { font-size: 10px; }
+.apple-app .mh-model-detail p, .apple-app .mh-detail-stats small { font-size: 12px; }
+.apple-app .mh-detail-stats strong { font-size: 13px; }
+.apple-app .mh-tags span { font-size: 11px; }
+.apple-app .mh-detail-info, .apple-app .mh-callout p { font-size: 13px; line-height: 1.6; }
+.apple-app .mh-callout strong { font-size: 15px; }
+.apple-app .mh-field-label { font-size: 13px; }
+.apple-app .mh-field-help { font-size: 12px; line-height: 1.5; }
+.apple-app .mh-inline-error, .apple-app .mh-inline-success { font-size: 13px; line-height: 1.5; }
+.apple-app .mh-provider-info strong { font-size: 13px; }
+.apple-app .mh-provider-info small { font-size: 12px; }
+.apple-app .mh-key-main strong, .apple-app .mh-connected-row strong { font-size: 14px; }
+.apple-app .mh-key-main small, .apple-app .mh-connected-row small { font-size: 12px; }
+.apple-app .mh-key-main code { font-size: 12px; }
+.apple-app .mh-secret-reveal > p, .apple-app .mh-docs > p { font-size: 13px; line-height: 1.65; }
+.apple-app .mh-secret-heading { font-size: 14px; }
+.apple-app .mh-secret-value code { font-size: 13px; }
+.apple-app .mh-doc-warning { font-size: 12px; line-height: 1.55; }
+.apple-app .mh-usage-table th { font-size: 10px; }
+.apple-app .mh-usage-table td { font-size: 12px; }
+.apple-app .mh-usage-table td strong { font-size: 12px; }
+.apple-app .mh-usage-table td small { font-size: 10px; }
+.apple-app .mh-empty { font-size: 13px; line-height: 1.5; }
+
+@media (max-width: 600px) {
+  .av-language-switcher { right: 14px; bottom: 14px; }
+  .av-language-trigger { min-height: 44px; min-width: 76px; }
+  .av-language-menu { width: 220px; }
+  .apple-app .mh-nav-item { font-size: 14px; }
+  .apple-app .mh-page-heading p { font-size: 14px; }
+  .apple-app .mh-step p { font-size: 13px; }
+}
