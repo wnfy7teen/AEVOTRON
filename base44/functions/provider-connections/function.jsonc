@@ -1,0 +1,4 @@
+{
+  "name": "provider-connections",
+  "entry": "index.ts"
+}

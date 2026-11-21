@@ -36,7 +36,9 @@ export default defineConfig({
     base44({
       hmrNotifier: true,
       navigationNotifier: true,
-      analyticsTracker: true,
+      // This is a public landing page; anonymous visitors must not trigger the
+      // platform's authenticated app-usage logging endpoint.
+      analyticsTracker: false,
       visualEditAgent: true,
     }),
     tanstackStart({ srcDirectory: "src" }),
