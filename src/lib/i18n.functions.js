@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
-import { normalizeLanguage } from "@/i18n";
+import { normalizeLanguage, supportedLanguages } from "@/i18n";
 
 function readCookie(cookieHeader, name) {
   const prefix = `${name}=`;
@@ -17,11 +17,11 @@ function negotiateLanguage(header) {
   }).filter((item) => item.tag && item.quality > 0)
     .sort((a, b) => b.quality - a.quality || a.index - b.index)
     .map((item) => normalizeLanguage(item.tag))
-    .find(Boolean) || "en";
+    .find((language) => supportedLanguages.includes(language)) || "en";
 }
 
 export const getRequestLocale = createServerFn({ method: "GET" }).handler(() => {
   const cookieLocale = readCookie(getRequestHeader("cookie"), "aevotron-language");
-  if (cookieLocale) return normalizeLanguage(cookieLocale);
+  if (cookieLocale && supportedLanguages.includes(cookieLocale.toLowerCase().split(/[-_]/)[0])) return normalizeLanguage(cookieLocale);
   return negotiateLanguage(getRequestHeader("accept-language"));
 });
