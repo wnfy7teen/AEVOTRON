@@ -783,5 +783,7 @@
   "Could not load models from your provider. Test the connection and refresh.": "Не удалось загрузить модели провайдера. Проверьте подключение и повторите попытку.",
   "Connect a provider to load the chat models available to your API key.": "Подключите провайдера, чтобы загрузить чат-модели, доступные вашему API-ключу.",
   "Connect a provider to discover the models available to your account.": "Подключите провайдера, чтобы увидеть доступные вашему аккаунту модели.",
-  "Billed by the connected provider": "Оплата взимается подключённым провайдером"
+  "Billed by the connected provider": "Оплата взимается подключённым провайдером",
+  "AEVOTRON — AI Workspace": "AEVOTRON — AI-пространство",
+  "Chat with connected AI models.": "Общайтесь с подключёнными AI-моделями."
 }
