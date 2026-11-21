@@ -216,6 +216,6 @@ it("localizes page metadata, accessibility labels, currency and dates", async ()
   assert.match(dashboard, /aria-label="Member role"/);
   assert.match(css, /\.av-topup-panel[\s\S]*?z-index:\s*3/);
   assert.match(css, /\.av-transactions-panel[\s\S]*?z-index:\s*1/);
-  assert.match(css, /\.av-topup-panel[\s\S]*?z-index:\s*3/);
+  assert.match(css, /\.av-topup-panel \.av-dropdown-menu/);
   assert.doesNotMatch(dashboard, /Nov 18, 2026|Nov 12, 2026|Nov 04, 2026|Today · 09:42|Yesterday · 16:20/);
 });
