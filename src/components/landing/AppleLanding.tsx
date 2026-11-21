@@ -79,6 +79,10 @@ export default function AppleLanding() {
   useEffect(() => {
     const codeExample = document.querySelector(".av-site .av-code");
     if (!codeExample) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      codeExample.querySelector(".av-code-result")?.classList.add("is-typed");
+      return;
+    }
     let observer: IntersectionObserver | undefined;
     let timer: number | undefined;
     let cancelled = false;
@@ -144,6 +148,7 @@ export default function AppleLanding() {
   useEffect(() => {
     const controlExample = document.querySelector(".av-site .av-control");
     if (!controlExample) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let observer: IntersectionObserver | undefined;
     let timer: number | undefined;
     let cancelled = false;
