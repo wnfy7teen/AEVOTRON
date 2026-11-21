@@ -14,7 +14,7 @@ test("AI Workspace route uses the session-authenticated streaming client", async
   assert.match(route, /onClick=\{stop\}/);
   assert.match(route, /regenerate/);
   assert.match(route, /Save and resend/);
-  assert.match(route, /messages: conversations\.find/);
+  assert.match(route, /setMessages\(conversations\.find/);
   assert.match(client, /\/api\/v1\/workspace\/chat\/completions/);
   assert.match(client, /credentials: "include"/);
   assert.match(client, /accept: "text\/event-stream"/);
