@@ -555,8 +555,8 @@ function readSettings() {
   try { return { ...SETTINGS_DEFAULTS, ...JSON.parse(window.localStorage.getItem("aevotron-workspace-settings") || "{}") }; }
   catch { return SETTINGS_DEFAULTS; }
 }
-function WorkspaceSettings({
-  const { language: currentLanguage } = useLanguage(); preview = false, account }) {
+function WorkspaceSettings({ preview = false, account }) {
+  const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
   const [settings, setSettings] = useState(readSettings);
   const [currentPassword, setCurrentPassword] = useState("");
