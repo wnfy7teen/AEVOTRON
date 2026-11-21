@@ -755,5 +755,13 @@
   "Go to next page": "Go to next page",
   "Toggle Sidebar": "Toggle Sidebar",
   "breadcrumb": "breadcrumb",
-  "More": "More"
+  "More": "More",
+  "Account": "Account",
+  "A single, OpenAI-compatible endpoint for text chat requests.": "A single, OpenAI-compatible endpoint for text chat requests.",
+  "Send your workspace key with every request.": "Send your workspace key with every request.",
+  "Required fields for a chat completion.": "Required fields for a chat completion.",
+  "EXAMPLE REQUEST": "EXAMPLE REQUEST",
+  "Make your first API call": "Make your first API call",
+  "What a successful request returns.": "What a successful request returns.",
+  "Rate limits and error handling.": "Rate limits and error handling."
 }
