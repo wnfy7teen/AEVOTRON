@@ -66,3 +66,9 @@ test("AI Workspace is available from the authenticated dashboard navigation", as
   assert.match(dashboard, /name: "AI Workspace"/);
   assert.match(dashboard, /window\.location\.assign\("\/workspace"\)/);
 });
+
+test("Cloudflare API proxy keeps streaming open for the backend timeout and forwards the response body", async () => {
+  const proxy = await read("src/routes/api/v1/$.js");
+  assert.match(proxy, /AbortSignal\.timeout\(125_000\)/);
+  assert.match(proxy, /return new Response\(upstream\.body/);
+});

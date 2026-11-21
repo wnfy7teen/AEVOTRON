@@ -50,12 +50,12 @@ function cookieHeader(token, maxAge) {
 function clearCookie() {
   return `${cookieName}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${process.env.COOKIE_SECURE === "false" ? "" : "; Secure"}`;
 }
-async function readBody(req) {
+async function readBody(req, limit = JSON_LIMIT) {
   const chunks = [];
   let size = 0;
   for await (const chunk of req) {
     size += chunk.length;
-    if (size > JSON_LIMIT) throw Object.assign(new Error("PAYLOAD_TOO_LARGE"), { status: 413 });
+    if (size > limit) throw Object.assign(new Error("PAYLOAD_TOO_LARGE"), { status: 413 });
     chunks.push(chunk);
   }
   if (!chunks.length) return {};
@@ -227,7 +227,8 @@ async function handle(req, res) {
   const path = url.pathname;
   if (req.method === "GET" && path === "/healthz") return json(res, 200, { status: "ok" });
   if (req.method !== "GET" && req.method !== "HEAD") assertSameOrigin(req);
-  const body = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) ? await readBody(req) : {};
+  const bodyLimit = path === "/api/v1/workspace/chat/completions" ? 1024 * 1024 : JSON_LIMIT;
+  const body = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) ? await readBody(req, bodyLimit) : {};
 
   if (req.method === "POST" && path === "/api/v1/auth/register") {
     await rateLimit(req, "register", 5, 3600);

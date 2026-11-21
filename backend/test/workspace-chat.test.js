@@ -60,3 +60,10 @@ test("Conversation branching copies only an owned prefix ending at a user messag
   assert.match(route, /created_at < \$[0-9]/);
   assert.match(route, /INSERT INTO workspace_chat_messages/);
 });
+
+test("Workspace chat accepts a bounded larger context while other API payloads keep the default limit", async () => {
+  const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
+  assert.match(server, /async function readBody\(req, limit = JSON_LIMIT\)/);
+  assert.match(server, /path === "\/api\/v1\/workspace\/chat\/completions" \? 1024 \* 1024 : JSON_LIMIT/);
+  assert.match(server, /if \(size > limit\)/);
+});

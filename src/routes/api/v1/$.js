@@ -21,7 +21,7 @@ async function proxyToApi({ request }) {
     method: request.method,
     headers,
     redirect: "manual",
-    signal: AbortSignal.timeout(65_000),
+    signal: AbortSignal.timeout(125_000),
   };
   if (!["GET", "HEAD"].includes(request.method)) {
     init.body = await request.arrayBuffer();
