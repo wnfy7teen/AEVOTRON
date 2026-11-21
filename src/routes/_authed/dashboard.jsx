@@ -366,12 +366,12 @@ function WorkspaceSettings() {
   const [confirmation, setConfirmation] = useState("");
   const [sessionList, setSessionList] = useState([{id:"current",name:"This device · Chrome",detail:"Current session · Netherlands",current:true},{id:"mobile",name:"Safari · iPhone",detail:"Last active yesterday",current:false}]);
   const [logins] = useState([{when:"Today, 09:42",where:"Kerkrade, NL",device:"Chrome · Windows"},{when:"Yesterday, 18:16",where:"Kerkrade, NL",device:"Safari · iPhone"}]);
-  const update = (key, value) => setSettings(previous => {
-    const next = { ...previous, [key]: value };
-    try { window.localStorage.setItem("aevotron-workspace-settings", JSON.stringify(next)); } catch { /* storage may be unavailable */ }
+  const update = (key, value) => {
+    const next = { ...settings, [key]: value };
+    setSettings(next);
+    try { window.localStorage.setItem("aevotron-workspace-settings", JSON.stringify(next)); } catch { toast.error("Could not persist this setting in local storage"); return; }
     toast.success("Setting saved");
-    return next;
-  });
+  };
   const uploadAvatar = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -381,7 +381,7 @@ function WorkspaceSettings() {
     reader.readAsDataURL(file);
   };
   const tabs = [{name:"Profile",icon:UserRound},{name:"Security",icon:Shield},{name:"Notifications",icon:Bell},{name:"Billing",icon:Wallet},{name:"API",icon:SlidersHorizontal},{name:"Appearance",icon:Palette},{name:"Danger zone",icon:Trash2}];
-  const field = (label,key,placeholder="") => <label className="av-setting-field"><span>{label}</span><input value={settings[key] ?? ""} placeholder={placeholder} onChange={e=>update(key,e.target.value)}/></label>;
+  const field = (label,key,placeholder="") => <label className="av-setting-field"><span>{label}</span><input type={key === "email" ? "email" : key === "monthlyLimit" || key === "requestLimit" ? "number" : "text"} min={key === "monthlyLimit" || key === "requestLimit" ? "1" : undefined} value={settings[key] ?? ""} placeholder={placeholder} onChange={e=>update(key,e.target.value)}/></label>;
   const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{label}</strong><small>{description}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
   const select = (label,key,options) => <label className="av-setting-field"><span>{label}</span><select value={settings[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option} value={option}>{option}</option>)}</select></label>;
   return <div className="av-settings">
