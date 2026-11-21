@@ -728,5 +728,19 @@
   "{{count}} members and invitations": "{{count}} members and invitations",
   "{{amount}} demo funds added": "{{amount}} demo funds added",
   "Local preview settings cleared": "Local preview settings cleared",
-  "Updating account settings…": "Updating account settings…"
+  "Updating account settings…": "Updating account settings…",
+  "Preview user": "Preview user",
+  "Last 30 days": "Last 30 days",
+  "matching events": "matching events",
+  "{{count}} total": "{{count}} total",
+  "Page {{page}} of {{pageCount}}": "Page {{page}} of {{pageCount}}",
+  "recently": "recently",
+  "Retry test": "Retry test",
+  "Starting…": "Starting…",
+  "Checking": "Checking",
+  "Disabled": "Disabled",
+  "Confirm and enable": "Confirm and enable",
+  "Verifying…": "Verifying…",
+  "Disabling…": "Disabling…",
+  "Time zone": "Time zone"
 }
