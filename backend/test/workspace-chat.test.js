@@ -61,7 +61,7 @@ test("Conversation branching copies only an owned prefix ending at a saved messa
   assert.match(route, /requireUser\(req, res\)/);
   assert.match(route, /workspace-chat-branch:/);
   assert.match(route, /owner_user_id=\$[0-9]/);
-  assert.match(route, /role IN \\('user','assistant'\\)/);
+  assert.match(route, /role IN \('user','assistant'\)/);
   assert.match(route, /created_at < \$[0-9]/);
   assert.match(route, /INSERT INTO workspace_chat_messages/);
   assert.match(route, /metadata,created_at\) SELECT/);
