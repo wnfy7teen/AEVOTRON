@@ -4,6 +4,7 @@ import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { createPortal } from "react-dom";
+import { readThemePreference, writeThemePreference } from "@/lib/theme-preference";
 
 type FeatureVisualProps = { variant: "routing" | "control" | "integration"; t: (value: string) => string };
 
@@ -49,8 +50,8 @@ export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
-  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
-  useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
+  const [theme, setTheme] = useState(readThemePreference);
+  useEffect(() => { writeThemePreference(theme); }, [theme]);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
