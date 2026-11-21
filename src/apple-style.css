@@ -148,3 +148,36 @@
 @media(max-width:760px){.apple-app .mh-sidebar{background:rgba(255,255,255,.97);backdrop-filter:blur(24px)}.apple-app .mh-topbar{height:58px;padding:0 16px}.apple-app .mh-content{padding:25px 16px 35px}.apple-app .mh-page-heading h1{font-size:29px}.apple-app .mh-stats{gap:9px}.apple-app .mh-stat{padding:15px;min-height:116px}.apple-app .mh-stat-value{font-size:23px}.apple-app .mh-panel{padding:16px}.apple-app .mh-footer{padding:14px 16px}.apple-app .mh-preview-banner{align-items:flex-start}}
 @media(max-width:520px){.apple-app .mh-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.apple-app .mh-page-heading>.mh-button{width:100%;justify-content:center}.apple-app .mh-bottom-grid{grid-template-columns:1fr}.apple-app .mh-steps{grid-template-columns:1fr}.apple-app .mh-step{min-height:145px}.apple-app .mh-toolbar{align-items:stretch}.apple-app .mh-search{flex-basis:100%}.apple-app .mh-toolbar select{flex:1}.apple-app .mh-preview-banner{gap:8px}.apple-app .mh-preview-label{margin-left:auto}}
 @media(prefers-reduced-motion:reduce){.apple-app *,.apple-app *::before,.apple-app *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Secondary workspace views: providers, key lifecycle, usage and documentation */
+.apple-app .mh-popular-row{border-top:1px solid #eeeef1;background:transparent;color:#606068;border-radius:8px;padding:12px 8px;transition:background .18s ease,transform .18s ease}
+.apple-app .mh-popular-row:hover{background:#f5f9ff;transform:translateX(2px)}
+.apple-app .mh-popular-row strong{color:#28282e;font-size:11px}
+.apple-app .mh-popular-row small{color:#85858c}
+.apple-app .mh-popular-row>svg{color:#8c9aaa}
+.apple-app .mh-provider-card{background:#fff;border:1px solid var(--apple-line);border-radius:14px;box-shadow:0 3px 14px rgba(20,30,45,.035)}
+.apple-app .mh-provider-card:hover{background:#fbfdff;border-color:#cbdff4}
+.apple-app .mh-provider-info strong{color:#29292e;font-size:11px}
+.apple-app .mh-provider-info small{color:#85858c}
+.apple-app .mh-provider-logo{border-radius:10px}
+.apple-app .mh-setup-panel{background:#fff;border:1px solid var(--apple-line);border-radius:15px}
+.apple-app .mh-secret-reveal{border:1px solid #ccebd9;background:#f2faf5;border-radius:15px;box-shadow:0 6px 20px rgba(25,100,60,.05)}
+.apple-app .mh-secret-heading{color:#216c43}
+.apple-app .mh-secret-reveal>p{color:#5e806b}
+.apple-app .mh-secret-value{background:#fff;border:1px solid #d7e9de;border-radius:10px}
+.apple-app .mh-secret-value code{color:#245d3e}
+.apple-app .mh-docs-title svg{color:#0071e3}
+.apple-app .mh-docs-title h3{color:#25252a}
+.apple-app .mh-method{background:#eaf4ff;border:1px solid #d5e9fb;color:#0969b4;border-radius:999px;padding:5px 9px}
+.apple-app .mh-endpoint{background:#f4f8fc;border:1px solid #dce8f2;border-radius:10px;color:#17639e;overflow-wrap:anywhere}
+.apple-app .mh-docs>p{color:#77777e;font-size:11px;line-height:1.7}
+.apple-app .mh-doc-warning{border-top:1px solid #eeeef1;color:#7b6a3d}
+.apple-app .mh-usage-table th{color:#85858c;border-color:#e9e9ed}
+.apple-app .mh-usage-table td{color:#5e5e66;border-color:#eeeef1}
+.apple-app .mh-usage-table td strong{color:#29292f}
+.apple-app .mh-usage-table td small{color:#85858c}
+.apple-app .mh-usage-error-code{color:#bd3b34!important}
+.apple-app .mh-field-help{color:#85858c}
+.apple-app .mh-key-row{border-color:#ededf0}
+.apple-app .mh-key-main code{color:#53535b}
+.apple-app .mh-key-list-panel,.apple-app .mh-usage-panel{background:#fff}
