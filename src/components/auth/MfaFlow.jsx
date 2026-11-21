@@ -13,7 +13,7 @@ const SMS_RESEND_SECONDS = 60;
 // session-record-block keeps the QR code, setup key and codes out of session recordings.
 // onManage(session) is called instead of finishing when the sign-in was for managing factors.
 export function MfaFlow({ challenge, returnTo, onManage }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const session = useMemo(() => mfaSession(challenge), [challenge]);
   const finish = (result) => (result.mfa_management_token && onManage ? onManage(session) : finishSignIn(result.access_token, returnTo));
   return (
@@ -26,7 +26,7 @@ export function MfaFlow({ challenge, returnTo, onManage }) {
 }
 
 function Enroll({ session, onDone }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const [method, setMethod] = useState(null);
   const info = useAppInfo();
   return (
@@ -48,7 +48,7 @@ function Enroll({ session, onDone }) {
 }
 
 function Verify({ session, challenge, returnTo, onDone }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const methods = challenge.mfa_methods;
   const [method, setMethod] = useState(methods.includes("totp") ? "totp" : "sms");
   const [code, setCode] = useState("");
