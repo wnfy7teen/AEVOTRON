@@ -272,6 +272,7 @@ function WorkspaceChat() {
     if ((!value && !selectedAttachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
     const fileContext = selectedAttachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n]/g, "_").replaceAll("[", "_").replaceAll("]", "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
     const prompt = [value, fileContext].filter(Boolean).join("\n\n");
+    const sentAttachmentIds = new Set(selectedAttachments.map((file) => file.id));
     if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
     if (!demoMode && (!sessionId || sessionId === "current")) {
@@ -292,8 +293,8 @@ function WorkspaceChat() {
     const next = [...messages, userMessage];
     setMessages(next);
     setDraft("");
-    setAttachments([]);
-    setSelectedAttachmentIds([]);
+    setAttachments((items) => items.filter((file) => !sentAttachmentIds.has(file.id)));
+    setSelectedAttachmentIds((items) => items.filter((id) => !sentAttachmentIds.has(id)));
     setFileError("");
     setConversations((items) => items.map((item) => item.id === sessionId
       ? { ...item, messages: next, title: item.title === t("New conversation") ? value.slice(0, 44) : item.title } : item));
@@ -381,6 +382,9 @@ function WorkspaceChat() {
       setActiveConversation(session.id);
       shouldAutoScrollRef.current = true;
       setMessages(session.messages);
+      setAttachments([]);
+      setSelectedAttachmentIds([]);
+      setFileError("");
       setMetrics(null);
       sessionsQuery.refetch();
     } catch (error) {
