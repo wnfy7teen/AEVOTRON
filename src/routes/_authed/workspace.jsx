@@ -184,7 +184,7 @@ function WorkspaceChat() {
     event?.preventDefault?.();
     const value = draft.trim();
     if ((!value && !attachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
-    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\\r\\n\\[\\]]/g, "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
+    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n\[\]]/g, "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
     const prompt = [value, fileContext].filter(Boolean).join("\n\n");
     if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
