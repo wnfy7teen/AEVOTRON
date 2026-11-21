@@ -12,10 +12,14 @@ function readThemePreference() {
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
     if (VALID_THEMES.has(stored)) return stored;
     const settings = JSON.parse(window.localStorage.getItem("aevotron-workspace-settings") || "{}");
-    return VALID_THEMES.has(settings.theme) ? settings.theme : "light";
+    return VALID_THEMES.has(settings.theme) ? settings.theme : "system";
   } catch {
-    return "light";
+    return "system";
   }
+}
+
+export function getAppThemePreference() {
+  return readThemePreference();
 }
 
 function resolveTheme(theme) {
