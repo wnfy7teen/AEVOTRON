@@ -40,9 +40,9 @@ test("settings layout supports narrow screens and reduced motion", async () => {
   assert.match(css, /\.av-modal-backdrop/);
 });
 
-test("settings clearly disclose local-only security and account controls", async () => {
+test("settings clearly disclose backend-connected and local-only account controls", async () => {
   const source = await read("src/routes/_authed/dashboard.jsx");
-  assert.match(source, /Local preview settings\./);
+  assert.match(source, /Account settings status\./);
   assert.match(source, /api\.auth\.mfaStatus/);
   assert.match(source, /api\.auth\.mfaEnroll/);
   assert.match(source, /api\.auth\.mfaConfirm/);
