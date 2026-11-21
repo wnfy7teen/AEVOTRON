@@ -54,7 +54,7 @@ export function PreviewDashboard() {
 }
 
 function HomePage({ preview = false }) {
-  const { t, i18n: activeI18n } = useTranslation();
+  const { t, i18n: activeI18n } = useTranslation(["dashboard", "translation"]);
   const currentLanguage = activeI18n.resolvedLanguage || activeI18n.language;
   const accountQuery = useQuery({
     queryKey: ["workspace-account-profile"],
