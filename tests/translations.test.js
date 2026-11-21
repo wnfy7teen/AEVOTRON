@@ -93,7 +93,8 @@ it("keeps model descriptions translated and validates locale punctuation", async
   for (const [key, value] of Object.entries(zh)) {
     assert.ok(!value.includes("..."), `ASCII ellipsis found in Chinese translation: ${key}`);
   }
-  for (const language of [en, ru, zh]) {
+  const rootCatalogs = await Promise.all(["en", "ru", "zh"].map(readJson));
+  for (const language of rootCatalogs) {
     for (const form of ["one", "few", "many", "other"]) {
       assert.ok(language[`i18n.test.item_${form}`], `Missing plural form: ${form}`);
     }
