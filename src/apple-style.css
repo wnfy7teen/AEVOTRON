@@ -1529,3 +1529,19 @@ html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
   position: relative;
   z-index: 1;
 }
+
+/* Keep the API settings action visually separated from the final input. */
+.apple-app .av-settings-action { margin-top: 18px; align-self: flex-start; }
+.apple-app .mh-docs-layout { display: grid; gap: 16px; }
+.apple-app .mh-doc-step { display: inline-grid; place-items: center; width: 30px; height: 30px; flex: 0 0 30px; border-radius: 9px; background: #eef6fc; color: #075eac; font-size: 12px; font-weight: 700; }
+.apple-app .mh-api-reference-row { display: grid; grid-template-columns: minmax(130px, 180px) minmax(0,1fr); gap: 12px; align-items: start; padding: 13px 0; border-bottom: 1px solid #e9edf2; font-size: 13px; }
+.apple-app .mh-api-reference-row > span { color: #68717d; font-weight: 600; }
+.apple-app .mh-api-reference-row code,.apple-app .mh-api-params code { overflow-wrap: anywhere; font-family: 'DM Mono',monospace; font-size: 12px; }
+.apple-app .mh-api-reference h4 { margin: 22px 0 10px; color: #20252c; font-size: 14px; }
+.apple-app .mh-api-params { width: 100%; border-collapse: collapse; font-size: 12px; }
+.apple-app .mh-api-params th,.apple-app .mh-api-params td { padding: 10px 9px; text-align: left; vertical-align: top; border-bottom: 1px solid #e9edf2; }
+.apple-app .mh-api-params th { color: #68717d; font-weight: 650; }
+.apple-app[data-theme="dark"] .mh-api-reference-row { border-color: #3b4653; }
+.apple-app[data-theme="dark"] .mh-api-reference-row > span,.apple-app[data-theme="dark"] .mh-api-reference h4,.apple-app[data-theme="dark"] .mh-api-params th { color: #b8c4d3; }
+.apple-app[data-theme="dark"] .mh-api-params th,.apple-app[data-theme="dark"] .mh-api-params td { border-color: #3b4653; }
+@media(max-width:600px) { .apple-app .mh-api-reference-row { grid-template-columns: 1fr; gap: 5px; } .apple-app .mh-api-params { display:block; overflow-x:auto; } }
