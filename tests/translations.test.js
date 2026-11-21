@@ -109,6 +109,8 @@ it("uses request-scoped locale resolution and does not mutate the DOM with an ob
     readFile(new URL("../src/routes/_authed/dashboard.jsx", import.meta.url), "utf8"),
   ]);
   assert.match(config, /createInstance\(/);
+  assert.match(config, /fallbackNS: "translation"/);
+  assert.match(config, /locales\/dashboard/);
   assert.doesNotMatch(config, /new MutationObserver/);
   assert.match(provider, /initialLanguage/);
   assert.match(provider, /persistLanguageCookie/);
@@ -117,5 +119,24 @@ it("uses request-scoped locale resolution and does not mutate the DOM with an ob
   assert.match(serverLocale, /getRequestHeader\("cookie"\)/);
   assert.match(serverLocale, /accept-language/);
   assert.doesNotMatch(dashboard, /Модель с усиленным пошаговым рассуждением/);
+  assert.match(dashboard, /useTranslation\(\["dashboard", "translation"\]\)/);
   assert.match(dashboard, /t\(describeModel\(model.id\)\)/);
+});
+
+it("formats numbers, currencies, dates and relative time using the active locale", async () => {
+  const {
+    formatNumber,
+    formatCurrency,
+    formatDate,
+    formatRelativeTime,
+    getIntlLocale,
+  } = await import("../src/lib/formatters.js");
+  assert.equal(getIntlLocale("ru-RU"), "ru-RU");
+  assert.equal(getIntlLocale("zh-CN"), "zh-CN");
+  assert.equal(getIntlLocale("unsupported"), "en-US");
+  assert.match(formatNumber(1234.5, "ru"), /1.234,5|1 234,5|1 234,5/);
+  assert.match(formatCurrency(12.5, "EUR", "en"), /€|EUR/);
+  assert.ok(formatDate("2026-01-02T12:00:00.000Z", "zh").length > 0);
+  assert.ok(formatRelativeTime(-1, "day", "ru").length > 0);
+  assert.equal(formatDate("not-a-date", "en"), "");
 });
