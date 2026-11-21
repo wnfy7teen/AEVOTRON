@@ -936,6 +936,11 @@ const workspaceTranslations = {
   "Единый API для подключения AI-моделей разных провайдеров.": { en: "One API for connecting AI models from different providers.", ru: "Единый API для подключения AI-моделей разных провайдеров.", zh: "通过一个 API 连接不同服务商的 AI 模型。" },
   "Aevotron — Workspace preview": { ru: "Aevotron — предварительный просмотр рабочего пространства", zh: "Aevotron — 工作区预览" },
   "Read-only visual preview of the Aevotron workspace.": { ru: "Визуальный предварительный просмотр рабочего пространства Aevotron в режиме только для чтения.", zh: "Aevotron 工作区的只读界面预览。" },
+  "UNIFIED API": { ru: "ЕДИНЫЙ API", zh: "统一 API" },
+  "Embeddings": { ru: "Эмбеддинги", zh: "文本嵌入" },
+  "Usage": { ru: "Использование", zh: "用量统计" },
+  "Developed by": { ru: "Разработано", zh: "开发者" },
+  "Telegram · @web3ResearchCN": { ru: "Telegram · @web3ResearchCN", zh: "Telegram · @web3ResearchCN" },
 };
 
 const landingTranslations = {
