@@ -120,7 +120,10 @@ function WorkspaceChat() {
         if (!allowed.has(extension)) { setFileError(t("This file type is not supported yet. Use plain text or source code files.")); continue; }
         if (file.size > 512 * 1024) { setFileError(t("Each text attachment must be 512 KB or smaller.")); continue; }
         const text = await file.text();
-        const controlCharacters = (text.match(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
+        const controlCharacters = [...text].filter((character) => {
+          const code = character.charCodeAt(0);
+          return code <= 8 || code === 11 || code === 12 || (code >= 14 && code <= 31);
+        }).length;
         if (controlCharacters > Math.max(2, text.length * 0.01)) { setFileError(t("This file does not appear to be valid UTF-8 text.")); continue; }
         if (totalCharacters + text.length > 12_000) { setFileError(t("The combined text from attachments is limited to 12,000 characters.")); continue; }
         totalCharacters += text.length;
@@ -184,7 +187,7 @@ function WorkspaceChat() {
     event?.preventDefault?.();
     const value = draft.trim();
     if ((!value && !attachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
-    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n\[\]]/g, "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
+    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\r\n]/g, "_").replaceAll("[", "_").replaceAll("]", "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
     const prompt = [value, fileContext].filter(Boolean).join("\n\n");
     if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
