@@ -1408,3 +1408,89 @@ html[data-theme="dark"] .av-language-menu button.active .av-language-native {
   width: 100%;
   margin-top: 0;
 }
+
+
+/* Sonner notifications are rendered outside .apple-app; give them independent theme-safe styling. */
+[data-sonner-toaster].aevotron-toaster {
+  z-index: 10050 !important;
+  top: max(16px, env(safe-area-inset-top)) !important;
+  right: max(16px, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  width: min(380px, calc(100vw - 32px)) !important;
+}
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-height: 58px !important;
+  padding: 15px 17px !important;
+  border: 1px solid #d8e1e9 !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: #17212d !important;
+  opacity: 1 !important;
+  box-shadow: 0 12px 36px rgba(17, 32, 49, .18), 0 2px 8px rgba(17, 32, 49, .08) !important;
+  font-family: 'DM Sans', Inter, system-ui, sans-serif !important;
+}
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-title],
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-title {
+  display: block !important;
+  color: #17212d !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
+  opacity: 1 !important;
+}
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-description],
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-description {
+  display: block !important;
+  margin-top: 3px !important;
+  color: #526174 !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  opacity: 1 !important;
+}
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-icon] {
+  flex: 0 0 auto !important;
+  color: #16834a !important;
+  opacity: 1 !important;
+}
+[data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-close-button] {
+  color: #526174 !important;
+  background: #f3f6f9 !important;
+  border-color: #d8e1e9 !important;
+}
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] {
+  border-color: #465568 !important;
+  background: #202a37 !important;
+  color: #f1f5fa !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .48) !important;
+}
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-title],
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-title {
+  color: #f1f5fa !important;
+}
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-description],
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-description {
+  color: #c0ccda !important;
+}
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-icon] {
+  color: #65d49a !important;
+}
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-close-button] {
+  color: #dce6f1 !important;
+  background: #2c3949 !important;
+  border-color: #526174 !important;
+}
+@media (max-width: 560px) {
+  [data-sonner-toaster].aevotron-toaster {
+    top: max(10px, env(safe-area-inset-top)) !important;
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+  }
+  [data-sonner-toaster].aevotron-toaster [data-sonner-toast] {
+    min-height: 54px !important;
+    padding: 13px 14px !important;
+  }
+}

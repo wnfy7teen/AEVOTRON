@@ -194,3 +194,17 @@ test("workspace footer is pinned to the bottom across short and long routes", as
   assert.match(css, /\.mh-content \{[\\s\\S]*?align-self: stretch;/);
   assert.match(css, /\.mh-footer \{[\\s\\S]*?align-self: end;[\\s\\S]*?width: 100%;/);
 });
+
+
+test("Sonner success and error notifications remain readable above the workspace in both themes", async () => {
+  const toaster = await read("src/components/ui/sonner.jsx");
+  const css = await read("src/apple-style.css");
+  assert.match(toaster, /position="top-right"/);
+  assert.match(toaster, /aevotron-toaster/);
+  assert.match(toaster, /title: "aevotron-toast-title"/);
+  assert.match(css, /\[data-sonner-toaster\]\.aevotron-toaster/);
+  assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color: #17212d !important/);
+  assert.match(css, /html\[data-theme="dark"\] \[data-sonner-toaster\]\.aevotron-toaster/);
+  assert.match(css, /color: #f1f5fa !important/);
+  assert.match(css, /z-index: 10050 !important/);
+});
