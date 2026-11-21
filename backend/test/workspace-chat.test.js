@@ -73,3 +73,23 @@ test("Workspace chat accepts a bounded larger context while other API payloads k
   assert.match(server, /path === "\/api\/v1\/workspace\/chat\/completions" \? 1024 \* 1024 : JSON_LIMIT/);
   assert.match(server, /if \(size > limit\)/);
 });
+
+
+test("Workspace chat usage is authenticated, session-scoped, and explicitly distinguishes estimates", async () => {
+  const server = await readFile(new URL("../src/server.js", import.meta.url), "utf8");
+  const start = server.indexOf("const chatUsageRoute");
+  const end = server.indexOf('if (req.method === "GET" && path === "/api/v1/workspace/chats")', start);
+  const route = server.slice(start, end);
+  assert.match(route, /requireUser\(req, res\)/);
+  assert.match(route, /currentWorkspace\(user\)/);
+  assert.match(route, /workspace_id=\$2 AND owner_user_id=\$3/);
+  assert.match(route, /total_input_tokens,total_output_tokens,request_count,usage_estimated/);
+  assert.match(route, /CHAT_NOT_FOUND/);
+  const streamStart = server.indexOf('if (req.method === "POST" && path === "/api/v1/workspace/chat/completions") {');
+  const streamEnd = server.indexOf('if (req.method === "POST" && (path === "/api/v1/chat/completions"', streamStart);
+  const stream = server.slice(streamStart, streamEnd);
+  assert.match(stream, /let hasProviderUsage = false/);
+  assert.match(stream, /let usageEstimated = false/);
+  assert.match(stream, /usageEstimated = true/);
+  assert.match(stream, /UPDATE workspace_chat_sessions SET total_input_tokens/);
+});
