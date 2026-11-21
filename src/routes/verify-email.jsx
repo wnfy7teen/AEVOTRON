@@ -1,3 +1,4 @@
+import { translateForLanguage } from "@/i18n";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AuthLayout } from "@/components/auth/AuthLayout";
@@ -42,6 +43,6 @@ function VerifyEmailPage() {
 
 export const Route = createFileRoute("/verify-email")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Verify email — Aevotron" }] }),
+  head: ({ matches }) => { const locale = matches.find((match) => match.routeId === "__root__")?.loaderData || "en"; return { meta: [{ title: translateForLanguage(locale, "Verify email — Aevotron") }] }; },
   component: VerifyEmailPage,
 });
