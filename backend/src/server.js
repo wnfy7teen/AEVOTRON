@@ -958,7 +958,8 @@ async function handle(req, res) {
     let errorCode = "internal_error";
     let inputTokens = 0;
     let outputTokens = 0;
-    let hasProviderUsage = false;
+    let hasProviderInputUsage = false;
+    let hasProviderOutputUsage = false;
     let usageEstimated = false;
     let assistantContent = "";
     let upstream;
@@ -1015,9 +1016,16 @@ async function handle(req, res) {
           const event = JSON.parse(payload);
           const providerUsage = event.usage || event.x_groq?.usage;
           if (providerUsage) {
-            hasProviderUsage = true;
-            inputTokens = Number(providerUsage.prompt_tokens ?? providerUsage.input_tokens ?? inputTokens);
-            outputTokens = Number(providerUsage.completion_tokens ?? providerUsage.output_tokens ?? outputTokens);
+            const rawInputTokens = providerUsage.prompt_tokens ?? providerUsage.input_tokens;
+            const rawOutputTokens = providerUsage.completion_tokens ?? providerUsage.output_tokens;
+            if (rawInputTokens !== undefined && rawInputTokens !== null && Number.isFinite(Number(rawInputTokens)) && Number(rawInputTokens) >= 0) {
+              inputTokens = Math.floor(Number(rawInputTokens));
+              hasProviderInputUsage = true;
+            }
+            if (rawOutputTokens !== undefined && rawOutputTokens !== null && Number.isFinite(Number(rawOutputTokens)) && Number(rawOutputTokens) >= 0) {
+              outputTokens = Math.floor(Number(rawOutputTokens));
+              hasProviderOutputUsage = true;
+            }
           }
           const delta = event.choices?.[0]?.delta?.content;
           if (typeof delta === "string" && assistantContent.length < 200_000) {
@@ -1081,8 +1089,11 @@ async function handle(req, res) {
             );
         await saveAssistant.catch((error) => process.stderr.write("[aevotron-api] workspace message write failed: " + error.message + "\n"));
       }
-      if (!hasProviderUsage) {
+      if (!hasProviderInputUsage) {
         inputTokens = Math.ceil(body.messages.reduce((sum, message) => sum + String(message.content || "").length, 0) / 4);
+        usageEstimated = true;
+      }
+      if (!hasProviderOutputUsage) {
         outputTokens = Math.ceil(assistantContent.length / 4);
         usageEstimated = true;
       }
