@@ -107,5 +107,10 @@
   "Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.": "Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.",
   "Live chat is disabled in demo mode": "Live chat is disabled in demo mode",
   "Delete conversation": "Delete conversation",
-  "Could not delete this conversation.": "Could not delete this conversation."
+  "Could not delete this conversation.": "Could not delete this conversation.",
+  "Could not load this conversation.": "Could not load this conversation.",
+  "Could not create a conversation.": "Could not create a conversation.",
+  "Edit": "Edit",
+  "Regenerate": "Regenerate",
+  "No model selected": "No model selected"
 }

@@ -107,5 +107,10 @@
   "Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.": "Количество токенов является оценочным, если провайдер не вернул фактические данные. Стоимость и лимит контекста не выдумываются.",
   "Live chat is disabled in demo mode": "В демо-режиме отправка запросов отключена",
   "Delete conversation": "Удалить диалог",
-  "Could not delete this conversation.": "Не удалось удалить диалог."
+  "Could not delete this conversation.": "Не удалось удалить диалог.",
+  "Could not load this conversation.": "Не удалось загрузить этот диалог.",
+  "Could not create a conversation.": "Не удалось создать диалог.",
+  "Edit": "Изменить",
+  "Regenerate": "Сгенерировать заново",
+  "No model selected": "Модель не выбрана"
 }

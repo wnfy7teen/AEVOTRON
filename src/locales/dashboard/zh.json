@@ -107,5 +107,10 @@
   "Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.": "除非服务商返回实际用量，否则 token 数量仅为估算。不会推测费用或上下文上限。",
   "Live chat is disabled in demo mode": "演示模式下无法发送实时请求",
   "Delete conversation": "删除对话",
-  "Could not delete this conversation.": "无法删除此对话。"
+  "Could not delete this conversation.": "无法删除此对话。",
+  "Could not load this conversation.": "无法加载此对话。",
+  "Could not create a conversation.": "无法创建对话。",
+  "Edit": "编辑",
+  "Regenerate": "重新生成",
+  "No model selected": "未选择模型"
 }
