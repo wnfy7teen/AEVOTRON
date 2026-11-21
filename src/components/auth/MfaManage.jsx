@@ -61,7 +61,7 @@ export function MfaManage({ session, returnTo }) {
                   </Button>
                   {enrolled && (
                     <Button size="sm" variant="ghost" onClick={() => setView({ name: "disable", method: id })}>
-                      Disable
+                      {t("Disable")}
                     </Button>
                   )}
                 </div>
@@ -69,7 +69,7 @@ export function MfaManage({ session, returnTo }) {
             );
           })}
           <Button className="w-full h-12 font-medium" onClick={() => { window.location.href = returnTo; }}>
-            Done
+            {t("Done")}
           </Button>
         </div>
       )}
@@ -126,14 +126,14 @@ function Disable({ session, method, onDone, onBack }) {
       ) : (
         <Button className="w-full h-11" disabled={busy} onClick={sendCode}>
           {busy && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-          Send Code
+          {t("Send Code")}
         </Button>
       )}
       <div className="grid grid-cols-2 gap-3 pt-2">
         <Button variant="outline" className="h-11" disabled={busy} onClick={onBack}>{t("Cancel")}</Button>
         <Button className="h-11" disabled={busy || !codeSent || code.length < 6} onClick={() => confirm()}>
           {busy && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-          Verify & Disable
+          {t("Verify & Disable")}
         </Button>
       </div>
     </div>
