@@ -122,9 +122,9 @@ it("uses request-scoped locale resolution and does not mutate the DOM with an ob
   assert.match(serverLocale, /accept-language/);
   assert.doesNotMatch(dashboard, /Модель с усиленным пошаговым рассуждением/);
   assert.match(dashboard, /useTranslation\(\["dashboard", "translation"\]\)/);
-  assert.match(dashboard, /t\("Loading models from OpenAI…")/);
-  assert.match(dashboard, /t\("Connect a provider to load the models available to your account\.")/);
-  assert.match(dashboard, /value=\{t\("Direct")\}/);
+  assert.match(dashboard, /t\("Loading models from OpenAI…"\)/);
+  assert.match(dashboard, /t\("Connect a provider to load the models available to your account\."\)/);
+  assert.match(dashboard, /value=\{t\("Direct"\)\}/);
   assert.match(dashboard, /t\(describeModel\(model.provider_model_id \|\| model.id\)\)/);
 });
 
