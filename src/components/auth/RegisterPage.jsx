@@ -93,7 +93,7 @@ export function RegisterPage() {
           <span className="font-medium text-foreground">{email}</span> {t("is already verified. Sign in to continue.")}
         </p>
         <AuthLink to="/login" returnTo={returnTo} className="inline-flex h-12 w-full items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/90">
-          Sign in
+          {t("Sign in")}
         </AuthLink>
       </AuthLayout>
     );
@@ -117,12 +117,12 @@ export function RegisterPage() {
             </InputOTP>
           </div>
           <SubmitButton busy={busy} busyLabel={t("Verifying...")} disabled={busy || otpCode.length < 6}>
-            Verify
+            {t("Verify")}
           </SubmitButton>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             {t("Didn't receive the code?")}{" "}
             <button type="button" onClick={resend} className="font-medium text-primary hover:underline">
-              Resend
+              {t("Resend")}
             </button>
           </p>
         </form>
@@ -156,13 +156,13 @@ export function RegisterPage() {
           </div>
         </div>
         <SubmitButton busy={busy} busyLabel={t("Creating account...")}>
-          Create account
+          {t("Create account")}
         </SubmitButton>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">
         {t("Already have an account?")}{" "}
         <AuthLink to="/login" returnTo={returnTo}>
-          Log in
+          {t("Log in")}
         </AuthLink>
       </p>
     </AuthLayout>
