@@ -187,3 +187,30 @@ it("migrates landing and authentication UI to domain namespaces with legacy fall
   assert.match(register, /useTranslation\(\["auth", "translation"\]\)/);
   assert.match(verification, /useTranslation\(\["auth", "translation"\]\)/);
 });
+
+it("preserves interpolation variables and locale punctuation across every namespace", async () => {
+  const namespaces = ["root", "dashboard", "landing", "auth"];
+  const variables = (value) => [...value.matchAll(/\\{\\{\\s*([\\w.-]+)(?:\\s*,[^}]*)?\\s*\\}\\}/g)]
+    .map((match) => match[1])
+    .sort();
+
+  for (const namespace of namespaces) {
+    const readNamespace = (language) => namespace === "root"
+      ? readJson(language)
+      : readFile(new URL(`../src/locales/${namespace}/${language}.json`, import.meta.url), "utf8").then(JSON.parse);
+    const [en, ru, zh] = await Promise.all(["en", "ru", "zh"].map(readNamespace));
+
+    for (const [key, source] of Object.entries(en)) {
+      const expected = variables(source);
+      assert.deepEqual(variables(ru[key]), expected, `Russian interpolation variables differ for ${namespace}.${key}`);
+      assert.deepEqual(variables(zh[key]), expected, `Chinese interpolation variables differ for ${namespace}.${key}`);
+    }
+
+    for (const [key, value] of Object.entries(ru)) {
+      assert.ok(!value.includes("。"), `Chinese full stop found in Russian ${namespace} translation: ${key}`);
+    }
+    for (const [key, value] of Object.entries(zh)) {
+      assert.ok(!value.includes("..."), `ASCII ellipsis found in Chinese ${namespace} translation: ${key}`);
+    }
+  }
+});
