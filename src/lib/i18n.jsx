@@ -3,7 +3,11 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import { Check, ChevronDown } from "lucide-react";
 import { createAppI18n, normalizeLanguage, persistLanguageCookie, supportedLanguages } from "@/i18n";
 
-function getBrowserStorage() {\n  try { return typeof window !== "undefined" ? window.localStorage : null; } catch { return null; }\n}\n\nexport function LanguageProvider({ children, initialLanguage = "en" }) {
+function getBrowserStorage() {
+  try { return typeof window !== "undefined" ? window.localStorage : null; } catch { return null; }
+}
+
+export function LanguageProvider({ children, initialLanguage = "en" }) {
   const [instance] = useState(() => createAppI18n({
     language: initialLanguage,
     storage: getBrowserStorage(),
