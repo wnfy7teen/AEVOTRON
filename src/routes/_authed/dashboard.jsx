@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { Activity, ArrowDownUp, ArrowUpRight, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap } from "lucide-react";
 
 const invokeFunction = async (name, payload) => {
-  const response = await base44.functions.invoke(name, payload);
+  const response = await api.functions.invoke(name, payload);
   return response?.data ?? response;
 };
 
