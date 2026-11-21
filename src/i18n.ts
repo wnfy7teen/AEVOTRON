@@ -93,7 +93,8 @@ export function persistLanguageCookie(language: string) {
 
 export function translateForLanguage(language: string | null | undefined, key: string) {
   const locale = normalizeLanguage(language);
-  const catalog = resources[locale].translation as Record<string, string>;
-  const fallback = resources.en.translation as Record<string, string>;
-  return catalog[key] ?? fallback[key] ?? key;
+  const catalog = resources[locale].translation;
+  const fallback = resources.en.translation;
+  const catalogValue = catalog[key as keyof typeof en];
+  return catalogValue ?? fallback[key as keyof typeof en] ?? key;
 }
