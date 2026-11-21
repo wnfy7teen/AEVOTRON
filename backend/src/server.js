@@ -912,9 +912,10 @@ async function handle(req, res) {
         if (!payload || payload === "[DONE]") return;
         try {
           const event = JSON.parse(payload);
-          if (event.usage) {
-            inputTokens = Number(event.usage.prompt_tokens || event.usage.input_tokens || inputTokens);
-            outputTokens = Number(event.usage.completion_tokens || event.usage.output_tokens || outputTokens);
+          const providerUsage = event.usage || event.x_groq?.usage;
+          if (providerUsage) {
+            inputTokens = Number(providerUsage.prompt_tokens || providerUsage.input_tokens || inputTokens);
+            outputTokens = Number(providerUsage.completion_tokens || providerUsage.output_tokens || outputTokens);
           }
           const delta = event.choices?.[0]?.delta?.content;
           if (typeof delta === "string" && assistantContent.length < 200_000) {

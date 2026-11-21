@@ -177,8 +177,9 @@ const workspace = {
         error.code = event.error.code;
         throw error;
       }
-      if (event.usage) {
-        usage = event.usage;
+      const providerUsage = event.usage || event.x_groq?.usage;
+      if (providerUsage) {
+        usage = providerUsage;
         onUsage?.(usage);
       }
       const delta = event.choices?.[0]?.delta?.content;

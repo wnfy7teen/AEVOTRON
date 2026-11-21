@@ -309,7 +309,12 @@ function WorkspaceChat() {
 
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
-  const tokenRate = outputTokens && metrics?.elapsedMs ? (outputTokens / (metrics.elapsedMs / 1000)).toFixed(1) : "—";
+  const generationMs = metrics?.elapsedMs ? Math.max(1, metrics.elapsedMs - (metrics.ttftMs || 0)) : 0;
+  const tokenRate = outputTokens && generationMs ? (outputTokens / (generationMs / 1000)).toFixed(1) : "—";
+  const contextLimit = Number(activeModel?.context_window || 0);
+  const contextLabel = contextLimit
+    ? "~" + contextEstimate.toLocaleString() + " / " + contextLimit.toLocaleString() + " " + t("tokens")
+    : "~" + contextEstimate.toLocaleString() + " " + t("tokens") + " · " + t("limit unknown");
 
   return (
     <div className="aw-shell">
@@ -353,7 +358,7 @@ function WorkspaceChat() {
             <div className="aw-compare-heading"><div><strong>{t("Compare model responses")}</strong><p>{t("Send the same prompt to 2–4 connected models in parallel. Each request is billed by its provider.")}</p></div><button type="button" onClick={() => {if(isComparing)stopComparison();setCompareOpen(false);}} aria-label={t("Close")}>×</button></div>
             <div className="aw-compare-models">{models.map((model) => <label key={model.id} className={compareSelection.includes(model.id) ? "is-selected" : ""}><input type="checkbox" checked={compareSelection.includes(model.id)} onChange={() => toggleCompareModel(model.id)} disabled={isComparing || (!compareSelection.includes(model.id) && compareSelection.length >= 4)}/><span><strong>{model.provider_code}</strong><small>{model.provider_model_id || model.id}</small></span></label>)}</div>
             <div className="aw-compare-actions"><span>{compareSelection.length} / 4 {t("models selected")}</span>{isComparing ? <button type="button" className="aw-compare-stop" onClick={stopComparison}><CircleStop size={14}/>{t("Stop comparison")}</button> : <button type="button" onClick={runComparison} disabled={compareSelection.length < 2 || !draft.trim() && !messages.some((item) => item.role === "user")}>{t("Compare now")}</button>}</div>
-            {compareResults.length > 0 && <div className="aw-compare-results">{compareResults.map((item) => {const model=models.find((entry) => entry.id === item.modelId);return <article key={item.modelId} className="aw-compare-result"><div className="aw-compare-result-title"><strong>{model?.provider_model_id || item.modelId}</strong><span>{item.status === "streaming" ? t("Generating…") : item.status === "complete" ? t("Complete") : item.status === "cancelled" ? t("Stopped") : t("Failed")}</span></div><div className="aw-message-content">{item.content ? <ReactMarkdown>{item.content}</ReactMarkdown> : item.status === "streaming" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null}{item.error && <p className="aw-message-error">{item.error}</p>}</div>{item.metrics && <small>{t("TTFT")}: {item.metrics.ttftMs ?? "—"} ms · {t("Cost")}: {t("Not reported")}</small>}</article>;})}</div>}
+            {compareResults.length > 0 && <div className="aw-compare-results">{compareResults.map((item) => {const model=models.find((entry) => entry.id === item.modelId);return <article key={item.modelId} className="aw-compare-result"><div className="aw-compare-result-title"><strong>{model?.provider_model_id || item.modelId}</strong><span>{item.status === "streaming" ? t("Generating…") : item.status === "complete" ? t("Complete") : item.status === "cancelled" ? t("Stopped") : t("Failed")}</span></div><div className="aw-message-content">{item.content ? <ReactMarkdown>{item.content}</ReactMarkdown> : item.status === "streaming" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null}{item.error && <p className="aw-message-error">{item.error}</p>}</div>{item.metrics && <small>{t("TTFT")}: {item.metrics.ttftMs ?? "—"} ms · {t("Provider usage")}: {item.metrics.usage?.prompt_tokens ?? item.metrics.usage?.input_tokens ?? "—"} / {item.metrics.usage?.completion_tokens ?? item.metrics.usage?.output_tokens ?? "—"} · {t("Cost")}: {t("Not reported")}</small>}</article>;})}</div>}
           </section>}
           {chatError && <div className="aw-notice is-warning" role="alert"><X size={16}/><span>{chatError}</span><button type="button" onClick={() => setChatError("")}>{t("Dismiss")}</button></div>}
           {demoMode && <div className="aw-notice" role="status"><Sparkles size={16}/><span>{t("This is a local demo session. Connect a real account and provider to send live requests.")}</span><a href="/dashboard">{t("Open providers")}</a></div>}
@@ -371,9 +376,10 @@ function WorkspaceChat() {
 
           <div className="aw-statusbar">
             <div className="aw-status-model"><Bot size={14}/><strong>{activeModel?.provider_model_id || t("No model selected")}</strong><span>{providerName}</span></div>
-            <div className="aw-status-metric"><FileText size={13}/><span>{t("Context estimate")}: ~{contextEstimate.toLocaleString()} {t("tokens")}</span></div>
+            <div className="aw-status-metric"><FileText size={13}/><span>{t("Context estimate")}: {contextLabel}</span></div>
             <div className="aw-status-metric"><Clock3 size={13}/><span>{t("TTFT")}: {metrics?.ttftMs != null ? metrics.ttftMs + " ms" : "—"}</span></div>
-            <div className="aw-status-metric"><Sparkles size={13}/><span>{t("Output speed")}: {tokenRate === "—" ? "—" : "~" + tokenRate + " tok/s"}</span></div>
+            {metrics?.usage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Provider usage")}: {metrics.usage.prompt_tokens ?? metrics.usage.input_tokens ?? "—"} {t("input")} / {metrics.usage.completion_tokens ?? metrics.usage.output_tokens ?? "—"} {t("output")}</span></div>}
+            <div className="aw-status-metric"><Sparkles size={13}/><span>{t("Output speed")}: {tokenRate === "—" ? "—" : (metrics?.usage ? "" : "~") + tokenRate + " tok/s"}</span></div>
             <div className="aw-status-cost">{t("Cost")}: {t("Not reported")}</div>
           </div>
           <p className="aw-disclaimer">{t("Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.")}</p>

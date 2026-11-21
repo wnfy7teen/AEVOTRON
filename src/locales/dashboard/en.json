@@ -126,5 +126,9 @@
   "Complete": "Complete",
   "Stopped": "Stopped",
   "Failed": "Failed",
-  "Enter a prompt or send a message before comparing models.": "Enter a prompt or send a message before comparing models."
+  "Enter a prompt or send a message before comparing models.": "Enter a prompt or send a message before comparing models.",
+  "limit unknown": "limit unknown",
+  "Provider usage": "Provider usage",
+  "input": "input",
+  "output": "output"
 }

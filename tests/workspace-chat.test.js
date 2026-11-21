@@ -35,6 +35,9 @@ test("AI Workspace discloses estimates instead of inventing provider usage and c
   assert.match(route, /estimateTokens/);
   assert.match(route, /Not reported/);
   assert.match(route, /Cost and context limits are not inferred/);
+  assert.match(route, /context_window/);
+  assert.match(route, /Provider usage/);
+  assert.match(route, /generationMs/);
   assert.match(route, /estimatedOutputTokens/);
 });
 
