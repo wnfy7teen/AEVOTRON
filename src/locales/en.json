@@ -611,5 +611,6 @@
   "Sign out": "Sign out",
   "Didn't receive a code?": "Didn't receive a code?",
   "Resend in": "Resend in",
-  "Welcome": "Welcome"
+  "Welcome": "Welcome",
+  "Resend in {{count}}s": "Resend in {{count}}s"
 }
