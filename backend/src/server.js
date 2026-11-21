@@ -939,6 +939,8 @@ async function handle(req, res) {
     let errorCode = "internal_error";
     let inputTokens = 0;
     let outputTokens = 0;
+    let hasProviderUsage = false;
+    let usageEstimated = false;
     let assistantContent = "";
     let upstream;
     const onResponseClose = () => {
@@ -1069,7 +1071,7 @@ async function handle(req, res) {
         await pool.query(
           "UPDATE workspace_chat_sessions SET total_input_tokens=total_input_tokens+$4,total_output_tokens=total_output_tokens+$5,request_count=request_count+1,usage_estimated=usage_estimated OR $6,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
           [chatSessionId,workspace.id,user.id,inputTokens,outputTokens,usageEstimated],
-        ).catch((error) => process.stderr.write("[aevotron-api] workspace usage aggregate failed: " + error.message + "\\n"));
+        ).catch((error) => process.stderr.write("[aevotron-api] workspace usage aggregate failed: " + error.message + "\n"));
       }
       await pool.query(
         "INSERT INTO usage_events(workspace_id,owner_user_id,request_id,model_id,provider_code,input_tokens,output_tokens,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
