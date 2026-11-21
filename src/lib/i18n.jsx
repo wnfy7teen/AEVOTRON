@@ -68,10 +68,10 @@ export function LanguageSwitcher() {
   return (
     <div ref={switcherRef} className="av-language-switcher" data-open={open}>
       {open && (
-        <div id="av-language-menu" className="av-language-menu" role="listbox" aria-label={t("Language")}>
+        <div id="av-language-menu" className="av-language-menu" role="group" aria-label={t("Language")}>
           <span className="av-language-menu-title">{t("Interface language")}</span>
           {options.map((option) => (
-            <button key={option.code} type="button" role="option" aria-selected={language === option.code}
+            <button key={option.code} type="button" aria-pressed={language === option.code}
               className={language === option.code ? "active" : ""} onClick={() => selectLanguage(option.code)}>
               <span className="av-language-native">{option.native}</span>
               <span>{option.label}</span>
@@ -81,7 +81,7 @@ export function LanguageSwitcher() {
         </div>
       )}
       <button ref={triggerRef} type="button" className="av-language-trigger" aria-label={t("Language")}
-        aria-haspopup="listbox" aria-controls="av-language-menu" aria-expanded={open}
+        aria-haspopup="true" aria-controls="av-language-menu" aria-expanded={open}
         onClick={() => setOpen((value) => !value)}>
         <span className="av-language-globe" aria-hidden="true">文</span>
         <span className="av-language-current" data-language={current.code} data-no-translate>{current.code.toUpperCase()}</span>
