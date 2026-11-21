@@ -149,16 +149,16 @@ test("popular model list has explicit readable layout and contrast in light and 
 
 test("dashboard buttons and forms have explicit actions and native validation", async () => {
   const source = await read("src/routes/_authed/dashboard.jsx");
-  const buttons = [...source.matchAll(/<button\\b[\\s\\S]*?>/g)].map(([tag]) => tag);
+  const buttons = [...source.matchAll(/<button\b[\s\S]*?>/g)].map(([tag]) => tag);
   assert.ok(buttons.length >= 35, "Expected the workspace action buttons to be present");
   for (const [index, tag] of buttons.entries()) {
-    assert.ok(/\\bonClick\\s*=/.test(tag) || /\\btype\\s*=\\s*["']submit["']/.test(tag) || /\\bdisabled(?:\\s|=|>)/.test(tag),
+    assert.ok(/\bonClick\s*=/.test(tag) || /\btype\s*=\s*["']submit["']/.test(tag) || /\bdisabled(?:\s|=|>)/.test(tag),
       `Button ${index + 1} must have an action, submit a form, or be explicitly disabled`);
   }
-  const forms = [...source.matchAll(/<form\\b[\\s\\S]*?>/g)].map(([tag]) => tag);
+  const forms = [...source.matchAll(/<form\b[\s\S]*?>/g)].map(([tag]) => tag);
   assert.ok(forms.length >= 6, "Expected the account forms to be present");
   for (const [index, tag] of forms.entries()) {
-    assert.ok(/\\bonSubmit\\s*=/.test(tag), `Form ${index + 1} must handle submission`);
+    assert.ok(/\bonSubmit\s*=/.test(tag), `Form ${index + 1} must handle submission`);
   }
   assert.match(source, /id="openai-key-help"/);
   assert.match(source, /Teammate email address/);
