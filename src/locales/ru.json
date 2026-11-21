@@ -302,7 +302,7 @@
   "Could not load API keys. Refresh the page and try again.": "Не удалось загрузить API-ключи. Обновите страницу и попробуйте ещё раз。",
   "No API keys have been created yet.": "API-ключи ещё не созданы。",
   "Created": "Создан",
-  "Expires": "Истекает",
+  "Expires": "Срок действия",
   "Never": "Никогда",
   "Could not create the API key.": "Не удалось создать API-ключ。",
   "Could not revoke the API key.": "Не удалось отозвать API-ключ。",
@@ -742,5 +742,8 @@
   "Confirm and enable": "Подтвердить и включить",
   "Verifying…": "Проверка…",
   "Disabling…": "Отключение…",
-  "Time zone": "Часовой пояс"
+  "Time zone": "Часовой пояс",
+  "{{count}} matching events": "Совпадающих событий: {{count}}",
+  "Русский": "Русский",
+  "简体中文": "简体中文"
 }
