@@ -46,7 +46,7 @@ function WorkspaceChat() {
   const [editValue, setEditValue] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [search, setSearch] = useState("");
-  const [conversations, setConversations] = useState([{ id: "current", title: t("New conversation") }]);
+  const [conversations, setConversations] = useState([{ id: "current", title: t("New conversation"), messages: [] }]);
   const [activeConversation, setActiveConversation] = useState("current");
   const [metrics, setMetrics] = useState(null);
   const abortRef = useRef(null);
@@ -54,13 +54,21 @@ function WorkspaceChat() {
   const contextEstimate = useMemo(() => estimateTokens(messages), [messages]);
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 
-  const updateAssistant = (id, updater) => setMessages((current) => current.map((item) => item.id === id ? updater(item) : item));
+  const updateAssistant = (id, updater) => {
+    setMessages((current) => {
+      const next = current.map((item) => item.id === id ? updater(item) : item);
+      setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: next } : item));
+      return next;
+    });
+  };
 
   const generate = async (baseMessages) => {
     if (!activeModel || demoMode) return;
     const assistantId = crypto.randomUUID();
     const assistant = { id: assistantId, role: "assistant", content: "", createdAt: Date.now() };
-    setMessages([...baseMessages, assistant]);
+    const nextMessages = [...baseMessages, assistant];
+    setMessages(nextMessages);
+    setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: nextMessages } : item));
     setMetrics(null);
     const controller = new AbortController();
     abortRef.current = controller;
@@ -91,8 +99,8 @@ function WorkspaceChat() {
     const next = [...messages, userMessage];
     setMessages(next);
     setDraft("");
-    setConversations((items) => items.map((item) => item.id === activeConversation && item.title === t("New conversation")
-      ? { ...item, title: value.slice(0, 44) } : item));
+    setConversations((items) => items.map((item) => item.id === activeConversation
+      ? { ...item, messages: next, title: item.title === t("New conversation") ? value.slice(0, 44) : item.title } : item));
     await generate(next);
   };
 
@@ -114,6 +122,7 @@ function WorkspaceChat() {
     const edited = { ...messages[index], content: value };
     const next = [...messages.slice(0, index), edited];
     setMessages(next);
+    setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: next } : item));
     setEditingId(null);
     await generate(next);
   };
@@ -121,9 +130,9 @@ function WorkspaceChat() {
   const newConversation = () => {
     if (isStreaming) stop();
     const id = crypto.randomUUID();
-    setConversations((items) => [{ id, title: t("New conversation") }, ...items]);
+    setConversations((items) => [{ id, title: t("New conversation"), messages: [] }, ...items]);
     setActiveConversation(id);
-    setMessages([]);
+    setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setMetrics(null);
     setDraft("");
   };
