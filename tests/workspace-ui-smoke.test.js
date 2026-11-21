@@ -100,3 +100,13 @@ test("read-only preview does not call account MFA or password mutation endpoints
   assert.match(securityPanel, /Password changes are disabled in the read-only preview/);
   assert.match(securityPanel, /preview \? <div className="mh-callout av-settings-notice"/);
 });
+
+
+test("workspace interaction polish covers keyboard focus, disabled controls and reduced motion", async () => {
+  const css = await read("src/apple-style.css");
+  assert.match(css, /:focus-visible/);
+  assert.match(css, /:disabled/);
+  assert.match(css, /prefers-reduced-motion:\\s*reduce/);
+  assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
+  assert.match(css, /@media \\(max-width: 560px\\)/);
+});
