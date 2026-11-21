@@ -989,7 +989,7 @@ const landingTranslations = {
   "Как это работает": { en: "How it works", zh: "工作原理" },
   "Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем": { en: "BYOK architecture · Your provider keys stay under your control", zh: "BYOK 架构 · 服务商密钥始终由您掌控" },
   "Визуализация единого API AEVOTRON": { en: "AEVOTRON unified API visualization", zh: "AEVOTRON 统一 API 示意图" },
-  "ONE INTERFACE": { en: "ONE INTERFACE", zh: "统一接口" },
+  "ONE INTERFACE": { en: "ONE INTERFACE", ru: "ЕДИНЫЙ ИНТЕРФЕЙС", zh: "统一接口" },
   "MULTIPLE MODELS": { en: "MULTIPLE MODELS", ru: "НЕСКОЛЬКО МОДЕЛЕЙ", zh: "多种模型" },
   "ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ": { en: "ONE ENVIRONMENT FOR WORKING WITH MODELS", zh: "统一的模型工作环境" },
   "Меньше связующего кода.": { en: "Less glue code.", zh: "更少的连接代码。" },
