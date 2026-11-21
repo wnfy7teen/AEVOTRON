@@ -1,4 +1,6 @@
 import { HeadContent, Outlet, Scripts, createRootRoute, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import { NotFound } from "@/components/NotFound";
 import { Toaster } from "@/components/ui/sonner";
@@ -37,6 +39,7 @@ function RootComponent() {
     <LanguageProvider initialLanguage={locale}>
       <AuthProvider>
         <div key={pathname} className="apple-app app-route-transition"><Outlet /></div>
+        <DocumentMetadataSync />
         <Toaster />
         <LanguageSwitcher />
         <ThemeSwitcher />
@@ -59,4 +62,26 @@ function RootDocument({ children }) {
       </body>
     </html>
   );
+}
+
+function DocumentMetadataSync() {
+  const { t, i18n } = useTranslation();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  useEffect(() => {
+    const metadata = {
+      "/": ["AEVOTRON — Все модели. Один API.", "Единый API для подключения AI-моделей разных провайдеров."],
+      "/login": ["Sign in — Aevotron", "Unified API infrastructure for AI models."],
+      "/register": ["Create account — Aevotron", "Unified API infrastructure for AI models."],
+      "/forgot-password": ["Reset password — Aevotron", "Unified API infrastructure for AI models."],
+      "/reset-password": ["Choose a new password — Aevotron", "Unified API infrastructure for AI models."],
+      "/mfa": ["Two-factor authentication — Aevotron", "Unified API infrastructure for AI models."],
+      "/verify-email": ["Verify email — Aevotron", "Unified API infrastructure for AI models."],
+      "/dashboard": ["Aevotron — Workspace", "One API for every AI model."],
+    };
+    const [titleKey, descriptionKey] = metadata[pathname] || ["Aevotron — One API. Every model.", "Unified API infrastructure for AI models."];
+    document.title = t(titleKey);
+    const description = document.querySelector('meta[name="description"]');
+    if (description) description.setAttribute("content", t(descriptionKey));
+  }, [i18n.resolvedLanguage, pathname, t]);
+  return null;
 }
