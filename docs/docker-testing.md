@@ -37,8 +37,9 @@ openssl rand -hex 32       # IP_HASH_SALT
 ```
 
 Put the generated values in `.env`, then set `PUBLIC_APP_URL` to the local
-or private preview origin. For local HTTP use `COOKIE_SECURE=false`; use
-`COOKIE_SECURE=true` behind HTTPS.
+or private preview origin. The example enables `COOKIE_SECURE=true` by default.
+For local HTTP development only, explicitly set `COOKIE_SECURE=false`; never
+disable Secure cookies on a public HTTPS deployment.
 
 SMTP is required for production registration and password recovery. Configure
 `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and

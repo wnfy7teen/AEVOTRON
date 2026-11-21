@@ -54,3 +54,12 @@ test("TOTP enrollment creates a valid authenticator URI", () => {
   assert.match(secret, /^[A-Z2-7]{32}$/);
   assert.match(totpUri(secret, "user@example.com"), /^otpauth:\/\/totp\/AEVOTRON%3Auser%40example.com\?/);
 });
+
+test("password verification rejects attacker-controlled scrypt parameters and malformed hashes", async () => {
+  const encoded = await hashPassword("correct horse battery staple");
+  const [, , , , salt, hash] = encoded.split("$");
+  assert.equal(await verifyPassword("correct horse battery staple", `scrypt$999999$8$1$${salt}$${hash}`), false);
+  assert.equal(await verifyPassword("correct horse battery staple", `scrypt$16384$8$1$${salt}$short`), false);
+  assert.equal(await verifyPassword("x".repeat(257), encoded), false);
+  assert.equal(await verifyPassword(null, encoded), false);
+});

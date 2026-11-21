@@ -29,7 +29,7 @@ services:
       AEVOTRON_MASTER_KEY: ${AEVOTRON_MASTER_KEY:?Set AEVOTRON_MASTER_KEY in .env}
       IP_HASH_SALT: ${IP_HASH_SALT:?Set IP_HASH_SALT in .env}
       PUBLIC_APP_URL: ${PUBLIC_APP_URL:-http://localhost:3000}
-      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}

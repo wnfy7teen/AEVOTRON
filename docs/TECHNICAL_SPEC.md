@@ -49,7 +49,7 @@
 - UI: Dashboard, Model catalog, Providers, API keys, Usage & logs, Quickstart, API reference, Preferences.
 
 ### Backend
-- Серверные функции и server routes в TanStack Start / Base44 runtime.
+- Отдельный Node.js API в `backend/`, PostgreSQL и same-origin proxy routes TanStack Start / Nitro.
 - PostgreSQL-подобное хранилище сущностей.
 - Provider adapters: один адаптер на провайдера, общий внутренний контракт.
 - Gateway endpoint: POST /v1/chat/completions.

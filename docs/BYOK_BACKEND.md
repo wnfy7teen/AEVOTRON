@@ -1,90 +1,87 @@
 # AEVOTRON BYOK backend
 
-## Current architecture
+## Architecture
 
-- The Vercel application serves the dashboard and proxies Base44 function calls.
-- Base44 app: `ModelHub` (`6afee6f0926a08905539d9ce`).
-- Expected Base44 default host: `https://model-hub-5539d9ce.base44.app` (must be confirmed from the published URL after approval).
-- Base44 backend functions are deployed separately from the Vercel frontend.
-- Vercel rewrites `/api/apps/:appId/functions/:functionName` to the Base44 app domain and routes `/v1/chat/completions` to the `gateway` function.
+- TanStack Start serves the dashboard and same-origin API proxy routes.
+- The standalone Node.js API in `backend/src/server.js` owns authentication, workspaces, provider connections, AEVOTRON API keys, usage records, and the model gateway.
+- PostgreSQL stores users, sessions, MFA factors, workspaces, provider connections, API-key digests, usage events, audit events, and rate-limit buckets.
+- Docker Compose runs PostgreSQL, the API, Nitro frontend, and Nginx. Nginx routes `/api/v1/*` and `/v1/chat/completions` to the API.
+- Vercel Preview can use the self-hosted API only when `API_INTERNAL_URL` points to a reachable API origin.
 
-The Base44 app has not been published yet. Its visibility is configured as `public_with_login`; publishing it is a separate action and must be approved before the default app domain can be confirmed and treated as a live endpoint. Vercel Production is not changed by this branch.
+Base44 is not part of this branch. Do not use Base44 SDKs, Base44 functions/entities, Base44 rewrites, or Base44 secret storage.
 
-## Backend functions
+## Authentication and security
 
-| Function | Purpose |
-|---|---|
-| `provider-connections` | List, connect, test, revoke and discover OpenAI models |
-| `api-keys` | Create, list and revoke AEVOTRON API keys |
-| `gateway` | OpenAI Chat Completions proxy with per-key usage records |
-| `usage` | Workspace-scoped usage summaries and metadata-only request history |
+- Passwords use Node.js scrypt with per-user random 16-byte salts and fixed cost parameters.
+- Browser sessions use opaque random tokens; only SHA-256 token hashes are stored in PostgreSQL.
+- Session cookies are HttpOnly and SameSite=Lax. `COOKIE_SECURE=true` is the default and must remain enabled behind HTTPS; disable it only for local HTTP development.
+- Email verification and password-reset tokens are random, hashed at rest, time-limited, and consumed once.
+- MFA uses TOTP. Pending and confirmed TOTP secrets are encrypted at rest.
+- Provider credentials and TOTP secrets use AES-256-GCM with account/workspace context in authenticated additional data.
+- `AEVOTRON_MASTER_KEY` must be Base64 that decodes to exactly 32 random bytes. It is required to decrypt provider credentials and verify AEVOTRON API keys.
+- AEVOTRON API keys are random `mh_live_...` tokens. The full token is shown once; only a keyed HMAC-SHA-256 digest and short prefix are stored.
+- `IP_HASH_SALT` is required by the Docker configuration. It prevents raw client IP addresses from being stored in rate-limit buckets.
+- Usage and audit events are append-only at the database level. Prompt and completion bodies are not written to usage/audit records.
+- Auth and API-key rate-limit counters are stored in PostgreSQL so multiple API instances share limits.
 
-All user-management functions require an authenticated Base44 user. They derive the workspace from the authenticated user and never accept a client-supplied owner ID.
+Never place the master key, provider credentials, session tokens, or full AEVOTRON API keys in `VITE_*` variables, browser storage, client responses after initial creation, logs, Docker build arguments, or Git.
 
-## Secret management
+## API routes
 
-The Base44 Secret Storage contains `AEVOTRON_MASTER_KEY`, a 32-byte random key encoded as Base64.
+| Route | Purpose |
+| --- | --- |
+| `POST /api/v1/auth/register` | Register an account and start email verification |
+| `POST /api/v1/auth/verify-email` | Verify the email address |
+| `POST /api/v1/auth/login` | Create a session or request MFA verification |
+| `POST /api/v1/auth/mfa/verify-login` | Complete a TOTP login challenge |
+| `POST /api/v1/auth/logout` / `GET /api/v1/auth/me` | End or inspect the current session |
+| `POST /api/v1/auth/password/forgot` / `POST /api/v1/auth/password/reset` | Password recovery |
+| `GET /api/v1/auth/mfa/status`, `POST /api/v1/auth/mfa/enroll`, `/confirm`, `/disable` | Manage TOTP MFA |
+| `GET /api/v1/workspaces/current`, `POST /api/v1/workspaces` | Read or create a workspace |
+| `GET /api/v1/api-keys`, `POST /api/v1/api-keys` | List or create workspace API keys |
+| `/api/v1/providers/openai` | Connect, test, or revoke an OpenAI credential |
+| `GET /api/v1/providers`, `/api/v1/providers/openai/models`, `/api/v1/models` | List provider connections and available models |
+| `GET /api/v1/usage/summary`, `/api/v1/usage/events` | Read usage summaries and metadata-only events |
+| `POST /v1/chat/completions` | OpenAI-compatible gateway endpoint |
 
-- Provider credentials are encrypted with AES-256-GCM.
-- Encryption and API-key HMAC subkeys are derived using HKDF-SHA-256 with separate context labels.
-- Credential ciphertext is bound to the owner, workspace and provider through AES-GCM additional authenticated data.
-- AEVOTRON API keys are generated from cryptographically secure random bytes. Only an HMAC-SHA-256 digest is stored.
-- The full AEVOTRON key is returned once at creation. It is not retrievable afterward.
-- The master key backup must be stored securely outside the repository. Losing it makes existing encrypted provider credentials unreadable and invalidates existing AEVOTRON API keys.
+## Current gateway limitations
 
-Never put provider credentials, the master key or full AEVOTRON API keys in Git, browser storage, logs or support messages.
+- OpenAI is the only provider adapter currently implemented.
+- Chat Completions supports non-streaming text requests only.
+- Streaming, tool calls, embeddings, image/audio/video, and other multimodal requests are rejected until explicitly implemented and tested.
+- Request size, message count, output-token limits, API-key scope, and per-key rate limits are enforced server-side.
+- No platform-funded API balance or markup is implemented; the connected provider bills its own account.
+- The gateway does not yet provide complete OpenAI API parity or a public `/v1/models` contract for every provider.
 
-## Data access
+Do not market this beta as a full OpenAI-compatible replacement or promise availability in regions not supported by the upstream provider.
 
-Workspace and membership records are owner-scoped. Provider connection and API key records can be read by their owner, but credential ciphertext and API-key hashes are restricted to trusted backend/admin access. Usage and audit records are append-only for normal users; users can read only their own workspace records.
+## Local setup
 
-Usage records contain request metadata (model, token counts, latency, status and error code). Prompt and completion contents are not stored.
-
-## Current API beta
-
-Endpoint after the Base44 app is published and the Vercel rewrite is deployed:
-
-`POST https://<AEVOTRON-domain>/v1/chat/completions`
-
-Example:
-
-```bash
-curl https://<AEVOTRON-domain>/v1/chat/completions \
-  -H "Authorization: Bearer mh_live_YOUR_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "gpt-4o-mini",
-    "messages": [{"role": "user", "content": "Hello"}]
-  }'
+```sh
+cp .env.docker.example .env
+openssl rand -hex 24       # POSTGRES_PASSWORD
+openssl rand -base64 32    # AEVOTRON_MASTER_KEY
+openssl rand -hex 32       # IP_HASH_SALT
+docker compose up --build -d
 ```
 
-Current limits:
+Set `PUBLIC_APP_URL` to the public HTTPS origin and keep `COOKIE_SECURE=true` for any non-local deployment. Configure SMTP for production registration and password recovery. Back up `AEVOTRON_MASTER_KEY` securely outside the repository; losing it makes existing provider credentials and AEVOTRON API keys unusable.
 
-- OpenAI only; other provider adapters are not implemented.
-- Text chat only. Streaming, tool calls, embeddings, image/audio and multimodal requests are not supported.
-- Request body maximum: 64 KB; up to 50 messages; text content is validated.
-- `max_tokens` is capped at 4096.
-- Best-effort limit: 30 requests/minute per API key. This is not an atomic distributed limiter; replace it with a durable atomic limiter before high-volume/public launch.
-- No platform price markup or cost estimate is calculated. The provider bills the connected OpenAI account directly.
-- API keys expire after 30, 90 or 365 days; default is 90 days. A workspace can have at most 20 active keys.
+## Verification
 
-Do not advertise this beta as a complete OpenAI API replacement.
+```sh
+npm test
+npm run lint
+npm run build
+npm --prefix backend install --no-audit --no-fund
+npm --prefix backend test
+sh ./docker-verify.sh
+```
 
-## Deployment checklist
+The Docker smoke test starts the full stack, checks homepage HTML and same-origin assets, exercises the declared app routes, and verifies that an anonymous session request receives HTTP 401. Unit tests cover password hashing, malformed password-hash rejection, API-key generation, authenticated encryption/context binding, and RFC 6238 TOTP.
 
-1. Keep this work on `feat/apple-style-landing`.
-2. Publish the Base44 app only after explicit approval; its visibility is already set to `public_with_login`.
-3. Verify the Base44 default domain and all four function invocations.
-4. Deploy the Vercel Preview and verify the proxy rewrites and dashboard interactions.
-5. Test provider connect/test/revoke with a provider key entered only in the dashboard.
-6. Create and revoke a test AEVOTRON key; verify that the full value is shown once.
-7. Send a test Chat Completions request; verify usage metadata and absence of prompt content in logs.
-8. Do not merge to GitHub `main` or deploy Vercel Production without separate approval.
+These checks are not a substitute for browser-level end-to-end testing of email delivery, MFA enrollment/login, password recovery, provider credential validation, API-key revocation, and real upstream model requests.
 
-## Known follow-up work
+## Deployment boundary
 
-- Replace the best-effort rate guard with an atomic distributed limiter and add per-key daily/monthly budgets.
-- Add provider adapters for Anthropic, Google and other compatible services.
-- Add a public `/v1/models` endpoint and additional OpenAI-compatible routes.
-- Add streaming and tool-call support only after the gateway has robust cancellation, metering and limits.
-- Resolve the documented race risk in first-time workspace provisioning with an atomic unique/upsert mechanism.
+This branch is a self-hosted migration/Preview branch. Vercel Production, production domains, DNS, aliases, and production environment variables remain unchanged. Do not promote this branch until the API is deployed, `API_INTERNAL_URL` is configured for Preview, and browser-level authentication and gateway integration tests pass.

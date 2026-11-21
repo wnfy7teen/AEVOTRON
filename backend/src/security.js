@@ -23,11 +23,18 @@ export async function hashPassword(password) {
 }
 
 export async function verifyPassword(password, encoded) {
-  const [kind, n, r, p, saltText, hashText] = String(encoded || "").split("$");
-  if (kind !== "scrypt" || !saltText || !hashText) return false;
+  if (typeof password !== "string" || password.length > 256) return false;
+  const parts = String(encoded || "").split("$");
+  if (parts.length !== 6) return false;
+  const [kind, n, r, p, saltText, hashText] = parts;
+  // Only accept the parameters emitted by hashPassword. Never let a stored
+  // hash choose attacker-controlled scrypt cost parameters during login.
+  if (kind !== "scrypt" || n !== "16384" || r !== "8" || p !== "1" || !saltText || !hashText) return false;
+  const salt = Buffer.from(saltText, "base64url");
   const expected = Buffer.from(hashText, "base64url");
-  const actual = Buffer.from(await scrypt(password, Buffer.from(saltText, "base64url"), expected.length, {
-    N: Number(n), r: Number(r), p: Number(p), maxmem: 64 * 1024 * 1024,
+  if (salt.length !== 16 || expected.length !== 64) return false;
+  const actual = Buffer.from(await scrypt(password, salt, 64, {
+    N: 16384, r: 8, p: 1, maxmem: 64 * 1024 * 1024,
   }));
   return safeEqual(actual, expected);
 }

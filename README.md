@@ -1,39 +1,70 @@
-# Base44 App — TanStack Start
+# AEVOTRON
 
-A full-stack Base44 app: [TanStack Start](https://tanstack.com/start) (React 19, plain JavaScript) with file-based routes, server functions and server routes, server-rendered and hosted by Base44.
+AEVOTRON is a multi-provider AI gateway and workspace application built with React 19, TanStack Start, Vite/Nitro, a self-hosted Node.js API, and PostgreSQL.
 
-## What is in the starter
+## Architecture
 
-| Route | File |
-| --- | --- |
-| `/` | `src/routes/index.jsx` — a placeholder home page, replaced by the app's own |
+- **Frontend:** TanStack Start routes and dashboard in `src/`; Vite/Nitro builds the web application.
+- **API:** standalone Node.js service in `backend/` handles authentication, workspaces, provider credentials, AEVOTRON API keys, usage, and the OpenAI-compatible gateway.
+- **Database:** PostgreSQL schema and migrations in `backend/migrations/`.
+- **Local/self-hosted stack:** Docker Compose runs PostgreSQL, API, Nitro frontend, and an Nginx gateway. The database and API are not exposed directly to the public host; Nginx binds to `127.0.0.1:3000`.
+- **Vercel:** serves the frontend. A self-hosted API must be reachable through `API_INTERNAL_URL` before the Vercel Preview can use authenticated backend features.
+
+Base44 runtime dependencies and platform resources are removed from this branch. Do not reintroduce Base44 SDK calls, Vite plugins, function rewrites, or entity resources.
 
 ## Run locally
 
-```bash
-npm ci
-base44 login   # one-time per machine
-base44 link    # one-time per clone
-base44 dev     # local backend + app together
+Requirements: Node.js 22+, Docker Engine, and the Docker Compose plugin.
+
+```sh
+npm install --no-audit --no-fund
+npm run dev
 ```
 
-## Build and publish
+To run the complete self-hosted stack:
 
-```bash
-npm run build         # -> dist/client (assets) + dist/server (the Worker)
-base44 deploy         # or publish from the Base44 builder
+```sh
+cp .env.docker.example .env
+# Replace all placeholder secrets with independently generated random values.
+openssl rand -hex 24       # POSTGRES_PASSWORD
+openssl rand -base64 32    # AEVOTRON_MASTER_KEY (exactly 32 decoded bytes)
+openssl rand -hex 32       # IP_HASH_SALT
+docker compose up --build -d
 ```
 
-There is no `index.html`: the HTML document is rendered on the server from `src/routes/__root.jsx`. The build runs through the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/), so dev and build both execute server code in `workerd`.
+Open `http://localhost:3000`. For local HTTP development set `COOKIE_SECURE=false` in `.env`; keep it `true` behind HTTPS. Configure SMTP before enabling production registration and password recovery.
 
-## How the pieces fit
+## Verification
 
-- **Pages** are files in `src/routes/`. A route's `loader` runs on the server for a document request and in the browser for a client navigation; `Route.useLoaderData()` gives the component the resolved data.
-- **Server functions** (in `src/lib/server-fns.js`, created with the first one) are RPCs created with `createServerFn`. `src/start.js` runs every one of them through `authMiddleware`, which sends the visitor's token along, so `context.getBase44()` returns a client acting as that visitor and entity access rules apply. `context.getBase44().asServiceRole` bypasses them, so use it only after authenticating the caller (`.middleware([requireUser])`) and checking they may access the records involved: server functions and server routes are public endpoints anyone can call with any input. See **Server Security** in `AGENTS.md`. Call it only in handlers that need Base44: it reads the platform headers, and a handler that never calls it works without them.
-- **Secrets** are read in server code with `import { secrets } from "base44:runtime"` → `secrets.get("NAME")`, inside a handler. Never `process.env`.
-- **Server routes** (`src/routes/api/*.js`) are raw HTTP endpoints for URLs something other than the app's own code requests (webhooks, downloads, feeds); the app's pages call server functions. `src/start.js` runs every request through `base44RequestMiddleware`, so their `server.handlers` receive the same `context.getBase44()` (`({ request, params, context }) => …`).
-- **Server-only code** lives in `*.server.js` files (TanStack refuses to bundle them for the browser).
-- **Auth** is resolved client-side after hydration (`useAuth()`); the server is anonymous on a document request, so give per-user pages `ssr: false`.
-- **Sign-in and gated pages** are not wired in the starter: `src/components/auth/` holds the pages (login, register, password reset, MCP consent) and a login gate for `src/routes/_authed/`, to add when the app needs them. See **Adding Authentication** in `AGENTS.md`.
-- **AI**: TanStack AI is installed and runs on the Base44 AI gateway, with no API key and usage billed to the app's AI credits. `gatewayModel(context.getBase44())` in `src/lib/ai.server.js` builds the adapter; `AGENTS.md` has a streaming chat example (a server function plus `useChat`).
-- **Caching**: the platform caches only what a route opts into via `headers()` (`Cache-Control: public, s-maxage=…`). Everything else is served fresh.
+```sh
+npm test
+npm run lint
+npm run build
+npm --prefix backend install --no-audit --no-fund
+npm --prefix backend test
+sh ./docker-verify.sh
+```
+
+GitHub Actions runs the frontend policy tests, backend security tests, lint, production build, and Docker smoke verification on the self-hosted feature branch.
+
+## Current API scope
+
+- Email/password authentication, email verification, password reset, TOTP MFA, and opaque browser sessions.
+- Workspace-scoped provider connections and API keys.
+- OpenAI provider connection and non-streaming Chat Completions gateway.
+- API keys are shown once and stored as HMAC-SHA-256 digests.
+- Provider credentials and TOTP secrets are encrypted with AES-256-GCM.
+- Usage and audit records are append-only; prompt and completion content are not persisted.
+
+Streaming, tool calls, embeddings, multimodal requests, additional provider adapters, full browser-level end-to-end coverage, and production operational hardening remain out of scope for this beta.
+
+## Documentation
+
+- `docs/BYOK_BACKEND.md` — current backend architecture, security model, API routes, and limitations.
+- `docs/docker-testing.md` — Docker setup, verification, and deployment boundary.
+- `docs/TECHNICAL_SPEC.md` — product requirements and technical specification.
+- `AGENTS.md` — repository-specific development and security rules.
+
+## Deployment boundary
+
+`feat/self-hosted-backend` is a preview/migration branch. It does not change Vercel Production, production domains, DNS, or live environment variables. Do not merge or promote it until the self-hosted API is deployed, its Preview environment is configured, and the browser-level authentication and gateway integration tests pass.

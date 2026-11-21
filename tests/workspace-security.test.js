@@ -74,3 +74,10 @@ test("frontend build has no Base44 SDK, platform function or rewrite dependency"
   assert.doesNotMatch(vite, /@base44/);
   assert.doesNotMatch(api, /base44\.app|app\.base44\.com/);
 });
+
+test("Docker configuration enables Secure session cookies by default", async () => {
+  const compose = await read("docker-compose.yml");
+  const envExample = await read(".env.docker.example");
+  assert.match(compose, /COOKIE_SECURE: \\?\$\\?\\{COOKIE_SECURE:-true\\}/);
+  assert.match(envExample, /^COOKIE_SECURE=true$/m);
+});
