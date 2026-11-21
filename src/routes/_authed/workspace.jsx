@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
@@ -26,6 +26,13 @@ function estimateTokens(messages) {
 function WorkspaceChat() {
   const { t } = useTranslation(["dashboard", "translation"]);
   const demoMode = Boolean(readDemoUser());
+  const sessionsQuery = useQuery({
+    queryKey: ["workspace-chats"],
+    queryFn: () => api.workspace.listChats(),
+    enabled: !demoMode,
+    retry: false,
+    staleTime: 15_000,
+  });
   const modelQuery = useQuery({
     queryKey: ["workspace-chat-models"],
     queryFn: async () => {
@@ -48,26 +55,58 @@ function WorkspaceChat() {
   const [search, setSearch] = useState("");
   const [conversations, setConversations] = useState([{ id: "current", title: t("New conversation"), messages: [] }]);
   const [activeConversation, setActiveConversation] = useState("current");
+  const activeConversationRef = useRef("current");
+  const [chatError, setChatError] = useState("");
   const [metrics, setMetrics] = useState(null);
   const abortRef = useRef(null);
   const composerRef = useRef(null);
   const contextEstimate = useMemo(() => estimateTokens(messages), [messages]);
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 
-  const updateAssistant = (id, updater) => {
-    setMessages((current) => current.map((item) => item.id === id ? updater(item) : item));
-    setConversations((items) => items.map((conversation) => conversation.id === activeConversation
+  useEffect(() => {
+    if (demoMode) return;
+    const sessions = sessionsQuery.data?.sessions;
+    if (!sessions) return;
+    setConversations((current) => sessions.map((session) => ({
+      ...session,
+      messages: current.find((item) => item.id === session.id)?.messages || [],
+    })));
+    if (activeConversation === "current" && sessions.length) {
+      activeConversationRef.current = sessions[0].id;
+      setActiveConversation(sessions[0].id);
+    }
+  }, [demoMode, sessionsQuery.data, activeConversation]);
+
+  useEffect(() => {
+    if (demoMode || !activeConversation || activeConversation === "current") return undefined;
+    let current = true;
+    api.workspace.getChat(activeConversation).then((result) => {
+      if (!current || activeConversationRef.current !== activeConversation) return;
+      const loaded = result.messages || [];
+      setMessages(loaded);
+      setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, ...result.session, messages: loaded } : item));
+    }).catch((error) => {
+      if (current) setChatError(error.message || t("Could not load this conversation."));
+    });
+    return () => { current = false; };
+  }, [activeConversation, demoMode, t]);
+
+  const updateAssistant = (id, updater, conversationId) => {
+    if (activeConversationRef.current === conversationId) {
+      setMessages((current) => current.map((item) => item.id === id ? updater(item) : item));
+    }
+    setConversations((items) => items.map((conversation) => conversation.id === conversationId
       ? { ...conversation, messages: conversation.messages.map((item) => item.id === id ? updater(item) : item) }
       : conversation));
   };
 
-  const generate = async (baseMessages) => {
+  const generate = async (baseMessages, { sessionId = activeConversation, persistUserMessage = true } = {}) => {
     if (!activeModel || demoMode) return;
     const assistantId = crypto.randomUUID();
     const assistant = { id: assistantId, role: "assistant", content: "", createdAt: Date.now() };
     const nextMessages = [...baseMessages, assistant];
     setMessages(nextMessages);
-    setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: nextMessages } : item));
+    setConversations((items) => items.map((item) => item.id === sessionId ? { ...item, messages: nextMessages } : item));
     setMetrics(null);
     const controller = new AbortController();
     abortRef.current = controller;
@@ -75,14 +114,20 @@ function WorkspaceChat() {
     try {
       const result = await api.workspace.streamChat({
         model: activeModel.id,
+        session_id: demoMode ? undefined : sessionId,
+        persist_user_message: persistUserMessage,
         messages: baseMessages.map(({ role, content }) => ({ role, content })),
         signal: controller.signal,
-        onDelta: (delta) => updateAssistant(assistantId, (item) => ({ ...item, content: item.content + delta })),
+        onDelta: (delta) => updateAssistant(assistantId, (item) => ({ ...item, content: item.content + delta }), sessionId),
       });
       setMetrics(result);
+      if (result.sessionId && result.sessionId !== sessionId) {
+        activeConversationRef.current = result.sessionId;
+        setActiveConversation(result.sessionId);
+      }
     } catch (error) {
       if (error.name !== "AbortError") {
-        updateAssistant(assistantId, (item) => ({ ...item, error: error.message || t("The response could not be completed.") }));
+        updateAssistant(assistantId, (item) => ({ ...item, error: error.message || t("The response could not be completed.") }), sessionId);
       }
     } finally {
       abortRef.current = null;
@@ -94,13 +139,26 @@ function WorkspaceChat() {
     event?.preventDefault?.();
     const value = draft.trim();
     if (!value || isStreaming || !activeModel || demoMode) return;
+    let sessionId = activeConversation;
+    if (!demoMode && (!sessionId || sessionId === "current")) {
+      try {
+        const created = await api.workspace.createChat({ title: value.slice(0, 100), model_id: activeModel.id });
+        sessionId = created.session.id;
+        activeConversationRef.current = sessionId;
+        setActiveConversation(sessionId);
+        setConversations((items) => [{ ...created.session, messages: [] }, ...items.filter((item) => item.id !== sessionId)]);
+      } catch (error) {
+        setChatError(error.message || t("Could not create a conversation."));
+        return;
+      }
+    }
     const userMessage = { id: crypto.randomUUID(), role: "user", content: value, createdAt: Date.now() };
     const next = [...messages, userMessage];
     setMessages(next);
     setDraft("");
-    setConversations((items) => items.map((item) => item.id === activeConversation
+    setConversations((items) => items.map((item) => item.id === sessionId
       ? { ...item, messages: next, title: item.title === t("New conversation") ? value.slice(0, 44) : item.title } : item));
-    await generate(next);
+    await generate(next, { sessionId });
   };
 
   const stop = () => abortRef.current?.abort();
@@ -109,7 +167,7 @@ function WorkspaceChat() {
     if (isStreaming) return;
     const lastUserIndex = messages.map((item) => item.role).lastIndexOf("user");
     if (lastUserIndex < 0) return;
-    await generate(messages.slice(0, lastUserIndex + 1));
+    await generate(messages.slice(0, lastUserIndex + 1), { sessionId: activeConversation, persistUserMessage: false });
   };
 
   const saveEdit = async (messageId) => {
@@ -123,25 +181,55 @@ function WorkspaceChat() {
     setMessages(next);
     setConversations((items) => items.map((item) => item.id === activeConversation ? { ...item, messages: next } : item));
     setEditingId(null);
-    await generate(next);
+    await generate(next, { sessionId: activeConversation });
   };
 
-  const newConversation = () => {
+  const newConversation = async () => {
     if (isStreaming) stop();
-    const id = crypto.randomUUID();
-    setConversations((items) => [{ id, title: t("New conversation"), messages: [] }, ...items]);
-    setActiveConversation(id);
+    setChatError("");
+    if (demoMode) {
+      const id = crypto.randomUUID();
+      setConversations((items) => [{ id, title: t("New conversation"), messages: [] }, ...items]);
+      activeConversationRef.current = id;
+      setActiveConversation(id);
+    } else {
+      try {
+        const created = await api.workspace.createChat({ title: t("New conversation"), model_id: activeModel?.id });
+        const session = { ...created.session, messages: [] };
+        setConversations((items) => [session, ...items.filter((item) => item.id !== session.id)]);
+        activeConversationRef.current = session.id;
+        setActiveConversation(session.id);
+        sessionsQuery.refetch();
+      } catch (error) {
+        setChatError(error.message || t("Could not create a conversation."));
+        return;
+      }
+    }
     setMessages([]);
     setMetrics(null);
     setDraft("");
   };
 
-  const selectConversation = (id) => {
+  const selectConversation = async (id) => {
     if (id === activeConversation) return;
     if (isStreaming) stop();
+    setChatError("");
+    activeConversationRef.current = id;
     setActiveConversation(id);
     setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setMetrics(null);
+    if (!demoMode && id !== "current") {
+      try {
+        const result = await api.workspace.getChat(id);
+        if (activeConversationRef.current === id) {
+          const loaded = result.messages || [];
+          setMessages(loaded);
+          setConversations((items) => items.map((item) => item.id === id ? { ...item, ...result.session, messages: loaded } : item));
+        }
+      } catch (error) {
+        if (activeConversationRef.current === id) setChatError(error.message || t("Could not load this conversation."));
+      }
+    }
   };
 
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
@@ -181,6 +269,7 @@ function WorkspaceChat() {
             </div>
           </div>
 
+          {chatError && <div className="aw-notice is-warning" role="alert"><X size={16}/><span>{chatError}</span><button type="button" onClick={() => setChatError("")}>{t("Dismiss")}</button></div>}
           {demoMode && <div className="aw-notice" role="status"><Sparkles size={16}/><span>{t("This is a local demo session. Connect a real account and provider to send live requests.")}</span><a href="/dashboard">{t("Open providers")}</a></div>}
           {!demoMode && modelQuery.isError && <div className="aw-notice is-warning" role="alert"><X size={16}/><span>{t("Could not load your connected models.")}</span><a href="/dashboard">{t("Manage providers")}</a></div>}
           {!demoMode && !modelQuery.isLoading && !models.length && <div className="aw-empty-models"><Bot size={26}/><h2>{t("No models connected yet")}</h2><p>{t("Connect OpenAI or Groq in your dashboard. Only models returned by your provider account appear here.")}</p><a href="/dashboard">{t("Open provider settings")}</a></div>}

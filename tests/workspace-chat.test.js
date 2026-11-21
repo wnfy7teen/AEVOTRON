@@ -9,6 +9,9 @@ test("AI Workspace route uses the session-authenticated streaming client", async
   const client = await read("src/api/client.js");
   assert.match(route, /createFileRoute\("\/_authed\/workspace"\)/);
   assert.match(route, /api\.workspace\.streamChat/);
+  assert.match(route, /api\.workspace\.listChats/);
+  assert.match(route, /api\.workspace\.getChat/);
+  assert.match(route, /api\.workspace\.createChat/);
   assert.match(route, /onDelta:/);
   assert.match(route, /CircleStop/);
   assert.match(route, /onClick=\{stop\}/);
