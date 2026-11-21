@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download, GitBranch, Paperclip, Star } from "lucide-react";
@@ -84,6 +84,8 @@ function WorkspaceChat() {
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState("");
   const [metrics, setMetrics] = useState(null);
+  const chatUsageQuery = useQuery({ queryKey: ["workspace-chat-usage", activeConversation], queryFn: () => api.workspace.getChatUsage(activeConversation), enabled: !demoMode && activeConversation !== "current", staleTime: 0, refetchOnWindowFocus: false });
+  const sessionUsage = chatUsageQuery.data?.usage || null;
   const [compareOpen, setCompareOpen] = useState(false);
   const [compareSelection, setCompareSelection] = useState([]);
   const [compareResults, setCompareResults] = useState([]);
@@ -243,6 +245,7 @@ function WorkspaceChat() {
         onDelta: (delta) => updateAssistant(assistantId, (item) => ({ ...item, content: item.content + delta }), sessionId),
       });
       setMetrics(result);
+      if (sessionId && sessionId !== "current") queryClient.invalidateQueries({ queryKey: ["workspace-chat-usage", sessionId] });
       if (result.sessionId && result.sessionId !== sessionId) {
         activeConversationRef.current = result.sessionId;
         setActiveConversation(result.sessionId);
@@ -473,6 +476,10 @@ function WorkspaceChat() {
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
   const generationMs = metrics?.elapsedMs ? Math.max(1, metrics.elapsedMs - (metrics.ttftMs || 0)) : 0;
   const tokenRate = outputTokens && generationMs ? (outputTokens / (generationMs / 1000)).toFixed(1) : "—";
+  const sessionInputTokens = Number(sessionUsage?.total_input_tokens || 0);
+  const sessionOutputTokens = Number(sessionUsage?.total_output_tokens || 0);
+  const sessionRequestCount = Number(sessionUsage?.request_count || 0);
+  const sessionCost = sessionUsage?.estimated_cost == null ? null : Number(sessionUsage.estimated_cost);
   const contextLimit = modelContextLimit;
   const contextRemaining = contextLimit ? Math.max(0, contextLimit - contextEstimate) : null;
   const contextLabel = contextLimit
@@ -547,7 +554,8 @@ function WorkspaceChat() {
             <div className="aw-status-metric"><Clock3 size={13}/><span>{t("TTFT")}: {metrics?.ttftMs != null ? metrics.ttftMs + " ms" : "—"}</span></div>
             {metrics?.usage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Provider usage")}: {metrics.usage.prompt_tokens ?? metrics.usage.input_tokens ?? "—"} {t("input")} / {metrics.usage.completion_tokens ?? metrics.usage.output_tokens ?? "—"} {t("output")}</span></div>}
             <div className="aw-status-metric"><Sparkles size={13}/><span>{t("Output speed")}: {tokenRate === "—" ? "—" : (metrics?.usage ? "" : "~") + tokenRate + " tok/s"}</span></div>
-            <div className="aw-status-cost">{t("Cost")}: {t("Not reported")}</div>
+            {sessionUsage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Session usage")}: {sessionInputTokens.toLocaleString()} {t("input")} / {sessionOutputTokens.toLocaleString()} {t("output")} · {sessionRequestCount} {t("requests")}{sessionUsage.usage_estimated ? " · " + t("Estimated") : ""}</span></div>}
+            <div className="aw-status-cost">{t("Cost")}: {sessionCost == null ? t("Not reported") : sessionCost.toFixed(4) + " " + (sessionUsage.currency || "USD")}</div>
           </div>
           <p className="aw-disclaimer">{t("Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.")} {t("Only plain text and source code files are parsed locally in this version.")}</p>
         </section>
