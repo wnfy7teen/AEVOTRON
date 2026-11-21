@@ -53,7 +53,10 @@ docker compose up --build -d
 
 Open http://localhost:3000. The gateway sends page traffic to the Nitro
 frontend and `/api/v1/*` plus `/v1/chat/completions` to the independent Node
-API. PostgreSQL data persists in the `aevotron-postgres` named volume.
+API. PostgreSQL data persists in the `aevotron-postgres` named volume. The
+Nitro frontend also has same-origin API proxy routes for deployments where
+Nginx is not in front of the app; configure `API_INTERNAL_URL` to an
+externally reachable API origin in that environment.
 
 Stop without deleting database data:
 
@@ -104,8 +107,15 @@ session request. Full email delivery, MFA setup/sign-in, password reset,
 provider credential validation, API-key lifecycle, and real upstream model
 requests still require integration tests before release.
 
-## Production boundary
+## Vercel preview and production boundary
 
-Vercel remains the production serving platform. The self-hosted stack lives on
-`feat/self-hosted-backend` and is not deployed or merged. No Production
-configuration or live domain is changed by this branch.
+The old Base44-specific rewrites have been removed from this branch. TanStack
+server routes proxy `/api/v1/*` and `/v1/chat/completions` to
+`API_INTERNAL_URL`. A Vercel Preview can use this API only after that
+environment variable points to a reachable self-hosted API deployment. The
+Docker Compose stack supplies the internal API address automatically.
+
+Vercel Production remains on its existing deployment because this branch is
+not merged or deployed to Production. Do not promote this branch until the
+self-hosted API is deployed, its Preview environment is configured, and the
+browser-level auth and gateway integration suite passes.
