@@ -63,4 +63,38 @@ describe("application i18n", () => {
     expect(freshPage.resolvedLanguage).toBe("en");
     expect(freshPage.t("Welcome back")).toBe("Welcome back");
   });
+  it("isolates locale state between independent SSR request instances", () => {
+    const englishRequest = createAppI18n({ language: "en", storage: null });
+    const russianRequest = createAppI18n({ language: "ru", storage: null });
+    const chineseRequest = createAppI18n({ language: "zh", storage: null });
+
+    expect(englishRequest.t("Welcome back")).toBe("Welcome back");
+    expect(russianRequest.t("Welcome back")).toBe("С возвращением");
+    expect(chineseRequest.t("Welcome back")).toBe("欢迎回来");
+
+    russianRequest.changeLanguage("zh");
+    expect(englishRequest.language).toBe("en");
+    expect(chineseRequest.language).toBe("zh");
+  });
+
+  it("supports locale-aware plural forms and interpolation", () => {
+    const english = createAppI18n({ language: "en", storage: null });
+    const russian = createAppI18n({ language: "ru", storage: null });
+    const chinese = createAppI18n({ language: "zh", storage: null });
+
+    expect(english.t("i18n.test.item", { count: 1 })).toBe("1 item");
+    expect(english.t("i18n.test.item", { count: 3 })).toBe("3 items");
+    expect(russian.t("i18n.test.item", { count: 2 })).toBe("2 элемента");
+    expect(russian.t("i18n.test.item", { count: 5 })).toBe("5 элементов");
+    expect(chinese.t("i18n.test.item", { count: 2 })).toBe("2 个项目");
+  });
+
+  it("normalizes regional language tags and uses the supported fallback", async () => {
+    const { normalizeLanguage } = await import("@/i18n");
+    expect(normalizeLanguage("ru-RU")).toBe("ru");
+    expect(normalizeLanguage("zh-CN")).toBe("zh");
+    expect(normalizeLanguage("fr-FR")).toBe("en");
+    expect(normalizeLanguage(null)).toBe("en");
+  });
+
 });
