@@ -614,5 +614,10 @@
   "Welcome": "Welcome",
   "Resend in {{count}}s": "{{count}} 秒后重新发送",
   "This app requires multi-factor authentication": "此应用要求启用多重身份验证",
-  "A 6-digit code sent to": "六位验证码已发送至"
+  "A 6-digit code sent to": "六位验证码已发送至",
+  "{{appName}} requires multi-factor authentication": "应用“{{appName}}”要求启用多重身份验证",
+  "Sending code to {{phone}}…": "正在向 {{phone}} 发送验证码…",
+  "Enter the code sent to {{phone}}": "请输入发送至 {{phone}} 的验证码",
+  "A 6-digit code sent to {{phone}}": "六位验证码已发送至 {{phone}}",
+  "Enabled · {{phone}}": "已启用 · {{phone}}"
 }
