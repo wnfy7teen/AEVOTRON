@@ -6,18 +6,18 @@ variables.
 
 ## Current migration status
 
-The independent Node.js API and PostgreSQL schema are scaffolded under
-`backend/`. The API includes email/password registration and verification,
-session cookies, password reset, TOTP MFA, workspaces, API-key management,
-encrypted OpenAI credentials, usage records, and an OpenAI-compatible
-non-streaming chat completion endpoint.
+The independent Node.js API and PostgreSQL schema live under `backend/`.
+The Base44 SDK, Vite plugin, platform function resources, and Base44 entity
+definitions have been removed from this branch. The login, registration,
+email verification, password recovery, TOTP MFA, workspace, API-key,
+provider-connection, model-discovery, and usage screens now call the
+same-origin self-hosted API.
 
-**The existing React pages are not yet migrated.** They still import the
-Base44 SDK and call Base44 auth/entities/functions. A successful container
-smoke test currently proves that the frontend can start and that the new API
-responds, but it does not mean the browser UI has stopped depending on Base44.
-Do not treat this branch as a production-ready replacement until the frontend
-adapter, all page flows, and integration tests have been migrated.
+Current scope limitations: only TOTP authenticator MFA is implemented (no
+SMS), social OAuth is not configured, and OpenAI is the only provider adapter.
+The chat endpoint supports non-streaming OpenAI Chat Completions. The
+standalone backend still needs deeper browser-level integration testing and
+operational hardening before production use.
 
 ## Configure locally
 
@@ -98,10 +98,11 @@ starts PostgreSQL, the API, frontend, and Nginx gateway; checks homepage HTML,
 all same-origin JS/CSS assets, the declared app routes, and verifies that
 unauthenticated `/api/v1/auth/me` returns HTTP 401.
 
-These are build and smoke tests, not a full browser end-to-end suite. Email
-delivery, MFA setup/sign-in, password reset, API-key lifecycle, provider
-connection, and real upstream model requests still require integration tests
-before release.
+These are build and HTTP smoke tests, not a full browser end-to-end suite.
+The automated smoke test checks that the API starts and rejects an anonymous
+session request. Full email delivery, MFA setup/sign-in, password reset,
+provider credential validation, API-key lifecycle, and real upstream model
+requests still require integration tests before release.
 
 ## Production boundary
 
