@@ -65,7 +65,7 @@ while IFS= read -r asset; do
 done < "$ASSET_LIST"
 printf 'Homepage and JS/CSS assets passed: %s assets.\n' "$asset_count"
 
-for route in /login /register /forgot-password /reset-password /mfa /dashboard; do
+for route in /login /register /forgot-password /reset-password /verify-email /mfa /dashboard; do
   curl -fsSL "http://127.0.0.1:3000$route" -o "$HTML_FILE"
   grep -Eiq '<!doctype html|<html([[:space:]>])' "$HTML_FILE"
   printf 'Route OK: %s\n' "$route"
