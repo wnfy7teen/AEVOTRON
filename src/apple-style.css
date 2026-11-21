@@ -2740,3 +2740,15 @@ html[data-theme="dark"] .aw-message-content pre { border-color:#304252; backgrou
 html[data-theme="dark"] .aw-message-content :not(pre) > code { background:#243847; color:#b9ddeb; }
 html[data-theme="dark"] .aw-message-content th,html[data-theme="dark"] .aw-message-content td { border-color:#344653; }
 html[data-theme="dark"] .aw-message-content th { background:#20313e; color:#c8d5df; }
+
+.aw-history-item { display:flex; align-items:center; gap:3px; min-width:0; }
+.aw-history-select { display:flex; align-items:center; gap:9px; flex:1; min-width:0; width:100%; padding:10px 9px; border:0; border-radius:8px; background:transparent; color:#68788a; text-align:left; font-size:12px; cursor:pointer; }
+.aw-history-select span { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.aw-history-select:hover,.aw-history-select.is-active { background:#edf4f8; color:#1e526b; }
+.aw-history-delete { display:grid; flex:0 0 27px; width:27px; height:27px; place-items:center; border:0; border-radius:7px; background:transparent; color:#9aa6b2; opacity:0; cursor:pointer; }
+.aw-history-item:hover .aw-history-delete,.aw-history-delete:focus-visible { opacity:1; }
+.aw-history-delete:hover { background:#f8eaea; color:#a34a4a; }
+html[data-theme="dark"] .aw-history-select { color:#9aabba; }
+html[data-theme="dark"] .aw-history-select:hover,html[data-theme="dark"] .aw-history-select.is-active { background:#203545; color:#b8e4f5; }
+html[data-theme="dark"] .aw-history-delete:hover { background:#3b292b; color:#f1a9a9; }
+@media (hover:none) { .aw-history-delete { opacity:1; } }

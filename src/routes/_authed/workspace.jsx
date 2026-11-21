@@ -225,6 +225,25 @@ function WorkspaceChat() {
 
   };
 
+  const deleteConversation = async (id) => {
+    if (isStreaming && id === activeConversation) stop();
+    if (!demoMode) {
+      try { await api.workspace.deleteChat(id); }
+      catch (error) { setChatError(error.message || t("Could not delete this conversation.")); return; }
+    }
+    const remaining = conversations.filter((item) => item.id !== id);
+    setConversations(remaining);
+    if (id === activeConversation) {
+      const next = remaining[0];
+      const nextId = next?.id || "current";
+      activeConversationRef.current = nextId;
+      setActiveConversation(nextId);
+      setMessages(next?.messages || []);
+      setMetrics(null);
+    }
+    if (!demoMode) sessionsQuery.refetch();
+  };
+
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
   const tokenRate = outputTokens && metrics?.elapsedMs ? (outputTokens / (metrics.elapsedMs / 1000)).toFixed(1) : "—";
@@ -237,7 +256,7 @@ function WorkspaceChat() {
         <label className="aw-search"><Search size={15}/><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("Search conversations")} aria-label={t("Search conversations")}/></label>
         <div className="aw-history-label">{t("RECENT")}</div>
         <div className="aw-history">
-          {filteredConversations.map((item) => <button key={item.id} type="button" className={activeConversation === item.id ? "is-active" : ""} onClick={() => selectConversation(item.id)}><MessageSquarePlus size={15}/><span>{item.title}</span><MoreHorizontal size={15}/></button>)}
+          {filteredConversations.map((item) => <div className="aw-history-item" key={item.id}><button type="button" className={"aw-history-select" + (activeConversation === item.id ? " is-active" : "")} onClick={() => selectConversation(item.id)}><MessageSquarePlus size={15}/><span>{item.title}</span></button><button type="button" className="aw-history-delete" aria-label={t("Delete conversation") + ": " + item.title} title={t("Delete conversation")} onClick={() => deleteConversation(item.id)}><X size={13}/></button></div>)}
           {filteredConversations.length === 0 && <p className="aw-history-empty">{t("No conversations found")}</p>}
         </div>
         <div className="aw-sidebar-bottom">
