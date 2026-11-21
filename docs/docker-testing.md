@@ -1,95 +1,110 @@
-# Docker preview
+# Self-hosted Docker environment
 
-This is a parallel, local Docker runtime for the AEVOTRON web application. It
-does not replace or modify the Vercel deployment.
+This branch introduces a parallel self-hosted stack for AEVOTRON. It does not
+modify Vercel, production domains, DNS, aliases, or production environment
+variables.
 
-The Vite/Nitro build emits a runnable `.output/server/index.mjs` plus public
-assets in `.output/public`. The Docker image runs that Nitro server; it does
-not serve only the client folder with Nginx, which would break SSR and server
-routes.
+## Current migration status
 
-## Local preview
+The independent Node.js API and PostgreSQL schema are scaffolded under
+`backend/`. The API includes email/password registration and verification,
+session cookies, password reset, TOTP MFA, workspaces, API-key management,
+encrypted OpenAI credentials, usage records, and an OpenAI-compatible
+non-streaming chat completion endpoint.
+
+**The existing React pages are not yet migrated.** They still import the
+Base44 SDK and call Base44 auth/entities/functions. A successful container
+smoke test currently proves that the frontend can start and that the new API
+responds, but it does not mean the browser UI has stopped depending on Base44.
+Do not treat this branch as a production-ready replacement until the frontend
+adapter, all page flows, and integration tests have been migrated.
+
+## Configure locally
 
 Requirements: Docker Engine and the Docker Compose plugin.
-
-Copy the example configuration and fill in the three public Base44 application
-settings from the connected Base44 app:
 
 ```sh
 cp .env.docker.example .env
 ```
 
-Then build and start the container:
+Generate three independent secrets. The master key must decode to exactly 32
+bytes:
+
+```sh
+openssl rand -hex 24       # POSTGRES_PASSWORD
+openssl rand -base64 32    # AEVOTRON_MASTER_KEY
+openssl rand -hex 32       # IP_HASH_SALT
+```
+
+Put the generated values in `.env`, then set `PUBLIC_APP_URL` to the local
+or private preview origin. For local HTTP use `COOKIE_SECURE=false`; use
+`COOKIE_SECURE=true` behind HTTPS.
+
+SMTP is required for production registration and password recovery. Configure
+`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and
+`SMTP_FROM`. Never place provider credentials or the master key in Vite
+`VITE_*` variables, Docker build arguments, the browser bundle, or Git.
+
+Start the stack:
 
 ```sh
 docker compose up --build -d
 ```
 
-Open http://localhost:3000. To stop it:
+Open http://localhost:3000. The gateway sends page traffic to the Nitro
+frontend and `/api/v1/*` plus `/v1/chat/completions` to the independent Node
+API. PostgreSQL data persists in the `aevotron-postgres` named volume.
+
+Stop without deleting database data:
 
 ```sh
 docker compose down
 ```
 
-The `VITE_BASE44_*` values are build-time configuration because Vite embeds
-them into the browser bundle. Rebuild the image after changing `.env`.
-These values identify/configure the Base44 app; do not put provider API keys,
-master encryption keys, or other secrets in this file. The generated browser
-bundle is public.
+To destroy the local database volume as well, use
+`docker compose down -v`. This is destructive.
 
-To build and run the HTTP smoke test manually:
+## Backend details
+
+- Passwords use Node.js scrypt with per-user random salts.
+- Browser sessions use opaque random tokens; only SHA-256 token hashes are
+  stored in PostgreSQL. Session cookies are HttpOnly and SameSite=Lax.
+- MFA uses TOTP; pending secrets and provider credentials are encrypted with
+  AES-256-GCM and bound to account/workspace context.
+- AEVOTRON API keys are random, shown once, and stored as HMAC-SHA-256 digests.
+- Usage and audit events are append-only at the database level.
+- Auth and gateway rate-limit counters are stored in PostgreSQL so concurrent
+  API instances share the counters.
+- The API does not persist prompt or completion text in usage/audit records.
+- `AEVOTRON_MASTER_KEY` is essential to decrypt provider credentials and
+  verify AEVOTRON API keys. Back it up securely; losing it makes stored
+  credentials and API keys unusable.
+
+The current gateway supports OpenAI Chat Completions without streaming and
+allows the existing `chat.completions` scope. Provider model discovery and
+additional provider adapters are not yet migrated.
+
+## Verification
 
 ```sh
-docker compose build
-sh docker-verify.sh
+npm --prefix backend install --no-audit --no-fund
+npm --prefix backend test
+sh ./docker-verify.sh
 ```
 
-The Docker build runs `npm install --no-audit --no-fund`, `npm test`,
-`npm run lint` and `npm run build`. The runtime image contains only Nitro's
-generated `.output` directory and runs as the unprivileged `node` user.
+The backend unit tests cover password hashing, API-key generation, encrypted
+credential context binding, and RFC 6238 TOTP behavior. The Docker smoke test
+starts PostgreSQL, the API, frontend, and Nginx gateway; checks homepage HTML,
+all same-origin JS/CSS assets, the declared app routes, and verifies that
+unauthenticated `/api/v1/auth/me` returns HTTP 401.
 
-This repository currently has no committed npm lockfile, so the dependency
-install follows the existing CI's `npm install` strategy rather than
-`npm ci`.
-
-## Base44 runtime boundary
-
-The Docker image currently runs the AEVOTRON web application, not a complete
-self-hosted replacement for Base44.
-
-The repository's server middleware calls `createClientFromRequest(request)`
-and expects Base44 platform-injected request headers. Base44 authentication,
-entity storage, and the Deno functions under `base44/functions/` remain
-platform-managed; those Deno functions are not built into or started by this
-Node container. As a result, a successful Docker page/asset smoke test does
-not prove that sign-in, MFA, workspaces, API-key management, provider
-connections, usage reporting, or the API gateway work in a standalone
-environment.
-
-The API-key, provider-connection, and gateway functions also require
-`AEVOTRON_MASTER_KEY` to be configured as a Base44 function secret. It must
-be a Base64-encoded 32-byte key. Keep it in the platform's secret manager; do
-not put it in `.env`, Docker build arguments, the image, or Git.
-
-A truly independent Docker deployment will require replacing the Base44
-request/auth integration, entity storage, and Deno functions with a
-self-hosted backend and database, then adding integration tests for those
-flows. That migration is separate from this safe parallel web-container
-preview.
-
-## GitHub Actions
-
-The `Docker build verification` workflow builds the image and runs
-`docker-verify.sh` through the POSIX shell. The script starts the container,
-checks that the homepage returns HTML, fetches every same-origin JS/CSS asset
-referenced by the homepage, and verifies that the declared login, registration,
-password recovery, MFA, and dashboard routes return HTML over HTTP. It does
-not push an image to a registry or deploy it. These are HTTP smoke tests, not
-browser-level authentication or API integration tests.
+These are build and smoke tests, not a full browser end-to-end suite. Email
+delivery, MFA setup/sign-in, password reset, API-key lifecycle, provider
+connection, and real upstream model requests still require integration tests
+before release.
 
 ## Production boundary
 
-Vercel remains the production serving platform. This branch does not change
-production domains, DNS, aliases, environment variables, or deployment
-settings. A separate reviewed change is required before any production
-migration.
+Vercel remains the production serving platform. The self-hosted stack lives on
+`feat/self-hosted-backend` and is not deployed or merged. No Production
+configuration or live domain is changed by this branch.
