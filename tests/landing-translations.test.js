@@ -38,5 +38,5 @@ test("all static landing copy has English and Chinese translations", async () =>
   assert.deepEqual(missing, [], "every visible landing string must be translated");
   assert.match(i18n, /const supported = \["en", "ru", "zh"\]/);
   assert.match(i18n, /new MutationObserver/);
-  assert.match(i18n, /applyTranslations\\(language\\)/);
+    assert.match(i18n, /applyTranslations\(language\)/);
 });
