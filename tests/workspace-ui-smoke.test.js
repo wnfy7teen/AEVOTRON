@@ -173,3 +173,14 @@ test("ESLint includes the shared UI component library in its source audit", asyn
   assert.match(config, /files: \["\*\*\/\*\.\{js,jsx\}"\]/);
 });
 
+test("API key expiry dropdown renders above the existing-keys panel", async () => {
+  const css = await read("src/apple-style.css");
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(dashboard, /className="mh-panel mh-key-create"/);
+  assert.match(dashboard, /className="mh-panel mh-key-list-panel"/);
+  assert.match(dashboard, /className="mh-key-form-expiry"/);
+  assert.match(css, /\.mh-key-create \{[\s\S]*?position: relative;[\s\S]*?z-index: 5;[\s\S]*?overflow: visible;/);
+  assert.match(css, /\.mh-key-create \.av-dropdown\[data-open="true"\] \{[\s\S]*?z-index: 20;/);
+  assert.match(css, /\.mh-key-list-panel \{[\s\S]*?z-index: 1;/);
+});
+

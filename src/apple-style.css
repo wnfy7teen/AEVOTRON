@@ -1361,3 +1361,31 @@ html[data-theme="dark"] .av-language-menu button.active .av-language-native {
     display: none;
   }
 }
+
+
+/* Keep the API-key expiry popup above the following existing-keys panel. */
+.apple-app .mh-key-create {
+  position: relative;
+  z-index: 5;
+  overflow: visible;
+}
+.apple-app .mh-key-create .mh-key-form {
+  position: relative;
+  overflow: visible;
+}
+.apple-app .mh-key-create .mh-key-form-expiry {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+.apple-app .mh-key-create .av-dropdown {
+  position: relative;
+  z-index: 1;
+}
+.apple-app .mh-key-create .av-dropdown[data-open="true"] {
+  z-index: 20;
+}
+.apple-app .mh-key-list-panel {
+  position: relative;
+  z-index: 1;
+}
