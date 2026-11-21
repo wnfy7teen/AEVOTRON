@@ -57,6 +57,9 @@ test("AI Workspace discloses estimates instead of inventing provider usage and c
   assert.match(route, /shouldAutoScrollRef/);
   assert.match(route, /threadRef/);
   assert.match(route, /favoriteModels/);
+  assert.match(route, /providerGroups/);
+  assert.match(route, /modelCapabilities/);
+  assert.match(route, /Model metadata not verified/);
   assert.match(route, /recentModels/);
   assert.match(route, /aevotron\.workspace\.favorites/);
   assert.match(route, /Search models/);
