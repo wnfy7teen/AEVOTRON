@@ -110,3 +110,13 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
   assert.match(css, /@media \\(max-width: 560px\\)/);
 });
+
+ 
+test("all workspace native select controls use the shared modern dropdown theme", async () => {
+  const css = await read("src/apple-style.css");
+  assert.match(css, /\.apple-app select,[\s\S]*?-webkit-appearance: none !important/);
+  assert.match(css, /background-position: right 13px center/);
+  assert.match(css, /\.apple-app\[data-theme="dark"\] select option/);
+  assert.match(css, /\.apple-app select:focus-visible/);
+  assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.apple-app select/);
+});
