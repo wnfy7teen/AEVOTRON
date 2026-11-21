@@ -51,12 +51,12 @@ GitHub Actions runs the frontend policy tests, backend security tests, lint, pro
 
 - Email/password authentication, email verification, password reset, TOTP MFA, and opaque browser sessions.
 - Workspace-scoped provider connections and API keys.
-- OpenAI provider connection and non-streaming Chat Completions gateway.
+- OpenAI and Groq provider connections and non-streaming Chat Completions gateway.
 - API keys are shown once and stored as HMAC-SHA-256 digests.
 - Provider credentials and TOTP secrets are encrypted with AES-256-GCM.
 - Usage and audit records are append-only; prompt and completion content are not persisted.
 
-Streaming, tool calls, embeddings, multimodal requests, additional provider adapters, full browser-level end-to-end coverage, and production operational hardening remain out of scope for this beta.
+Streaming, tool calls, embeddings, multimodal requests, additional provider adapters beyond OpenAI and Groq, full browser-level end-to-end coverage, and production operational hardening remain out of scope for this beta.
 
 ## Documentation
 
