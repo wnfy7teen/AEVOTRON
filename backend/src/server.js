@@ -69,9 +69,17 @@ async function readBody(req) {
 function assertSameOrigin(req) {
   const origin = req.headers.origin;
   if (!origin) return;
-  const forwardedProto = String(req.headers["x-forwarded-proto"] || "http").split(",")[0].trim();
-  const host = String(req.headers["x-forwarded-host"] || req.headers.host || "").split(",")[0].trim();
-  if (!host || new URL(origin).host !== host || new URL(origin).protocol !== `${forwardedProto}:`) {
+  let requestOrigin;
+  let allowedOrigin;
+  try {
+    requestOrigin = new URL(origin).origin;
+    allowedOrigin = new URL(process.env.PUBLIC_APP_URL || "http://localhost:3000").origin;
+  } catch {
+    throw Object.assign(new Error("ORIGIN_REJECTED"), { status: 403 });
+  }
+  // Never trust client-supplied X-Forwarded-* headers as the CSRF allowlist.
+  // PUBLIC_APP_URL is deployment configuration, not request metadata.
+  if (requestOrigin !== allowedOrigin) {
     throw Object.assign(new Error("ORIGIN_REJECTED"), { status: 403 });
   }
 }
