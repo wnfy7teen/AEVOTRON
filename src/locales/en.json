@@ -783,5 +783,7 @@
   "Could not load models from your provider. Test the connection and refresh.": "Could not load models from your provider. Test the connection and refresh.",
   "Connect a provider to load the chat models available to your API key.": "Connect a provider to load the chat models available to your API key.",
   "Connect a provider to discover the models available to your account.": "Connect a provider to discover the models available to your account.",
-  "Billed by the connected provider": "Billed by the connected provider"
+  "Billed by the connected provider": "Billed by the connected provider",
+  "AEVOTRON — AI Workspace": "AEVOTRON — AI Workspace",
+  "Chat with connected AI models.": "Chat with connected AI models."
 }
