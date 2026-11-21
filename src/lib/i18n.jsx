@@ -1020,10 +1020,19 @@ const translateText = (value, language) => {
 // instead of translating stale text from a previous render.
 const originalText = new WeakMap();
 const originalAttributes = new WeakMap();
+let originalDocumentTitle = null;
 
 function applyTranslations(language) {
   if (typeof document === "undefined") return;
   document.documentElement.lang = language === "zh" ? "zh-CN" : language;
+
+  const currentTitle = document.title;
+  if (!originalDocumentTitle || currentTitle !== originalDocumentTitle.translated) {
+    originalDocumentTitle = { source: currentTitle, translated: currentTitle };
+  }
+  const translatedTitle = translateText(originalDocumentTitle.source, language);
+  if (translatedTitle !== currentTitle) document.title = translatedTitle;
+  originalDocumentTitle.translated = translatedTitle;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const nodes = [];
@@ -1036,7 +1045,7 @@ function applyTranslations(language) {
       state = { source: current, translated: current };
     }
 
-    if (node.parentElement?.closest("[data-no-translate]")) {
+    if (node.parentElement?.closest("[data-no-translate], pre, code, script, style")) {
       state.source = current;
       state.translated = current;
       originalText.set(node, state);
@@ -1049,8 +1058,8 @@ function applyTranslations(language) {
     originalText.set(node, state);
   });
 
-  document.querySelectorAll("input[placeholder], textarea[placeholder], [aria-label], [title]").forEach((element) => {
-    ["placeholder", "aria-label", "title"].forEach((attribute) => {
+  document.querySelectorAll("input[placeholder], textarea[placeholder], [aria-label], [title], [alt], meta[name=description]").forEach((element) => {
+    ["placeholder", "aria-label", "title", "alt", "content"].forEach((attribute) => {
       const current = element.getAttribute(attribute);
       if (current === null) return;
 
@@ -1094,12 +1103,12 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     applyTranslations(language);
     const observer = new MutationObserver(() => applyTranslations(language));
-    observer.observe(document.body, {
+    observer.observe(document.documentElement, {
       childList: true,
       subtree: true,
       characterData: true,
       attributes: true,
-      attributeFilter: ["aria-label", "title", "placeholder"],
+      attributeFilter: ["aria-label", "title", "placeholder", "alt", "content"],
     });
     return () => observer.disconnect();
   }, [language]);
