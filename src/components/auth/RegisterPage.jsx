@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { MfaFlow } from "@/components/auth/MfaFlow";
 import { MfaScreen } from "@/components/auth/MfaParts";
-import { AuthError, AuthLink, GoogleButton, OrDivider, SubmitButton } from "@/components/auth/parts";
+import { AuthError, AuthLink, SubmitButton } from "@/components/auth/parts";
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
@@ -130,8 +130,6 @@ export function RegisterPage() {
 
   return (
     <AuthLayout icon={UserPlus} title="Create your account" subtitle="Sign up to get started">
-      <GoogleButton returnTo={returnTo} onError={setError} />
-      <OrDivider />
       <AuthError>{error}</AuthError>
       <form onSubmit={register} className="space-y-4">
         <div className="space-y-2">
