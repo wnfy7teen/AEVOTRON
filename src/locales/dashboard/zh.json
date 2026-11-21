@@ -53,5 +53,8 @@
   "One API. Your provider accounts.": "一个 API，连接您的服务商账户。",
   "AEVOTRON routes requests to the selected provider. Model access and charges are controlled by that provider account.": "AEVOTRON 会将请求路由至所选服务商。模型访问权限和费用由该服务商账户决定。",
   "Read the quickstart": "查看快速入门指南",
-  "You": "你"
+  "You": "你",
+  "General": "通用",
+  "Lightweight": "轻量型",
+  "Direct": "直接"
 }
