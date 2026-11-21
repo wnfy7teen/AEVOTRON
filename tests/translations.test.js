@@ -218,3 +218,67 @@ it("preserves interpolation variables and locale punctuation across every namesp
     }
   }
 });
+
+it("ensures every literal translation key used by application screens exists in all supported locales", async () => {
+  const groups = [
+    { namespace: "dashboard", paths: ["../src/routes/_authed/dashboard.jsx"] },
+    {
+      namespace: "auth",
+      paths: [
+        "../src/components/auth/AuthLayout.jsx",
+        "../src/components/auth/ForgotPasswordPage.jsx",
+        "../src/components/auth/LoginPage.jsx",
+        "../src/components/auth/MfaFlow.jsx",
+        "../src/components/auth/MfaManage.jsx",
+        "../src/components/auth/MfaMethodSetup.jsx",
+        "../src/components/auth/MfaPage.jsx",
+        "../src/components/auth/MfaParts.jsx",
+        "../src/components/auth/RegisterPage.jsx",
+        "../src/components/auth/ResetPasswordPage.jsx",
+        "../src/components/auth/UserNotRegistered.jsx",
+        "../src/components/auth/parts.jsx",
+        "../src/routes/verify-email.jsx",
+      ],
+    },
+    { namespace: "landing", paths: ["../src/components/landing/AppleLanding.tsx"] },
+    {
+      namespace: "translation",
+      paths: [
+        "../src/components/ui/breadcrumb.jsx",
+        "../src/components/ui/carousel.jsx",
+        "../src/components/ui/dialog.jsx",
+        "../src/components/ui/pagination.jsx",
+        "../src/components/ui/sheet.jsx",
+        "../src/components/ui/sidebar.jsx",
+      ],
+    },
+  ];
+
+  const languages = ["en", "ru", "zh"];
+  const rootCatalogs = Object.fromEntries(await Promise.all(languages.map(async (language) => [
+    language,
+    await readJson(language),
+  ])));
+
+  for (const group of groups) {
+    const domainCatalogs = group.namespace === "translation"
+      ? rootCatalogs
+      : Object.fromEntries(await Promise.all(languages.map(async (language) => [
+          language,
+          JSON.parse(await readFile(new URL(`../src/locales/${group.namespace}/${language}.json`, import.meta.url), "utf8")),
+        ])));
+
+    for (const sourcePath of group.paths) {
+      const source = await readFile(new URL(sourcePath, import.meta.url), "utf8");
+      const matches = [...source.matchAll(/\\bt\\(\\s*"((?:\\\\.|[^"\\\\])*)"/g)];
+      const keys = new Set(matches.map((match) => JSON.parse(`"${match[1]}"`)));
+
+      for (const key of keys) {
+        for (const language of languages) {
+          const found = Object.hasOwn(domainCatalogs[language], key) || Object.hasOwn(rootCatalogs[language], key);
+          assert.ok(found, `Missing ${language} translation for ${group.namespace} key "${key}" used in ${sourcePath}`);
+        }
+      }
+    }
+  }
+});
