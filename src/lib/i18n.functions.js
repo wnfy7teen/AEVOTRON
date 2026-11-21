@@ -14,14 +14,13 @@ function negotiateLanguage(header) {
     const [tag, ...params] = part.trim().split(";");
     const quality = Number(params.find((param) => param.trim().startsWith("q="))?.trim().slice(2) ?? 1);
     return { tag, quality: Number.isFinite(quality) ? quality : 0, index };
-  }).filter((item) => item.tag && item.quality > 0)
+  }).filter((item) => item.tag && item.quality > 0 && supportedLanguages.some((language) => language === item.tag.toLowerCase().split(/[-_]/)[0]))
     .sort((a, b) => b.quality - a.quality || a.index - b.index)
-    .map((item) => normalizeLanguage(item.tag))
-    .find((language) => supportedLanguages.includes(language)) || "en";
+    .map((item) => normalizeLanguage(item.tag))[0] || "en";
 }
 
 export const getRequestLocale = createServerFn({ method: "GET" }).handler(() => {
   const cookieLocale = readCookie(getRequestHeader("cookie"), "aevotron-language");
-  if (cookieLocale && supportedLanguages.includes(cookieLocale.toLowerCase().split(/[-_]/)[0])) return normalizeLanguage(cookieLocale);
+  if (cookieLocale && supportedLanguages.some((language) => language === cookieLocale.toLowerCase().split(/[-_]/)[0])) return normalizeLanguage(cookieLocale);
   return negotiateLanguage(getRequestHeader("accept-language"));
 });
