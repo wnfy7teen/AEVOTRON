@@ -614,5 +614,10 @@
   "Welcome": "Welcome",
   "Resend in {{count}}s": "Повторная отправка через {{count}} с",
   "This app requires multi-factor authentication": "Для этого приложения требуется многофакторная аутентификация",
-  "A 6-digit code sent to": "Шестизначный код отправлен на"
+  "A 6-digit code sent to": "Шестизначный код отправлен на",
+  "{{appName}} requires multi-factor authentication": "Для приложения «{{appName}}» требуется многофакторная аутентификация",
+  "Sending code to {{phone}}…": "Отправляем код на номер {{phone}}…",
+  "Enter the code sent to {{phone}}": "Введите код, отправленный на номер {{phone}}",
+  "A 6-digit code sent to {{phone}}": "Шестизначный код отправлен на номер {{phone}}",
+  "Enabled · {{phone}}": "Включено · {{phone}}"
 }
