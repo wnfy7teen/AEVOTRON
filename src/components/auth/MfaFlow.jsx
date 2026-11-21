@@ -32,7 +32,7 @@ function Enroll({ session, onDone }) {
   return (
     <>
       <MfaHeader
-        title={info && t("This app requires multi-factor authentication", { appName: info.name || t("This app") })}
+        title={info && t("{{appName}} requires multi-factor authentication", { appName: info.name || t("This app") })}
         description={method ? null : t("Add a second sign-in step to keep your account secure. Choose how you want to get your codes.")}
       />
       {method ? (
