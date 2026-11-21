@@ -1847,3 +1847,63 @@ html[data-theme="dark"] .apple-app .mh-top-actions .av-theme-trigger svg { color
   }
   .apple-app .mh-top-actions .av-theme-trigger span { display: none; }
 }
+
+
+/* Keep the real connected-provider controls; remove only the decorative inventory banner. */
+.apple-app .mh-catalog-overview {
+  display: block !important;
+  margin: 0 0 16px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.apple-app .mh-catalog-overview-main { display: none !important; }
+.apple-app .mh-catalog-provider-strip {
+  display: flex !important;
+  padding: 0 0 14px;
+  border: 0;
+  border-bottom: 1px solid #e9edf1;
+  background: transparent;
+}
+.apple-app .mh-catalog-provider-strip>span:first-child { color: #697586; }
+.apple-app .mh-catalog-provider-strip>button {
+  border-color: #e0e5eb;
+  border-radius: 7px;
+  background: #fff;
+  color: #526071;
+}
+.apple-app .mh-catalog-provider-strip>button.active,
+.apple-app .mh-catalog-provider-strip>button:hover {
+  border-color: #9ab9d8;
+  background: #edf5fc;
+  color: #14558a;
+}
+.apple-app .mh-catalog-provider-strip>button small { border-color: #e0e5eb; color: #697586; }
+.apple-app .mh-catalog-provider-strip .mh-catalog-add-source {
+  border-color: #b8cfe3;
+  background: #f2f7fb;
+  color: #245b85;
+}
+.apple-app .mh-catalog-no-sources { color: #697586; }
+html[data-theme="dark"] .apple-app .mh-catalog-overview { background: transparent; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip { border-color: #303b49; background: transparent; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>span:first-child,
+html[data-theme="dark"] .apple-app .mh-catalog-no-sources { color: #a4b0bf; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button {
+  border-color: #3a4655;
+  background: #1b2430;
+  color: #b8c4d2;
+}
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button.active,
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button:hover {
+  border-color: #557da2;
+  background: #1e3549;
+  color: #b9dcf8;
+}
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button small { border-color: #3a4655; color: #aab6c5; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip .mh-catalog-add-source {
+  border-color: #557da2;
+  background: #1e3549;
+  color: #b9dcf8;
+}
