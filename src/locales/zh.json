@@ -776,5 +776,8 @@
   "model.description.reasoning": "专为复杂分析任务设计的推理模型。",
   "model.description.lightweight": "适用于快速响应和预算敏感型任务的轻量模型。",
   "model.description.default": "用于对话、内容生成和分析的文本 AI 模型。",
-  "i18n.test.item_other": "{{count}} 个项目"
+  "i18n.test.item_other": "{{count}} 个项目",
+  "i18n.test.item_one": "{{count}} 个项目",
+  "i18n.test.item_few": "{{count}} 个项目",
+  "i18n.test.item_many": "{{count}} 个项目"
 }
