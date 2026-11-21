@@ -270,7 +270,7 @@ it("ensures every literal translation key used by application screens exists in 
 
     for (const sourcePath of group.paths) {
       const source = await readFile(new URL(sourcePath, import.meta.url), "utf8");
-      const matches = [...source.matchAll(/\\bt\\(\\s*"((?:\\\\.|[^"\\\\])*)"/g)];
+      const matches = [...source.matchAll(/\bt\(\s*"((?:\\.|[^"\\])*)"/g)];
       const keys = new Set(matches.map((match) => JSON.parse(`"${match[1]}"`)));
 
       for (const key of keys) {
