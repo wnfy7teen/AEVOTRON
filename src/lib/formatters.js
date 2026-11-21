@@ -1,9 +1,8 @@
-import { normalizeLanguage } from "@/i18n";
-
 const intlLocales = { en: "en-US", ru: "ru-RU", zh: "zh-CN" };
 
 export function getIntlLocale(language) {
-  return intlLocales[normalizeLanguage(language)];
+  const normalized = String(language || "en").toLowerCase().split(/[-_]/)[0];
+  return intlLocales[normalized] || intlLocales.en;
 }
 
 export function formatNumber(value, language, options = {}) {
