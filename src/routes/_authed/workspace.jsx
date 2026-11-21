@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X } from "lucide-react";
+import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -307,6 +307,22 @@ function WorkspaceChat() {
     setIsComparing(false);
   };
 
+  const exportConversation = () => {
+    if (!messages.length) return;
+    const title = conversations.find((item) => item.id === activeConversation)?.title || "AEVOTRON conversation";
+    const content = "# " + title + "\n\n" + messages.map((message) => {
+      const speaker = message.role === "assistant" ? (activeModel?.provider_model_id || "Assistant") : t("You");
+      return "## " + speaker + "\n\n" + (message.content || "") + (message.error ? "\n\n> " + message.error : "");
+    }).join("\n\n---\n\n");
+    const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = title.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "").slice(0,60) + ".md";
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  };
+
   const providerName = activeModel?.provider_code === "groq" ? "Groq" : activeModel?.provider_code === "openai" ? "OpenAI" : "—";
   const outputTokens = metrics?.usage?.completion_tokens ?? metrics?.usage?.output_tokens ?? metrics?.estimatedOutputTokens;
   const generationMs = metrics?.elapsedMs ? Math.max(1, metrics.elapsedMs - (metrics.ttftMs || 0)) : 0;
@@ -338,7 +354,7 @@ function WorkspaceChat() {
       <main className="aw-main">
         <header className="aw-topbar">
           <div className="aw-topbar-title"><span>{t("Workspace")}</span><span className="aw-slash">/</span><strong>{t("AI chat")}</strong></div>
-          <div className="aw-topbar-actions"><span className="aw-connection-state"><i/> {demoMode ? t("Demo mode") : t("Session protected")}</span><ThemeSwitcher/></div>
+          <div className="aw-topbar-actions"><span className="aw-connection-state"><i/> {demoMode ? t("Demo mode") : t("Session protected")}</span>{messages.length > 0 && <button type="button" className="aw-export-button" onClick={exportConversation}><Download size={14}/>{t("Export")}</button>}<ThemeSwitcher/></div>
         </header>
 
         <section className="aw-content">
@@ -366,7 +382,7 @@ function WorkspaceChat() {
           {!demoMode && !modelQuery.isLoading && !models.length && <div className="aw-empty-models"><Bot size={26}/><h2>{t("No models connected yet")}</h2><p>{t("Connect OpenAI or Groq in your dashboard. Only models returned by your provider account appear here.")}</p><a href="/dashboard">{t("Open provider settings")}</a></div>}
 
           <div className={messages.length ? "aw-thread has-messages" : "aw-thread"} aria-live="polite">
-            {messages.length === 0 ? <div className="aw-empty-state"><div className="aw-empty-icon"><Sparkles size={22}/></div><h2>{t("A clear space for your next idea.")}</h2><p>{t("Ask a question, explore an idea, or work through a technical problem.")}</p><div className="aw-prompt-suggestions">{[t("Explain a complex concept simply"),t("Review this code for potential issues"),t("Help me plan a technical project")].map((item) => <button key={item} type="button" onClick={() => {setDraft(item);composerRef.current?.focus();}} disabled={demoMode || !activeModel}>{item}<ArrowUp size={14}/></button>)}</div></div> : messages.map((message) => <article key={message.id} className={"aw-message aw-message-" + message.role}><div className="aw-message-avatar">{message.role === "assistant" ? <Bot size={16}/> : <span>Y</span>}</div><div className="aw-message-body"><div className="aw-message-meta"><strong>{message.role === "assistant" ? (activeModel?.provider_model_id || t("Assistant")) : t("You")}</strong>{message.role === "assistant" && <span>{providerName}</span>}</div>{editingId === message.id ? <div className="aw-edit-box"><textarea value={editValue} onChange={(event) => setEditValue(event.target.value)} rows={4}/><div><button type="button" onClick={() => setEditingId(null)}>{t("Cancel")}</button><button type="button" onClick={() => saveEdit(message.id)}>{t("Save and resend")}</button></div></div> : <div className="aw-message-content">{message.role === "assistant" && message.content ? <ReactMarkdown>{message.content}</ReactMarkdown> : message.content || (isStreaming && message.role === "assistant" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null)}{message.error && <p className="aw-message-error">{message.error}</p>}</div>}{message.role === "user" && !isStreaming && <button className="aw-message-action" type="button" onClick={() => {setEditingId(message.id);setEditValue(message.content);}}><Pencil size={13}/>{t("Edit")}</button>}{message.role === "assistant" && message.content && !isStreaming && message.id === messages[messages.length - 1]?.id && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Regenerate")}</button>}</div></article>)}
+            {messages.length === 0 ? <div className="aw-empty-state"><div className="aw-empty-icon"><Sparkles size={22}/></div><h2>{t("A clear space for your next idea.")}</h2><p>{t("Ask a question, explore an idea, or work through a technical problem.")}</p><div className="aw-prompt-suggestions">{[t("Explain a complex concept simply"),t("Review this code for potential issues"),t("Help me plan a technical project")].map((item) => <button key={item} type="button" onClick={() => {setDraft(item);composerRef.current?.focus();}} disabled={demoMode || !activeModel}>{item}<ArrowUp size={14}/></button>)}</div></div> : messages.map((message) => <article key={message.id} className={"aw-message aw-message-" + message.role}><div className="aw-message-avatar">{message.role === "assistant" ? <Bot size={16}/> : <span>Y</span>}</div><div className="aw-message-body"><div className="aw-message-meta"><strong>{message.role === "assistant" ? (activeModel?.provider_model_id || t("Assistant")) : t("You")}</strong>{message.role === "assistant" && <span>{providerName}</span>}</div>{editingId === message.id ? <div className="aw-edit-box"><textarea value={editValue} onChange={(event) => setEditValue(event.target.value)} rows={4}/><div><button type="button" onClick={() => setEditingId(null)}>{t("Cancel")}</button><button type="button" onClick={() => saveEdit(message.id)}>{t("Save and resend")}</button></div></div> : <div className="aw-message-content">{message.role === "assistant" && message.content ? <ReactMarkdown>{message.content}</ReactMarkdown> : message.content || (isStreaming && message.role === "assistant" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null)}{message.error && <p className="aw-message-error">{message.error}</p>}{message.role === "assistant" && message.error && !isStreaming && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Retry")}</button>}</div>}{message.role === "user" && !isStreaming && <button className="aw-message-action" type="button" onClick={() => {setEditingId(message.id);setEditValue(message.content);}}><Pencil size={13}/>{t("Edit")}</button>}{message.role === "assistant" && message.content && !isStreaming && message.id === messages[messages.length - 1]?.id && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Regenerate")}</button>}</div></article>)}
           </div>
 
           <form className="aw-composer" onSubmit={send}>

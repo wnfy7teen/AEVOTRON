@@ -130,5 +130,7 @@
   "limit unknown": "limit unknown",
   "Provider usage": "Provider usage",
   "input": "input",
-  "output": "output"
+  "output": "output",
+  "Export": "Export",
+  "Retry": "Retry"
 }

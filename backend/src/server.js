@@ -835,6 +835,11 @@ async function handle(req, res) {
           "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
           [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
         );
+      } else {
+        await pool.query(
+          "DELETE FROM workspace_chat_messages WHERE session_id=$1 AND role='assistant' AND created_at > (SELECT COALESCE(MAX(created_at),'epoch'::timestamptz) FROM workspace_chat_messages WHERE session_id=$1 AND role='user')",
+          [chatSessionId],
+        );
       }
       await pool.query("UPDATE workspace_chat_sessions SET model_id=$4,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
         [chatSessionId,workspace.id,user.id,body.model]);

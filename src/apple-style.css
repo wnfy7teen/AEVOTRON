@@ -2796,3 +2796,7 @@ html[data-theme="dark"] .aw-compare-models label.is-selected { border-color:#456
 html[data-theme="dark"] .aw-compare-models small { color:#c7d5df; }
 html[data-theme="dark"] .aw-compare-heading p,html[data-theme="dark"] .aw-compare-result-title span { color:#9aabba; }
 @media (max-width:720px) { .aw-heading-controls { width:100%; flex-basis:auto; align-items:stretch; } .aw-compare-toggle { align-self:flex-end; } .aw-compare-results { grid-template-columns:1fr; } }
+
+.aw-export-button { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid #dfe7ed; border-radius:7px; background:#fff; color:#647789; font-size:10px; cursor:pointer; }
+.aw-export-button:hover { border-color:#a9cddd; color:#18789c; }
+html[data-theme="dark"] .aw-export-button { border-color:#304252; background:#192733; color:#b5c5d1; }

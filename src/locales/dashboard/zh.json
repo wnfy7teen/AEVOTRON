@@ -130,5 +130,7 @@
   "limit unknown": "上限未知",
   "Provider usage": "服务商实际用量",
   "input": "输入",
-  "output": "输出"
+  "output": "输出",
+  "Export": "导出",
+  "Retry": "重试"
 }
