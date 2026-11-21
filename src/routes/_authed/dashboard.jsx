@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/client";
-import { Activity, ArrowDownUp, ArrowUpRight, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap } from "lucide-react";
+import { Activity, ArrowDownUp, ArrowUpRight, Bell, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap, Users, Wallet, UserRound, Shield, SlidersHorizontal, Palette, Trash2, Sun, Moon, Monitor, Mail, Webhook, Clock, X, CircleDollarSign } from "lucide-react";
 
 const invokeFunction = async (name, payload) => {
   const response = await api.functions.invoke(name, payload);
@@ -64,7 +65,7 @@ function HomePage({ preview = false }) {
   const [mobileNav, setMobileNav] = useState(false);
   const filtered = useMemo(() => models.filter(m => (filter === "All models" || m.type === filter) && (m.name + m.provider + m.tags.join(" ")).toLowerCase().includes(query.toLowerCase())), [models, filter, query]);
   const active = models.find(m => m.name === selected) || models[0] || null;
-  const nav = [{ label: "WORKSPACE", items: [{ name: "Overview", icon: LayoutDashboard }, { name: "Model catalog", icon: Boxes }, { name: "API keys", icon: KeyRound }, { name: "Usage & logs", icon: Activity }] }, { label: "DEVELOPERS", items: [{ name: "Quickstart", icon: Terminal }, { name: "API reference", icon: BookOpen }] }, { label: "SETTINGS", items: [{ name: "Providers", icon: Layers3 }, { name: "Preferences", icon: Settings2 }] }];
+  const nav = [{ label: "WORKSPACE", items: [{ name: "Overview", icon: LayoutDashboard }, { name: "Model catalog", icon: Boxes }, { name: "API keys", icon: KeyRound }, { name: "Usage & logs", icon: Activity }, { name: "Billing", icon: Wallet }, { name: "Team & projects", icon: Users }, { name: "Notifications", icon: Bell }] }, { label: "DEVELOPERS", items: [{ name: "Quickstart", icon: Terminal }, { name: "API reference", icon: BookOpen }] }, { label: "SETTINGS", items: [{ name: "Providers", icon: Layers3 }, { name: "Preferences", icon: Settings2 }] }];
   const apiEndpoint = typeof window !== "undefined"
     ? `${window.location.origin}/v1/chat/completions`
     : "https://aevotron.vercel.app/v1/chat/completions";
@@ -94,7 +95,10 @@ function HomePage({ preview = false }) {
           {section === "API keys" && <ApiKeyManager/>}
           {section === "Usage & logs" && <UsageDashboard/>}
           {(section === "Quickstart" || section === "API reference") && <><div className="mh-page-heading"><div><div className="mh-eyebrow">DEVELOPERS</div><h1>{section === "Quickstart" ? "Quickstart" : "API reference"}</h1><p>One endpoint and a familiar request format to get started.</p></div></div><div className="mh-panel mh-docs"><div className="mh-docs-title"><Terminal size={18}/><h3>Chat completions</h3><span className="mh-method">POST</span></div><div className="mh-endpoint">{apiEndpoint}</div><p>OpenAI Chat Completions in a familiar format. Your provider key is used server-side and billing remains with OpenAI. Your self-hosted API gateway handles this endpoint.</p><pre className="mh-code"><code>{code}</code></pre><button className="mh-copy-button" onClick={copyCode}>{copied?<Check size={14}/>:<Copy size={14}/>} {copied?"Copied":"Copy cURL"}</button><div className="mh-doc-warning"><CircleHelp size={15}/> Beta: OpenAI text chat only; no streaming, tool calls, embeddings or multimodal requests. Limit: 30 requests/minute per key (atomic, shared through PostgreSQL).</div></div></>}
-          {section === "Preferences" && <div className="mh-page-heading"><div><div className="mh-eyebrow">WORKSPACE</div><h1>Preferences</h1><p>Workspace settings and regional defaults will be available here.</p></div></div>}
+          {section === "Preferences" && <WorkspaceSettings/>}
+          {section === "Billing" && <MockBilling/>}
+          {section === "Team & projects" && <MockTeam/>}
+          {section === "Notifications" && <MockNotifications/>}
         </div>
         <footer className="mh-footer"><span>© 2026 AEVOTRON</span><span><span className="mh-footer-dot"/> All systems operational <span className="mh-footer-sep">·</span> Built for developers</span><span>v0.1.0-preview</span></footer>
       </main>
@@ -340,6 +344,77 @@ function UsageDashboard() {
       </div>
     </>
   );
+}
+
+
+const SETTINGS_DEFAULTS = {
+  name: "Christopher", email: "christopher@example.com", timezone: "Europe/Amsterdam", language: "English",
+  twoFactor: true, emailSecurity: true, emailUsage: true, pushUsage: false, inAppProduct: true,
+  currency: "USD", autoTopUp: false, monthlyLimit: "250", requestLimit: "60", ipWhitelist: "", webhookUrl: "",
+  theme: "system", accent: "blue",
+};
+function readSettings() {
+  if (typeof window === "undefined") return SETTINGS_DEFAULTS;
+  try { return { ...SETTINGS_DEFAULTS, ...JSON.parse(window.localStorage.getItem("aevotron-workspace-settings") || "{}") }; }
+  catch { return SETTINGS_DEFAULTS; }
+}
+function WorkspaceSettings() {
+  const [settings, setSettings] = useState(readSettings);
+  const [tab, setTab] = useState("Profile");
+  const [avatar, setAvatar] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-avatar") || "" : "");
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [confirmation, setConfirmation] = useState("");
+  const [sessionList, setSessionList] = useState([{id:"current",name:"This device · Chrome",detail:"Current session · Netherlands",current:true},{id:"mobile",name:"Safari · iPhone",detail:"Last active yesterday",current:false}]);
+  const [logins] = useState([{when:"Today, 09:42",where:"Kerkrade, NL",device:"Chrome · Windows"},{when:"Yesterday, 18:16",where:"Kerkrade, NL",device:"Safari · iPhone"}]);
+  const update = (key, value) => setSettings(previous => {
+    const next = { ...previous, [key]: value };
+    try { window.localStorage.setItem("aevotron-workspace-settings", JSON.stringify(next)); } catch { /* storage may be unavailable */ }
+    toast.success("Setting saved");
+    return next;
+  });
+  const uploadAvatar = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/") || file.size > 2 * 1024 * 1024) { toast.error("Choose an image under 2 MB"); return; }
+    const reader = new FileReader();
+    reader.onload = () => { const value = String(reader.result); setAvatar(value); try { window.localStorage.setItem("aevotron-avatar", value); } catch { toast.error("Image is too large for local storage"); } };
+    reader.readAsDataURL(file);
+  };
+  const tabs = [{name:"Profile",icon:UserRound},{name:"Security",icon:Shield},{name:"Notifications",icon:Bell},{name:"Billing",icon:Wallet},{name:"API",icon:SlidersHorizontal},{name:"Appearance",icon:Palette},{name:"Danger zone",icon:Trash2}];
+  const field = (label,key,placeholder="") => <label className="av-setting-field"><span>{label}</span><input value={settings[key] ?? ""} placeholder={placeholder} onChange={e=>update(key,e.target.value)}/></label>;
+  const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{label}</strong><small>{description}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
+  const select = (label,key,options) => <label className="av-setting-field"><span>{label}</span><select value={settings[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option} value={option}>{option}</option>)}</select></label>;
+  return <div className="av-settings">
+    <div className="mh-page-heading"><div><div className="mh-eyebrow">ACCOUNT</div><h1>Settings</h1><p>Manage your account, security and workspace defaults.</p></div></div>
+    <div className="av-settings-layout">
+      <nav className="av-settings-tabs" aria-label="Settings sections">{tabs.map(item=><button type="button" key={item.name} className={tab===item.name?"active":""} onClick={()=>setTab(item.name)}><item.icon size={16}/>{item.name}</button>)}</nav>
+      <section className="mh-panel av-settings-panel">
+        {tab==="Profile" && <><div className="av-settings-heading"><h2>Profile</h2><p>Your personal details and regional preferences.</p></div><div className="av-avatar-editor"><div className="av-avatar-preview">{avatar ? <img src={avatar} alt="Profile avatar"/> : "C"}</div><div><strong>Profile photo</strong><small>JPG, PNG or WebP · up to 2 MB</small><label className="mh-button mh-button-quiet av-upload-button">Upload photo<input type="file" accept="image/*" onChange={uploadAvatar}/></label></div></div><div className="av-settings-grid">{field("Full name","name")}{field("Email address","email")}{select("Time zone","timezone",["Europe/Amsterdam","Europe/London","Europe/Berlin","Europe/Moscow","America/New_York","Asia/Tokyo","UTC"])}{select("Language","language",["English","Русский","简体中文"])}</div></>}
+        {tab==="Security" && <><div className="av-settings-heading"><h2>Security</h2><p>Protect your account and review active access.</p></div>{toggle("Two-factor authentication","twoFactor","Require a second verification step when signing in.")}<div className="av-settings-subtitle">Password</div><form className="av-settings-grid" onSubmit={e=>{e.preventDefault();toast.success("Password change request saved in demo mode");}}><label className="av-setting-field"><span>Current password</span><input type="password" required minLength="12" autoComplete="current-password"/></label><label className="av-setting-field"><span>New password</span><input type="password" required minLength="12" autoComplete="new-password"/></label><button className="mh-button mh-button-primary" type="submit">Update password</button></form><div className="av-settings-subtitle">Active sessions</div>{sessionList.map(session=><div className="av-session-row" key={session.id}><div><strong>{session.name}</strong><small>{session.detail}</small></div>{session.current?<span className="mh-status byok">Current</span>:<button className="mh-button mh-button-danger" onClick={()=>{setSessionList(list=>list.filter(item=>item.id!==session.id));toast.success("Session ended");}}>End session</button>}</div>)}<div className="av-settings-subtitle">Recent sign-ins</div>{logins.map(item=><div className="av-session-row" key={item.when}><div><strong>{item.device}</strong><small>{item.when} · {item.where}</small></div><ShieldCheck size={17}/></div>)}</>}
+        {tab==="Notifications" && <><div className="av-settings-heading"><h2>Notifications</h2><p>Choose which events can reach you.</p></div>{toggle("Security alerts","emailSecurity","Important sign-in and account security events by email.")}{toggle("Usage summaries","emailUsage","Periodic usage and spend summaries by email.")}{toggle("Push notifications","pushUsage","Browser notifications for important account events.")}{toggle("In-app product updates","inAppProduct","Service announcements and product changes.")}</>}
+        {tab==="Billing" && <><div className="av-settings-heading"><h2>Billing preferences</h2><p>Configure spending safeguards. Changes are stored locally in this preview.</p></div>{select("Billing currency","currency",["USD","EUR","GBP","RUB"])}{toggle("Automatic top-up","autoTopUp","Automatically add funds when your balance is low (demo).")}{field("Monthly spending limit (USD)","monthlyLimit")}</>}
+        {tab==="API" && <><div className="av-settings-heading"><h2>API controls</h2><p>Set request limits and trusted destinations.</p></div>{field("Requests per minute","requestLimit")}{field("IP allowlist (comma-separated)","ipWhitelist","203.0.113.10, 198.51.100.0/24")}{field("Webhook URL","webhookUrl","https://example.com/webhooks/aevotron")}<button className="mh-button mh-button-quiet" onClick={()=>{if(settings.webhookUrl && !/^https:\/\//i.test(settings.webhookUrl)){toast.error("Webhook URL must use HTTPS");return;}toast.success("API controls saved");}}>Validate and save API controls</button></>}
+        {tab==="Appearance" && <><div className="av-settings-heading"><h2>Appearance</h2><p>Make the workspace comfortable on every device.</p></div><div className="av-appearance-options">{[{value:"light",label:"Light",icon:Sun},{value:"dark",label:"Dark",icon:Moon},{value:"system",label:"System",icon:Monitor}].map(option=><button key={option.value} className={settings.theme===option.value?"selected":""} onClick={()=>{update("theme",option.value);document.querySelector(".apple-app")?.setAttribute("data-theme",option.value==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):option.value);}}><option.icon size={20}/>{option.label}</button>)}</div><div className="av-settings-subtitle">Accent color</div><div className="av-accent-options">{["blue","violet","graphite"].map(color=><button key={color} aria-label={color+" accent"} className={settings.accent===color?"selected":""} data-accent={color} onClick={()=>update("accent",color)}/>)}</div></>}
+        {tab==="Danger zone" && <><div className="av-settings-heading"><h2>Danger zone</h2><p>Irreversible actions for your account.</p></div><div className="av-danger-card"><div><strong>Delete account</strong><small>This demo only clears local preview preferences. It does not contact the production account service.</small></div><button className="mh-button mh-button-danger" onClick={()=>setDeleteOpen(true)}>Delete account</button></div></>}
+      </section>
+    </div>
+    {deleteOpen && <div className="av-modal-backdrop" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setDeleteOpen(false);}}><div className="av-modal" role="dialog" aria-modal="true" aria-labelledby="av-delete-title"><button className="av-modal-close" aria-label="Close" onClick={()=>setDeleteOpen(false)}><X size={18}/></button><h2 id="av-delete-title">Delete preview data?</h2><p>This clears locally saved workspace settings and avatar from this browser. It does not delete a real account.</p><label className="av-setting-field"><span>Type DELETE to confirm</span><input value={confirmation} onChange={e=>setConfirmation(e.target.value)} /></label><div className="av-modal-actions"><button className="mh-button mh-button-quiet" onClick={()=>setDeleteOpen(false)}>Cancel</button><button className="mh-button mh-button-danger" disabled={confirmation!=="DELETE"} onClick={()=>{localStorage.removeItem("aevotron-workspace-settings");localStorage.removeItem("aevotron-avatar");setSettings(SETTINGS_DEFAULTS);setAvatar("");setConfirmation("");setDeleteOpen(false);toast.success("Local preview settings cleared");}}>Delete local data</button></div></div></div>}
+  </div>;
+}
+function MockBilling() {
+  const [amount,setAmount]=useState("50");
+  const [balance,setBalance]=useState(128.4);
+  const [period,setPeriod]=useState("30 days");
+  return <><div className="mh-page-heading"><div><div className="mh-eyebrow">FINANCE</div><h1>Billing</h1><p>Track your balance, transactions and provider spend.</p></div></div><div className="mh-stats"><Stat icon={Wallet} label="Available balance" value={`${balance.toFixed(2)}`} note="Demo wallet balance"/><Stat icon={CircleDollarSign} label="This month" value="$42.80" note="Estimated provider spend"/><Stat icon={CreditCard} label="Payment method" value="•••• 4242" note="Demo payment method"/><Stat icon={Activity} label="Next invoice" value="Dec 01" note="Estimated billing date"/></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>Add funds</h3><p>Mock top-up. No payment is processed.</p></div></div><div className="av-topup-row"><select value={amount} onChange={e=>setAmount(e.target.value)}><option value="20">$20</option><option value="50">$50</option><option value="100">$100</option><option value="250">$250</option></select><button className="mh-button mh-button-primary" onClick={()=>{setBalance(value=>value+Number(amount));toast.success(`${amount} demo funds added`);}}>Add funds</button></div></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>Transactions</h3><p>Recent account activity · demo data</p></div><select value={period} onChange={e=>setPeriod(e.target.value)}><option>30 days</option><option>90 days</option><option>12 months</option></select></div>{[{date:"Nov 18, 2026",name:"Provider usage",value:"−$12.40"},{date:"Nov 12, 2026",name:"Account top-up",value:"+$100.00"},{date:"Nov 04, 2026",name:"Provider usage",value:"−$30.40"}].map(row=><div className="av-session-row" key={row.date}><div><strong>{row.name}</strong><small>{row.date}</small></div><strong>{row.value}</strong></div>)}</div></>;
+}
+function MockTeam() {
+  const [members,setMembers]=useState([{email:"christopher@example.com",role:"Owner",status:"Active"},{email:"developer@studio.example",role:"Developer",status:"Invited"},{email:"finance@studio.example",role:"Billing",status:"Active"}]);
+  const [email,setEmail]=useState("");
+  return <><div className="mh-page-heading"><div><div className="mh-eyebrow">COLLABORATION</div><h1>Team & projects</h1><p>Manage workspace members and access roles.</p></div></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>Invite a teammate</h3><p>Invitations are simulated in this local preview.</p></div></div><form className="av-topup-row" onSubmit={e=>{e.preventDefault();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast.error("Enter a valid email address");return;}setMembers(list=>[...list,{email,role:"Developer",status:"Invited"}]);setEmail("");toast.success("Invitation added to demo team");}}><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@company.com"/><button className="mh-button mh-button-primary" type="submit"><Plus size={15}/> Invite</button></form></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>Workspace members</h3><p>{members.length} members and invitations</p></div></div>{members.map((member,index)=><div className="av-session-row" key={member.email}><div><strong>{member.email}</strong><small>{member.status}</small></div><select value={member.role} disabled={index===0} onChange={e=>{setMembers(list=>list.map((item,i)=>i===index?{...item,role:e.target.value}:item));toast.success("Member role updated");}}><option>Owner</option><option>Admin</option><option>Developer</option><option>Billing</option><option>Viewer</option></select></div>)}</div></>;
+}
+function MockNotifications() {
+  const [items,setItems]=useState([{id:1,title:"Workspace is ready",detail:"Your AEVOTRON workspace has been initialized.",time:"Today · 09:42",read:false},{id:2,title:"API key created",detail:"A new key was generated for My application.",time:"Yesterday · 16:20",read:false},{id:3,title:"Usage summary available",detail:"Your monthly usage summary is ready to review.",time:"Nov 18 · 12:00",read:true}]);
+  return <><div className="mh-page-heading"><div><div className="mh-eyebrow">ACTIVITY CENTER</div><h1>Notifications</h1><p>Important updates and account activity.</p></div><button className="mh-button mh-button-quiet" onClick={()=>{setItems(list=>list.map(item=>({...item,read:true})));toast.success("All notifications marked as read");}}>Mark all as read</button></div><div className="mh-panel av-mock-panel">{items.map(item=><div className={`av-notification-row ${item.read?"is-read":""}`} key={item.id}><span className="av-notification-dot"/><div><strong>{item.title}</strong><p>{item.detail}</p><small>{item.time}</small></div><button className="mh-button mh-button-quiet" onClick={()=>setItems(list=>list.filter(entry=>entry.id!==item.id))}>Dismiss</button></div>)}{!items.length&&<div className="mh-empty">You're all caught up.</div>}</div></>;
 }
 
 function Stat({icon:Icon,label,value,note}) { return <div className="mh-stat"><div className="mh-stat-icon"><Icon size={17}/></div><div className="mh-stat-label">{label}</div><div className="mh-stat-value">{value}</div><div className="mh-stat-note">{note}</div></div>; }
