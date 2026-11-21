@@ -112,6 +112,14 @@ function WorkspaceChat() {
   const favoriteOptions = filteredModels.filter((model) => favoriteModels.includes(model.id));
   const recentOptions = filteredModels.filter((model) => recentModels.includes(model.id) && !favoriteModels.includes(model.id));
   const otherOptions = filteredModels.filter((model) => !favoriteModels.includes(model.id) && !recentModels.includes(model.id));
+  const providerGroups = [...new Set(otherOptions.map((model) => model.provider_code || "unknown"))];
+  const modelCapabilities = activeModel?.capabilities || {};
+  const modelDetails = [
+    activeModel?.context_window ? Number(activeModel.context_window).toLocaleString() + " " + t("context tokens") : null,
+    modelCapabilities.vision ? t("Vision") : null,
+    modelCapabilities.tools ? t("Tools") : null,
+    modelCapabilities.streaming === true ? t("Streaming") : modelCapabilities.streaming === false ? t("Streaming unavailable") : null,
+  ].filter(Boolean);
   const isFavoriteModel = Boolean(activeModel && favoriteModels.includes(activeModel.id));
   const contextTruncated = contextMessages.length < messages.length;
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
@@ -532,8 +540,8 @@ function WorkspaceChat() {
               <div className="aw-model-picker">
                 <label htmlFor="aw-model-search">{t("MODEL")}</label>
                 <input id="aw-model-search" className="aw-model-search" value={modelSearch} onChange={(event) => setModelSearch(event.target.value)} placeholder={t("Search models")} aria-label={t("Search models")} disabled={!models.length}/>
-                <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{favoriteOptions.length > 0 && <optgroup label={t("Favorites")}>{favoriteOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{recentOptions.length > 0 && <optgroup label={t("Recently used")}>{recentOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{otherOptions.length > 0 && <optgroup label={t("All connected models")}>{otherOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{filteredModels.length === 0 && <option value="" disabled>{t("No models match your search")}</option>}</select><ChevronDown size={14}/></div>
-                <div className="aw-model-picker-meta"><small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small><button type="button" className={isFavoriteModel ? "aw-favorite-toggle is-favorite" : "aw-favorite-toggle"} onClick={toggleFavoriteModel} disabled={!activeModel} aria-pressed={isFavoriteModel}><Star size={13} fill={isFavoriteModel ? "currentColor" : "none"}/>{isFavoriteModel ? t("Pinned") : t("Add to favorites")}</button></div>
+                <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{favoriteOptions.length > 0 && <optgroup label={t("Favorites")}>{favoriteOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{recentOptions.length > 0 && <optgroup label={t("Recently used")}>{recentOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{providerGroups.map((providerCode) => <optgroup key={providerCode} label={providerCode === "openai" ? "OpenAI" : providerCode === "groq" ? "Groq" : providerCode}>{otherOptions.filter((model) => (model.provider_code || "unknown") === providerCode).map((model) => <option key={model.id} value={model.id}>{model.display_name || model.provider_model_id || model.id}</option>)}</optgroup>)}{filteredModels.length === 0 && <option value="" disabled>{t("No models match your search")}</option>}</select><ChevronDown size={14}/></div>
+                <div className="aw-model-picker-meta"><small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small>{modelDetails.length > 0 ? <small className="aw-model-details">{modelDetails.join(" · ")}</small> : activeModel?.catalog_status === "unlisted" ? <small className="aw-model-details">{t("Model metadata not verified")}</small> : null}<button type="button" className={isFavoriteModel ? "aw-favorite-toggle is-favorite" : "aw-favorite-toggle"} onClick={toggleFavoriteModel} disabled={!activeModel} aria-pressed={isFavoriteModel}><Star size={13} fill={isFavoriteModel ? "currentColor" : "none"}/>{isFavoriteModel ? t("Pinned") : t("Add to favorites")}</button></div>
               </div>
             </div>
           </div>
