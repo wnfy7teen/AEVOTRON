@@ -2,150 +2,76 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const entity = async (name) => JSON.parse(
-  await readFile(new URL(`../base44/entities/${name}.jsonc`, import.meta.url), "utf8"),
-);
+const read = (path) => readFile(new URL("../" + path, import.meta.url), "utf8");
 
-test("workspace ownership cannot be changed by a regular user", async () => {
-  const schema = await entity("workspace");
-  assert.deepEqual(schema.properties.owner_user_id.rls.write, {
-    user_condition: { role: "admin" },
-  });
-  assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
-  assert.deepEqual(schema.rls.delete, { user_condition: { role: "admin" } });
-  for (const operation of ["create", "read", "update"]) {
-    assert.ok(schema.rls[operation].$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
+test("PostgreSQL schema defines isolated users, sessions and workspaces", async () => {
+  const sql = await read("backend/migrations/001_initial.sql");
+  for (const table of ["users", "sessions", "email_verification_tokens", "password_reset_tokens", "mfa_factors", "workspaces", "workspace_members"]) {
+    assert.match(sql, new RegExp("CREATE TABLE IF NOT EXISTS " + table + "\\b"));
   }
+  assert.match(sql, /email_normalized TEXT NOT NULL UNIQUE/);
+  assert.match(sql, /token_hash BYTEA NOT NULL UNIQUE/);
+  assert.match(sql, /owner_user_id UUID NOT NULL REFERENCES users\\(id\\)/);
 });
 
-test("workspace membership mutations are restricted to trusted backend role", async () => {
-  const schema = await entity("workspace-member");
-  for (const operation of ["create", "update", "delete"]) {
-    assert.deepEqual(schema.rls[operation], { user_condition: { role: "admin" } });
-  }
-  assert.ok(schema.rls.read.$or.some((rule) => rule["data.user_id"] === "{{user.id}}"));
-  assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
+test("provider credentials use authenticated encryption with contextual binding", async () => {
+  const source = await read("backend/src/security.js");
+  const server = await read("backend/src/server.js");
+  assert.match(source, /aes-256-gcm/);
+  assert.match(source, /setAAD/);
+  assert.match(source, /getAuthTag/);
+  assert.match(server, /encryptSecret\\(credential, aad\\)/);
+  assert.match(server, /decryptSecret\\(provider\\.rows\\[0\\]\\.credential_ciphertext/);
 });
 
-test("provider credentials and API key hashes are admin-only fields", async () => {
-  const provider = await entity("provider-connection");
-  const apiKey = await entity("api-key");
-  for (const field of ["credential_ciphertext", "credential_key_version"]) {
-    assert.deepEqual(provider.properties[field].rls.read, { user_condition: { role: "admin" } });
-    assert.deepEqual(provider.properties[field].rls.write, { user_condition: { role: "admin" } });
-  }
-  assert.deepEqual(apiKey.properties.key_hash.rls.read, { user_condition: { role: "admin" } });
-  assert.deepEqual(apiKey.properties.key_hash.rls.write, { user_condition: { role: "admin" } });
-  for (const schema of [provider, apiKey]) {
-    for (const operation of ["create", "update", "delete"]) {
-      assert.deepEqual(schema.rls[operation], { user_condition: { role: "admin" } });
-    }
-    assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
-  }
+test("AEVOTRON API keys are generated randomly and HMAC-hashed", async () => {
+  const source = await read("backend/src/security.js");
+  const server = await read("backend/src/server.js");
+  assert.match(source, /randomBytes\\(32\\)/);
+  assert.match(source, /createHmac\\("sha256"/);
+  assert.match(source, /mh_live_/);
+  assert.match(server, /apiKeyHash\\(token\\)/);
+  assert.match(server, /This key is shown once/);
 });
 
-test("usage and audit events are append-only", async () => {
-  for (const name of ["usage-event", "audit-event"]) {
-    const schema = await entity(name);
-    assert.equal(schema.rls.update, false);
-    assert.equal(schema.rls.delete, false);
-    assert.deepEqual(schema.rls.create, { user_condition: { role: "admin" } });
-    assert.ok(schema.rls.read.$or.some((rule) => rule["data.owner_user_id"] === "{{user.id}}"));
-  }
+test("usage and audit events are append-only and do not store prompt content", async () => {
+  const sql = await read("backend/migrations/001_initial.sql");
+  const server = await read("backend/src/server.js");
+  assert.match(sql, /CREATE TRIGGER usage_events_immutable BEFORE UPDATE OR DELETE/);
+  assert.match(sql, /CREATE TRIGGER audit_events_immutable BEFORE UPDATE OR DELETE/);
+  assert.match(server, /input_tokens INTEGER NOT NULL DEFAULT 0/);
+  assert.doesNotMatch(server, /console\\.log\\([^)]*messages/);
+  assert.doesNotMatch(server, /INSERT INTO usage_events[^;]*(messages|prompt|completion_content)/i);
 });
 
-const backendFunction = async (name) => readFile(
-  new URL(`../base44/functions/${name}/index.ts`, import.meta.url),
-  "utf8",
-);
-
-test("provider credentials are validated and encrypted before persistence", async () => {
-  const source = await backendFunction("provider-connections");
-  assert.match(source, /https:\/\/api\.openai\.com\/v1\/models/);
-  assert.match(source, /AES-GCM/);
-  assert.match(source, /Deno\.env\.get\("AEVOTRON_MASTER_KEY"\)/);
-  assert.match(source, /credential_ciphertext: ciphertext/);
-  assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
-  assert.doesNotMatch(source, /return json\(\{[^}]*credential_ciphertext/s);
+test("gateway rejects unbounded payloads and streaming until streaming support is implemented", async () => {
+  const server = await read("backend/src/server.js");
+  assert.match(server, /const JSON_LIMIT = 64 \\* 1024/);
+  assert.match(server, /input\\.stream === true/);
+  assert.match(server, /input\\.messages\\.length > 50/);
+  assert.match(server, /raw\\.length > 65536/);
+  assert.match(server, /api_key_rate_limits/);
+  assert.match(server, /rate_limit_exceeded/);
 });
 
-test("AEVOTRON API keys are random, HMAC-hashed and only returned at creation", async () => {
-  const source = await backendFunction("api-keys");
-  assert.match(source, /crypto\.getRandomValues/);
-  assert.match(source, /name: "HMAC"/);
-  assert.match(source, /key_hash: keyHash/);
-  assert.match(source, /scopes_json: JSON\.stringify\(\["chat\.completions"\]\)/);
-  assert.match(source, /key: token/);
-  assert.match(source, /This key is shown once/);
-  assert.doesNotMatch(source, /localStorage/);
+test("Docker stack isolates PostgreSQL and API behind the Nginx gateway", async () => {
+  const compose = await read("docker-compose.yml");
+  const nginx = await read("docker/nginx.conf");
+  assert.match(compose, /image: postgres:17-alpine/);
+  assert.match(compose, /image: aevotron-api:local/);
+  assert.match(compose, /127\\.0\\.0\\.1:3000:3000/);
+  assert.match(compose, /read_only: true/);
+  assert.match(nginx, /location \/api\/v1\//);
+  assert.match(nginx, /proxy_pass http:\/\/backend:3001/);
+  assert.match(nginx, /location = \/v1\/chat\/completions/);
 });
 
-test("gateway accepts only bounded OpenAI chat requests and never logs prompts", async () => {
-  const source = await backendFunction("gateway");
-  assert.match(source, /https:\/\/api\.openai\.com\/v1\/chat\/completions/);
-  assert.match(source, /raw\.length > 65536/);
-  assert.match(source, /input\.stream === true/);
-  assert.match(source, /input\.messages\.length > 50/);
-  assert.ok(source.includes("Authorization: `Bearer ${credential}`"));
-  assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
-  assert.doesNotMatch(source, /prompt:\s*input\.messages/);
-});
-
-test("usage analytics are workspace-scoped and never persist prompt content", async () => {
-  const source = await backendFunction("usage");
-  assert.match(source, /owner_user_id: user\.id, workspace_id: workspace\.id/);
-  assert.match(source, /workspace: \{ id: workspace\.id, name: workspace\.name/);
-  assert.match(source, /"input_tokens", "output_tokens"/);
-  assert.match(source, /"latency_ms", "status_code", "error_code"/);
-  assert.doesNotMatch(source, /console\.(log|error)\s*\(/);
-  assert.doesNotMatch(source, /messages|prompt|completion_content/i);
-});
-
-test("gateway checks API key scopes and applies a documented per-key request guard", async () => {
-  const source = await backendFunction("gateway");
-  assert.match(source, /scopes\.includes\("chat\.completions"\)/);
-  assert.match(source, /recentUsage = await entities\.UsageEvent\.filter/);
-  assert.match(source, /recentCount >= 30/);
-  assert.match(source, /rate_limit_exceeded/);
-  assert.match(source, /not a distributed concurrency limit/);
-});
-
-test("API key management bounds active keys and rejects control characters in names", async () => {
-  const source = await backendFunction("api-keys");
-  assert.match(source, /activeKeys\.length >= 20/);
-  assert.match(source, /code < 32 \|\| code === 127/);
-});
-
-test("provider model discovery is owner-scoped and uses the encrypted OpenAI connection", async () => {
-  const source = await backendFunction("provider-connections");
-  assert.match(source, /action === "models"/);
-  assert.match(source, /decryptCredential\(/);
-  assert.match(source, /https:\/\/api\.openai\.com\/v1\/models/);
-  assert.match(source, /chatgpt-/);
-  assert.doesNotMatch(source, /return json\(\{[^}]*credential_ciphertext/s);
-});
-
-test("gateway API bearer keys are not reused as Base44 session credentials", async () => {
-  const source = await backendFunction("gateway");
-  assert.match(source, /serviceHeaders\.delete\("authorization"\)/);
-  assert.match(source, /createClientFromRequest\(serviceRequest\)/);
-});
-
-test("expired API keys are reported as expired without exposing their hash", async () => {
-  const source = await backendFunction("api-keys");
-  assert.match(source, /status: key\.status === "active"/);
-  assert.match(source, /Date\.parse\(key\.expires_at\) <= Date\.now\(\)/);
-  assert.doesNotMatch(source, /return json\(\{ keys: rows/);
-});
-
-test("Vercel routes Base44 functions to the app subdomain, not the blocked platform host", async () => {
-  const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
-  assert.equal(
-    config.rewrites[0].destination,
-    "https://model-hub-5539d9ce.base44.app/api/apps/6afee6f0926a08905539d9ce/functions/gateway",
-  );
-  assert.equal(
-    config.rewrites[1].destination,
-    "https://model-hub-5539d9ce.base44.app/api/apps/:appId/functions/:functionName",
-  );
+test("frontend build has no Base44 SDK, platform function or rewrite dependency", async () => {
+  const pkg = JSON.parse(await read("package.json"));
+  const vite = await read("vite.config.js");
+  const api = await read("src/api/client.js");
+  assert.equal(pkg.dependencies["@base44/sdk"], undefined);
+  assert.equal(pkg.dependencies["@base44/vite-plugin"], undefined);
+  assert.doesNotMatch(vite, /@base44/);
+  assert.doesNotMatch(api, /base44\\.app|app\\.base44\\.com/);
 });
