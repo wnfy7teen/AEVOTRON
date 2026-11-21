@@ -80,14 +80,25 @@ async function invoke(name, payload = {}) {
   }
   if (name === "provider-connections") {
     if (payload.action === "list") return request("/api/v1/providers");
+    const providerCode = ["openai", "groq"].includes(payload.provider_code) ? payload.provider_code : "openai";
     if (payload.action === "connect") {
-      return request("/api/v1/providers/openai", { method: "POST", body: { api_key: payload.credential } });
+      return request("/api/v1/providers/" + providerCode, { method: "POST", body: { api_key: payload.credential } });
     }
     if (payload.action === "test") {
-      return request("/api/v1/providers/openai/test", { method: "POST", body: { connection_id: payload.connection_id } });
+      return request("/api/v1/providers/" + providerCode + "/test", { method: "POST", body: {} });
     }
-    if (payload.action === "revoke") return request("/api/v1/providers/openai", { method: "DELETE", body: {} });
-    if (payload.action === "models") return request("/api/v1/providers/openai/models");
+    if (payload.action === "revoke") {
+      return request("/api/v1/providers/" + providerCode, { method: "DELETE", body: {} });
+    }
+    if (payload.action === "models") {
+      const connections = await request("/api/v1/providers");
+      const active = (connections.connections || []).filter((item) => item.status === "active" && ["openai", "groq"].includes(item.provider_code));
+      const results = await Promise.all(active.map(async (item) => {
+        const result = await request("/api/v1/providers/" + item.provider_code + "/models");
+        return result.models || [];
+      }));
+      return { models: results.flat() };
+    }
   }
   if (name === "api-keys") {
     if (payload.action === "list") {
