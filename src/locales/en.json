@@ -777,5 +777,7 @@
   "model.description.lightweight": "A lightweight model for fast responses and budget-conscious tasks.",
   "model.description.default": "A text AI model for conversations, generation, and content analysis.",
   "i18n.test.item_one": "{{count}} item",
-  "i18n.test.item_other": "{{count}} items"
+  "i18n.test.item_other": "{{count}} items",
+  "i18n.test.item_few": "{{count}} items",
+  "i18n.test.item_many": "{{count}} items"
 }
