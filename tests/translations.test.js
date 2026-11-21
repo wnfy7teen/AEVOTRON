@@ -145,6 +145,29 @@ it("keeps all audited page labels, model descriptions and fallback screens trans
     "Search model, provider or error",
     "Filter request status",
     "All statuses",
+    "Add funds",
+    "Mock top-up. No payment is processed.",
+    "Top-up amount",
+    "Transactions",
+    "Recent account activity · demo data",
+    "Transaction period",
+    "Owner",
+    "Admin",
+    "Developer",
+    "Viewer",
+    "Active",
+    "Invited",
+    "Loading",
+    "Successful",
+    "Errors",
+    "Previous",
+    "Next",
+    "Mark all as read",
+    "Member role",
+    "Expired",
+    "active",
+    "expired",
+    "revoked",
     "Revoke this API key? Applications using it will lose access immediately.",
     "Could not load MFA status.",
     "Could not start authenticator setup.",
@@ -187,5 +210,11 @@ it("localizes page metadata, accessibility labels, currency and dates", async ()
   assert.match(dashboard, /new Intl\.DateTimeFormat\(locale/);
   assert.match(dashboard, /"ru-RU"/);
   assert.match(dashboard, /"zh-CN"/);
+  assert.match(dashboard, /av-topup-panel/);
+  assert.match(dashboard, /av-transactions-panel/);
+  assert.match(dashboard, /aria-label="Member role"/);
+  assert.match(css, /\\.av-topup-panel[\\s\\S]*?z-index:\\s*3/);
+  assert.match(css, /\\.av-transactions-panel[\\s\\S]*?z-index:\\s*1/);
+  assert.match(css, /\\.av-topup-panel \\.av-dropdown\\.av-dropdown-menu|\\.av-topup-panel \\.av-dropdown-menu/);
   assert.doesNotMatch(dashboard, /Nov 18, 2026|Nov 12, 2026|Nov 04, 2026|Today · 09:42|Yesterday · 16:20/);
 });
