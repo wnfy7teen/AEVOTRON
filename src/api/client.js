@@ -139,7 +139,7 @@ const workspace = {
   async branchChat(sessionId, messageId) {
     return request("/api/v1/workspace/chats/" + encodeURIComponent(sessionId) + "/branch", { method: "POST", body: { message_id: messageId } });
   },
-  async streamChat({ model, messages, session_id, message_id, persist_user_message = true, persist_conversation = true, replace_last_user_message = false, max_tokens, temperature, top_p, signal, onDelta, onUsage }) {
+  async streamChat({ model, messages, session_id, message_id, assistant_message_id, persist_user_message = true, persist_conversation = true, replace_last_user_message = false, max_tokens, temperature, top_p, signal, onDelta, onUsage }) {
     const startedAt = performance.now();
     let firstTokenAt = null;
     let outputCharacters = 0;
@@ -151,6 +151,7 @@ const workspace = {
       body: JSON.stringify({
         model, messages, stream: true, persist_user_message, persist_conversation, replace_last_user_message,
         ...(message_id ? { message_id } : {}),
+        ...(assistant_message_id ? { assistant_message_id } : {}),
         ...(session_id ? { session_id } : {}),
         ...(max_tokens !== undefined ? { max_tokens } : {}),
         ...(temperature !== undefined ? { temperature } : {}),

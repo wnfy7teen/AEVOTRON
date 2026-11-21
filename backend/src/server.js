@@ -764,7 +764,7 @@ async function handle(req, res) {
     );
     if (!source.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
     const target = await pool.query(
-      "SELECT id,created_at FROM workspace_chat_messages WHERE id=$1 AND session_id=$2 AND workspace_id=$3 AND owner_user_id=$4 AND role='user'",
+      "SELECT id,created_at FROM workspace_chat_messages WHERE id=$1 AND session_id=$2 AND workspace_id=$3 AND owner_user_id=$4 AND role IN ('user','assistant')",
       [body.message_id,chatBranchRoute[1],workspace.id,user.id],
     );
     if (!target.rowCount) return fail(res, 404, "CHAT_MESSAGE_NOT_FOUND", "The selected message was not found.");
@@ -838,6 +838,9 @@ async function handle(req, res) {
     const [, providerCode, providerModel] = modelMatch;
     const providerConfig = getProvider(providerCode);
     if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    if (body.assistant_message_id !== undefined && (typeof body.assistant_message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.assistant_message_id))) {
+      return fail(res, 400, "INVALID_CHAT_MESSAGE", "The assistant message identifier is invalid.");
+    }
     if (body.message_id !== undefined && (typeof body.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.message_id))) {
       return fail(res, 400, "INVALID_CHAT_MESSAGE", "The message identifier is invalid.");
     }
@@ -1032,10 +1035,17 @@ async function handle(req, res) {
     } finally {
       res.removeListener("close", onResponseClose);
       if (assistantContent && chatSessionId) {
-        await pool.query(
-          "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,'assistant',$4,$5,$6::jsonb)",
-          [chatSessionId,workspace.id,user.id,assistantContent,body.model,JSON.stringify({ partial: responseStatus !== 200 })],
-        ).catch((error) => process.stderr.write("[aevotron-api] workspace message write failed: " + error.message + "\n"));
+        const assistantMetadata = JSON.stringify({ partial: responseStatus !== 200 });
+        const saveAssistant = body.assistant_message_id
+          ? pool.query(
+              "INSERT INTO workspace_chat_messages(id,session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,$4,'assistant',$5,$6,$7::jsonb)",
+              [body.assistant_message_id,chatSessionId,workspace.id,user.id,assistantContent,body.model,assistantMetadata],
+            )
+          : pool.query(
+              "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,'assistant',$4,$5,$6::jsonb)",
+              [chatSessionId,workspace.id,user.id,assistantContent,body.model,assistantMetadata],
+            );
+        await saveAssistant.catch((error) => process.stderr.write("[aevotron-api] workspace message write failed: " + error.message + "\n"));
       }
       await pool.query(
         "INSERT INTO usage_events(workspace_id,owner_user_id,request_id,model_id,provider_code,input_tokens,output_tokens,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",

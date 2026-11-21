@@ -23,6 +23,7 @@ test("Workspace chat is session-authenticated and streams through connected prov
   assert.match(route, /body\.session_id/);
   assert.match(route, /persist_conversation/);
   assert.match(route, /replace_last_user_message/);
+  assert.match(route, /assistant_message_id/);
   assert.match(route, /CHAT_MESSAGE_NOT_FOUND/);
   assert.match(route, /Non-persistent requests cannot target a saved conversation/);
   assert.doesNotMatch(route, /parseApiKeyBearer|mh_live_/);
@@ -60,7 +61,7 @@ test("Conversation branching copies only an owned prefix ending at a user messag
   assert.match(route, /requireUser\(req, res\)/);
   assert.match(route, /workspace-chat-branch:/);
   assert.match(route, /owner_user_id=\$[0-9]/);
-  assert.match(route, /role='user'/);
+  assert.match(route, /role IN \\('user','assistant'\\)/);
   assert.match(route, /created_at < \$[0-9]/);
   assert.match(route, /INSERT INTO workspace_chat_messages/);
   assert.match(route, /metadata,created_at\) SELECT/);
