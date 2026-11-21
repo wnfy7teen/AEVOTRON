@@ -23,12 +23,12 @@ function resolveTheme(theme) {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function applyResolvedTheme(theme) {
-  const resolved = resolveTheme(theme);
+function applyResolvedTheme(preference) {
+  const theme = resolveTheme(preference);
   if (typeof document === "undefined") return;
-  document.querySelectorAll(".apple-app").forEach((element) => { element.dataset.theme = resolved; });
-  document.documentElement.dataset.theme = resolved;
-  document.documentElement.style.colorScheme = resolved;
+  document.querySelectorAll(".apple-app").forEach((element) => { element.dataset.theme = theme; });
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
 }
 
 export function setAppTheme(theme) {
