@@ -81,7 +81,7 @@ it("keeps model descriptions translated and validates locale punctuation", async
     "model.description.gpt41Mini", "model.description.gpt41Nano", "model.description.o3",
     "model.description.o3Mini", "model.description.o4Mini", "model.description.reasoning",
     "model.description.lightweight", "model.description.default",
-    "General", "Reasoning", "Coding", "Lightweight", "Direct", "PREVIEW",
+    "General", "Reasoning", "Coding", "Lightweight", "Direct", "PREVIEW", "BETA",
   ];
   for (const key of modelKeys) {
     assert.ok(en[key], `Missing English model description: ${key}`);
