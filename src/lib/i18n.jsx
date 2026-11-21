@@ -1,7 +1,7 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { Check, ChevronDown } from "lucide-react";
-import { createAppI18n, normalizeLanguage, persistLanguageCookie, supportedLanguages } from "@/i18n";
+import { createAppI18n, LANGUAGE_STORAGE_KEY, normalizeLanguage, persistLanguageCookie, supportedLanguages } from "@/i18n";
 
 function getBrowserStorage() {
   try { return typeof window !== "undefined" ? window.localStorage : null; } catch { return null; }
@@ -12,6 +12,17 @@ export function LanguageProvider({ children, initialLanguage = "en" }) {
     language: initialLanguage,
     storage: getBrowserStorage(),
   }));
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const hasLocaleCookie = document.cookie.split(";").some((part) => part.trim().startsWith(`${LANGUAGE_STORAGE_KEY}=`));
+    if (hasLocaleCookie) return;
+    const savedLocale = getBrowserStorage()?.getItem(LANGUAGE_STORAGE_KEY);
+    const preferredLocale = savedLocale ? normalizeLanguage(savedLocale) : normalizeLanguage(initialLanguage);
+    persistLanguageCookie(preferredLocale);
+    if (preferredLocale !== normalizeLanguage(initialLanguage)) {
+      instance.changeLanguage(preferredLocale);
+    }
+  }, [initialLanguage, instance]);
   return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
 }
 
