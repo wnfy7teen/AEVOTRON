@@ -153,5 +153,8 @@
   "All connected models": "所有已连接模型",
   "No models match your search": "没有匹配的模型",
   "Pinned": "已固定",
-  "Add to favorites": "添加到收藏"
+  "Add to favorites": "添加到收藏",
+  "Session usage": "会话用量",
+  "requests": "次请求",
+  "Estimated": "估算"
 }
