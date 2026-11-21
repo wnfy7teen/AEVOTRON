@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Moon, Sun } from "lucide-react";
 
-export function ThemeSwitcher() {\n  const { t } = useTranslation();
+export function ThemeSwitcher() {
+  const { t } = useTranslation();
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "light";
     try { return window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "light"; }
