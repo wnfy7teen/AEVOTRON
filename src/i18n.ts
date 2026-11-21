@@ -1,4 +1,4 @@
-import i18next, { createInstance } from "i18next";
+import { createInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
