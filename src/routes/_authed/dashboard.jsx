@@ -454,6 +454,40 @@ function readSettings() {
 }
 function WorkspaceSettings({ preview = false, account }) {
   const [settings, setSettings] = useState(readSettings);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [mfaCode, setMfaCode] = useState("");
+  const queryClient = useQueryClient();
+  const sessionsQuery = useQuery({
+    queryKey: ["auth-sessions"],
+    queryFn: () => api.auth.sessions(),
+    enabled: !preview && tab === "Security",
+    retry: false,
+    staleTime: 30_000,
+  });
+  const passwordMutation = useMutation({
+    mutationFn: () => api.auth.changePassword({
+      current_password: currentPassword,
+      new_password: newPassword,
+      mfa_code: mfaCode,
+    }),
+    onSuccess: () => {
+      setCurrentPassword("");
+      setNewPassword("");
+      setMfaCode("");
+      toast.success("Password updated. Other sessions were signed out.");
+      queryClient.invalidateQueries({ queryKey: ["auth-sessions"] });
+    },
+    onError: (error) => toast.error(error.message || "Could not update password."),
+  });
+  const revokeSessionMutation = useMutation({
+    mutationFn: (sessionId) => api.auth.revokeSession(sessionId),
+    onSuccess: () => {
+      toast.success("Session revoked");
+      queryClient.invalidateQueries({ queryKey: ["auth-sessions"] });
+    },
+    onError: (error) => toast.error(error.message || "Could not revoke session."),
+  });
   const [tab, setTab] = useState("Profile");
   const [avatar, setAvatar] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-avatar") || "" : "");
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -477,13 +511,13 @@ function WorkspaceSettings({ preview = false, account }) {
   const toggle = (label,key,description) => <div className="av-setting-row"><div><strong>{label}</strong><small>{description}</small></div><button type="button" role="switch" aria-checked={!!settings[key]} className={`av-switch ${settings[key] ? "is-on" : ""}`} onClick={()=>update(key,!settings[key])}><span/></button></div>;
   const select = (label,key,options) => <label className="av-setting-field"><span>{label}</span><select value={settings[key]} onChange={e=>update(key,e.target.value)}>{options.map(option=><option key={option} value={option}>{option}</option>)}</select></label>;
   return <div className="av-settings">
-    <div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>Local preview settings.</strong> These preferences are saved only in this browser. Profile identity, password changes, session management, billing, webhooks and API restrictions are not edited here. Two-factor authentication below is connected to the account security API.</span></div>
+    <div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>Account settings status.</strong> Profile identity is read from your account. Password changes, active-session revocation and two-factor authentication use the account API. Appearance, regional preferences and avatar are stored in this browser; billing, notification delivery, webhooks and API restrictions are not yet connected to server-side settings.</span></div>
     <div className="mh-page-heading"><div><div className="mh-eyebrow">ACCOUNT</div><h1>Settings</h1><p>Manage your account, security and workspace defaults. {preview ? "Sample account data is shown in this read-only preview." : "Identity details are read from your signed-in account."}</p></div></div>
     <div className="av-settings-layout">
       <nav className="av-settings-tabs" aria-label="Settings sections">{tabs.map(item=><button type="button" key={item.name} className={tab===item.name?"active":""} onClick={()=>setTab(item.name)}><item.icon size={16}/>{item.name}</button>)}</nav>
       <section className="mh-panel av-settings-panel">
         {tab==="Profile" && <><div className="av-settings-heading"><h2>Profile</h2><p>Your account identity and regional preferences. Name and email are managed by your account service.</p></div><div className="av-avatar-editor"><div className="av-avatar-preview">{avatar ? <img src={avatar} alt="Profile avatar"/>  : (account?.display_name?.charAt(0) || account?.email?.charAt(0) || (preview ? "S" : "A")).toUpperCase()}</div><div><strong>Profile photo</strong><small>JPG, PNG or WebP · up to 2 MB</small><label className="mh-button mh-button-quiet av-upload-button">Upload photo<input type="file" accept="image/*" onChange={uploadAvatar}/></label></div></div><div className="av-settings-grid"><label className="av-setting-field"><span>Full name</span><input readOnly value={account?.display_name || account?.email?.split("@")[0] || (preview ? "Sample account" : "Loading account…")}/></label><label className="av-setting-field"><span>Email address</span><input readOnly value={account?.email || (preview ? "Read-only preview" : "Loading account…")}/></label>{select("Time zone","timezone",["Europe/Amsterdam","Europe/London","Europe/Berlin","Europe/Moscow","America/New_York","Asia/Tokyo","UTC"])}{select("Language","language",["English","Русский","简体中文"])}</div></>}
-        {tab==="Security" && <><div className="av-settings-heading"><h2>Security</h2><p>Protect your account and review active access.</p></div><MfaSettings/><div className="av-settings-subtitle">Password</div><div className="mh-callout av-settings-notice" role="note"><LockKeyhole size={16}/><span><strong>Password changes are not available here yet.</strong> The backend currently supports password reset by email, but does not expose an authenticated change-password endpoint. This form is intentionally unavailable rather than pretending to save a change.</span></div><div className="av-settings-subtitle">Active sessions</div><div className="mh-callout av-settings-notice" role="note"><Shield size={16}/><span><strong>Session management is not connected yet.</strong> The backend does not currently expose a session-list or revoke-session endpoint. No sample devices are shown as real sessions.</span></div><div className="av-settings-subtitle">Recent sign-ins</div><div className="mh-callout av-settings-notice" role="note"><Clock size={16}/><span><strong>Sign-in history is not available yet.</strong> The backend does not expose an account sign-in history endpoint.</span></div></>}
+        {tab==="Security" && <><div className="av-settings-heading"><h2>Security</h2><p>Protect your account and review active access.</p></div><MfaSettings/><div className="av-settings-subtitle">Change password</div><form className="av-settings-grid" onSubmit={event=>{event.preventDefault();if(newPassword===currentPassword){toast.error("Choose a new password different from the current one.");return;}passwordMutation.mutate();}}><label className="av-setting-field"><span>Current password</span><input type="password" required minLength={12} maxLength={256} autoComplete="current-password" value={currentPassword} onChange={event=>setCurrentPassword(event.target.value)}/></label><label className="av-setting-field"><span>New password</span><input type="password" required minLength={12} maxLength={256} autoComplete="new-password" value={newPassword} onChange={event=>setNewPassword(event.target.value)}/></label><label className="av-setting-field"><span>Authenticator code (if MFA is enabled)</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={mfaCode} onChange={event=>setMfaCode(event.target.value.replace(/\\D/g,"").slice(0,6))} placeholder="000000"/></label><button className="mh-button mh-button-primary" type="submit" disabled={passwordMutation.isPending || currentPassword.length<12 || newPassword.length<12}>{passwordMutation.isPending?"Updating…":"Update password"}</button></form><div className="av-settings-subtitle">Active sessions</div>{preview ? <div className="mh-callout av-settings-notice" role="note">Session data is not included in the read-only preview.</div> : sessionsQuery.isLoading ? <div className="mh-empty">Loading active sessions…</div> : sessionsQuery.isError ? <div className="mh-inline-error" role="alert">{sessionsQuery.error?.message || "Could not load active sessions."}</div> : (sessionsQuery.data?.sessions || []).length === 0 ? <div className="mh-empty">No active sessions found.</div> : (sessionsQuery.data.sessions).map(session=><div className="av-session-row" key={session.id}><div><strong>{session.id===sessionsQuery.data.current_session_id?"This device":"Signed-in device"}</strong><small>{session.user_agent || "Unknown browser"} · Last active {new Date(session.last_seen_at).toLocaleString()}</small><small>Signed in {new Date(session.created_at).toLocaleString()}</small></div>{session.id===sessionsQuery.data.current_session_id?<span className="mh-status byok">Current</span>:<button className="mh-button mh-button-danger" type="button" disabled={revokeSessionMutation.isPending} onClick={()=>{if(window.confirm("End this session? The device will need to sign in again."))revokeSessionMutation.mutate(session.id);}}>End session</button>}</div>)}</>}
         {tab==="Notifications" && <><div className="av-settings-heading"><h2>Notifications</h2><p>Choose which events can reach you.</p></div>{toggle("Security alerts","emailSecurity","Important sign-in and account security events by email.")}{toggle("Usage summaries","emailUsage","Periodic usage and spend summaries by email.")}{toggle("Push notifications","pushUsage","Browser notifications for important account events.")}{toggle("In-app product updates","inAppProduct","Service announcements and product changes.")}</>}
         {tab==="Billing" && <><div className="av-settings-heading"><h2>Billing preferences</h2><p>Configure spending safeguards. Changes are stored locally in this preview.</p></div>{select("Billing currency","currency",["USD","EUR","GBP","RUB"])}{toggle("Automatic top-up","autoTopUp","Automatically add funds when your balance is low (demo).")}{field("Monthly spending limit (USD)","monthlyLimit")}</>}
         {tab==="API" && <><div className="av-settings-heading"><h2>API controls</h2><p>Set request limits and trusted destinations.</p></div>{field("Requests per minute","requestLimit")}{field("IP allowlist (comma-separated)","ipWhitelist","203.0.113.10, 198.51.100.0/24")}{field("Webhook URL","webhookUrl","https://example.com/webhooks/aevotron")}<button className="mh-button mh-button-quiet" onClick={()=>{if(settings.webhookUrl && !/^https:\/\//i.test(settings.webhookUrl)){toast.error("Webhook URL must use HTTPS");return;}toast.success("API controls saved");}}>Validate and save API controls</button></>}
