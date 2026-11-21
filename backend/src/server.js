@@ -251,7 +251,7 @@ async function handle(req, res) {
   if (req.method === "POST" && path === "/api/v1/auth/verify-email") {
     await rateLimit(req, "verify-email", 10, 900);
     const token = String(body.token || "");
-    if (!/^\\d{6}$/.test(token)) return fail(res, 400, "INVALID_TOKEN", "Verification code is invalid or expired.");
+    if (token.length !== 6 || [...token].some((char) => char < "0" || char > "9")) return fail(res, 400, "INVALID_TOKEN", "Verification code is invalid or expired.");
     const result = await pool.query(
       `UPDATE email_verification_tokens SET consumed_at=now()
        WHERE token_hash=$1 AND consumed_at IS NULL AND expires_at>now()
@@ -353,6 +353,11 @@ async function handle(req, res) {
     return updated ? json(res, 200, { success: true }) : fail(res, 400, "INVALID_TOKEN", "Reset link is invalid or expired.");
   }
 
+  if (req.method === "GET" && path === "/api/v1/auth/mfa/status") {
+    const user = await requireUser(req, res); if (!user) return;
+    const result = await pool.query("SELECT type FROM mfa_factors WHERE user_id=$1 AND confirmed_at IS NOT NULL", [user.id]);
+    return json(res, 200, { methods: result.rows.map((row) => row.type) });
+  }
   if (req.method === "POST" && path === "/api/v1/auth/mfa/enroll") {
     const user = await requireUser(req, res); if (!user) return;
     const secret = newTotpSecret();
@@ -363,7 +368,9 @@ async function handle(req, res) {
        ON CONFLICT(user_id,type) DO UPDATE SET secret_ciphertext=EXCLUDED.secret_ciphertext,confirmed_at=NULL,created_at=now()`,
       [user.id, encrypted],
     );
-    return json(res, 200, { secret, otpauth_url: totpUri(secret, user.email) });
+    const otpauthUrl = totpUri(secret, user.email);
+    const qrCode = await QRCode.toDataURL(otpauthUrl, { errorCorrectionLevel: "M", margin: 1, width: 220 });
+    return json(res, 200, { secret, secret_formatted: secret.match(/.{1,4}/g).join(" "), otpauth_url: otpauthUrl, qr_code: qrCode });
   }
 
   if (req.method === "POST" && path === "/api/v1/auth/mfa/confirm") {
