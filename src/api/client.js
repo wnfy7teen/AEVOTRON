@@ -122,7 +122,88 @@ async function invoke(name, payload = {}) {
   throw new Error("Unsupported backend operation: " + name + "/" + payload.action);
 }
 
+const workspace = {
+  async streamChat({ model, messages, max_tokens, temperature, top_p, signal, onDelta, onUsage }) {
+    const startedAt = performance.now();
+    let firstTokenAt = null;
+    let outputCharacters = 0;
+    let usage = null;
+    const response = await fetch("/api/v1/workspace/chat/completions", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json", accept: "text/event-stream" },
+      body: JSON.stringify({
+        model, messages, stream: true,
+        ...(max_tokens !== undefined ? { max_tokens } : {}),
+        ...(temperature !== undefined ? { temperature } : {}),
+        ...(top_p !== undefined ? { top_p } : {}),
+      }),
+      signal,
+    });
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      const error = new Error(data.error?.message || data.error?.code || "Chat request failed");
+      error.status = response.status;
+      error.code = data.error?.code;
+      throw error;
+    }
+    if (!response.body) throw new Error("Streaming is not available in this browser.");
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let pending = "";
+    let finished = false;
+    const processLine = (line) => {
+      if (!line.startsWith("data:")) return;
+      const value = line.slice(5).trim();
+      if (!value || value === "[DONE]") { if (value === "[DONE]") finished = true; return; }
+      let event;
+      try { event = JSON.parse(value); } catch { return; }
+      if (event.error) {
+        const error = new Error(event.error.message || "The provider stream failed.");
+        error.code = event.error.code;
+        throw error;
+      }
+      if (event.usage) {
+        usage = event.usage;
+        onUsage?.(usage);
+      }
+      const delta = event.choices?.[0]?.delta?.content;
+      if (typeof delta === "string" && delta.length) {
+        if (firstTokenAt === null) firstTokenAt = performance.now();
+        outputCharacters += delta.length;
+        onDelta?.(delta);
+      }
+    };
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        pending += decoder.decode(value, { stream: true });
+        const lines = pending.split(/\r?\n/);
+        pending = lines.pop() || "";
+        for (const line of lines) processLine(line);
+      }
+      pending += decoder.decode();
+      if (pending) processLine(pending);
+    } catch (error) {
+      await reader.cancel().catch(() => {});
+      throw error;
+    }
+    const finishedAt = performance.now();
+    return {
+      requestId: response.headers.get("x-request-id"),
+      usage,
+      ttftMs: firstTokenAt === null ? null : Math.round(firstTokenAt - startedAt),
+      elapsedMs: Math.round(finishedAt - startedAt),
+      outputCharacters,
+      estimatedOutputTokens: Math.ceil(outputCharacters / 4),
+      finished,
+    };
+  },
+};
+
 export const api = {
   auth,
+  workspace,
   functions: { invoke },
 };
