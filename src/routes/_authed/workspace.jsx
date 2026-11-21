@@ -41,6 +41,7 @@ function selectContextMessages(messages, tokenBudget = 24_000) {
 
 function WorkspaceChat() {
   const { t } = useTranslation(["dashboard", "translation"]);
+  const queryClient = useQueryClient();
   const demoMode = Boolean(readDemoUser());
   const sessionsQuery = useQuery({
     queryKey: ["workspace-chats"],
