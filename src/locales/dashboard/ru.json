@@ -147,5 +147,11 @@
   "Attach": "Прикрепить",
   "Only plain text and source code files are parsed locally in this version.": "В этой версии локально обрабатываются только обычные текстовые файлы и исходный код.",
   "remaining": "осталось",
-  "Older messages omitted from this request": "Старые сообщения не включены в этот запрос"
+  "Older messages omitted from this request": "Старые сообщения не включены в этот запрос",
+  "Favorites": "Избранное",
+  "Recently used": "Недавно использованные",
+  "All connected models": "Все подключённые модели",
+  "No models match your search": "Модели не найдены",
+  "Pinned": "Закреплено",
+  "Add to favorites": "В избранное"
 }

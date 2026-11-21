@@ -147,5 +147,11 @@
   "Attach": "Attach",
   "Only plain text and source code files are parsed locally in this version.": "Only plain text and source code files are parsed locally in this version.",
   "remaining": "remaining",
-  "Older messages omitted from this request": "Older messages omitted from this request"
+  "Older messages omitted from this request": "Older messages omitted from this request",
+  "Favorites": "Favorites",
+  "Recently used": "Recently used",
+  "All connected models": "All connected models",
+  "No models match your search": "No models match your search",
+  "Pinned": "Pinned",
+  "Add to favorites": "Add to favorites"
 }

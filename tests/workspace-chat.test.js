@@ -45,6 +45,10 @@ test("AI Workspace discloses estimates instead of inventing provider usage and c
   const route = await read("src/routes/_authed/workspace.jsx");
   assert.match(route, /estimateTokens/);
   assert.match(route, /selectContextMessages/);
+  assert.match(route, /favoriteModels/);
+  assert.match(route, /recentModels/);
+  assert.match(route, /aevotron\.workspace\.favorites/);
+  assert.match(route, /Search models/);
   assert.match(route, /tokenBudget = 24_000/);
   assert.match(route, /Older messages omitted from this request/);
   assert.match(route, /Not reported/);

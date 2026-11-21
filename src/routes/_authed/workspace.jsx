@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download, GitBranch, Paperclip } from "lucide-react";
+import { ArrowUp, Bot, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X, Download, GitBranch, Paperclip, Star } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -62,6 +62,9 @@ function WorkspaceChat() {
   });
   const models = modelQuery.data || [];
   const [selectedModel, setSelectedModel] = useState("");
+  const [modelSearch, setModelSearch] = useState("");
+  const [favoriteModels, setFavoriteModels] = useState([]);
+  const [recentModels, setRecentModels] = useState([]);
   const activeModel = models.find((model) => model.id === selectedModel) || models[0] || null;
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
@@ -94,8 +97,45 @@ function WorkspaceChat() {
     : 24_000;
   const contextMessages = useMemo(() => selectContextMessages(messages, contextBudget), [messages, contextBudget]);
   const contextEstimate = useMemo(() => estimateTokens(contextMessages), [contextMessages]);
+  const filteredModels = models.filter((model) => {
+    const query = modelSearch.trim().toLowerCase();
+    return !query || model.id === activeModel?.id || [model.id, model.provider_code, model.provider_model_id, model.owned_by].filter(Boolean).join(" ").toLowerCase().includes(query);
+  });
+  const favoriteOptions = filteredModels.filter((model) => favoriteModels.includes(model.id));
+  const recentOptions = filteredModels.filter((model) => recentModels.includes(model.id) && !favoriteModels.includes(model.id));
+  const otherOptions = filteredModels.filter((model) => !favoriteModels.includes(model.id) && !recentModels.includes(model.id));
+  const isFavoriteModel = Boolean(activeModel && favoriteModels.includes(activeModel.id));
   const contextTruncated = contextMessages.length < messages.length;
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
+
+  useEffect(() => {
+    try {
+      const favorites = JSON.parse(localStorage.getItem("aevotron.workspace.favorites") || "[]");
+      const recent = JSON.parse(localStorage.getItem("aevotron.workspace.recent") || "[]");
+      if (Array.isArray(favorites)) setFavoriteModels(favorites.filter((item) => typeof item === "string"));
+      if (Array.isArray(recent)) setRecentModels(recent.filter((item) => typeof item === "string").slice(0,8));
+    } catch { /* Ignore unavailable or malformed local preference storage. */ }
+  }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem("aevotron.workspace.favorites", JSON.stringify(favoriteModels)); } catch { /* Preferences remain in memory. */ }
+  }, [favoriteModels]);
+
+  useEffect(() => {
+    try { localStorage.setItem("aevotron.workspace.recent", JSON.stringify(recentModels)); } catch { /* Preferences remain in memory. */ }
+  }, [recentModels]);
+
+  useEffect(() => {
+    if (!activeModel?.id) return;
+    setRecentModels((current) => [activeModel.id, ...current.filter((id) => id !== activeModel.id)].slice(0,8));
+  }, [activeModel?.id]);
+
+  const toggleFavoriteModel = () => {
+    if (!activeModel) return;
+    setFavoriteModels((current) => current.includes(activeModel.id)
+      ? current.filter((id) => id !== activeModel.id)
+      : [activeModel.id, ...current]);
+  };
 
   useEffect(() => {
     if (demoMode) return;
@@ -453,9 +493,10 @@ function WorkspaceChat() {
             <div className="aw-heading-controls">
               <button className="aw-compare-toggle" type="button" onClick={() => {setCompareOpen((open) => !open);setCompareSelection((selected) => selected.length ? selected : models.slice(0,2).map((model) => model.id));}} disabled={models.length < 2 || demoMode || isStreaming}>{t("Compare models")} <span>2–4</span></button>
               <div className="aw-model-picker">
-                <label htmlFor="aw-model-select">{t("MODEL")}</label>
-                <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{models.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</select><ChevronDown size={14}/></div>
-                <small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small>
+                <label htmlFor="aw-model-search">{t("MODEL")}</label>
+                <input id="aw-model-search" className="aw-model-search" value={modelSearch} onChange={(event) => setModelSearch(event.target.value)} placeholder={t("Search models")} aria-label={t("Search models")} disabled={!models.length}/>
+                <div className="aw-model-select-wrap"><Bot size={16}/><select id="aw-model-select" value={activeModel?.id || ""} onChange={(event) => setSelectedModel(event.target.value)} disabled={!models.length || isStreaming}><option value="" disabled>{t("Select a model")}</option>{favoriteOptions.length > 0 && <optgroup label={t("Favorites")}>{favoriteOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{recentOptions.length > 0 && <optgroup label={t("Recently used")}>{recentOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{otherOptions.length > 0 && <optgroup label={t("All connected models")}>{otherOptions.map((model) => <option key={model.id} value={model.id}>{model.id}</option>)}</optgroup>}{filteredModels.length === 0 && <option value="" disabled>{t("No models match your search")}</option>}</select><ChevronDown size={14}/></div>
+                <div className="aw-model-picker-meta"><small>{activeModel ? providerName + " · " + t("Provider billing applies") : t("No connected models")}</small><button type="button" className={isFavoriteModel ? "aw-favorite-toggle is-favorite" : "aw-favorite-toggle"} onClick={toggleFavoriteModel} disabled={!activeModel} aria-pressed={isFavoriteModel}><Star size={13} fill={isFavoriteModel ? "currentColor" : "none"}/>{isFavoriteModel ? t("Pinned") : t("Add to favorites")}</button></div>
               </div>
             </div>
           </div>
