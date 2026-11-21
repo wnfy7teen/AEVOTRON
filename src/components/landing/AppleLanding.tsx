@@ -233,7 +233,7 @@ export default function AppleLanding() {
       <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label={t("Основная навигация")}>
         <a href="#platform" onClick={() => setMenuOpen(false)}>{t("Платформа")}</a><a href="#security" onClick={() => setMenuOpen(false)}>{t("Безопасность")}</a><a href="#developers" onClick={() => setMenuOpen(false)}>{t("Разработчикам")}</a>
       </nav>
-      <div className="av-nav-actions"><Link to="/login" className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
+      <div className="av-nav-actions"><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><Moon size={16} /><span>{t("Тёмная")}</span></button>
         <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label={t("Серая тема")} aria-pressed={theme === "gray"} title={t("Серая")}><Cloud size={16} /><span>{t("Серая")}</span></button>
@@ -268,7 +268,7 @@ export default function AppleLanding() {
         </div>
         <div className="av-footer-column">
           <span className="av-footer-heading">{t("АККАУНТ")}</span>
-          <Link to="/login">{t("Войти")}</Link>
+          <Link to="/login" search={{ demo: "1" }}>{t("Войти")}</Link>
           <Link to="/register">{t("Регистрация")}</Link>
         </div>
         <div className="av-footer-column av-footer-contact">
