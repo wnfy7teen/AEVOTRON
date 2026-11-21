@@ -385,6 +385,7 @@ async function handle(req, res) {
     const changed = await transaction(async (client) => {
       const account = await client.query("SELECT password_hash FROM users WHERE id=$1 AND status='active' FOR UPDATE", [user.id]);
       if (!account.rowCount || !await verifyPassword(currentPassword, account.rows[0].password_hash)) return { error: "INVALID_CURRENT_PASSWORD" };
+      if (await verifyPassword(nextPassword, account.rows[0].password_hash)) return { error: "PASSWORD_UNCHANGED" };
       const factor = await client.query(
         "SELECT secret_ciphertext FROM mfa_factors WHERE user_id=$1 AND type='totp' AND confirmed_at IS NOT NULL",
         [user.id],
@@ -401,6 +402,7 @@ async function handle(req, res) {
       return { success: true };
     });
     if (changed.error === "INVALID_CURRENT_PASSWORD") return fail(res, 401, "INVALID_CURRENT_PASSWORD", "Current password is incorrect.");
+    if (changed.error === "PASSWORD_UNCHANGED") return fail(res, 400, "PASSWORD_UNCHANGED", "Choose a new password that differs from your current password.");
     if (changed.error === "INVALID_MFA_CODE") return fail(res, 401, "INVALID_MFA_CODE", "Enter a valid authenticator code.");
     return json(res, 200, { success: true, other_sessions_revoked: true });
   }
