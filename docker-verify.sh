@@ -63,6 +63,27 @@ grep -q '"UNAUTHORIZED"' "$API_FILE" || {
 }
 printf 'Self-hosted API smoke test passed: anonymous session rejected with HTTP 401.\n'
 
+# Verify that the frontend origin survives the reverse proxy and foreign origins are rejected.
+matching_origin_status="$(curl -sS -o "$API_FILE" -w '%{http_code}' -X POST http://127.0.0.1:3000/api/v1/auth/register \
+  -H 'Origin: http://localhost:3000' -H 'Content-Type: application/json' --data '{}')"
+[ "$matching_origin_status" = "503" ] || {
+  printf 'Docker smoke test failed: same-origin registration returned %s, expected SMTP guard HTTP 503.\n' "$matching_origin_status" >&2
+  cat "$API_FILE" >&2
+  exit 1
+}
+grep -q 'EMAIL_NOT_CONFIGURED' "$API_FILE" || {
+  printf 'Docker smoke test failed: same-origin request did not reach the SMTP configuration guard.\n' >&2
+  exit 1
+}
+foreign_origin_status="$(curl -sS -o "$API_FILE" -w '%{http_code}' -X POST http://127.0.0.1:3000/api/v1/auth/register \
+  -H 'Origin: https://attacker.example' -H 'Content-Type: application/json' --data '{}')"
+[ "$foreign_origin_status" = "403" ] || {
+  printf 'Docker smoke test failed: foreign-origin registration returned %s, expected 403.\n' "$foreign_origin_status" >&2
+  cat "$API_FILE" >&2
+  exit 1
+}
+printf 'Reverse-proxy origin checks passed: same-origin forwarded, foreign origin rejected.\n'
+
 # Fetch every same-origin Vite JS/CSS asset referenced by the rendered page.
 grep -oE '/assets/[^"]+\.(js|css)(\?[^"]*)?' "$HTML_FILE" | sort -u > "$ASSET_LIST" || true
 [ -s "$ASSET_LIST" ] || {
