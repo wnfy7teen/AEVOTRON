@@ -105,5 +105,7 @@
   "Cost": "费用",
   "Not reported": "暂无数据",
   "Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.": "除非服务商返回实际用量，否则 token 数量仅为估算。不会推测费用或上下文上限。",
-  "Live chat is disabled in demo mode": "演示模式下无法发送实时请求"
+  "Live chat is disabled in demo mode": "演示模式下无法发送实时请求",
+  "Delete conversation": "删除对话",
+  "Could not delete this conversation.": "无法删除此对话。"
 }

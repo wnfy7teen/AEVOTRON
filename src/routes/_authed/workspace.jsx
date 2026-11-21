@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Bot, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, MoreHorizontal, Pencil, Plus, RefreshCw, Search, Sparkles, X } from "lucide-react";
+import { ArrowUp, Bot, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, Sparkles, X } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -214,7 +214,7 @@ function WorkspaceChat() {
     setDraft("");
   };
 
-  const selectConversation = async (id) => {
+  const selectConversation = (id) => {
     if (id === activeConversation) return;
     if (isStreaming) stop();
     setChatError("");
