@@ -1,82 +1,70 @@
-# AEVOTRON — translation QA summary
+# AEVOTRON — i18next migration and localization QA
 
 **Branch:** `infra/cloudflare-workers-preview`  
-**Scope:** 9 user-facing routes, shared authentication/MFA screens, workspace preview, shared 404/error fallbacks, page metadata and accessibility attributes.  
-**Languages:** English (`en`), Russian (`ru`), Simplified Chinese (`zh`).
+**Languages:** English (`en`), Russian (`ru`), Simplified Chinese (`zh`)  
+**Architecture:** `i18next` + `react-i18next`  
+**Language persistence:** `localStorage["aevotron-language"]`  
+**Fallback:** English (`en`)
 
-## QA findings and corrections
+## Architecture delivered
 
-| Путь к файлу | Язык | Строка / объект | Дефект | Решение |
-|---|---|---|---|---|
-| `src/lib/i18n.jsx` | zh | `The public endpoint is a planned interface` | Не было китайского значения для существующего ключа русского словаря | Добавлен точный китайский перевод |
-| `src/routes/_authed/dashboard.jsx` + `src/lib/i18n.jsx` | en / ru / zh | `modelDescriptions`, включая GPT-4o, GPT-4.1, o3 и o4-mini | Описания моделей были захардкожены на русском и не переключались | Добавлены полные значения на английском, русском и китайском |
-| `src/lib/i18n.jsx` | ru / zh | MFA, подтверждение почты, настройки, команды, уведомления, ошибки и fallback-страницы | Часть видимых строк, подсказок и сообщений не имела локализованных значений | Добавлены недостающие переводы в общий каталог |
-| `src/components/landing/AppleLanding.tsx` + `src/lib/i18n.jsx` | ru / zh | `UNIFIED API`, `Embeddings`, `Usage`, `Developed by`, `Telegram` | Англоязычные подписи визуальной схемы и футера не имели полного русского перевода | Добавлены точные подписи на русском и китайском; бренд Telegram оставлен без перевода |
-| `src/lib/i18n.jsx` | en / ru / zh | `document.title`, meta description, `alt`, `aria-label`, `title`, `placeholder` | Переключатель языка не обновлял заголовок вкладки, описание страницы и альтернативные подписи изображений | Добавлена обработка метаданных и атрибутов доступности; кодовые блоки исключены из перевода |
-| `src/lib/ThemeSwitcher.jsx` + `src/lib/i18n.jsx` | ru / zh | `Switch to light theme`, `Switch to dark theme`, `Светлая тема` | Подписи переключателя темы и aria-label оставались непереведёнными | Добавлены русские и китайские подписи и проверка в тесте |
-| `src/routes/_authed/dashboard.jsx` | en / ru / zh | Демонстрационные суммы, даты транзакций и времени уведомлений | Даты и USD-значения были зафиксированы в американском формате | Форматирование переведено на `Intl.NumberFormat` и `Intl.DateTimeFormat` с локалями `en-US`, `ru-RU`, `zh-CN` |
-| `tests/translations.test.js` | en / ru / zh | `should have translations in all languages` | Не было автоматической проверки набора языков, полноты словарей и известных UI-строк | Добавлены регрессионные тесты на три языка, пропуски, пустые значения, страницы, MFA, metadata, даты и валюты |
+| File | Responsibility |
+|---|---|
+| `src/i18n.ts` | Creates the i18next instance, configures the three supported languages, English fallback, language normalization, localStorage persistence and document metadata |
+| `src/locales/en.json` | Canonical English translation catalog |
+| `src/locales/ru.json` | Russian translation catalog with the same keys as English |
+| `src/locales/zh.json` | Simplified Chinese translation catalog with the same keys as English |
+| `src/lib/i18n.jsx` | React provider, compatibility hook backed by `useTranslation`, and Apple-style language dropdown |
+| `src/lib/ThemeSwitcher.jsx` | Localized theme-switcher labels and accessibility names |
+| `vitest.config.js` | Vitest + jsdom configuration |
+| `tests/i18n.test.jsx` | Language-change rerender, localStorage persistence/reload and English fallback tests |
+| `tests/translations.test.js` | Node regression tests for catalog synchronization and app-level i18next wiring |
 
-## Объём каталога после исправлений
+The previous hand-written dictionary implementation and body-wide DOM text-rewriting observer were removed. React UI text is rendered through i18next translation calls; document title, description and the root `lang` attribute are synchronized separately.
 
-| Слой локализации | English | Русский | 简体中文 |
-|---|---:|---:|---:|
-| Базовый словарь интерфейса | Исходный текст | 346 записей | 370 записей |
-| Общий каталог workspace/auth/MFA | Исходные английские ключи + локализованные модельные описания | 217 записей | 217 записей |
-| Каталог главной страницы | 72 записи | Русский исходный текст / локализованные ключи | 72 записи |
-| Поддержка языка в приложении | 9/9 маршрутов | 9/9 маршрутов | 9/9 маршрутов |
+## Application coverage
 
-Английский используется как исходный язык интерфейса; для русских исходных строк главной страницы русский текст является оригиналом, а не пропущенным переводом. Все 346 ключей русского базового словаря присутствуют в китайском словаре. Все 217 записей общего каталога содержат непустые значения `ru` и `zh`; все 72 записи главной страницы содержат значения `en` и `zh`.
-
-## Итоговые статусы
-
-| Язык | Маршруты с покрытием в коде | Найдено незакрытых статических пропусков | Ошибки в проверенном каталоге |
-|---|---:|---:|---:|
-| English | 9/9 (100%) | 0 | 0% |
-| Русский | 9/9 (100%) | 0 | 0% |
-| 简体中文 | 9/9 (100%) | 0 | 0% |
-
-**Исправлено:** все обнаруженные статические дефекты из таблицы выше.  
-**Остаток известных пропусков в проверенных словарях и строках:** 0.  
-**TODO-комментарии:** не добавлялись — все найденные статические дефекты исправлены непосредственно в коде.
-
-## Автоматическая проверка
-
-Новый файл `tests/translations.test.js` подключён к существующей команде `npm test`, которая уже выполняется в GitHub Actions CI. Проверка подтверждает:
-
-- поддерживаются только `en`, `ru`, `zh`;
-- каждый ключ русского базового словаря существует в китайском;
-- нет пустых значений и строк-заглушек из одних многоточий;
-- все workspace/auth/MFA записи содержат русский и китайский варианты;
-- все записи главной страницы содержат английский и китайский варианты;
-- ключевые строки проверенных страниц, MFA, подтверждения почты и fallback-экранов присутствуют;
-- локализуются заголовки страниц, meta description и accessibility attributes;
-- даты и суммы используют локальные форматы.
-
-## Ручная проверка перед релизом
-
-Статическая проверка не заменяет браузерный визуальный QA. Перед публичным релизом нужно проверить 27 сочетаний «9 маршрутов × 3 языка» на desktop и mobile:
-
-1. Открыть Preview в чистой сессии браузера и последовательно выбрать English, Русский и 简体中文.
-2. Проверить маршруты: `/`, `/login`, `/register`, `/forgot-password`, `/reset-password` (без token и с тестовым token), `/verify-email` (без token и с тестовым token), `/mfa`, `/dashboard`, `/workspace-preview`.
-3. Проверить 404/error fallback, заголовок вкладки, подписи изображений, placeholders и aria-label через accessibility inspector.
-4. В workspace preview проверить USD-суммы, даты транзакций и временные метки уведомлений на всех трёх языках.
-5. При подключённом backend отдельно проверить реальные ответы API, почтовые ошибки и MFA-ошибки: произвольные сообщения, возвращаемые внешними сервисами, могут не входить в статический каталог.
-
-## Вывод
-
-**Локализационный код и проверенный статический каталог готовы к релизному smoke test:** известные пропуски исправлены, автоматическая проверка добавлена в CI. Полностью подтвердить визуальную готовность релиза можно только после ручного прохождения 27 сочетаний маршрута и языка на Preview и проверки динамических ответов подключённого backend. Production этой работой не изменялся.
-
-
-## Дополнительный QA: Billing и выпадающие списки
-
-| Область | Дефект | Исправление |
+| Page / component area | Translation status | Keys filled |
 |---|---|---|
-| Billing → Add funds | Меню выбора суммы могло отображаться под соседней панелью Transactions из-за порядка слоёв родительских панелей | Панель пополнения получила отдельный stacking layer выше панели Transactions; меню имеет повышенный локальный слой |
-| Billing → Transactions | Не были заведены отдельные переводы заголовка, пояснения и aria-label периода | Добавлены значения EN/RU/ZH |
-| Billing → Transactions | Названия типов операций и периоды должны сохранять единый язык интерфейса | Проверены ключи Provider usage, Account top-up, 30 days, 90 days и 12 months; добавлены тесты для списка |
-| Team & projects | Роли и статусы участников оставались английскими | Добавлены переводы Owner, Admin, Developer, Viewer, Active и Invited; aria-label списка ролей унифицирован |
-| Usage & logs / API keys | Часть статусов и управления страницами списка оставалась непереведённой | Добавлены Successful, Errors, active, expired, revoked, Previous и Next |
-| Notifications | Действие массового прочтения списка оставалось английским | Добавлен перевод Mark all as read |
+| Landing page `/` | Ready | Yes |
+| Sign in `/login` | Ready | Yes |
+| Registration `/register` | Ready | Yes |
+| Forgot password `/forgot-password` | Ready | Yes |
+| Reset password `/reset-password` | Ready | Yes |
+| Email verification `/verify-email` | Ready | Yes |
+| MFA `/mfa` | Ready | Yes |
+| Workspace dashboard `/dashboard` | Ready | Yes |
+| Read-only workspace preview `/workspace-preview` | Ready | Yes |
+| Shared dialogs, sheets, pagination, carousel, sidebar, breadcrumb and auth controls | Ready | Yes |
+| Theme and language switchers, 404 and error screens | Ready | Yes |
 
-Регрессионный тест теперь проверяет ключевые строки списков Billing, Team, Usage, API keys и Notifications, а также наличие CSS-слоёв панели Add funds над Transactions. Это статическая проверка исходников; визуальное поведение меню нужно подтвердить в браузере на Preview.
+## Catalog integrity
+
+All three JSON files use the same flat key structure. The test suite verifies exact key-set equality, non-empty string values and required labels for authentication, MFA, Billing, Transactions, Team, Usage, Notifications, API keys and shared accessibility controls.
+
+**Catalog size:** see the current JSON files; the Node regression test checks that the catalog remains above the minimum audited vocabulary threshold and that all three key sets are identical.
+
+## Automated tests
+
+The package test command now runs both suites:
+
+```bash
+npm test
+```
+
+Equivalent focused commands:
+
+```bash
+npm run test:node
+npm run test:i18n
+```
+
+Vitest checks that a rendered React component updates immediately when i18next changes language, that the selected language is written to localStorage and restored by a fresh i18n instance, and that unsupported saved language values fall back to English.
+
+## Manual browser QA still required
+
+Static source checks and automated tests do not replace visual verification. On the Preview deployment, verify the nine routes in each language (27 route/language combinations), including narrow mobile widths. Check line wrapping, dropdowns, long Chinese labels, auth validation messages, keyboard focus, accessibility labels, document titles and persistence after a hard refresh.
+
+Backend-generated error text that is not a known catalog key can still be returned in its original language. For complete localization of external API errors, map stable backend error codes to frontend translation keys rather than translating arbitrary server prose.
+
+**Deployment:** no production deployment was performed. A successful CI build is required before considering the Preview change validated; visual browser QA remains a separate release check.
