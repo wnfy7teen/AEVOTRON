@@ -202,6 +202,7 @@ function HomePage({ preview = false }) {
   );
 }
 function ProviderConnections() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const queryClient = useQueryClient();
   const [credential, setCredential] = useState("");
   const [error, setError] = useState("");
@@ -308,6 +309,7 @@ function ProviderConnections() {
 }
 
 function ApiKeyManager() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const queryClient = useQueryClient();
   const [name, setName] = useState("My application");
   const [expiry, setExpiry] = useState("90");
@@ -395,6 +397,7 @@ function ApiKeyManager() {
 }
 
 function UsageDashboard() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const query = useQuery({
     queryKey: ["usage-events"],
     queryFn: () => invokeFunction("usage", { action: "events" }),
@@ -453,6 +456,7 @@ function UsageDashboard() {
 
 
 function MfaSettings({ preview = false }) {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -549,6 +553,7 @@ function readSettings() {
   catch { return SETTINGS_DEFAULTS; }
 }
 function WorkspaceSettings({ preview = false, account }) {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const [settings, setSettings] = useState(readSettings);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -625,33 +630,36 @@ function WorkspaceSettings({ preview = false, account }) {
   </div>;
 }
 function MockBilling() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const { language } = useLanguage();
-  const locale = language === "ru" ? "ru-RU" : language === "zh" ? "zh-CN" : "en-US";
-  const currency = new Intl.NumberFormat(locale, { style: "currency", currency: "USD" });
-  const formatDate = (month, day, year = true) => new Intl.DateTimeFormat(locale, {
-    month: "short", day: "2-digit", ...(year ? { year: "numeric" } : {}), timeZone: "UTC",
-  }).format(new Date(Date.UTC(2026, month - 1, day)));
-  const formatSignedCurrency = (value) => value > 0 ? `+${currency(value)}` : currency.format(value);
+  const currency = (value) => formatCurrency(value, "USD", language);
+  const formatBillingDate = (month, day, year = true) => formatDate(
+    new Date(Date.UTC(2026, month - 1, day)),
+    language,
+    { month: "short", day: "2-digit", ...(year ? { year: "numeric" } : {}), timeZone: "UTC" },
+  );
+  const formatSignedCurrency = (value) => value > 0 ? `+${currency(value)}` : currency(value);
   const [amount,setAmount]=useState("50");
   const [balance,setBalance]=useState(128.4);
   const [period,setPeriod]=useState("30 days");
-  return <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("FINANCE")}</div><h1>{t("Billing")}</h1><p>{t("Track your balance, transactions and provider spend.")}</p></div></div><div className="mh-stats"><Stat icon={Wallet} label={t("Available balance")} value={currency(balance)} note={t("Demo wallet balance")}/><Stat icon={CircleDollarSign} label={t("This month")} value={currency(42.8)} note={t("Estimated provider spend")}/><Stat icon={CreditCard} label={t("Payment method")} value="•••• 4242" note={t("Demo payment method")}/><Stat icon={Activity} label={t("Next invoice")} value={formatBillingDate(12,1,false)} note={t("Estimated billing date")}/></div><div className="mh-panel av-mock-panel av-topup-panel"><div className="mh-panel-heading"><div><h3>{t("Add funds")}</h3><p>{t("Mock top-up. No payment is processed.")}</p></div></div><div className="av-topup-row"><Dropdown aria-label={t("Top-up amount")} value={amount} onChange={setAmount} options={[20,50,100,250].map(value=>({value:String(value),label:currency.format(value)}))}/><button className="mh-button mh-button-primary" onClick={()=>{setBalance(value=>value+Number(amount));toast.success(t("{{amount}} demo funds added", { amount: currency(Number(amount)) }));}}>{t("Add funds")}</button></div></div><div className="mh-panel av-mock-panel av-transactions-panel"><div className="mh-panel-heading"><div><h3>{t("Transactions")}</h3><p>{t("Recent account activity · demo data")}</p></div><Dropdown aria-label={t("Transaction period")} value={period} onChange={setPeriod} options={["30 days","90 days","12 months"].map(value=>({value,label:t(value)}))}/></div>{[{date:formatBillingDate(11,18),name:"Provider usage",value:-12.4},{date:formatBillingDate(11,12),name:"Account top-up",value:100},{date:formatBillingDate(11,4),name:"Provider usage",value:-30.4}].map((row,index)=><div className="av-session-row" key={index}><div><strong>{t(row.name)}</strong><small>{row.date}</small></div><strong>{formatSignedCurrency(row.value)}</strong></div>)}</div></>;
+  return <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("FINANCE")}</div><h1>{t("Billing")}</h1><p>{t("Track your balance, transactions and provider spend.")}</p></div></div><div className="mh-stats"><Stat icon={Wallet} label={t("Available balance")} value={currency(balance)} note={t("Demo wallet balance")}/><Stat icon={CircleDollarSign} label={t("This month")} value={currency(42.8)} note={t("Estimated provider spend")}/><Stat icon={CreditCard} label={t("Payment method")} value="•••• 4242" note={t("Demo payment method")}/><Stat icon={Activity} label={t("Next invoice")} value={formatBillingDate(12,1,false)} note={t("Estimated billing date")}/></div><div className="mh-panel av-mock-panel av-topup-panel"><div className="mh-panel-heading"><div><h3>{t("Add funds")}</h3><p>{t("Mock top-up. No payment is processed.")}</p></div></div><div className="av-topup-row"><Dropdown aria-label={t("Top-up amount")} value={amount} onChange={setAmount} options={[20,50,100,250].map(value=>({value:String(value),label:currency(value)}))}/><button className="mh-button mh-button-primary" onClick={()=>{setBalance(value=>value+Number(amount));toast.success(t("{{amount}} demo funds added", { amount: currency(Number(amount)) }));}}>{t("Add funds")}</button></div></div><div className="mh-panel av-mock-panel av-transactions-panel"><div className="mh-panel-heading"><div><h3>{t("Transactions")}</h3><p>{t("Recent account activity · demo data")}</p></div><Dropdown aria-label={t("Transaction period")} value={period} onChange={setPeriod} options={["30 days","90 days","12 months"].map(value=>({value,label:t(value)}))}/></div>{[{date:formatBillingDate(11,18),name:"Provider usage",value:-12.4},{date:formatBillingDate(11,12),name:"Account top-up",value:100},{date:formatBillingDate(11,4),name:"Provider usage",value:-30.4}].map((row,index)=><div className="av-session-row" key={index}><div><strong>{t(row.name)}</strong><small>{row.date}</small></div><strong>{formatSignedCurrency(row.value)}</strong></div>)}</div></>;
 }
 function MockTeam() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const [members,setMembers]=useState([{email:"christopher@example.com",role:"Owner",status:"Active"},{email:"developer@studio.example",role:"Developer",status:"Invited"},{email:"finance@studio.example",role:"Billing",status:"Active"}]);
   const [email,setEmail]=useState("");
   return <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("COLLABORATION")}</div><h1>{t("Team & projects")}</h1><p>{t("Manage workspace members and access roles.")}</p></div></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>{t("Invite a teammate")}</h3><p>{t("Invitations are simulated in this local preview.")}</p></div></div><form className="av-topup-row" onSubmit={e=>{e.preventDefault();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast.error(t("Enter a valid email address"));return;}if(members.some(member=>member.email.toLowerCase()===email.trim().toLowerCase())){toast.error(t("This email is already in the workspace"));return;}setMembers(list=>[...list,{email:email.trim(),role:"Developer",status:"Invited"}]);setEmail("");toast.success(t("Invitation added to demo team"));}}><input type="email" required autoComplete="email" aria-label={t("Teammate email address")} value={email} onChange={e=>setEmail(e.target.value)} placeholder={t("name@company.com")}/><button className="mh-button mh-button-primary" type="submit"><Plus size={15}/> {t("Invite")}</button></form></div><div className="mh-panel av-mock-panel"><div className="mh-panel-heading"><div><h3>{t("Workspace members")}</h3><p>{t("{{count}} members and invitations", { count: members.length })}</p></div></div>{members.map((member,index)=><div className="av-session-row" key={member.email}><div><strong>{member.email}</strong><small>{t(member.status)}</small></div><Dropdown aria-label={t("Member role")} value={member.role} disabled={index===0} onChange={value=>{setMembers(list=>list.map((item,i)=>i===index?{...item,role:value}:item));toast.success(t("Member role updated"));}} options={["Owner","Admin","Developer","Billing","Viewer"].map(value=>({value,label:value === "Billing" ? t("Billing role") : t(value)}))}/></div>)}</div></>;
 }
 function MockNotifications() {
+  const { t } = useTranslation(["dashboard", "translation"]);
   const { language } = useLanguage();
-  const locale = language === "ru" ? "ru-RU" : language === "zh" ? "zh-CN" : "en-US";
-  const formatTime = (value) => new Intl.DateTimeFormat(locale, {
+  const formatTime = (value) => formatDate(value, language, {
     dateStyle: "medium", timeStyle: "short", timeZone: "UTC",
-  }).format(new Date(value));
+  });
   const [items,setItems]=useState([{id:1,title:"Workspace is ready",detail:"Your AEVOTRON workspace has been initialized.",time:"2026-11-21T09:42:00Z",read:false},{id:2,title:"API key created",detail:"A new key was generated for My application.",time:"2026-11-20T16:20:00Z",read:false},{id:3,title:"Usage summary available",detail:"Your monthly usage summary is ready to review.",time:"2026-11-18T12:00:00Z",read:true}]);
   return <><div className="mh-page-heading"><div><div className="mh-eyebrow">{t("ACTIVITY CENTER")}</div><h1>{t("Notifications")}</h1><p>{t("Important updates and account activity.")}</p></div><button className="mh-button mh-button-quiet" onClick={()=>{setItems(list=>list.map(item=>({...item,read:true})));toast.success(t("All notifications marked as read"));}}>{t("Mark all as read")}</button></div><div className="mh-panel av-mock-panel">{items.map(item=><div className={`av-notification-row ${item.read?"is-read":""}`} key={item.id}><span className="av-notification-dot"/><div><strong>{t(item.title)}</strong><p>{t(item.detail)}</p><small>{formatTime(item.time)}</small></div><button className="mh-button mh-button-quiet" onClick={()=>setItems(list=>list.filter(entry=>entry.id!==item.id))}>{t("Dismiss")}</button></div>)}{!items.length&&<div className="mh-empty">{t("You're all caught up.")}</div>}</div></>;
 }
 
 function Stat({icon:Icon,label,value,note}) { return <div className="mh-stat"><div className="mh-stat-icon"><Icon size={17}/></div><div className="mh-stat-label">{label}</div><div className="mh-stat-value">{value}</div><div className="mh-stat-note">{note}</div></div>; }
-function Step({number,title,desc,action,onClick,icon:Icon,disabled=false}) { const { t } = useTranslation(["dashboard", "translation"]); return <div className="mh-step"><div className="mh-step-number">{number}</div><div className="mh-step-icon"><Icon size={18}/></div><div className="mh-step-copy"><h3>{t(title)}</h3><p>{t(desc)}</p><button className="mh-text-link" onClick={onClick} disabled={disabled}>{t(action)} <ArrowUpRight size={14}/></button></div><div className="mh-step-check"><span/></div></div>; }
-function ModelRow({model,onClick,disabled=false}) { return <button className="mh-popular-row" onClick={onClick} disabled={disabled}><span className={`mh-provider-dot ${model.color}`}/><span><strong>{model.name}</strong><small>{model.provider}</small><small className="mh-model-description">{t(model.description)}</small></span><span className="mh-popular-price">{t(model.price)}</span><ArrowUpRight size={14}/></button>; }
+function Step({number,title,desc,action,onClick,icon:Icon,disabled=false}) { const { t } = useTranslation(["dashboard", "translation"]); const { t } = useTranslation(["dashboard", "translation"]); return <div className="mh-step"><div className="mh-step-number">{number}</div><div className="mh-step-icon"><Icon size={18}/></div><div className="mh-step-copy"><h3>{t(title)}</h3><p>{t(desc)}</p><button className="mh-text-link" onClick={onClick} disabled={disabled}>{t(action)} <ArrowUpRight size={14}/></button></div><div className="mh-step-check"><span/></div></div>; }
+function ModelRow({model,onClick,disabled=false}) { const { t } = useTranslation(["dashboard", "translation"]); return <button className="mh-popular-row" onClick={onClick} disabled={disabled}><span className={`mh-provider-dot ${model.color}`}/><span><strong>{model.name}</strong><small>{model.provider}</small><small className="mh-model-description">{t(model.description)}</small></span><span className="mh-popular-price">{t(model.price)}</span><ArrowUpRight size={14}/></button>; }
