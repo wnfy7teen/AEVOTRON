@@ -281,8 +281,8 @@ function ApiKeyManager() {
           <div className="mh-key-form-name"><label className="mh-field-label" htmlFor="api-key-name">Key name</label>
             <input id="api-key-name" className="mh-field" value={name} onChange={(event) => setName(event.target.value)}
               maxLength={60} placeholder="My application" /></div>
-          <div className="mh-key-form-expiry"><label className="mh-field-label" htmlFor="api-key-expiry">Expires in</label>
-            <Dropdown id="api-key-expiry" className="mh-field" aria-label="Expires in" value={expiry} onChange={setExpiry} options={[{value:"30",label:"30 days"},{value:"90",label:"90 days"},{value:"365",label:"1 year"}]}/></div>
+          <div className="mh-key-form-expiry"><label className="mh-field-label" htmlFor="api-key-expiry-trigger">Expires in</label>
+            <Dropdown id="api-key-expiry" aria-label="Expires in" value={expiry} onChange={setExpiry} options={[{value:"30",label:"30 days"},{value:"90",label:"90 days"},{value:"365",label:"1 year"}]}/></div>
           <button className="mh-button mh-button-primary" type="submit" disabled={!name.trim() || create.isPending}>
             {create.isPending ? "Creating…" : <><Plus size={15}/> Create key</>}
           </button>
