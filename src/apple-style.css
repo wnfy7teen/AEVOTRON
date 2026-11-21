@@ -1389,3 +1389,22 @@ html[data-theme="dark"] .av-language-menu button.active .av-language-native {
   position: relative;
   z-index: 1;
 }
+
+
+/* Use explicit grid tracks so the footer stays at the viewport bottom on every route. */
+.apple-app .mh-main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.apple-app .mh-content {
+  min-height: 0;
+  align-self: stretch;
+}
+.apple-app .mh-footer {
+  align-self: end;
+  width: 100%;
+  margin-top: 0;
+}
