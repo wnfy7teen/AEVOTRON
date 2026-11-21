@@ -763,5 +763,6 @@
   "EXAMPLE REQUEST": "ПРИМЕР ЗАПРОСА",
   "Make your first API call": "Выполните первый API-запрос",
   "What a successful request returns.": "Пример успешного ответа на запрос。",
-  "Rate limits and error handling.": "Ограничения частоты запросов и обработка ошибок。"
+  "Rate limits and error handling.": "Ограничения частоты запросов и обработка ошибок。",
+  "Billing role": "Финансовый доступ"
 }
