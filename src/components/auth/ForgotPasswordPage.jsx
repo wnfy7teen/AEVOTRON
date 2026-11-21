@@ -11,7 +11,7 @@ import { safeReturnTo } from "@/lib/authReturnTo";
 // The /forgot-password page. Always ends in the generic "if an account exists"
 // message: the API does not reveal whether the email is registered, and neither should the UI.
 export function ForgotPasswordPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   const returnTo = safeReturnTo();
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
