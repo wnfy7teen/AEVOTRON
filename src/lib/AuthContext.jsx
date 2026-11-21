@@ -31,9 +31,10 @@ export function isDemoAuthenticated() {
 
 export function isDemoAuthEnabled() {
   if (typeof window === "undefined") return false;
+  const hostname = window.location.hostname;
   return import.meta.env.DEV
     || import.meta.env.VITE_DEMO_AUTH === "true"
-    || window.location.hostname.endsWith(".workers.dev");
+    || (hostname.includes("preview") && hostname.endsWith(".workers.dev"));
 }
 
 export const authQuery = queryOptions({
