@@ -801,8 +801,8 @@ async function handle(req, res) {
       responseStatus = upstream.status === 429 ? 429 : 502; errorCode = upstream.status === 429 ? "provider_rate_limited" : "upstream_provider_error";
       await upstream.body?.cancel().catch(() => {});
       await pool.query(
-        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8)",
-        [key.workspace_id,key.owner_user_id,key.id,model,requestId,Date.now()-started,responseStatus,errorCode],
+        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,Date.now()-started,responseStatus,errorCode],
       );
       return json(res, responseStatus, { error: { message: "The provider could not complete this request.", type: "aevotron_error", code: errorCode } }, { "x-request-id": requestId });
     }
@@ -812,7 +812,7 @@ async function handle(req, res) {
     responseStatus = 200;
     await pool.query("UPDATE api_keys SET last_used_at=now() WHERE id=$1", [key.id]);
     await pool.query(
-      "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,input_tokens,output_tokens,latency_ms,status_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8,200)",
+      "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,input_tokens,output_tokens,latency_ms,status_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,200)",
       [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,inputTokens,outputTokens,Date.now()-started],
     );
     return json(res, 200, result, { "x-request-id": requestId });
