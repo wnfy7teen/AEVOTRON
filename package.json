@@ -9,7 +9,12 @@
     "lint": "eslint src tests vite.config.js --quiet",
     "lint:fix": "eslint . --fix",
     "test": "node --test",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:cloudflare": "vite dev --config vite.config.cloudflare.js",
+    "build:cloudflare": "vite build --config vite.config.cloudflare.js",
+    "preview:cloudflare": "vite preview --config vite.config.cloudflare.js",
+    "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -92,7 +97,9 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "vite": "^8.2.4",
-    "nitro": "3.0.261103-rc"
+    "nitro": "3.0.261103-rc",
+    "@cloudflare/vite-plugin": "1.70.1",
+    "wrangler": "4.164.0"
   },
   "overrides": {
     "undici": "7.30.1",
