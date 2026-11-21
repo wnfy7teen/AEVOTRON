@@ -157,5 +157,11 @@
   "Session usage": "Session usage",
   "requests": "requests",
   "Estimated": "Estimated",
-  "Include attachment": "Include attachment"
+  "Include attachment": "Include attachment",
+  "context tokens": "context tokens",
+  "Vision": "Vision",
+  "Tools": "Tools",
+  "Streaming": "Streaming",
+  "Streaming unavailable": "Streaming unavailable",
+  "Model metadata not verified": "Model metadata not verified"
 }
