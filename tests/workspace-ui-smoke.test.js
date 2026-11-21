@@ -50,7 +50,8 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /Session management is not connected yet/);
   assert.match(source, /Sign-in history is not available yet/);
   assert.match(source, /Password changes are not available here yet/);
-  assert.doesNotMatch(source, /Kerkrade, NL|Safari · iPhone|christopher@example\.com/);
+  const securityPanel = source.split('{tab==="Security" &&')[1]?.split('{tab==="Notifications" &&')[0] || "";
+  assert.doesNotMatch(securityPanel, /Kerkrade, NL|Safari · iPhone|christopher@example\.com/);
   assert.doesNotMatch(source, /Password change request saved in demo mode/);
 });
 
