@@ -49,7 +49,7 @@ jobs:
 
       - name: Verify Base44 runtime dependencies are removed
         run: |
-          if grep -R -nE "@base44|base44Client|createClientFromRequest|asServiceRole|base44/functions" src package.json vite.config.js; then
+          if grep -R -nE "@base44|base44Client|createClientFromRequest|asServiceRole|base44/functions|base44:" src package.json vite.config.js; then
             echo "A Base44 runtime reference remains in the self-hosted branch."
             exit 1
           fi
