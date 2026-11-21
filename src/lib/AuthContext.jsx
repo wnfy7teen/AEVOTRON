@@ -1,14 +1,14 @@
 import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { currentUrl } from "@/lib/authReturnTo";
 
 export const authQuery = queryOptions({
   queryKey: ["auth", "me"],
   queryFn: async () => {
-    if (!base44.auth.hasToken()) return { user: null, error: null };
+    if (!api.auth.hasToken()) return { user: null, error: null };
     try {
-      return { user: await base44.auth.me(), error: null };
+      return { user: await api.auth.me(), error: null };
     } catch (err) {
       if (err?.status === 401 || err?.status === 403) return { user: null, error: null };
       throw err;
@@ -32,9 +32,9 @@ export function AuthProvider({ children }) {
     refresh: () => queryClient.fetchQuery({ ...authQuery, staleTime: 0 }),
     logout: () => {
       queryClient.setQueryData(authQuery.queryKey, { user: null, error: null });
-      return base44.auth.logout();
+      return api.auth.logout();
     },
-    navigateToLogin: () => base44.auth.redirectToLogin(currentUrl()),
+    navigateToLogin: () => api.auth.redirectToLogin(currentUrl()),
   }), [data, error, isPending, queryClient]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
