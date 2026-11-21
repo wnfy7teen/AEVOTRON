@@ -768,5 +768,16 @@
   "i18n.test.item_one": "{{count}} item",
   "i18n.test.item_other": "{{count}} items",
   "i18n.test.item_few": "{{count}} items",
-  "i18n.test.item_many": "{{count}} items"
+  "i18n.test.item_many": "{{count}} items",
+  "Connect {{provider}}": "Connect {{provider}}",
+  "Groq API key": "Groq API key",
+  "Paste your Groq API key": "Paste your Groq API key",
+  "Fast open models and Llama inference": "Fast open models and Llama inference",
+  "Connect your AI providers once. Route text chat requests through a single API.": "Connect your AI providers once. Route text chat requests through a single API.",
+  "Available from connected providers": "Available from connected providers",
+  "Connect a provider to discover models": "Connect a provider to discover models",
+  "Connect a provider to load the models available to your account.": "Connect a provider to load the models available to your account.",
+  "Revoke the Groq provider connection? Requests using it will stop working.": "Revoke the Groq provider connection? Requests using it will stop working.",
+  "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} is connected. Your credential is encrypted and hidden.",
+  "Could not revoke this provider connection.": "Could not revoke this provider connection."
 }
