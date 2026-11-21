@@ -360,16 +360,35 @@ async function handle(req, res) {
     const token = String(body.token || "");
     const passwordHash = await hashPassword(body.password);
     const updated = await transaction(async (client) => {
-      const row = await client.query(
-        `UPDATE password_reset_tokens SET consumed_at=now()
-         WHERE token_hash=$1 AND consumed_at IS NULL AND expires_at>now()
-         RETURNING user_id`,
+      // Lock the account before consuming a reset token. This serializes concurrent
+      // reset attempts issued for the same user, so only the first can succeed.
+      const candidate = await client.query(
+        `SELECT user_id FROM password_reset_tokens
+         WHERE token_hash=$1 AND consumed_at IS NULL AND expires_at>now()`,
         [sha256(token)],
       );
+      if (!candidate.rowCount) return null;
+      const userId = candidate.rows[0].user_id;
+      await client.query("SELECT id FROM users WHERE id=$1 FOR UPDATE", [userId]);
+      const row = await client.query(
+        `UPDATE password_reset_tokens SET consumed_at=now()
+         WHERE token_hash=$1 AND user_id=$2 AND consumed_at IS NULL AND expires_at>now()
+         RETURNING user_id`,
+        [sha256(token), userId],
+      );
       if (!row.rowCount) return null;
-      await client.query("UPDATE users SET password_hash=$2,updated_at=now() WHERE id=$1", [row.rows[0].user_id, passwordHash]);
-      await client.query("DELETE FROM sessions WHERE user_id=$1", [row.rows[0].user_id]);
-      return row.rows[0].user_id;
+      await client.query("UPDATE users SET password_hash=$2,updated_at=now() WHERE id=$1", [userId, passwordHash]);
+      // A password reset invalidates every outstanding recovery and MFA login path.
+      await client.query(
+        "UPDATE password_reset_tokens SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL",
+        [userId],
+      );
+      await client.query(
+        "UPDATE mfa_challenges SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL",
+        [userId],
+      );
+      await client.query("DELETE FROM sessions WHERE user_id=$1", [userId]);
+      return userId;
     });
     return updated ? json(res, 200, { success: true }) : fail(res, 400, "INVALID_TOKEN", "Reset link is invalid or expired.");
   }
@@ -381,6 +400,13 @@ async function handle(req, res) {
   }
   if (req.method === "POST" && path === "/api/v1/auth/mfa/enroll") {
     const user = await requireUser(req, res); if (!user) return;
+    const confirmed = await pool.query(
+      "SELECT id FROM mfa_factors WHERE user_id=$1 AND type='totp' AND confirmed_at IS NOT NULL",
+      [user.id],
+    );
+    if (confirmed.rowCount) {
+      return fail(res, 409, "MFA_ALREADY_CONFIGURED", "Disable the existing authenticator with its current code before replacing it.");
+    }
     const secret = newTotpSecret();
     const encrypted = encryptSecret(secret, `totp:${user.id}`);
     await pool.query(
