@@ -66,7 +66,7 @@ Expected response: `{"status":"ok"}`. PostgreSQL remains private inside the Comp
 
 Choose a dedicated hostname such as `api.<your-domain>` and point its DNS A record to the new VPS IPv4 address. Do not reuse the Donation Alerts hostname or IP.
 
-Configure the VPS host Nginx with a TLS virtual host for that API hostname. Proxy requests to `http://127.0.0.1:3001`, preserving the request path and the incoming `Origin` header. Forward `Host`, set `X-Real-IP`, and set `X-Forwarded-For`. Obtain and renew the TLS certificate before enabling Vercel to use the API. The API edge only exposes `/api/v1/*` and `/healthz`; other paths return 404.
+Use `deploy/nginx-api.conf.example` as the VPS host Nginx template. Replace `api.example.com` and install the TLS certificate paths. Obtain and renew the certificate before enabling Vercel to use the API. The host Nginx proxies requests to `http://127.0.0.1:3001`, preserves the request path and incoming `Origin` header, and forwards client address metadata. The API edge only exposes `/api/v1/*` and `/healthz`; other paths return 404. Validate with `nginx -t` and reload Nginx after installing the certificate and configuration.
 
 Verify from outside the VPS:
 
