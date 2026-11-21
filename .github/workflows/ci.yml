@@ -38,6 +38,12 @@ jobs:
       - name: Run security policy tests
         run: npm test
 
+      - name: Install self-hosted backend dependencies
+        run: npm --prefix backend install --no-audit --no-fund
+
+      - name: Test self-hosted backend security primitives
+        run: npm --prefix backend test
+
       - name: Run ESLint
         run: npm run lint
 
