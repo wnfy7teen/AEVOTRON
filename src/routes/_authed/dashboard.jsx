@@ -250,7 +250,7 @@ function ProviderConnections() {
         {query.isError && <div className="mh-inline-error">{t("Could not load provider connections. Refresh the page and try again.")}</div>}
         {openai && ["active", "error"].includes(openai.status) ? (
           <div className="mh-connected-row">
-            <div><strong>{t("API credential protected")}</strong><small>Last checked: {openai.last_tested_at ? t("Last checked: {{date}}", { date: new Date(openai.last_tested_at).toLocaleString() }) : t("Not checked")}</small></div>
+            <div><strong>{t("API credential protected")}</strong><small>{openai.last_tested_at ? t("Last checked: {{date}}", { date: new Date(openai.last_tested_at).toLocaleString() }) : t("Not checked")}</small></div>
             <div className="mh-connection-actions">
               <button className="mh-button mh-button-quiet" disabled={busy} onClick={() => {setError("");test.mutate(openai.id);}}> {test.isPending ? t("Testing…") : openai.status === "error" ? t("Retry test") : t("Test connection")} </button>
               <button className="mh-button mh-button-danger" disabled={busy} onClick={() => {if (!window.confirm(t("Revoke the OpenAI provider connection? Requests using it will stop working."))) return;setError("");revoke.mutate(openai.id);}}>{t("Revoke")}</button>
@@ -270,7 +270,7 @@ function ProviderConnections() {
             </div>
           </form>
         )}
-        {error && <div className="mh-inline-error" role="alert">{error}</div>}
+        {error && <div className="mh-inline-error" role="alert">{t(error)}</div>}
         {connect.isSuccess && <div className="mh-inline-success">{t("OpenAI is connected. Your credential is encrypted and hidden.")}</div>}
         {revoke.isSuccess && <div className="mh-inline-success">{t("The provider credential has been revoked.")}</div>}
       </div>
@@ -353,7 +353,7 @@ function ApiKeyManager() {
             {create.isPending ? t("Creating…") : <><Plus size={15}/> {t("Create key")}</>}
           </button>
         </form>
-        {error && <div className="mh-inline-error" role="alert">{error}</div>}
+        {error && <div className="mh-inline-error" role="alert">{t(error)}</div>}
       </div>
       <div className="mh-panel mh-key-list-panel">
         <div className="mh-panel-heading"><div><h3>{t("Existing keys")}</h3><p>{t("Revoke a key immediately if it is no longer needed.")}</p></div>
@@ -513,7 +513,7 @@ function MfaSettings({ preview = false }) {
       <label className="av-setting-field"><span>{t("Current authenticator code to disable MFA")}</span><input inputMode="numeric" autoComplete="one-time-code" maxLength={6} pattern="[0-9]{6}" required value={code} onChange={event=>setCode(event.target.value.replace(/\D/g,"").slice(0,6))} placeholder="000000"/></label>
       <button className="mh-button mh-button-danger" type="submit" disabled={busy || code.length!==6}>{busy ? t("Disabling…") : t("Disable two-factor authentication")}</button>
     </form>}
-    {error && <div className="mh-inline-error" role="alert">{error}</div>}
+    {error && <div className="mh-inline-error" role="alert">{t(error)}</div>}
   </div>;
 }
 
