@@ -442,7 +442,7 @@ function MfaSettings() {
 }
 
 const SETTINGS_DEFAULTS = {
-  name: "Christopher", email: "christopher@example.com", timezone: "Europe/Amsterdam", language: "English",
+  timezone: "Europe/Amsterdam", language: "English",
   twoFactor: true, emailSecurity: true, emailUsage: true, pushUsage: false, inAppProduct: true,
   currency: "USD", autoTopUp: false, monthlyLimit: "250", requestLimit: "60", ipWhitelist: "", webhookUrl: "",
   theme: "system", accent: "blue",
