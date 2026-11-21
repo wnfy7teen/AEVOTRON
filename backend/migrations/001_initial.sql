@@ -183,3 +183,10 @@ CREATE TABLE IF NOT EXISTS rate_limit_buckets (
   hits INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY(bucket_key, window_start)
 );
+
+CREATE TABLE IF NOT EXISTS api_key_rate_limits (
+  api_key_id UUID NOT NULL REFERENCES api_keys(id) ON DELETE CASCADE,
+  window_start TIMESTAMPTZ NOT NULL,
+  hits INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY(api_key_id, window_start)
+);
