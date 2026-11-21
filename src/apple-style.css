@@ -442,3 +442,41 @@ body > .av-language-switcher,
 .apple-app[data-theme="dark"] .av-language-native { background: #354255; color: #e5ebf3; }
 .apple-app[data-theme="dark"] .av-theme-trigger { background: #202833; color: #edf2f8; border-color: #465568; }
 .apple-app[data-theme="dark"] .av-theme-trigger:hover { background: #293545; }
+
+
+/* Dark-mode contrast fixes for overview metrics and workspace/account controls. */
+.apple-app[data-theme="dark"] .mh-stat-value,
+.apple-app[data-theme="dark"] .mh-workspace strong,
+.apple-app[data-theme="dark"] .mh-profile strong {
+  color: #f4f7fb !important;
+}
+.apple-app[data-theme="dark"] .mh-stat-label,
+.apple-app[data-theme="dark"] .mh-stat-note,
+.apple-app[data-theme="dark"] .mh-workspace small,
+.apple-app[data-theme="dark"] .mh-profile small {
+  color: #b8c4d2 !important;
+}
+.apple-app[data-theme="dark"] .mh-profile {
+  width: 100%;
+  color: #e8eef6;
+  border: 1px solid rgba(220,232,245,.12);
+  background: #202833;
+  border-radius: 12px;
+}
+.apple-app[data-theme="dark"] .mh-profile:hover {
+  background: #293545;
+  border-color: rgba(140,200,255,.28);
+}
+.apple-app[data-theme="dark"] .mh-profile > svg {
+  color: #a9bfd5;
+}
+.apple-app[data-theme="dark"] .mh-workspace {
+  color: #e8eef6;
+}
+.apple-app[data-theme="dark"] .mh-workspace > svg {
+  color: #a9bfd5;
+}
+.apple-app[data-theme="dark"] .mh-avatar {
+  background: linear-gradient(145deg,#294968,#1b3650);
+  color: #c9e6ff;
+}
