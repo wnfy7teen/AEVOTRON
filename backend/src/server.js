@@ -801,6 +801,9 @@ async function handle(req, res) {
     const [, providerCode, providerModel] = modelMatch;
     const providerConfig = getProvider(providerCode);
     if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    if (body.replace_last_user_message !== undefined && typeof body.replace_last_user_message !== "boolean") {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "The message replacement option must be a boolean.");
+    }
     if (body.persist_conversation !== undefined && typeof body.persist_conversation !== "boolean") {
       return fail(res, 400, "INVALID_CHAT_SESSION", "The persistence option must be a boolean.");
     }
@@ -829,8 +832,18 @@ async function handle(req, res) {
         );
         chatSessionId = createdSession.rows[0].id;
       }
-      if (body.persist_user_message !== false) {
-        const latestPrompt = body.messages[body.messages.length - 1].content;
+      const latestPrompt = body.messages[body.messages.length - 1].content;
+      if (body.replace_last_user_message === true) {
+        const updatedUser = await pool.query(
+          "UPDATE workspace_chat_messages SET content=$2,model_id=$3 WHERE id=(SELECT id FROM workspace_chat_messages WHERE session_id=$1 AND role='user' ORDER BY created_at DESC,id DESC LIMIT 1) AND session_id=$1 RETURNING id,created_at",
+          [chatSessionId,latestPrompt,body.model],
+        );
+        if (!updatedUser.rowCount) return fail(res, 409, "CHAT_MESSAGE_NOT_FOUND", "The message to edit no longer exists.");
+        await pool.query(
+          "DELETE FROM workspace_chat_messages WHERE session_id=$1 AND role='assistant' AND created_at >= $2",
+          [chatSessionId,updatedUser.rows[0].created_at],
+        );
+      } else if (body.persist_user_message !== false) {
         await pool.query(
           "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
           [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
