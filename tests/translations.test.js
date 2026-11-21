@@ -71,9 +71,13 @@ it("should have translations in all languages", async () => {
 
   const workspace = parseLocaleMap(extractObject(source, "const workspaceTranslations = {"));
   assert.ok(workspace.length > 0, "Workspace translation catalog must not be empty");
+  assert.equal(new Set(workspace.map((entry) => entry.key)).size, workspace.length, "Workspace translation keys must be unique");
   for (const entry of workspace) {
     assert.ok(entry.locales.ru?.trim(), `Missing Russian workspace translation: ${entry.key}`);
     assert.ok(entry.locales.zh?.trim(), `Missing Chinese workspace translation: ${entry.key}`);
+    if (/[\u0400-\u04ff]/u.test(entry.key)) {
+      assert.ok(entry.locales.en?.trim(), `Missing English translation for non-English workspace source: ${entry.key}`);
+    }
   }
 
   const landing = parseLocaleMap(extractObject(source, "const landingTranslations = {"));
