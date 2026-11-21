@@ -1,7 +1,7 @@
 import React, { act } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
 
 function HydrationProbe() {
@@ -39,7 +39,14 @@ describe("i18n SSR hydration", () => {
         <HydrationProbe />
       </LanguageProvider>
     );
-    const serverMarkup = renderToString(app);
+    const browserWindow = globalThis.window;
+    vi.stubGlobal("window", undefined);
+    let serverMarkup;
+    try {
+      serverMarkup = renderToString(app);
+    } finally {
+      vi.stubGlobal("window", browserWindow);
+    }
     container.innerHTML = serverMarkup;
     const recoverableErrors = [];
 
@@ -53,7 +60,7 @@ describe("i18n SSR hydration", () => {
     expect(recoverableErrors).toEqual([]);
   });
 
-  it("keeps the server locale for the first hydration render before restoring browser preferences", async () => {
+  it("restores browser preferences after hydrating the matching server locale", async () => {
     localStorage.setItem("aevotron-language", "ru");
     const app = (
       <LanguageProvider initialLanguage="en">
