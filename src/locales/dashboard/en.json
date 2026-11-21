@@ -153,5 +153,8 @@
   "All connected models": "All connected models",
   "No models match your search": "No models match your search",
   "Pinned": "Pinned",
-  "Add to favorites": "Add to favorites"
+  "Add to favorites": "Add to favorites",
+  "Session usage": "Session usage",
+  "requests": "requests",
+  "Estimated": "Estimated"
 }
