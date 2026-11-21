@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Smartphone, MessageSquare } from "lucide-react";
+import { Loader2, Smartphone } from "lucide-react";
 import { MfaMethodSetup } from "@/components/auth/MfaMethodSetup";
 import { CodeField, MfaHeader, MfaNotice, ResendLine, useCooldown } from "@/components/auth/MfaParts";
 
 const METHODS = [
   { id: "totp", name: "Authenticator app", icon: Smartphone,
     description: "Use an app like Google Authenticator or Duo to generate secure sign-in codes." },
-  { id: "sms", name: "Text messages", icon: MessageSquare, description: "Get sign-in codes sent to your phone by text message." },
 ];
 const SMS_RESEND_SECONDS = 30;
 
