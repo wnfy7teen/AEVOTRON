@@ -907,7 +907,7 @@ const workspaceTranslations = {
   "Start over": { ru: "На главную", zh: "重新开始" },
   "Try again": { ru: "Попробовать снова", zh: "重试" },
   "Home": { ru: "Главная", zh: "首页" },
-  "Verifying your email address…": { ru: "Проверка адреса электронной почты…", zh: "正在验证您的电子邮箱… " },
+  "Verifying your email address…": { ru: "Проверка адреса электронной почты…", zh: "正在验证您的电子邮箱…" },
   "This verification link is missing its code.": { ru: "В ссылке для подтверждения отсутствует код.", zh: "验证链接中缺少验证码。" },
   "This verification link is invalid or expired.": { ru: "Ссылка для подтверждения недействительна или срок её действия истёк.", zh: "验证链接无效或已过期。" },
   "Your email is verified. Your account is ready.": { ru: "Электронная почта подтверждена. Ваш аккаунт готов к работе.", zh: "您的电子邮箱已验证，账户现已可以使用。" },
