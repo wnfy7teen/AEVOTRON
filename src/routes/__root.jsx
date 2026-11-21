@@ -4,6 +4,7 @@ import { NotFound } from "@/components/NotFound";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
+import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 
@@ -31,6 +32,7 @@ function RootComponent() {
         <div key={pathname} className="apple-app app-route-transition"><Outlet /></div>
         <Toaster />
         <LanguageSwitcher />
+        <ThemeSwitcher />
       </AuthProvider>
     </LanguageProvider>
   );
