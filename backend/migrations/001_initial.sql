@@ -166,3 +166,20 @@ FOR EACH ROW EXECUTE FUNCTION prevent_immutable_event_mutation();
 DROP TRIGGER IF EXISTS audit_events_immutable ON audit_events;
 CREATE TRIGGER audit_events_immutable BEFORE UPDATE OR DELETE ON audit_events
 FOR EACH ROW EXECUTE FUNCTION prevent_immutable_event_mutation();
+
+CREATE TABLE IF NOT EXISTS mfa_challenges (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash BYTEA NOT NULL UNIQUE,
+  expires_at TIMESTAMPTZ NOT NULL,
+  consumed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS mfa_challenges_expiry_idx ON mfa_challenges(expires_at);
+
+CREATE TABLE IF NOT EXISTS rate_limit_buckets (
+  bucket_key TEXT NOT NULL,
+  window_start TIMESTAMPTZ NOT NULL,
+  hits INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY(bucket_key, window_start)
+);
