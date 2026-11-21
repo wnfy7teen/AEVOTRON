@@ -79,21 +79,20 @@ function applyLegacyTranslations(language) {
 }
 
 export function LanguageProvider({ children }) {
-  const { i18n: activeI18n } = useTranslation();
   useEffect(() => {
-    const apply = () => applyLegacyTranslations(normalizeLanguage(activeI18n.resolvedLanguage || activeI18n.language));
+    const apply = () => applyLegacyTranslations(normalizeLanguage(i18n.resolvedLanguage || i18n.language));
     apply();
     const observer = new MutationObserver(apply);
     observer.observe(document.documentElement, {
       childList: true, subtree: true, characterData: true, attributes: true,
       attributeFilter: ["aria-label", "title", "placeholder", "alt", "content"],
     });
-    activeI18n.on("languageChanged", apply);
+    i18n.on("languageChanged", apply);
     return () => {
       observer.disconnect();
-      activeI18n.off("languageChanged", apply);
+      i18n.off("languageChanged", apply);
     };
-  }, [activeI18n]);
+  }, []);
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 }
 
