@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 
 // The /reset-password page; the reset email links here with ?token=.
 export function ResetPasswordPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["auth", "translation"]);
   // Read raw: the router's search parser would turn an all-digit token into a number.
   const token = new URLSearchParams(window.location.search).get("token");
   const [password, setPassword] = useState("");
