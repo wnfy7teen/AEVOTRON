@@ -1,7 +1,7 @@
 {
   "Aevotron — One API. Every model.": "Aevotron — 一个 API，接入各种模型。",
   "Aevotron — Workspace": "Aevotron — 工作空间",
-  "One API for every AI model.": "一个 API 接入所有 AI 模型。",
+  "One API for every AI model.": "一个 API，连接所有 AI 模型。",
   "demo funds added": "已添加演示资金",
   "Search request logs": "搜索请求日志",
   "Search model, provider or error": "搜索模型、服务商或错误",
@@ -496,7 +496,7 @@
   "This verification link is missing its code.": "此验证链接缺少验证码。",
   "This verification link is invalid or expired.": "此验证链接无效或已过期。",
   "Your email is verified. Your account is ready.": "您的邮箱已验证，账户现已可以使用。",
-  "Verify email — Aevotron": "验证电子邮箱 — Aevotron",
+  "Verify email — Aevotron": "验证邮箱 — Aevotron",
   "This app": "此应用",
   "Add a second sign-in step to keep your account secure. Choose how you want to get your codes.": "添加第二步登录验证以保护账户。请选择接收验证码的方式。",
   "your phone": "您的手机",
@@ -511,9 +511,9 @@
   "Sign in to manage your two-factor authentication.": "登录后即可管理双重身份验证。",
   "My application": "我的应用",
   "AEVOTRON — Все модели. Один API.": "AEVOTRON — 所有模型，一个 API。",
-  "Единый API для подключения AI-моделей разных провайдеров.": "通过一个 API 连接不同服务商的 AI 模型。",
-  "Aevotron — Workspace preview": "Aevotron — 工作区预览",
-  "Read-only visual preview of the Aevotron workspace.": "Aevotron 工作区的只读界面预览。",
+  "Единый API для подключения AI-моделей разных провайдеров.": "通过统一 API 接入不同服务商的 AI 模型。",
+  "Aevotron — Workspace preview": "Aevotron — 工作空间预览",
+  "Read-only visual preview of the Aevotron workspace.": "Aevotron 工作空间的只读界面预览。",
   "Telegram · @web3ResearchCN": "Telegram · @web3ResearchCN",
   "Switch to light theme": "切换到浅色主题",
   "Switch to dark theme": "切换到深色主题",
@@ -619,5 +619,10 @@
   "Sending code to {{phone}}…": "正在向 {{phone}} 发送验证码…",
   "Enter the code sent to {{phone}}": "请输入发送至 {{phone}} 的验证码",
   "A 6-digit code sent to {{phone}}": "六位验证码已发送至 {{phone}}",
-  "Enabled · {{phone}}": "已启用 · {{phone}}"
+  "Enabled · {{phone}}": "已启用 · {{phone}}",
+  "Sign in — Aevotron": "登录 — Aevotron",
+  "Create account — Aevotron": "创建账户 — Aevotron",
+  "Reset password — Aevotron": "重置密码 — Aevotron",
+  "Choose a new password — Aevotron": "设置新密码 — Aevotron",
+  "Two-factor authentication — Aevotron": "双重身份验证 — Aevotron"
 }
