@@ -51,7 +51,7 @@ export function MfaManage({ session, returnTo }) {
                 <div className="flex-1 min-w-[10rem]">
                   <p className="font-medium">{t(name)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {enrolled ? (id === "sms" && status.phone_hint ? `Enabled · ${status.phone_hint}` : t("Enabled")) : t(description)}
+                    {enrolled ? (id === "sms" && status.phone_hint ? t("Enabled · {{phone}}", { phone: status.phone_hint }) : t("Enabled")) : t(description)}
                   </p>
                 </div>
                 {/* On a narrow screen the actions drop below the method instead of squeezing it. */}
