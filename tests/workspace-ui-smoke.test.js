@@ -136,5 +136,5 @@ test("workspace uses accessible custom dropdowns instead of native select popups
   assert.match(component, /Escape/);
   assert.match(component, /pointerdown/);
   assert.match(css, /\.av-dropdown-menu/);
-  assert.match(css, /data-theme="dark" \.av-dropdown-menu/);
+  assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
 });
