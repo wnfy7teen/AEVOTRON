@@ -21,6 +21,16 @@ const auth = {
     const result = await request("/api/v1/auth/me");
     return result.user;
   },
+  async sessions() { return request("/api/v1/auth/sessions"); },
+  async revokeSession(sessionId) {
+    return request("/api/v1/auth/sessions/" + encodeURIComponent(sessionId), { method: "DELETE", body: {} });
+  },
+  async changePassword({ current_password, new_password, mfa_code }) {
+    return request("/api/v1/auth/password/change", {
+      method: "POST",
+      body: { current_password, new_password, ...(mfa_code ? { mfa_code } : {}) },
+    });
+  },
   async mfaStatus() { return request("/api/v1/auth/mfa/status"); },
   async mfaEnroll() { return request("/api/v1/auth/mfa/enroll", { method: "POST", body: {} }); },
   async mfaConfirm(code) { return request("/api/v1/auth/mfa/confirm", { method: "POST", body: { code } }); },
