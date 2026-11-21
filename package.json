@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "lint": "eslint . --quiet",
+    "lint": "eslint src tests vite.config.js --quiet",
     "lint:fix": "eslint . --fix",
     "test": "node --test",
     "preview": "vite preview"
