@@ -61,7 +61,7 @@ describe("workspace theme", () => {
   });
 
   it("provides dark-theme overrides for workspace surfaces, typography, controls and navigation", async () => {
-    const css = await readFile(new URL("../src/apple-style.css", import.meta.url), "utf8");
+    const css = await readFile("src/apple-style.css", "utf8");
     const requiredDarkRules = [
       /\.apple-app\[data-theme="dark"\] \.mh-shell/,
       /\.apple-app\[data-theme="dark"\] \.mh-stat/,
