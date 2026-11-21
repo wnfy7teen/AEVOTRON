@@ -8,14 +8,15 @@
     "build": "vite build",
     "lint": "eslint src tests vite.config.js --quiet",
     "lint:fix": "eslint . --fix",
-    "test": "node --test",
+    "test": "node --test && vitest run",
     "preview": "vite preview",
     "dev:cloudflare": "vite dev --config vite.config.cloudflare.js",
     "build:cloudflare": "vite build --config vite.config.cloudflare.js",
     "preview:cloudflare": "vite preview --config vite.config.cloudflare.js",
     "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy",
     "cf-typegen": "wrangler types",
-    "test:i18n": "vitest run"
+    "test:i18n": "vitest run",
+    "test:node": "node --test"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
