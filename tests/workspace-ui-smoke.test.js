@@ -115,7 +115,7 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
 test("workspace dropdown menus share responsive light and dark styling", async () => {
   const css = await read("src/apple-style.css");
   assert.match(css, /\.av-dropdown-trigger/);
-  assert.match(css, /\.av-dropdown-menu/);
+  assert.doesNotMatch(css, /\.mh-toolbar select/);\n  assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /\.av-dropdown-option\.is-selected/);
   assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
