@@ -1,5 +1,3 @@
-import { getRequest, getResponseStatus } from "@tanstack/react-start/server";
-
 // Local, privacy-conscious error reporting. Do not send prompts, credentials, cookies,
 // request bodies, or user data to an external platform.
 function record(error, context = {}) {
