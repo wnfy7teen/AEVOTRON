@@ -764,5 +764,18 @@
   "Make your first API call": "Make your first API call",
   "What a successful request returns.": "What a successful request returns.",
   "Rate limits and error handling.": "Rate limits and error handling.",
-  "Billing role": "Billing role"
+  "Billing role": "Billing role",
+  "model.description.gpt4o": "A versatile multimodal model for complex conversations, analysis, and image understanding.",
+  "model.description.gpt4oMini": "A fast, cost-efficient model for everyday requests, classification, and concise responses.",
+  "model.description.gpt41": "A capable model for complex instructions, analysis, and large-context tasks.",
+  "model.description.gpt41Mini": "A balanced model for practical tasks, assistants, and text processing.",
+  "model.description.gpt41Nano": "A lightweight model optimized for simple tasks, speed, and low cost.",
+  "model.description.o3": "A reasoning model for multi-step analysis, logic, and demanding technical tasks.",
+  "model.description.o3Mini": "A compact reasoning model for logic, mathematics, and programming.",
+  "model.description.o4Mini": "A fast reasoning model for analysis and code when speed and accuracy matter.",
+  "model.description.reasoning": "A reasoning model designed for complex analytical tasks.",
+  "model.description.lightweight": "A lightweight model for fast responses and budget-conscious tasks.",
+  "model.description.default": "A text AI model for conversations, generation, and content analysis.",
+  "i18n.test.item_one": "{{count}} item",
+  "i18n.test.item_other": "{{count}} items"
 }
