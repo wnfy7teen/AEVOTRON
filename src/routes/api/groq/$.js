@@ -175,6 +175,19 @@ async function handleGroqRequest({ request }) {
     return json(403, { error: { code: "ACCESS_REQUIRED", message: "This temporary Groq endpoint requires Cloudflare Access." } });
   }
 
+  if (request.method !== "GET") {
+    const origin = request.headers.get("origin");
+    if (origin) {
+      try {
+        if (new URL(origin).origin !== new URL(request.url).origin) {
+          return json(403, { error: { code: "ORIGIN_REJECTED", message: "Cross-origin requests are not allowed." } });
+        }
+      } catch {
+        return json(403, { error: { code: "ORIGIN_REJECTED", message: "The request origin is invalid." } });
+      }
+    }
+  }
+
   const path = new URL(request.url).pathname;
   if (request.method === "GET" && path === "/api/groq/models") return listGroqModels();
   if (request.method === "POST" && path === "/api/groq/chat/completions") return createGroqCompletion(request);
