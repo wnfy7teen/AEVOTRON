@@ -768,5 +768,16 @@
   "i18n.test.item_other": "{{count}} 个项目",
   "i18n.test.item_one": "{{count}} 个项目",
   "i18n.test.item_few": "{{count}} 个项目",
-  "i18n.test.item_many": "{{count}} 个项目"
+  "i18n.test.item_many": "{{count}} 个项目",
+  "Connect {{provider}}": "连接 {{provider}}",
+  "Groq API key": "Groq API 密钥",
+  "Paste your Groq API key": "粘贴 Groq API 密钥",
+  "Fast open models and Llama inference": "高速开放模型与 Llama 推理",
+  "Connect your AI providers once. Route text chat requests through a single API.": "连接 AI 服务提供商，通过统一 API 发送文本对话请求。",
+  "Available from connected providers": "来自已连接的服务提供商",
+  "Connect a provider to discover models": "连接服务提供商以发现模型",
+  "Connect a provider to load the models available to your account.": "连接服务提供商以加载账户可用的模型。",
+  "Revoke the Groq provider connection? Requests using it will stop working.": "撤销 Groq 服务商连接？使用该服务商的请求将停止工作。",
+  "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} 已连接。凭据已加密并隐藏。",
+  "Could not revoke this provider connection.": "无法撤销此服务商连接。"
 }
