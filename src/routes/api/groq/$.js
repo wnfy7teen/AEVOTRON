@@ -40,7 +40,7 @@ async function getAccessJwks(teamDomain) {
 }
 
 async function isAccessAuthorized(request) {
-  const teamDomain = String(process.env.CF_ACCESS_TEAM_DOMAIN || "").trim().replace(/^https?:\\/\\//, "").replace(/\\/$/, "");
+  const teamDomain = String(process.env.CF_ACCESS_TEAM_DOMAIN || "").trim().replace("https://", "").replace("http://", "").split("/")[0];
   const audience = String(process.env.CF_ACCESS_AUD || "").trim();
   const token = request.headers.get("cf-access-jwt-assertion");
   if (!teamDomain || !audience || !token) return false;
