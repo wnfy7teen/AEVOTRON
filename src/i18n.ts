@@ -3,6 +3,9 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
 import zh from "./locales/zh.json";
+import dashboardEn from "./locales/dashboard/en.json";
+import dashboardRu from "./locales/dashboard/ru.json";
+import dashboardZh from "./locales/dashboard/zh.json";
 
 export const LANGUAGE_STORAGE_KEY = "aevotron-language";
 export const LANGUAGE_COOKIE_KEY = "aevotron-language";
@@ -10,9 +13,9 @@ export const supportedLanguages = ["en", "ru", "zh"] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];
 
 const resources = {
-  en: { translation: en },
-  ru: { translation: ru },
-  zh: { translation: zh },
+  en: { translation: en, dashboard: dashboardEn },
+  ru: { translation: ru, dashboard: dashboardRu },
+  zh: { translation: zh, dashboard: dashboardZh },
 };
 
 export function normalizeLanguage(value: string | null | undefined): SupportedLanguage {
@@ -48,7 +51,8 @@ export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
     defaultNS: "translation",
-    ns: ["translation"],
+    ns: ["translation", "dashboard"],
+    fallbackNS: "translation",
     keySeparator: false,
     interpolation: { escapeValue: false },
     returnEmptyString: false,
