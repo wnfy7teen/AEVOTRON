@@ -711,5 +711,7 @@
   "Errors use a JSON error object with a code and message. Requests are limited to 30 per minute per API key. A rate-limited request returns HTTP 429.": "Errors are returned as a JSON object containing a code and message. Each API key is limited to 30 requests per minute. Exceeding the limit returns HTTP 429.",
   "Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.": "Current scope: text chat only. Streaming, tool calls, embeddings and multimodal requests are not supported in this preview.",
   "Billing": "Billing",
-  "Notifications": "Notifications"
+  "Notifications": "Notifications",
+  "Send your first request": "Send your first request",
+  "This preview supports OpenAI text chat only. Streaming, tool calls, embeddings and multimodal requests are not available yet.": "This preview supports OpenAI text chat only. Streaming, tool calls, embeddings and multimodal requests are not available yet."
 }
