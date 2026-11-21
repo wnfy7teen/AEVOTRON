@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
+import { translateForLanguage } from "@/i18n";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/api/client";
@@ -10,37 +10,35 @@ import { useLanguage } from "@/lib/i18n";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { Activity, ArrowDownUp, ArrowUpRight, Bell, BookOpen, Boxes, Check, ChevronDown, CircleHelp, Code2, Command, Copy, Cpu, CreditCard, Globe2, KeyRound, Layers3, LayoutDashboard, LockKeyhole, Menu, Plus, Search, Settings2, ShieldCheck, Terminal, Zap, Users, Wallet, UserRound, Shield, SlidersHorizontal, Palette, Trash2, Sun, Moon, Monitor, Mail, Webhook, Clock, X, CircleDollarSign } from "lucide-react";
 
-const t = (key, options) => i18n.t(key, options);
-
 const invokeFunction = async (name, payload) => {
   const response = await api.functions.invoke(name, payload);
   return response?.data ?? response;
 };
 
 export const Route = createFileRoute("/_authed/dashboard")({
-  head: () => ({ meta: [{ title: i18n.t("Aevotron — Workspace") }, { name: "description", content: i18n.t("One API for every AI model.") }] }),
+  head: ({ matches }) => { const locale = matches.find((match) => match.routeId === "__root__")?.loaderData || "en"; return { meta: [{ title: translateForLanguage(locale, "Aevotron — Workspace") }, { name: "description", content: translateForLanguage(locale, "One API for every AI model.") }] }; },
   // Keep HomePage in this module: PreviewDashboard also reuses it on a public preview route.
   // An inline wrapper prevents route auto-splitting from moving the component out of this module.
   component: () => <HomePage />,
 });
 
 const modelDescriptions = {
-  "gpt-4o": "Универсальная мультимодальная модель для сложных диалогов, анализа и работы с изображениями.",
-  "gpt-4o-mini": "Быстрая и экономичная модель для повседневных запросов, классификации и коротких ответов.",
-  "gpt-4.1": "Сильная модель для сложных инструкций, анализа и задач с большим контекстом.",
-  "gpt-4.1-mini": "Баланс скорости и качества для прикладных задач, ассистентов и обработки текста.",
-  "gpt-4.1-nano": "Лёгкая модель для простых задач с приоритетом скорости и низкой стоимости.",
-  "o3": "Reasoning-модель для многошагового анализа, логики и непростых технических задач.",
-  "o3-mini": "Компактная reasoning-модель для логики, математики и программирования.",
-  "o4-mini": "Быстрая reasoning-модель для анализа, кода и задач, где важны скорость и точность.",
+  "gpt-4o": "model.description.gpt4o",
+  "gpt-4o-mini": "model.description.gpt4oMini",
+  "gpt-4.1": "model.description.gpt41",
+  "gpt-4.1-mini": "model.description.gpt41Mini",
+  "gpt-4.1-nano": "model.description.gpt41Nano",
+  "o3": "model.description.o3",
+  "o3-mini": "model.description.o3Mini",
+  "o4-mini": "model.description.o4Mini",
 };
 
 function describeModel(id) {
   const key = String(id || "").toLowerCase();
   if (modelDescriptions[key]) return modelDescriptions[key];
-  if (/^o[1-9](?:-|$)/.test(key)) return "Модель с усиленным пошаговым рассуждением для сложных аналитических задач.";
-  if (key.includes("mini") || key.includes("nano")) return "Облегчённая модель для быстрых ответов и задач с ограниченным бюджетом.";
-  return "Текстовая AI-модель для диалогов, генерации и анализа контента.";
+  if (/^o[1-9](?:-|$)/.test(key)) return "model.description.reasoning";
+  if (key.includes("mini") || key.includes("nano")) return "model.description.lightweight";
+  return "model.description.default";
 }
 
 const providers = [
@@ -56,7 +54,7 @@ export function PreviewDashboard() {
 }
 
 function HomePage({ preview = false }) {
-  const { i18n: activeI18n } = useTranslation();
+  const { t, i18n: activeI18n } = useTranslation();
   const currentLanguage = activeI18n.resolvedLanguage || activeI18n.language;
   const accountQuery = useQuery({
     queryKey: ["workspace-account-profile"],
@@ -90,10 +88,10 @@ function HomePage({ preview = false }) {
     ] } : undefined,
   });
   const models = useMemo(() => (modelQuery.data?.models || []).map((model) => ({
-    name: model.id, description: describeModel(model.id), provider: "OpenAI", type: "Chat", context: "Provider-defined",
+    name: model.id, description: t(describeModel(model.id)), provider: "OpenAI", type: "Chat", context: "Provider-defined",
     speed: "Provider API", price: "Direct provider billing",
     tags: [model.owned_by || "OpenAI"], color: "green", status: "BYOK",
-  })), [modelQuery.data]);
+  })), [modelQuery.data, activeI18n.resolvedLanguage]);
   const [section, setSection] = useState("Overview");
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All models");
