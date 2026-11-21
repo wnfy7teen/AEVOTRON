@@ -1,5 +1,3 @@
-import { MfaError } from "./mfaError";
-
 async function request(path, { method = "POST", body } = {}) {
   const response = await fetch("/api/v1/auth/" + path, {
     method,
