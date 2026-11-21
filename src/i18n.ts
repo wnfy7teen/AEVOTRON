@@ -63,9 +63,46 @@ export function createAppI18n(storage?: Pick<Storage, "getItem" | "setItem"> | n
 }
 
 const i18n = createAppI18n();
-if (typeof document !== "undefined") {
+
+type MetadataState = { source: string; translated: string };
+const metadataState = new WeakMap<Element, MetadataState>();
+
+function translateMetadataElement(element: Element, attribute: "content" | null, language: SupportedLanguage) {
+  const current = attribute ? element.getAttribute(attribute) ?? "" : element.textContent ?? "";
+  let state = metadataState.get(element);
+  if (!state || current !== state.translated) state = { source: current, translated: current };
+  const translated = i18n.t(state.source, { lng: language, defaultValue: state.source });
+  if (attribute) {
+    if (current !== translated) element.setAttribute(attribute, translated);
+  } else if (current !== translated) {
+    element.textContent = translated;
+  }
+  state.translated = translated;
+  metadataState.set(element, state);
+}
+
+function syncDocumentMetadata() {
+  if (typeof document === "undefined") return;
   const language = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
   document.documentElement.lang = language === "zh" ? "zh-CN" : language;
+  const title = document.querySelector("head title");
+  if (title) translateMetadataElement(title, null, language);
+  document.querySelectorAll('meta[name="description"]').forEach((meta) => {
+    translateMetadataElement(meta, "content", language);
+  });
+}
+
+if (typeof document !== "undefined") {
+  syncDocumentMetadata();
+  i18n.on("languageChanged", syncDocumentMetadata);
+  const metadataObserver = new MutationObserver(syncDocumentMetadata);
+  metadataObserver.observe(document.head, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    attributes: true,
+    attributeFilter: ["content"],
+  });
 }
 
 export default i18n;
