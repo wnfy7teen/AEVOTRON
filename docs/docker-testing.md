@@ -48,9 +48,11 @@ Do not copy production secrets into the image or commit them to the repository.
 ## GitHub Actions
 
 The `Docker build verification` workflow builds the image and runs
-`docker-verify.sh` through the POSIX shell. The script starts the container
-and checks that the homepage returns HTML over HTTP. It does not push an image
-to a registry or deploy it.
+`docker-verify.sh` through the POSIX shell. The script starts the container,
+checks that the homepage returns HTML, fetches every same-origin JS/CSS asset
+referenced by the homepage, and verifies that the declared login, registration,
+password recovery, MFA, and dashboard routes return HTML over HTTP. It does
+not push an image to a registry or deploy it.
 
 ## Production boundary
 
