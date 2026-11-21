@@ -612,5 +612,7 @@
   "Didn't receive a code?": "Didn't receive a code?",
   "Resend in": "Resend in",
   "Welcome": "Welcome",
-  "Resend in {{count}}s": "Resend in {{count}}s"
+  "Resend in {{count}}s": "Resend in {{count}}s",
+  "This app requires multi-factor authentication": "This app requires multi-factor authentication",
+  "A 6-digit code sent to": "A 6-digit code sent to"
 }
