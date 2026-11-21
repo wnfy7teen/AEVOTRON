@@ -155,7 +155,7 @@ function HomePage({ preview = false }) {
               <section className="mh-api-hero">
                 <div className="mh-api-hero-top"><span className="mh-api-kicker"><Code2 size={14}/> {t("API reference")}</span><span className="mh-api-version">v1 · PREVIEW</span></div>
                 <div className="mh-api-hero-main"><div><h2>{t("Chat completions")}</h2><p>{t("A single, OpenAI-compatible endpoint for text chat requests.")}</p></div><span className="mh-api-method">POST</span></div>
-                <div className="mh-api-url"><span>{apiEndpoint}</span><button type="button" aria-label={t("Copy cURL")} onClick={async()=>{try{await navigator.clipboard.writeText(apiEndpoint);toast.success(t("Copied"));}catch{toast.error(t("Could not copy"));}}}><Copy size={15}/></button></div>
+                <div className="mh-api-url"><span>{apiEndpoint}</span><button type="button" aria-label={t("Copy cURL")} onClick={async()=>{try{await navigator.clipboard.writeText(apiEndpoint);toast.success(t("Copied"));}catch{}}}><Copy size={15}/></button></div>
               </section>
               <div className="mh-api-doc-grid">
                 <section className="mh-panel mh-api-card">
