@@ -60,6 +60,15 @@ describe("workspace theme", () => {
     expect(getAppThemePreference()).toBe("system");
   });
 
+  it("styles the model trust notice with readable light and dark variants", async () => {
+    const css = await readFile(new URL("../src/apple-style.css", import.meta.url), "utf8");
+
+    expect(css).toMatch(/\.apple-app \.mh-detail-info\s*\{[^}]*display:\s*flex/s);
+    expect(css).toMatch(/\.apple-app \.mh-detail-info-icon\s*\{[^}]*flex:\s*0 0 32px/s);
+    expect(css).toMatch(/\.apple-app\[data-theme="dark"\] \.mh-detail-info\s*\{[^}]*color:\s*#c3def7/s);
+    expect(css).toMatch(/\.apple-app\[data-theme="dark"\] \.mh-detail-info-icon\s*\{[^}]*color:\s*#a9d7ff/s);
+  });
+
   it("provides dark-theme overrides for workspace surfaces, typography, controls and navigation", async () => {
     const css = await readFile("src/apple-style.css", "utf8");
     const requiredDarkRules = [
