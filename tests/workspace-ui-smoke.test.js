@@ -189,10 +189,10 @@ test("API key expiry dropdown renders above the existing-keys panel", async () =
 test("workspace footer is pinned to the bottom across short and long routes", async () => {
   const css = await read("src/apple-style.css");
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
-  assert.match(dashboard, /<main className="mh-main">[\\s\\S]*?<div className="mh-content">[\\s\\S]*?<footer className="mh-footer">/);
-  assert.match(css, /\.mh-main \{[\\s\\S]*?display: grid;[\\s\\S]*?grid-template-rows: auto minmax\\(0, 1fr\\) auto;[\\s\\S]*?min-height: 100dvh;/);
-  assert.match(css, /\.mh-content \{[\\s\\S]*?align-self: stretch;/);
-  assert.match(css, /\.mh-footer \{[\\s\\S]*?align-self: end;[\\s\\S]*?width: 100%;/);
+  assert.match(dashboard, /<main className="mh-main">[\s\S]*?<div className="mh-content">[\s\S]*?<footer className="mh-footer">/);
+  assert.match(css, /\.mh-main \{[\s\S]*?display: grid;[\s\S]*?grid-template-rows: auto minmax\\(0, 1fr\\) auto;[\s\S]*?min-height: 100dvh;/);
+  assert.match(css, /\.mh-content \{[\s\S]*?align-self: stretch;/);
+  assert.match(css, /\.mh-footer \{[\s\S]*?align-self: end;[\s\S]*?width: 100%;/);
 });
 
 
