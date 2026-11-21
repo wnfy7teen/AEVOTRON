@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import i18n, { supportedLanguages } from "@/i18n";
+import { supportedLanguages } from "@/i18n";
 
 export function LanguageProvider({ children }) {
   return children;
