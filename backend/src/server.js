@@ -721,6 +721,133 @@ async function handle(req, res) {
     return json(res, 200, { models: rows.rows });
   }
 
+  // First-party Workspace chat uses the signed-in HttpOnly session, never a browser-held API key.
+  if (req.method === "POST" && path === "/api/v1/workspace/chat/completions") {
+    const user = await requireUser(req, res); if (!user) return;
+    const invalid = validateChat({ ...body, stream: false });
+    if (invalid) return fail(res, 400, invalid, "The workspace chat request is invalid.");
+    if (body.stream !== true) return fail(res, 400, "streaming_required", "Workspace chat currently requires stream=true.");
+    const modelMatch = body.model.match(/^(openai|groq)\/(.+)$/);
+    if (!modelMatch) return fail(res, 400, "invalid_model", "Select a model from a connected provider.");
+    const [, providerCode, providerModel] = modelMatch;
+    const providerConfig = getProvider(providerCode);
+    if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    const workspace = await currentWorkspace(user);
+    await rateLimit(req, "workspace-chat:" + user.id, 20, 60);
+    const savedProvider = await pool.query(
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [workspace.id, user.id, providerCode],
+    );
+    if (!savedProvider.rowCount) return fail(res, 403, "provider_not_connected", "Connect " + providerConfig.name + " before using this model.");
+    const credential = decryptSecret(
+      savedProvider.rows[0].credential_ciphertext,
+      "provider:" + providerCode + ":" + user.id + ":" + workspace.id,
+    );
+    const requestId = randomUUID();
+    const started = Date.now();
+    const controller = new AbortController();
+    let clientDisconnected = false;
+    let responseStatus = 500;
+    let errorCode = "internal_error";
+    let inputTokens = 0;
+    let outputTokens = 0;
+    let upstream;
+    const onResponseClose = () => {
+      if (!res.writableEnded) {
+        clientDisconnected = true;
+        controller.abort();
+      }
+    };
+    res.once("close", onResponseClose);
+    try {
+      upstream = await fetch(providerConfig.baseUrl + "/chat/completions", {
+        method: "POST",
+        headers: { authorization: "Bearer " + credential, "content-type": "application/json" },
+        body: JSON.stringify({
+          model: providerModel,
+          messages: body.messages,
+          stream: true,
+          stream_options: { include_usage: true },
+          ...(body.max_tokens !== undefined ? { max_tokens: body.max_tokens } : {}),
+          ...(body.temperature !== undefined ? { temperature: body.temperature } : {}),
+          ...(body.top_p !== undefined ? { top_p: body.top_p } : {}),
+        }),
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(120_000)]),
+      });
+      if (!upstream.ok) {
+        responseStatus = upstream.status === 429 ? 429 : 502;
+        errorCode = upstream.status === 429 ? "provider_rate_limited" : "upstream_provider_error";
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, responseStatus, errorCode, "The provider could not start this response.", { "x-request-id": requestId });
+      }
+      if (!upstream.body) {
+        responseStatus = 502;
+        errorCode = "empty_provider_stream";
+        return fail(res, 502, errorCode, "The provider returned an empty response stream.", { "x-request-id": requestId });
+      }
+      res.writeHead(200, {
+        "content-type": "text/event-stream; charset=utf-8",
+        "cache-control": "no-cache, no-transform",
+        connection: "keep-alive",
+        "x-content-type-options": "nosniff",
+        "x-request-id": requestId,
+        "x-accel-buffering": "no",
+      });
+      const reader = upstream.body.getReader();
+      const decoder = new TextDecoder();
+      let pending = "";
+      const collectUsage = (line) => {
+        if (!line.startsWith("data:")) return;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === "[DONE]") return;
+        try {
+          const event = JSON.parse(payload);
+          if (event.usage) {
+            inputTokens = Number(event.usage.prompt_tokens || event.usage.input_tokens || inputTokens);
+            outputTokens = Number(event.usage.completion_tokens || event.usage.output_tokens || outputTokens);
+          }
+        } catch { /* Ignore non-JSON provider event data; the original bytes are forwarded unchanged. */ }
+      };
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (clientDisconnected) break;
+        res.write(value);
+        pending += decoder.decode(value, { stream: true });
+        const lines = pending.split(/\r?\n/);
+        pending = lines.pop() || "";
+        for (const line of lines) collectUsage(line);
+      }
+      pending += decoder.decode();
+      if (pending) collectUsage(pending);
+      if (clientDisconnected) {
+        responseStatus = 499;
+        errorCode = "client_cancelled";
+      } else {
+        responseStatus = 200;
+        errorCode = null;
+        if (!res.writableEnded) res.end();
+      }
+    } catch (error) {
+      responseStatus = clientDisconnected ? 499 : 504;
+      errorCode = clientDisconnected ? "client_cancelled" : "upstream_stream_failed";
+      if (!res.headersSent) {
+        return fail(res, responseStatus === 499 ? 499 : 504, errorCode, "The provider stream could not be completed.", { "x-request-id": requestId });
+      }
+      if (!clientDisconnected && !res.destroyed && !res.writableEnded) {
+        res.write("data: " + JSON.stringify({ error: { code: errorCode, message: "The provider stream could not be completed." } }) + "\n\n");
+        res.end();
+      }
+    } finally {
+      res.removeListener("close", onResponseClose);
+      await pool.query(
+        "INSERT INTO usage_events(workspace_id,owner_user_id,request_id,model_id,provider_code,input_tokens,output_tokens,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+        [workspace.id,user.id,requestId,body.model,providerCode,inputTokens,outputTokens,Date.now()-started,responseStatus,errorCode],
+      ).catch((error) => process.stderr.write("[aevotron-api] workspace usage write failed: " + error.message + "\n"));
+    }
+    return;
+  }
+
   if (req.method === "POST" && (path === "/api/v1/chat/completions" || path === "/v1/chat/completions")) {
     const invalid = validateChat(body);
     if (invalid) return fail(res, invalid === "unsupported_streaming" ? 400 : 400, invalid, "The chat completion request is invalid or unsupported.");
