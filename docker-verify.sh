@@ -24,12 +24,6 @@ export AEVOTRON_MASTER_KEY="$(openssl rand -base64 32)"
 export IP_HASH_SALT="$(openssl rand -hex 32)"
 export COOKIE_SECURE=false
 export PUBLIC_APP_URL=http://localhost:3000
-export SMTP_HOST=localhost
-export SMTP_PORT=587
-export SMTP_SECURE=false
-export SMTP_USER=smoke-test
-export SMTP_PASS=smoke-test
-export SMTP_FROM=smoke@example.invalid
 
 docker compose -p "$PROJECT_NAME" up --build -d
 
@@ -111,6 +105,13 @@ for route in /login /register /forgot-password /reset-password /verify-email /mf
   grep -Eiq '<!doctype html|<html([[:space:]>])' "$HTML_FILE"
   printf 'Route OK: %s\n' "$route"
 done
+
+export SMTP_HOST=localhost
+export SMTP_PORT=587
+export SMTP_SECURE=false
+export SMTP_USER=smoke-test
+export SMTP_PASS=smoke-test
+export SMTP_FROM=smoke@example.invalid
 
 # Build and smoke-test the backend-only VPS stack used with the Vercel frontend.
 docker compose -p "$API_PROJECT_NAME" -f docker-compose.api.yml config >/dev/null
