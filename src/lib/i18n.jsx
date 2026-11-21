@@ -5,6 +5,9 @@ const LanguageContext = createContext({ language: "en", setLanguage: () => {}, t
 
 const dictionaries = {
   ru: {
+    "Aevotron — One API. Every model.": "Aevotron — один API для любых моделей.",
+    "Aevotron — Workspace": "Aevotron — рабочее пространство",
+    "One API for every AI model.": "Единый API для всех моделей ИИ.",
     "Sign in": "Войти",
     "Get started": "Начало работы",
     "UNIFIED AI INFRASTRUCTURE": "ЕДИНАЯ ИНФРАСТРУКТУРА ИИ",
@@ -344,6 +347,9 @@ const dictionaries = {
     "Connect OpenAI once. Route text chat requests through a single API.": "Подключите OpenAI один раз и направляйте текстовые запросы через единый API.",
   },
   zh: {
+    "Aevotron — One API. Every model.": "Aevotron — 一个 API，接入各种模型。",
+    "Aevotron — Workspace": "Aevotron — 工作空间",
+    "One API for every AI model.": "一个 API 接入所有 AI 模型。",
     "Sign in": "登录",
     "Get started": "开始使用",
     "UNIFIED AI INFRASTRUCTURE": "统一 AI 基础设施",
@@ -562,6 +568,7 @@ const dictionaries = {
     "Copy cURL": "复制 cURL",
     "Input": "输入",
     "Output": "输出",
+    "The public endpoint is a planned interface": "公共 API 接口目前仍处于规划阶段",
     "Available after secure key storage is implemented": "安全密钥存储功能实现后开放",
     "Welcome back": "欢迎回来",
     "Log in to your account": "登录您的账户",
@@ -770,6 +777,20 @@ const workspaceTranslations = {
   "MODEL": { ru: "МОДЕЛЬ", zh: "模型" },
   "CONTEXT": { ru: "КОНТЕКСТ", zh: "上下文" },
   "ACCESS": { ru: "ДОСТУП", zh: "访问权限" }
+  "Sign in required": { ru: "Требуется войти", zh: "需要登录" },
+  "Continue to sign in": { ru: "Перейти ко входу", zh: "继续登录" },
+  "QR code for authenticator app setup": { ru: "QR-код для настройки приложения-аутентификатора", zh: "身份验证器应用设置二维码" },
+  "Универсальная мультимодальная модель для сложных диалогов, анализа и работы с изображениями.": { ru: "Универсальная мультимодальная модель для сложных диалогов, анализа и работы с изображениями.", en: "A versatile multimodal model for complex conversations, analysis, and image understanding.", zh: "适用于复杂对话、分析和图像理解的通用多模态模型。" },
+  "Быстрая и экономичная модель для повседневных запросов, классификации и коротких ответов.": { ru: "Быстрая и экономичная модель для повседневных запросов, классификации и коротких ответов.", en: "A fast, cost-efficient model for everyday requests, classification, and concise responses.", zh: "适用于日常请求、分类和简短回答的快速高效模型。" },
+  "Сильная модель для сложных инструкций, анализа и задач с большим контекстом.": { ru: "Сильная модель для сложных инструкций, анализа и задач с большим контекстом.", en: "A capable model for complex instructions, analysis, and long-context tasks.", zh: "适用于复杂指令、分析和长上下文任务的高性能模型。" },
+  "Баланс скорости и качества для прикладных задач, ассистентов и обработки текста.": { ru: "Баланс скорости и качества для прикладных задач, ассистентов и обработки текста.", en: "A balance of speed and quality for practical tasks, assistants, and text processing.", zh: "兼顾速度与质量，适用于实际任务、智能助手和文本处理。" },
+  "Лёгкая модель для простых задач с приоритетом скорости и низкой стоимости.": { ru: "Лёгкая модель для простых задач с приоритетом скорости и низкой стоимости.", en: "A lightweight model optimized for simple tasks, speed, and low cost.", zh: "轻量模型，优先满足简单任务的速度和低成本需求。" },
+  "Reasoning-модель для многошагового анализа, логики и непростых технических задач.": { ru: "Reasoning-модель для многошагового анализа, логики и непростых технических задач.", en: "A reasoning model for multi-step analysis, logic, and demanding technical tasks.", zh: "适用于多步骤分析、逻辑推理和复杂技术任务的推理模型。" },
+  "Компактная reasoning-модель для логики, математики и программирования.": { ru: "Компактная reasoning-модель для логики, математики и программирования.", en: "A compact reasoning model for logic, mathematics, and programming.", zh: "适用于逻辑、数学和编程任务的紧凑型推理模型。" },
+  "Быстрая reasoning-модель для анализа, кода и задач, где важны скорость и точность.": { ru: "Быстрая reasoning-модель для анализа, кода и задач, где важны скорость и точность.", en: "A fast reasoning model for analysis, coding, and tasks that require speed and accuracy.", zh: "适用于分析、编程以及注重速度和准确性的快速推理模型。" },
+  "Модель с усиленным пошаговым рассуждением для сложных аналитических задач.": { ru: "Модель с усиленным пошаговым рассуждением для сложных аналитических задач.", en: "A model with enhanced step-by-step reasoning for complex analytical tasks.", zh: "具备增强型逐步推理能力，适用于复杂分析任务的模型。" },
+  "Облегчённая модель для быстрых ответов и задач с ограниченным бюджетом.": { ru: "Облегчённая модель для быстрых ответов и задач с ограниченным бюджетом.", en: "A lightweight model for fast responses and budget-conscious workloads.", zh: "适用于快速响应和预算有限场景的轻量模型。" },
+  "Текстовая AI-модель для диалогов, генерации и анализа контента.": { ru: "Текстовая AI-модель для диалогов, генерации и анализа контента.", en: "A text-based AI model for conversations, content generation, and analysis.", zh: "用于对话、内容生成和分析的文本型 AI 模型。" },
 };
 
 const landingTranslations = {
