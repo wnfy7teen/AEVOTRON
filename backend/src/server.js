@@ -7,6 +7,7 @@ import {
   newTotpSecret, randomToken, sha256, totpUri, verifyPassword, verifyTotp,
 } from "./security.js";
 import { mailConfigured, sendActionEmail } from "./mailer.js";
+import { getProvider, isValidProviderCredential, normalizeProviderModels } from "./providers.js";
 
 const PORT = Number(process.env.PORT || 3001);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -574,55 +575,109 @@ async function handle(req, res) {
     return json(res, 200, { success: true });
   }
 
-  if (req.method === "POST" && path === "/api/v1/providers/openai") {
+  const providerRoute = path.match(/^\/api\/v1\/providers\/(openai|groq)(?:\/(test|models))?$/);
+  if (providerRoute && req.method === "POST") {
     const user = await requireUser(req, res); if (!user) return;
-    const credential = String(body.api_key || "");
-    if (!credential.startsWith("sk-") || credential.length < 20 || credential.length > 500) return fail(res, 400, "INVALID_PROVIDER_KEY", "Enter a valid OpenAI API key.");
+    const provider = getProvider(providerRoute[1]);
+    const action = providerRoute[2];
     const workspace = await currentWorkspace(user);
+    if (action === "test") {
+      const saved = await pool.query(
+        "SELECT id,credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status<>'revoked'",
+        [workspace.id, user.id, provider.code],
+      );
+      if (!saved.rowCount) return fail(res, 404, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+      const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+      let upstream;
+      try {
+        upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+      } catch {
+        return fail(res, 502, "PROVIDER_UNREACHABLE", provider.name + " could not be reached. Try again.");
+      }
+      await pool.query("UPDATE provider_connections SET status=$2,last_tested_at=now(),updated_at=now() WHERE id=$1", [saved.rows[0].id, upstream.ok ? "active" : "error"]);
+      if (!upstream.ok) {
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, 422, "PROVIDER_AUTH_FAILED", provider.name + " rejected the saved API key.");
+      }
+      await upstream.body?.cancel().catch(() => {});
+      return json(res, 200, { success: true, status: "active" });
+    }
+    if (action === "models") {
+      const saved = await pool.query(
+        "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+        [workspace.id, user.id, provider.code],
+      );
+      if (!saved.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+      const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+      let upstream;
+      try {
+        upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+      } catch {
+        return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+      }
+      if (!upstream.ok) {
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+      }
+      const result = await upstream.json();
+      return json(res, 200, { models: normalizeProviderModels(provider.code, result.data || []) });
+    }
+    const credential = String(body.api_key || "");
+    if (!isValidProviderCredential(provider.code, credential)) {
+      return fail(res, 400, "INVALID_PROVIDER_KEY", "Enter a valid " + provider.name + " API key.");
+    }
     let providerCheck;
     try {
-      providerCheck = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
+      providerCheck = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
     } catch {
-      return fail(res, 502, "PROVIDER_UNREACHABLE", "OpenAI could not be reached. Try again.");
+      return fail(res, 502, "PROVIDER_UNREACHABLE", provider.name + " could not be reached. Try again.");
     }
     if (!providerCheck.ok) {
       await providerCheck.body?.cancel().catch(() => {});
-      return fail(res, 422, "PROVIDER_AUTH_FAILED", "OpenAI rejected this API key.");
+      return fail(res, 422, "PROVIDER_AUTH_FAILED", provider.name + " rejected this API key.");
     }
-    const aad = "provider:openai:" + user.id + ":" + workspace.id;
+    await providerCheck.body?.cancel().catch(() => {});
+    const aad = "provider:" + provider.code + ":" + user.id + ":" + workspace.id;
     const ciphertext = encryptSecret(credential, aad);
     const result = await pool.query(
-      "INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status,last_tested_at) VALUES($1,$2,$3,$4,$5,$6,now()) ON CONFLICT(workspace_id,provider_code) DO UPDATE SET credential_ciphertext=EXCLUDED.credential_ciphertext,status=EXCLUDED.status,last_tested_at=now(),updated_at=now() RETURNING id,provider_code,display_name,status,last_tested_at",
-      [workspace.id, user.id, "openai", "OpenAI", ciphertext, "active"],
+      "INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status,last_tested_at) VALUES($1,$2,$3,$4,$5,'active',now()) ON CONFLICT(workspace_id,provider_code) DO UPDATE SET display_name=EXCLUDED.display_name,credential_ciphertext=EXCLUDED.credential_ciphertext,status='active',last_tested_at=now(),updated_at=now() RETURNING id,provider_code,display_name,status,last_tested_at",
+      [workspace.id, user.id, provider.code, provider.name, ciphertext],
     );
     return json(res, 201, { connection: result.rows[0] });
   }
-
-  if (req.method === "POST" && path === "/api/v1/providers/openai/test") {
+  if (providerRoute && req.method === "DELETE" && !providerRoute[2]) {
     const user = await requireUser(req, res); if (!user) return;
-    const workspace = await currentWorkspace(user);
-    const result = await pool.query(
-      "SELECT id,credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai' AND status<>'revoked'",
-      [workspace.id, user.id],
-    );
-    if (!result.rowCount) return fail(res, 404, "PROVIDER_NOT_CONNECTED", "Connect OpenAI first.");
-    const credential = decryptSecret(result.rows[0].credential_ciphertext, `provider:openai:${user.id}:${workspace.id}`);
-    const upstream = await fetch("https://api.openai.com/v1/models", { headers: { authorization: `Bearer ${credential}` }, signal: AbortSignal.timeout(10_000) });
-    await pool.query("UPDATE provider_connections SET status=$2,last_tested_at=now(),updated_at=now() WHERE id=$1", [result.rows[0].id, upstream.ok ? "active" : "error"]);
-    if (!upstream.ok) return fail(res, 422, "PROVIDER_AUTH_FAILED", "The provider rejected this API key.");
-    return json(res, 200, { success: true, status: "active" });
-  }
-
-  if (req.method === "DELETE" && path === "/api/v1/providers/openai") {
-    const user = await requireUser(req, res); if (!user) return;
+    const provider = getProvider(providerRoute[1]);
     const workspace = await currentWorkspace(user);
     await pool.query(
-      "UPDATE provider_connections SET status='revoked',credential_ciphertext='',updated_at=now() WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai'",
-      [workspace.id, user.id],
+      "UPDATE provider_connections SET status='revoked',credential_ciphertext='',updated_at=now() WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3",
+      [workspace.id, user.id, provider.code],
     );
     return json(res, 200, { success: true });
   }
-
+  if (providerRoute && req.method === "GET" && providerRoute[2] === "models") {
+    const user = await requireUser(req, res); if (!user) return;
+    const provider = getProvider(providerRoute[1]);
+    const workspace = await currentWorkspace(user);
+    const saved = await pool.query(
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [workspace.id, user.id, provider.code],
+    );
+    if (!saved.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+    const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+    let upstream;
+    try {
+      upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+    } catch {
+      return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+    }
+    if (!upstream.ok) {
+      await upstream.body?.cancel().catch(() => {});
+      return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+    }
+    const result = await upstream.json();
+    return json(res, 200, { models: normalizeProviderModels(provider.code, result.data || []) });
+  }
   if (req.method === "GET" && path === "/api/v1/providers") {
     const user = await requireUser(req, res); if (!user) return;
     const workspace = await currentWorkspace(user);
@@ -658,19 +713,6 @@ async function handle(req, res) {
     return json(res, 200, { events: rows.rows });
   }
 
-  if (req.method === "GET" && path === "/api/v1/providers/openai/models") {
-    const user = await requireUser(req, res); if (!user) return;
-    const workspace = await currentWorkspace(user);
-    const provider = await pool.query("SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status=$4", [workspace.id, user.id, "openai", "active"]);
-    if (!provider.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect OpenAI first.");
-    const aad = "provider:openai:" + user.id + ":" + workspace.id;
-    const credential = decryptSecret(provider.rows[0].credential_ciphertext, aad);
-    const upstream = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
-    if (!upstream.ok) return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", "OpenAI model list could not be loaded.");
-    const result = await upstream.json();
-    const found = (result.data || []).filter((item) => /^(gpt-|chatgpt-)/i.test(item.id)).map((item) => ({ id: item.id, owned_by: item.owned_by || "OpenAI" }));
-    return json(res, 200, { models: found });
-  }
   if (req.method === "GET" && path === "/api/v1/models") {
     const user = await requireUser(req, res); if (!user) return;
     const rows = await pool.query(
@@ -721,13 +763,18 @@ async function handle(req, res) {
     } finally {
       client.release();
     }
+    const modelMatch = body.model.match(/^(openai|groq)\/(.+)$/);
+    const providerCode = modelMatch?.[1] || "openai";
+    const providerModel = modelMatch?.[2] || body.model;
+    const providerConfig = getProvider(providerCode);
+    if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
     const provider = await pool.query(
-      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai' AND status='active'",
-      [key.workspace_id,key.owner_user_id],
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [key.workspace_id, key.owner_user_id, providerCode],
     );
-    if (!provider.rowCount) return fail(res, 403, "provider_not_connected", "Connect an OpenAI provider account before using this model.");
-    const credential = decryptSecret(provider.rows[0].credential_ciphertext, `provider:openai:${key.owner_user_id}:${key.workspace_id}`);
-    const model = body.model.startsWith("openai/") ? body.model.slice(7) : body.model;
+    if (!provider.rowCount) return fail(res, 403, "provider_not_connected", "Connect " + providerConfig.name + " before using this model.");
+    const credential = decryptSecret(provider.rows[0].credential_ciphertext, "provider:" + providerCode + ":" + key.owner_user_id + ":" + key.workspace_id);
+    const model = providerModel;
     const upstreamBody = {
       model, messages: body.messages,
       ...(body.max_tokens !== undefined ? { max_tokens: body.max_tokens } : {}),
@@ -736,7 +783,7 @@ async function handle(req, res) {
     };
     let upstream;
     try {
-      upstream = await fetch("https://api.openai.com/v1/chat/completions", {
+      upstream = await fetch(providerConfig.baseUrl + "/chat/completions", {
         method: "POST",
         headers: { authorization: `Bearer ${credential}`, "content-type": "application/json" },
         body: JSON.stringify(upstreamBody),
@@ -745,8 +792,8 @@ async function handle(req, res) {
     } catch {
       responseStatus = 504; errorCode = "upstream_timeout";
       await pool.query(
-        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8)",
-        [key.workspace_id,key.owner_user_id,key.id,model,requestId,Date.now()-started,responseStatus,errorCode],
+        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,Date.now()-started,responseStatus,errorCode],
       );
       return json(res, responseStatus, { error: { message: "The provider request timed out.", type: "aevotron_error", code: errorCode } }, { "x-request-id": requestId });
     }
@@ -766,7 +813,7 @@ async function handle(req, res) {
     await pool.query("UPDATE api_keys SET last_used_at=now() WHERE id=$1", [key.id]);
     await pool.query(
       "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,input_tokens,output_tokens,latency_ms,status_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8,200)",
-      [key.workspace_id,key.owner_user_id,key.id,model,requestId,inputTokens,outputTokens,Date.now()-started],
+      [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,inputTokens,outputTokens,Date.now()-started],
     );
     return json(res, 200, result, { "x-request-id": requestId });
   }
