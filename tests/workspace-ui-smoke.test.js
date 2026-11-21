@@ -51,7 +51,7 @@ test("settings clearly disclose local-only security and account controls", async
   assert.match(source, /api\.auth\.revokeSession\(session\.id\)/);
   assert.match(source, /api\.auth\.changePassword\(/);
   assert.match(source, /sessionsQuery\.data\.current_session_id/);
-  assert.match(source, /other_sessions_revoked/);
+  assert.match(source, /Password updated\. Other sessions were signed out\./);
   const securityPanel = source.split('{tab==="Security" &&')[1]?.split('{tab==="Notifications" &&')[0] || "";
   assert.doesNotMatch(securityPanel, /Kerkrade, NL|Safari · iPhone|christopher@example\.com|saved in demo mode/);
 });
