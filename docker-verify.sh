@@ -76,7 +76,7 @@ grep -q 'EMAIL_NOT_CONFIGURED' "$API_FILE" || {
   exit 1
 }
 foreign_origin_status="$(curl -sS -o "$API_FILE" -w '%{http_code}' -X POST http://127.0.0.1:3000/api/v1/auth/register \
-  -H 'Origin: https://attacker.example' -H 'Content-Type: application/json' --data '{}')"
+  -H 'Origin: https://attacker.example' -H 'X-Forwarded-Host: attacker.example' -H 'X-Forwarded-Proto: https' -H 'Content-Type: application/json' --data '{}')"
 [ "$foreign_origin_status" = "403" ] || {
   printf 'Docker smoke test failed: foreign-origin registration returned %s, expected 403.\n' "$foreign_origin_status" >&2
   cat "$API_FILE" >&2
