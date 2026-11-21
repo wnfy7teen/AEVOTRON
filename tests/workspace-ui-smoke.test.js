@@ -121,11 +121,12 @@ test("workspace dropdown menus share responsive light and dark styling", async (
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
 });
 
-\ntest("workspace uses accessible custom dropdowns instead of native select popups", async () => {
+
+test("workspace uses accessible custom dropdowns instead of native select popups", async () => {
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
   const component = await read("src/components/ui/Dropdown.jsx");
   const css = await read("src/apple-style.css");
-  assert.doesNotMatch(dashboard, /<select\\b/);
+  assert.doesNotMatch(dashboard, /<select\b/);
   assert.match(dashboard, /<Dropdown/);
   assert.match(component, /aria-haspopup="listbox"/);
   assert.match(component, /role="listbox"/);
