@@ -602,5 +602,14 @@
   "Тёмная тема": "Dark theme",
   "Серая тема": "Gray theme",
   "Тёмная": "Dark",
-  "Серая": "Gray"
+  "Серая": "Gray",
+  "Interface language": "Interface language",
+  "Dark theme": "Dark theme",
+  "Light theme": "Light theme",
+  "you@example.com": "you@example.com",
+  "Already verified": "Already verified",
+  "Sign out": "Sign out",
+  "Didn't receive a code?": "Didn't receive a code?",
+  "Resend in": "Resend in",
+  "Welcome": "Welcome"
 }
