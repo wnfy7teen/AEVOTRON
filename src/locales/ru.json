@@ -768,5 +768,16 @@
   "i18n.test.item_one": "{{count}} элемент",
   "i18n.test.item_few": "{{count}} элемента",
   "i18n.test.item_many": "{{count}} элементов",
-  "i18n.test.item_other": "{{count}} элемента"
+  "i18n.test.item_other": "{{count}} элемента",
+  "Connect {{provider}}": "Подключить {{provider}}",
+  "Groq API key": "API-ключ Groq",
+  "Paste your Groq API key": "Вставьте API-ключ Groq",
+  "Fast open models and Llama inference": "Быстрые открытые модели и инференс Llama",
+  "Connect your AI providers once. Route text chat requests through a single API.": "Подключите AI-провайдеров и отправляйте текстовые запросы через единый API.",
+  "Available from connected providers": "Доступно у подключённых провайдеров",
+  "Connect a provider to discover models": "Подключите провайдера, чтобы загрузить модели",
+  "Connect a provider to load the models available to your account.": "Подключите провайдера, чтобы загрузить доступные вашему аккаунту модели.",
+  "Revoke the Groq provider connection? Requests using it will stop working.": "Отозвать подключение Groq? Запросы через этого провайдера перестанут работать.",
+  "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} подключён. Ключ зашифрован и скрыт.",
+  "Could not revoke this provider connection.": "Не удалось отозвать подключение провайдера."
 }
