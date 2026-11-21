@@ -43,7 +43,10 @@ test("settings layout supports narrow screens and reduced motion", async () => {
 test("settings clearly disclose local-only security and account controls", async () => {
   const source = await read("src/routes/_authed/dashboard.jsx");
   assert.match(source, /Local preview settings\./);
-  assert.match(source, /Server-side MFA is not changed\./);
+  assert.match(source, /api\.auth\.mfaStatus/);
+  assert.match(source, /api\.auth\.mfaEnroll/);
+  assert.match(source, /api\.auth\.mfaConfirm/);
+  assert.match(source, /api\.auth\.mfaDisable/);
   assert.match(source, /Preview session removed from this list/);
 });
 
