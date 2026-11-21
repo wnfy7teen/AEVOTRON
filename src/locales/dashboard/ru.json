@@ -157,5 +157,11 @@
   "Session usage": "Расход за диалог",
   "requests": "запросов",
   "Estimated": "Оценка",
-  "Include attachment": "Включить вложение"
+  "Include attachment": "Включить вложение",
+  "context tokens": "токенов контекста",
+  "Vision": "Изображения",
+  "Tools": "Инструменты",
+  "Streaming": "Потоковая генерация",
+  "Streaming unavailable": "Потоковая генерация недоступна",
+  "Model metadata not verified": "Метаданные модели не проверены"
 }
