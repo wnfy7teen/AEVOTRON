@@ -707,6 +707,71 @@ const dictionaries = {
   }
 };
 
+const workspaceTranslations = {
+  "Workspace preview": { ru: "Предпросмотр кабинета", zh: "工作区预览" },
+  "Sample data · Read-only mode · No account or backend connection required": { ru: "Демонстрационные данные · Только просмотр · Аккаунт и сервер не требуются", zh: "示例数据 · 只读模式 · 无需账户或后端连接" },
+  "Your models. One API.": { ru: "Ваши модели. Один API.", zh: "您的模型，一个 API。" },
+  "Connect OpenAI once. Route text chat requests through a single API.": { ru: "Подключите OpenAI и отправляйте текстовые запросы через единый API.", zh: "连接 OpenAI，通过统一 API 路由文本聊天请求。" },
+  "Requests (30 days)": { ru: "Запросы (30 дней)", zh: "请求数（30 天）" },
+  "Models in catalog": { ru: "Моделей в каталоге", zh: "目录中的模型" },
+  "Recorded by the gateway": { ru: "Зафиксировано шлюзом", zh: "由网关记录" },
+  "Available to your OpenAI key": { ru: "Доступно по вашему ключу OpenAI", zh: "您的 OpenAI 密钥可用" },
+  "Connect OpenAI to discover models": { ru: "Подключите OpenAI, чтобы увидеть модели", zh: "连接 OpenAI 以查看模型" },
+  "Provider-defined": { ru: "Определяется провайдером", zh: "由服务商定义" },
+  "Provider API": { ru: "API провайдера", zh: "服务商 API" },
+  "Direct provider billing": { ru: "Оплата напрямую провайдеру", zh: "直接向服务商付费" },
+  "Free plan": { ru: "Бесплатный тариф", zh: "免费计划" },
+  "Personal workspace": { ru: "Личное рабочее пространство", zh: "个人工作区" },
+  "Personal account": { ru: "Личный аккаунт", zh: "个人账户" },
+  "Bring your own provider keys to get started.": { ru: "Для начала подключите собственные ключи провайдеров.", zh: "请先连接您自己的服务商密钥。" },
+  "Get started": { ru: "Начало работы", zh: "开始使用" },
+  "Three steps to your first API call.": { ru: "Три шага до первого вызова API.", zh: "只需三步即可发起首次 API 调用。" },
+  "Connect a provider": { ru: "Подключить провайдера", zh: "连接服务商" },
+  "Add your own API key. It stays private and is never shown in the browser again.": { ru: "Добавьте свой API-ключ. Он останется конфиденциальным и больше не будет показан в браузере.", zh: "添加您自己的 API 密钥。密钥将保持私密，不会再次显示在浏览器中。" },
+  "Create an AEVOTRON key": { ru: "Создать ключ AEVOTRON", zh: "创建 AEVOTRON 密钥" },
+  "Generate a single key for your apps and services to authenticate requests.": { ru: "Создайте единый ключ для авторизации запросов приложений и сервисов.", zh: "生成一个密钥，用于应用和服务的请求身份验证。" },
+  "Make your first request": { ru: "Выполнить первый запрос", zh: "发送您的第一个请求" },
+  "Use our OpenAI-compatible endpoint with any supported model.": { ru: "Используйте совместимую с OpenAI конечную точку с поддерживаемыми моделями.", zh: "使用兼容 OpenAI 的接口调用受支持的模型。" },
+  "Popular models": { ru: "Популярные модели", zh: "热门模型" },
+  "Start exploring the catalog": { ru: "Изучите каталог моделей", zh: "开始浏览模型目录" },
+  "Quick API example": { ru: "Пример API-запроса", zh: "API 请求示例" },
+  "OpenAI-compatible interface": { ru: "Интерфейс, совместимый с OpenAI", zh: "兼容 OpenAI 的接口" },
+  "Your keys, your control.": { ru: "Ваши ключи — под вашим контролем.", zh: "您的密钥，由您掌控。" },
+  "AI INFRASTRUCTURE, SIMPLIFIED": { ru: "ИНФРАСТРУКТУРА ИИ — ПРОСТО", zh: "简化 AI 基础设施" },
+  "DISCOVER": { ru: "ОБЗОР", zh: "探索" },
+  "INTEGRATIONS": { ru: "ИНТЕГРАЦИИ", zh: "集成" },
+  "ACCESS CONTROL": { ru: "УПРАВЛЕНИЕ ДОСТУПОМ", zh: "访问控制" },
+  "OBSERVABILITY": { ru: "МОНИТОРИНГ", zh: "可观测性" },
+  "Provider connections": { ru: "Подключения провайдеров", zh: "服务商连接" },
+  "API keys": { ru: "API-ключи", zh: "API 密钥" },
+  "Usage & logs": { ru: "Использование и журналы", zh: "用量与日志" },
+  "Model catalog": { ru: "Каталог моделей", zh: "模型目录" },
+  "Quickstart": { ru: "Быстрый старт", zh: "快速入门" },
+  "API reference": { ru: "Справочник API", zh: "API 参考" },
+  "Preferences": { ru: "Настройки", zh: "偏好设置" },
+  "Requests": { ru: "Запросы", zh: "请求" },
+  "Tokens": { ru: "Токены", zh: "令牌" },
+  "Error rate": { ru: "Частота ошибок", zh: "错误率" },
+  "Average latency": { ru: "Средняя задержка", zh: "平均延迟" },
+  "Context window": { ru: "Контекстное окно", zh: "上下文窗口" },
+  "Pricing": { ru: "Стоимость", zh: "价格" },
+  "Refresh": { ru: "Обновить", zh: "刷新" },
+  "Search models...": { ru: "Поиск моделей...", zh: "搜索模型..." },
+  "All models": { ru: "Все модели", zh: "所有模型" },
+  "Connect OpenAI": { ru: "Подключить OpenAI", zh: "连接 OpenAI" },
+  "Not connected": { ru: "Не подключено", zh: "未连接" },
+  "Connected": { ru: "Подключено", zh: "已连接" },
+  "Test connection": { ru: "Проверить подключение", zh: "测试连接" },
+  "Revoke": { ru: "Отозвать", zh: "撤销" },
+  "Create key": { ru: "Создать ключ", zh: "创建密钥" },
+  "Existing keys": { ru: "Существующие ключи", zh: "现有密钥" },
+  "Recent requests": { ru: "Последние запросы", zh: "最近的请求" },
+  "TIME": { ru: "ВРЕМЯ", zh: "时间" },
+  "MODEL": { ru: "МОДЕЛЬ", zh: "模型" },
+  "CONTEXT": { ru: "КОНТЕКСТ", zh: "上下文" },
+  "ACCESS": { ru: "ДОСТУП", zh: "访问权限" }
+};
+
 const landingTranslations = {
   "AEVOTRON — главная": { en: "AEVOTRON — Home", ru: "AEVOTRON — главная", zh: "AEVOTRON — 首页" },
   "Основная навигация": { en: "Main navigation", ru: "Основная навигация", zh: "主导航" },
@@ -788,6 +853,8 @@ const translateText = (value, language) => {
   if (!value) return value;
   const originalTrimmed = value.trim();
   const trimmed = originalTrimmed.replace(/\u00a0/g, " ");
+  const workspaceTranslation = workspaceTranslations[trimmed];
+  if (workspaceTranslation) return value.replace(originalTrimmed, workspaceTranslation[language] ?? trimmed);
   const landingTranslation = landingTranslations[trimmed];
   if (landingTranslation) {
     const translated = landingTranslation[language] ?? trimmed;
@@ -874,16 +941,15 @@ function applyTranslations(language) {
 }
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguageState] = useState("en");
-
-  useEffect(() => {
+  const [language, setLanguageState] = useState(() => {
+    if (typeof window === "undefined") return "en";
     try {
       const saved = window.localStorage.getItem("aevotron-language");
-      if (supported.includes(saved)) setLanguageState(saved);
+      return supported.includes(saved) ? saved : "en";
     } catch {
-      // Language switching still works for this session when storage is blocked.
+      return "en";
     }
-  }, []);
+  });
 
   useEffect(() => {
     applyTranslations(language);
