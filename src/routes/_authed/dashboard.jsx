@@ -457,6 +457,7 @@ function WorkspaceSettings({ preview = false, account }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [mfaCode, setMfaCode] = useState("");
+  const [tab, setTab] = useState("Profile");
   const queryClient = useQueryClient();
   const sessionsQuery = useQuery({
     queryKey: ["auth-sessions"],
@@ -488,7 +489,6 @@ function WorkspaceSettings({ preview = false, account }) {
     },
     onError: (error) => toast.error(error.message || "Could not revoke session."),
   });
-  const [tab, setTab] = useState("Profile");
   const [avatar, setAvatar] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("aevotron-avatar") || "" : "");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [confirmation, setConfirmation] = useState("");
