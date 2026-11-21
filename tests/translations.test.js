@@ -190,7 +190,7 @@ it("migrates landing and authentication UI to domain namespaces with legacy fall
 
 it("preserves interpolation variables and locale punctuation across every namespace", async () => {
   const namespaces = ["root", "dashboard", "landing", "auth"];
-  const variables = (value) => [...value.matchAll(/\\{\\{\\s*([\\w.-]+)(?:\\s*,[^}]*)?\\s*\\}\\}/g)]
+  const variables = (value) => [...value.matchAll(/\{\{\s*([\w.-]+)(?:\s*,[^}]*)?\s*\}\}/g)]
     .map((match) => match[1])
     .sort();
 
