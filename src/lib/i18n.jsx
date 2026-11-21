@@ -361,7 +361,7 @@ const dictionaries = {
     "Search model, provider or error": "搜索模型、服务商或错误",
     "Filter models": "筛选模型",
     "Team & projects": "团队与项目",
-    "90 days": "90 天"
+    "90 days": "90 天",
     "Sign in": "登录",
     "Get started": "开始使用",
     "UNIFIED AI INFRASTRUCTURE": "统一 AI 基础设施",
