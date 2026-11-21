@@ -190,9 +190,9 @@ test("workspace footer is pinned to the bottom across short and long routes", as
   const css = await read("src/apple-style.css");
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
   assert.match(dashboard, /<main className="mh-main">[\s\S]*?<div className="mh-content">[\s\S]*?<footer className="mh-footer">/);
-  assert.match(css, /\.mh-main \{[\s\S]*?display: grid;[\s\S]*?grid-template-rows: auto minmax\(0, 1fr\) auto;[\s\S]*?min-height: 100dvh;/);
-  assert.match(css, /\.mh-content \{[\s\S]*?align-self: stretch;/);
-  assert.match(css, /\.mh-footer \{[\s\S]*?align-self: end;[\s\S]*?width: 100%;/);
+  assert.match(css, /\.mh-main \{[\s\S]*?display:flex;[\s\S]*?flex-direction:column;[\s\S]*?margin-left:0;/);
+  assert.match(css, /\.mh-content \{[\s\S]*?flex:1 0 auto;[\s\S]*?min-height:auto;/);
+  assert.match(css, /\.mh-footer \{[\s\S]*?margin-top:auto;[\s\S]*?width:100%;/);
 });
 
 
@@ -217,4 +217,14 @@ test("workspace topbar keeps menu, breadcrumb and actions aligned without overfl
   assert.match(css, /\.mh-topbar\s*\{[^}]*display:flex;[^}]*align-items:center;[^}]*justify-content:space-between;/);
   assert.match(css, /\.mh-top-actions\s*\{[^}]*display:flex;[^}]*align-items:center;/);
   assert.match(css, /@media\(max-width:760px\)[\s\S]*?\.mh-mobile-menu\{display:flex\}[\s\S]*?\.mh-breadcrumb\{flex:1;min-width:0\}/);
+});
+
+test("workspace sidebar has stable desktop geometry and a working mobile drawer", async () => {
+  const css = await read("src/apple-style.css");
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(dashboard, /mh-sidebar-open/);
+  assert.match(css, /\.mh-shell \{[^}]*display:flex;[^}]*align-items:stretch;/);
+  assert.match(css, /\.mh-sidebar \{[^}]*position:sticky;[^}]*flex:0 0 252px;[^}]*height:100dvh;/);
+  assert.match(css, /\.mh-main \{[^}]*margin-left:0;/);
+  assert.match(css, /@media \(max-width:760px\)[\s\S]*?\.mh-sidebar \{[^}]*position:fixed;[^}]*transform:translateX\(-105%\);[\s\S]*?\.mh-sidebar\.mh-sidebar-open \{[^}]*transform:translateX\(0\);/);
 });
