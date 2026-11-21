@@ -1023,3 +1023,96 @@ body:has(.apple-app[data-theme="dark"] .mh-shell) {
   .apple-app .av-pagination > div { width: 100%; }
   .apple-app .av-pagination .mh-button { flex: 1; }
 }
+
+
+/* Final interaction polish: keyboard focus, form clarity and restrained motion. */
+.apple-app :where(button, a, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+  outline: 3px solid rgba(0, 113, 227, .42);
+  outline-offset: 3px;
+}
+.apple-app :where(input, select, textarea) {
+  accent-color: #0071e3;
+}
+.apple-app :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  min-width: 0;
+  border-radius: 10px;
+  transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.apple-app :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus {
+  border-color: #1683e8;
+  box-shadow: 0 0 0 3px rgba(22, 131, 232, .13);
+  outline: none;
+}
+.apple-app :where(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: .56;
+}
+.apple-app .mh-button {
+  transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease, border-color .16s ease;
+}
+.apple-app .mh-button:not(:disabled):active {
+  transform: translateY(1px) scale(.985);
+}
+.apple-app .mh-empty {
+  padding: 34px 20px;
+  color: var(--apple-muted, #737982);
+  text-align: center;
+  line-height: 1.55;
+}
+.apple-app .mh-panel,
+.apple-app .av-mock-panel {
+  min-width: 0;
+}
+.apple-app .av-mock-panel > .mh-panel-heading {
+  gap: 14px;
+}
+.apple-app[data-theme="dark"] .av-mock-panel,
+.apple-app[data-theme="dark"] .mh-panel {
+  color: #e8edf4;
+}
+.apple-app[data-theme="dark"] .av-mock-panel .mh-panel-heading,
+.apple-app[data-theme="dark"] .av-mock-panel .mh-panel-heading p {
+  color: #aab6c5;
+}
+.apple-app[data-theme="dark"] .av-notification-row.is-read {
+  opacity: .68;
+}
+.apple-app[data-theme="dark"] .av-notification-dot {
+  box-shadow: 0 0 0 4px rgba(68, 142, 220, .16);
+}
+.apple-app[data-theme="dark"] .av-notification-row.is-read .av-notification-dot {
+  background: #697586;
+  box-shadow: 0 0 0 4px rgba(170, 182, 197, .1);
+}
+@media (max-width: 560px) {
+  .apple-app .mh-page-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .apple-app .mh-page-heading > :last-child {
+    max-width: 100%;
+  }
+  .apple-app .av-topup-row {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+  .apple-app .av-topup-row > :where(input, select, button) {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+  .apple-app .mh-panel-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apple-app *,
+  .apple-app *::before,
+  .apple-app *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
