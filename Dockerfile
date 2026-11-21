@@ -6,6 +6,13 @@ COPY package.json ./
 RUN npm install --no-audit --no-fund
 
 FROM dependencies AS build
+# Vite embeds VITE_* values into the browser bundle at build time.
+ARG VITE_BASE44_APP_ID
+ARG VITE_BASE44_FUNCTIONS_VERSION
+ARG VITE_BASE44_APP_BASE_URL
+ENV VITE_BASE44_APP_ID=${VITE_BASE44_APP_ID} \
+    VITE_BASE44_FUNCTIONS_VERSION=${VITE_BASE44_FUNCTIONS_VERSION} \
+    VITE_BASE44_APP_BASE_URL=${VITE_BASE44_APP_BASE_URL}
 COPY . .
 RUN npm test && npm run lint && npm run build
 
