@@ -53,5 +53,8 @@
   "One API. Your provider accounts.": "Один API для ваших аккаунтов провайдеров.",
   "AEVOTRON routes requests to the selected provider. Model access and charges are controlled by that provider account.": "AEVOTRON направляет запросы выбранному провайдеру. Доступ к моделям и расходы определяются условиями аккаунта этого провайдера.",
   "Read the quickstart": "Открыть краткое руководство",
-  "You": "Вы"
+  "You": "Вы",
+  "General": "Общие задачи",
+  "Lightweight": "Лёгкие модели",
+  "Direct": "Напрямую"
 }
