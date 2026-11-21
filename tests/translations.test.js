@@ -135,7 +135,7 @@ it("formats numbers, currencies, dates and relative time using the active locale
   assert.equal(getIntlLocale("ru-RU"), "ru-RU");
   assert.equal(getIntlLocale("zh-CN"), "zh-CN");
   assert.equal(getIntlLocale("unsupported"), "en-US");
-  assert.match(formatNumber(1234.5, "ru"), /1.234,5|1\\u00a0234,5|1\\u202f234,5/);
+  assert.match(formatNumber(1234.5, "ru"), /1.234,5|1\u00a0234,5|1\u202f234,5/);
   assert.match(formatCurrency(12.5, "EUR", "en"), /€|EUR/);
   assert.ok(formatDate("2026-01-02T12:00:00.000Z", "zh").length > 0);
   assert.ok(formatRelativeTime(-1, "day", "ru").length > 0);
