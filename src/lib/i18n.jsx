@@ -906,7 +906,13 @@ const workspaceTranslations = {
   "Go back": { ru: "Назад", zh: "返回" },
   "Start over": { ru: "На главную", zh: "重新开始" },
   "Try again": { ru: "Попробовать снова", zh: "重试" },
-  "Home": { ru: "Главная", zh: "首页" }
+  "Home": { ru: "Главная", zh: "首页" },
+  "Verifying your email address…": { ru: "Проверка адреса электронной почты…", zh: "正在验证您的电子邮箱… " },
+  "This verification link is missing its code.": { ru: "В ссылке для подтверждения отсутствует код.", zh: "验证链接中缺少验证码。" },
+  "This verification link is invalid or expired.": { ru: "Ссылка для подтверждения недействительна или срок её действия истёк.", zh: "验证链接无效或已过期。" },
+  "Your email is verified. Your account is ready.": { ru: "Электронная почта подтверждена. Ваш аккаунт готов к работе.", zh: "您的电子邮箱已验证，账户现已可以使用。" },
+  "Verify email — Aevotron": { ru: "Подтверждение электронной почты — Aevotron", zh: "验证电子邮箱 — Aevotron" },
+  "Enter a code from your authenticator app": { ru: "Введите код из приложения-аутентификатора", zh: "请输入身份验证器应用中的验证码" }
   "Team & projects": { ru: "Команда и проекты", zh: "团队与项目" },
   "90 days": { ru: "90 дней", zh: "90 天" },
   "This app": { ru: "Это приложение", zh: "此应用" },
