@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(new URL("../" + path, import.meta.url), "utf8");
@@ -137,4 +137,24 @@ test("workspace uses accessible custom dropdowns instead of native select popups
   assert.match(component, /pointerdown/);\n  assert.match(component, /typeaheadRef/);\n  assert.match(component, /toLocaleLowerCase/);\n  assert.match(component, /event.key === "Enter"/);
   assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
+});
+
+test("all application routes and components avoid native select popups", async () => {
+  const collect = async (directory) => {
+    const entries = await readdir(new URL("../" + directory, import.meta.url), { withFileTypes: true });
+    const files = [];
+    for (const entry of entries) {
+      const relative = directory + "/" + entry.name;
+      if (entry.isDirectory()) files.push(...await collect(relative));
+      else if (/\\.(jsx|tsx)$/.test(entry.name)) files.push(relative);
+    }
+    return files;
+  };
+  const files = await collect("src");
+  const nativeSelects = [];
+  for (const file of files) {
+    const source = await read(file);
+    if (/<select(?:\\s|>)/.test(source)) nativeSelects.push(file);
+  }
+  assert.deepEqual(nativeSelects, [], `Native select controls remain in: ${nativeSelects.join(", ")}`);
 });
