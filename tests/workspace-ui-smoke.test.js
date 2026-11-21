@@ -106,7 +106,7 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   const css = await read("src/apple-style.css");
   assert.match(css, /:focus-visible/);
   assert.match(css, /:disabled/);
-  assert.match(css, /prefers-reduced-motion:\\s*reduce/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
   assert.match(css, /@media \\(max-width: 560px\\)/);
 });
@@ -119,4 +119,21 @@ test("all workspace native select controls use the shared modern dropdown theme"
   assert.match(css, /\.apple-app\[data-theme="dark"\] select option/);
   assert.match(css, /\.apple-app select:focus-visible/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.apple-app select/);
+});
+
+\ntest("workspace uses accessible custom dropdowns instead of native select popups", async () => {
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  const component = await read("src/components/ui/Dropdown.jsx");
+  const css = await read("src/apple-style.css");
+  assert.doesNotMatch(dashboard, /<select\\b/);
+  assert.match(dashboard, /<Dropdown/);
+  assert.match(component, /aria-haspopup="listbox"/);
+  assert.match(component, /role="listbox"/);
+  assert.match(component, /role="option"/);
+  assert.match(component, /ArrowDown/);
+  assert.match(component, /Home/);
+  assert.match(component, /Escape/);
+  assert.match(component, /pointerdown/);
+  assert.match(css, /\.av-dropdown-menu/);
+  assert.match(css, /data-theme="dark" \.av-dropdown-menu/);
 });
