@@ -9,11 +9,13 @@ import { MfaFlow } from "@/components/auth/MfaFlow";
 import { MfaScreen } from "@/components/auth/MfaParts";
 import { loginWithMfa } from "@/lib/authMfa";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { isDemoAuthEnabled, useAuth } from "@/lib/AuthContext";
 
 // The /login page. ?returnTo= (or the platform's ?from_url=) is where the visitor
 // goes after signing in — the login gate and the MCP consent page send people here with it.
 export function LoginPage() {
   const { t } = useTranslation();
+  const { signInDemo } = useAuth();
   const returnTo = safeReturnTo();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +28,12 @@ export function LoginPage() {
     setError("");
     setBusy(true);
     try {
+      const demoRequested = new URLSearchParams(window.location.search).get("demo") === "1";
+      if (demoRequested && isDemoAuthEnabled()) {
+        signInDemo(email);
+        window.location.assign("/dashboard");
+        return;
+      }
       const result = await loginWithMfa(email, password);
       if (result.mfa_required) {
         setMfaChallenge(result);
