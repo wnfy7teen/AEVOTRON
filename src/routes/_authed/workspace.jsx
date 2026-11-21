@@ -109,7 +109,7 @@ function WorkspaceChat() {
     if (!files.length) return;
     setFileError("");
     setIsProcessingFiles(true);
-    const allowed = new Set(["txt","md","markdown","csv","tsv","json","yaml","yml","xml","html","css","js","jsx","ts","tsx","py","go","rs","java","kt","sql","sh","bash","log","toml","ini","env.example"]);
+    const allowed = new Set(["txt","md","markdown","csv","tsv","json","yaml","yml","xml","html","css","js","jsx","ts","tsx","py","go","rs","java","kt","sql","sh","bash","log","toml","ini"]);
     const currentCount = attachments.length;
     let totalCharacters = attachments.reduce((sum, item) => sum + item.text.length, 0);
     const accepted = [];
@@ -184,8 +184,8 @@ function WorkspaceChat() {
     event?.preventDefault?.();
     const value = draft.trim();
     if ((!value && !attachments.length) || isStreaming || isProcessingFiles || !activeModel || demoMode) return;
-    const fileContext = attachments.map((file) => "[Attachment: " + file.name + "]\\n" + file.text + "\\n[End attachment]").join("\\n\\n");
-    const prompt = [value, fileContext].filter(Boolean).join("\\n\\n");
+    const fileContext = attachments.map((file) => "[BEGIN UNTRUSTED ATTACHMENT " + JSON.stringify(file.name.replace(/[\\r\\n\\[\\]]/g, "_")) + "]\n" + file.text + "\n[END UNTRUSTED ATTACHMENT]").join("\n\n");
+    const prompt = [value, fileContext].filter(Boolean).join("\n\n");
     if (prompt.length > 20_000) { setFileError(t("The message and attachments exceed the 20,000 character limit.")); return; }
     let sessionId = activeConversation;
     if (!demoMode && (!sessionId || sessionId === "current")) {
