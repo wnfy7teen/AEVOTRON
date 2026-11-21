@@ -749,6 +749,41 @@ async function handle(req, res) {
     return json(res, 201, { session: result.rows[0] });
   }
 
+  const chatBranchRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})\/branch$/i);
+  if (chatBranchRoute && req.method === "POST") {
+    const user = await requireUser(req, res); if (!user) return;
+    if (typeof body.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.message_id)) {
+      return fail(res, 400, "INVALID_BRANCH_MESSAGE", "Select a saved user message to branch from.");
+    }
+    const workspace = await currentWorkspace(user);
+    const source = await pool.query(
+      "SELECT id,title,model_id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+      [chatBranchRoute[1],workspace.id,user.id],
+    );
+    if (!source.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    const target = await pool.query(
+      "SELECT id,created_at FROM workspace_chat_messages WHERE id=$1 AND session_id=$2 AND workspace_id=$3 AND owner_user_id=$4 AND role='user'",
+      [body.message_id,chatBranchRoute[1],workspace.id,user.id],
+    );
+    if (!target.rowCount) return fail(res, 404, "CHAT_MESSAGE_NOT_FOUND", "The selected message was not found.");
+    const title = typeof body.title === "string" && body.title.trim()
+      ? body.title.trim().slice(0,120)
+      : (source.rows[0].title + " — branch").slice(0,120);
+    const created = await pool.query(
+      "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id,title,model_id,created_at,updated_at",
+      [workspace.id,user.id,title,source.rows[0].model_id],
+    );
+    await pool.query(
+      "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) SELECT $4,$2,$3,role,content,model_id,metadata FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 AND (created_at < $5 OR (created_at = $5 AND id <= $6)) ORDER BY created_at,id",
+      [chatBranchRoute[1],workspace.id,user.id,created.rows[0].id,target.rows[0].created_at,body.message_id],
+    );
+    const messages = await pool.query(
+      "SELECT id,role,content,model_id,metadata,created_at FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 ORDER BY created_at,id",
+      [created.rows[0].id,workspace.id,user.id],
+    );
+    return json(res, 201, { session: created.rows[0], messages: messages.rows });
+  }
+
   const chatSessionRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})$/i);
   if (chatSessionRoute && req.method === "GET") {
     const user = await requireUser(req, res); if (!user) return;
@@ -801,6 +836,9 @@ async function handle(req, res) {
     const [, providerCode, providerModel] = modelMatch;
     const providerConfig = getProvider(providerCode);
     if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    if (body.message_id !== undefined && (typeof body.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.message_id))) {
+      return fail(res, 400, "INVALID_CHAT_MESSAGE", "The message identifier is invalid.");
+    }
     if (body.replace_last_user_message !== undefined && typeof body.replace_last_user_message !== "boolean") {
       return fail(res, 400, "INVALID_CHAT_SESSION", "The message replacement option must be a boolean.");
     }
@@ -835,8 +873,8 @@ async function handle(req, res) {
       const latestPrompt = body.messages[body.messages.length - 1].content;
       if (body.replace_last_user_message === true) {
         const updatedUser = await pool.query(
-          "UPDATE workspace_chat_messages SET content=$2,model_id=$3 WHERE id=(SELECT id FROM workspace_chat_messages WHERE session_id=$1 AND role='user' ORDER BY created_at DESC,id DESC LIMIT 1) AND session_id=$1 RETURNING id,created_at",
-          [chatSessionId,latestPrompt,body.model],
+          "UPDATE workspace_chat_messages SET content=$2,model_id=$3 WHERE id=COALESCE($4,(SELECT id FROM workspace_chat_messages WHERE session_id=$1 AND role='user' ORDER BY created_at DESC,id DESC LIMIT 1)) AND session_id=$1 RETURNING id,created_at",
+          [chatSessionId,latestPrompt,body.model,body.message_id || null],
         );
         if (!updatedUser.rowCount) return fail(res, 409, "CHAT_MESSAGE_NOT_FOUND", "The message to edit no longer exists.");
         await pool.query(
@@ -844,10 +882,17 @@ async function handle(req, res) {
           [chatSessionId,updatedUser.rows[0].created_at],
         );
       } else if (body.persist_user_message !== false) {
-        await pool.query(
-          "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
-          [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
-        );
+        if (body.message_id) {
+          await pool.query(
+            "INSERT INTO workspace_chat_messages(id,session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,$4,'user',$5,$6)",
+            [body.message_id,chatSessionId,workspace.id,user.id,latestPrompt,body.model],
+          );
+        } else {
+          await pool.query(
+            "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
+            [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
+          );
+        }
       } else {
         await pool.query(
           "DELETE FROM workspace_chat_messages WHERE session_id=$1 AND role='assistant' AND created_at > (SELECT COALESCE(MAX(created_at),'epoch'::timestamptz) FROM workspace_chat_messages WHERE session_id=$1 AND role='user')",
