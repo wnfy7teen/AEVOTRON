@@ -788,7 +788,7 @@ const workspaceTranslations = {
   "TIME": { ru: "ВРЕМЯ", zh: "时间" },
   "MODEL": { ru: "МОДЕЛЬ", zh: "模型" },
   "CONTEXT": { ru: "КОНТЕКСТ", zh: "上下文" },
-  "ACCESS": { ru: "ДОСТУП", zh: "访问权限" }
+  "ACCESS": { ru: "ДОСТУП", zh: "访问权限" },
   "Sign in required": { ru: "Требуется войти", zh: "需要登录" },
   "Continue to sign in": { ru: "Перейти ко входу", zh: "继续登录" },
   "QR code for authenticator app setup": { ru: "QR-код для настройки приложения-аутентификатора", zh: "身份验证器应用设置二维码" },
