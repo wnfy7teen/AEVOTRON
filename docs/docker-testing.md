@@ -40,7 +40,7 @@ bundle is public.
 To build and run the HTTP smoke test manually:
 
 ```sh
-docker build -t aevotron:docker-preview .
+docker compose build
 sh docker-verify.sh
 ```
 
