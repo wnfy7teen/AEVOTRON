@@ -779,5 +779,9 @@
   "Connect a provider to load the models available to your account.": "Подключите провайдера, чтобы загрузить доступные вашему аккаунту модели.",
   "Revoke the Groq provider connection? Requests using it will stop working.": "Отозвать подключение Groq? Запросы через этого провайдера перестанут работать.",
   "{{provider}} is connected. Your credential is encrypted and hidden.": "{{provider}} подключён. Ключ зашифрован и скрыт.",
-  "Could not revoke this provider connection.": "Не удалось отозвать подключение провайдера."
+  "Could not revoke this provider connection.": "Не удалось отозвать подключение провайдера.",
+  "Could not load models from your provider. Test the connection and refresh.": "Не удалось загрузить модели провайдера. Проверьте подключение и повторите попытку.",
+  "Connect a provider to load the chat models available to your API key.": "Подключите провайдера, чтобы загрузить чат-модели, доступные вашему API-ключу.",
+  "Connect a provider to discover the models available to your account.": "Подключите провайдера, чтобы увидеть доступные вашему аккаунту модели.",
+  "Billed by the connected provider": "Оплата взимается подключённым провайдером"
 }
