@@ -61,7 +61,7 @@ describe("workspace theme", () => {
   });
 
   it("styles the model trust notice with readable light and dark variants", async () => {
-    const css = await readFile(new URL("../src/apple-style.css", import.meta.url), "utf8");
+    const css = await readFile("src/apple-style.css", "utf8");
 
     expect(css).toMatch(/\.apple-app \.mh-detail-info\s*\{[^}]*display:\s*flex/s);
     expect(css).toMatch(/\.apple-app \.mh-detail-info-icon\s*\{[^}]*flex:\s*0 0 32px/s);
