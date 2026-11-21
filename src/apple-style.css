@@ -2217,3 +2217,276 @@ html[data-theme="dark"] .apple-app .mh-model-card-bottom > span:last-child { col
   .apple-app .mh-model-card,
   .apple-app .mh-provider-filters button { transition: none; }
 }
+
+/* Workspace readability pass: typography and spacing only; preserve all existing colors and surfaces. */
+.apple-app .mh-content {
+  line-height: 1.5;
+}
+.apple-app .mh-content p,
+.apple-app .mh-content li {
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.apple-app .mh-content .mh-page-heading p,
+.apple-app .mh-content .mh-api-hero-main p {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.apple-app .mh-content .mh-section-heading h2 {
+  font-size: 21px;
+  line-height: 1.3;
+}
+.apple-app .mh-content .mh-section-heading p,
+.apple-app .mh-content .mh-panel-heading p,
+.apple-app .mh-content .mh-api-card-heading p,
+.apple-app .mh-content .mh-field-help,
+.apple-app .mh-content .mh-model-name small,
+.apple-app .mh-content .mh-model-context,
+.apple-app .mh-content .mh-provider-info small,
+.apple-app .mh-content .mh-popular-row small,
+.apple-app .mh-content .mh-key-main small,
+.apple-app .mh-content .mh-connected-row small,
+.apple-app .mh-content .av-setting-row small,
+.apple-app .mh-content .av-session-row small,
+.apple-app .mh-content .av-notification-row small {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.apple-app .mh-content .mh-panel-heading h3,
+.apple-app .mh-content .mh-docs-title h3,
+.apple-app .mh-content .mh-api-card-heading h3,
+.apple-app .mh-content .mh-api-section-head h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+.apple-app .mh-content .mh-step h3 {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.apple-app .mh-content .mh-step p,
+.apple-app .mh-content .mh-stat-note,
+.apple-app .mh-content .mh-trust-note,
+.apple-app .mh-content .mh-inline-error,
+.apple-app .mh-content .mh-inline-success,
+.apple-app .mh-content .mh-detail-info,
+.apple-app .mh-content .mh-callout p,
+.apple-app .mh-content .mh-doc-warning,
+.apple-app .mh-content .mh-secret-reveal > p,
+.apple-app .mh-content .mh-model-detail p,
+.apple-app .mh-content .mh-api-bottom-grid .mh-api-card > p,
+.apple-app .mh-content .av-settings-heading p,
+.apple-app .mh-content .av-setting-row small,
+.apple-app .mh-content .av-session-row small,
+.apple-app .mh-content .av-notification-row p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.apple-app .mh-content .mh-stat-label,
+.apple-app .mh-content .mh-field-label,
+.apple-app .mh-content .av-setting-field > span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.apple-app .mh-content .mh-model-name strong,
+.apple-app .mh-content .mh-popular-row strong,
+.apple-app .mh-content .mh-provider-info strong,
+.apple-app .mh-content .mh-key-main strong,
+.apple-app .mh-content .mh-connected-row strong,
+.apple-app .mh-content .av-setting-row strong,
+.apple-app .mh-content .av-session-row strong,
+.apple-app .mh-content .av-notification-row strong {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.apple-app .mh-content .mh-usage-table th {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.apple-app .mh-content .mh-usage-table td,
+.apple-app .mh-content .mh-usage-table td strong {
+  font-size: 13px;
+  line-height: 1.55;
+}
+.apple-app .mh-content .mh-usage-table td small {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.apple-app .mh-content .mh-api-reference-row,
+.apple-app .mh-content .mh-api-params {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.apple-app .mh-content .mh-api-params th,
+.apple-app .mh-content .mh-api-params td {
+  padding: 12px;
+  line-height: 1.55;
+}
+.apple-app .mh-content .mh-api-reference-row code,
+.apple-app .mh-content .mh-api-params code {
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.apple-app .mh-content .av-settings-heading h2 {
+  font-size: 21px;
+  line-height: 1.3;
+}
+.apple-app .mh-content .av-settings-subtitle {
+  font-size: 16px;
+  line-height: 1.4;
+}
+.apple-app .mh-content .av-settings-tabs button {
+  font-size: 14px;
+}
+.apple-app .mh-content .av-pagination {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Give documentation steps a stable number column and predictable vertical rhythm. */
+.apple-app .mh-docs-layout {
+  gap: 18px;
+}
+.apple-app .mh-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+.apple-app .mh-docs-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.apple-app .mh-docs-title h3 {
+  min-width: 0;
+  margin: 0;
+}
+.apple-app .mh-doc-step {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 700;
+}
+.apple-app .mh-docs > p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.apple-app .mh-docs .mh-endpoint,
+.apple-app .mh-docs .mh-code,
+.apple-app .mh-docs .mh-copy-button,
+.apple-app .mh-docs .mh-doc-warning {
+  margin-top: 0;
+}
+.apple-app .mh-docs .mh-doc-warning {
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.apple-app .mh-docs .mh-doc-warning svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+/* Consistent breathing room across panels, lists, forms and data views. */
+.apple-app .mh-content .mh-stats,
+.apple-app .mh-content .mh-steps {
+  gap: 16px;
+}
+.apple-app .mh-content .mh-bottom-grid,
+.apple-app .mh-content .mh-api-doc-grid {
+  gap: 18px;
+}
+.apple-app .mh-content .mh-panel-heading {
+  margin-bottom: 18px;
+}
+.apple-app .mh-content .mh-key-list {
+  gap: 12px;
+}
+.apple-app .mh-content .mh-key-row,
+.apple-app .mh-content .mh-connected-row {
+  gap: 20px;
+  padding: 17px 18px;
+}
+.apple-app .mh-content .mh-key-main {
+  gap: 8px;
+}
+.apple-app .mh-content .av-settings-grid {
+  gap: 18px;
+}
+.apple-app .mh-content .av-setting-field {
+  gap: 9px;
+}
+.apple-app .mh-content .av-setting-row,
+.apple-app .mh-content .av-session-row {
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.apple-app .mh-content .av-notification-row {
+  gap: 14px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.apple-app .mh-content .mh-api-docs {
+  gap: 20px;
+}
+.apple-app .mh-content .mh-api-card-heading {
+  gap: 12px;
+}
+.apple-app .mh-content .mh-api-reference h4 {
+  margin: 24px 0 12px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Do not ellipsize API-key identifiers; allow them to wrap inside their own row. */
+.apple-app .mh-content .mh-key-main code {
+  max-width: 100%;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+@media (max-width: 760px) {
+  .apple-app .mh-docs {
+    padding: 20px;
+    gap: 13px;
+  }
+  .apple-app .mh-content .mh-key-row,
+  .apple-app .mh-content .mh-connected-row {
+    padding: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .apple-app .mh-docs-title {
+    align-items: flex-start;
+  }
+  .apple-app .mh-doc-step {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+  }
+  .apple-app .mh-content .mh-panel-heading {
+    gap: 12px;
+  }
+  .apple-app .mh-content .mh-usage-table th,
+  .apple-app .mh-content .mh-usage-table td {
+    padding: 12px;
+  }
+}
