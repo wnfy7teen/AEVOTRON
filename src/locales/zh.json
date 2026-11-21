@@ -755,5 +755,13 @@
   "Go to next page": "转到下一页",
   "Toggle Sidebar": "切换侧边栏",
   "breadcrumb": "面包屑导航",
-  "More": "更多"
+  "More": "更多",
+  "Account": "账户",
+  "A single, OpenAI-compatible endpoint for text chat requests.": "用于文本聊天请求的统一 OpenAI 兼容接口。",
+  "Send your workspace key with every request.": "每次请求都需要附带您的工作空间密钥。",
+  "Required fields for a chat completion.": "聊天补全请求的必填字段。",
+  "EXAMPLE REQUEST": "请求示例",
+  "Make your first API call": "发起您的第一个 API 请求",
+  "What a successful request returns.": "成功请求的返回示例。",
+  "Rate limits and error handling.": "速率限制与错误处理。"
 }
