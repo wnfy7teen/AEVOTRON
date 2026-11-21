@@ -2830,3 +2830,5 @@ html[data-theme="dark"] .aw-context-trimmed { color:#d5b77d; }
 html[data-theme="dark"] .aw-model-search { border-color:#304252; background:#192733; color:#dce6ee; }
 html[data-theme="dark"] .aw-favorite-toggle:hover:not(:disabled) { border-color:#304252; }
 html[data-theme="dark"] .aw-favorite-toggle.is-favorite { color:#e2c17d; }
+
+.aw-statusbar { position:sticky; bottom:8px; z-index:5; }

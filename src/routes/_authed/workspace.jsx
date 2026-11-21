@@ -92,6 +92,8 @@ function WorkspaceChat() {
   const abortRef = useRef(null);
   const composerRef = useRef(null);
   const fileInputRef = useRef(null);
+  const threadRef = useRef(null);
+  const shouldAutoScrollRef = useRef(true);
   const modelContextLimit = Number(activeModel?.context_window || 0);
   const contextBudget = Number.isFinite(modelContextLimit) && modelContextLimit > 0
     ? Math.max(512, Math.min(24_000, modelContextLimit - 4_096))
@@ -154,6 +156,11 @@ function WorkspaceChat() {
       setActiveConversation(sessions[0].id);
     }
   }, [demoMode, sessionsQuery.data, activeConversation]);
+
+  useEffect(() => {
+    const node = threadRef.current;
+    if (node && shouldAutoScrollRef.current) node.scrollTop = node.scrollHeight;
+  }, [messages]);
 
   useEffect(() => {
     if (demoMode || !activeConversation || activeConversation === "current") return undefined;
@@ -272,6 +279,7 @@ function WorkspaceChat() {
       }
     }
     const userMessage = { id: crypto.randomUUID(), role: "user", content: prompt, createdAt: Date.now() };
+    shouldAutoScrollRef.current = true;
     const next = [...messages, userMessage];
     setMessages(next);
     setDraft("");
@@ -327,6 +335,7 @@ function WorkspaceChat() {
         return;
       }
     }
+    shouldAutoScrollRef.current = true;
     setMessages([]);
     setMetrics(null);
     setDraft("");
@@ -339,7 +348,9 @@ function WorkspaceChat() {
     if (isStreaming) stop();
     setChatError("");
     activeConversationRef.current = id;
+    shouldAutoScrollRef.current = true;
     setActiveConversation(id);
+    shouldAutoScrollRef.current = true;
     setMessages(conversations.find((item) => item.id === id)?.messages || []);
     setAttachments([]);
     setFileError("");
@@ -356,6 +367,7 @@ function WorkspaceChat() {
       skipSessionLoadRef.current = session.id;
       activeConversationRef.current = session.id;
       setActiveConversation(session.id);
+      shouldAutoScrollRef.current = true;
       setMessages(session.messages);
       setMetrics(null);
       sessionsQuery.refetch();
