@@ -636,7 +636,7 @@ function WorkspaceChatView() {
             {metrics?.usage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Provider usage")}: {metrics.usage.prompt_tokens ?? metrics.usage.input_tokens ?? "—"} {t("input")} / {metrics.usage.completion_tokens ?? metrics.usage.output_tokens ?? "—"} {t("output")}</span></div>}
             <div className="aw-status-metric"><span>{t("Output speed")}: {tokenRate === "—" ? "—" : (metrics?.usage ? "" : "~") + tokenRate + " tok/s"}</span></div>
             {sessionUsage && <div className="aw-status-metric"><FileText size={13}/><span>{t("Session usage")}: {sessionInputTokens.toLocaleString()} {t("input")} / {sessionOutputTokens.toLocaleString()} {t("output")} · {sessionRequestCount} {t("requests")}{sessionUsage.usage_estimated ? " · " + t("Estimated") : ""}</span></div>}
-            <div className="aw-status-cost">{t("Cost")}: {sessionCost == null ? t("Not reported") : sessionCost.toFixed(4) + " " + (sessionUsage.currency || "USD")}</div>
+            <div className="aw-status-cost">{sessionUsage?.usage_estimated ? t("Estimated cost") : t("Cost")}: {sessionCost == null ? t("Not reported") : (sessionUsage?.usage_estimated ? "~" : "") + sessionCost.toFixed(4) + " " + (sessionUsage.currency || "USD")}</div>
           </div>
           <p className="aw-disclaimer">{t("Token counts are estimates unless the provider returns usage. Cost and context limits are not inferred.")} {t("Only plain text and source code files are parsed locally in this version.")}</p>
         </section>
