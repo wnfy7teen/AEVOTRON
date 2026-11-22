@@ -278,6 +278,14 @@ test("Cloudflare Workers preview redirects every authenticated route to the isol
   assert.doesNotMatch(previewRoute, /requireSignedIn|AuthGate/);
 });
 
+test("public workspace preview lazy-loads the dashboard module behind a Suspense boundary", async () => {
+  const previewRoute = await read("src/routes/workspace-preview.jsx");
+  assert.match(previewRoute, /const PreviewDashboard = lazy\(\(\) =>\s*import\("\.\/_authed\/dashboard"\)/);
+  assert.match(previewRoute, /<Suspense fallback=\{<div role="status" aria-label="Loading workspace preview" \/>\}>/);
+  assert.match(previewRoute, /<PreviewDashboard \/>/);
+  assert.doesNotMatch(previewRoute, /import \{ PreviewDashboard \} from "\.\/_authed\/dashboard"/);
+});
+
 test("preview banner describes interactive local demo behavior accurately in all locales", async () => {
   const dashboard = await read("src/routes/_authed/dashboard.jsx");
   assert.match(dashboard, /Sample data · Interactive demo · Local changes only · No account or backend connection required/);
