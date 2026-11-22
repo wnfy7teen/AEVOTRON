@@ -109,7 +109,7 @@ async function main(){
     for(const lang of LANGUAGES){
       for(const [key,value] of Object.entries(catalogs[ns][lang])){
         if(typeof value!=="string")continue;
-        const matches=[...value.matchAll(/(?:\\.{3,}|…+|\\bTODO\\b|\\bFIXME\\b|\\bUntranslated\\b)/gi)];
+        const matches=[...value.matchAll(/(?:\.{3,}|…+|\bTODO\b|\bFIXME\b|\bUntranslated\b)/gi)];
         for(const match of matches)report.placeholderMatches.push({
           namespace:ns,language:lang,key,match:match[0],value
         });
@@ -186,7 +186,7 @@ async function main(){
   for(const [key,value] of Object.entries(report.summary))console.log(key+": "+value);
   console.log("Report: i18n-report.json");
   if(report.placeholderMatches.length){
-    console.warn("\\nPlaceholder scan matches (review; not all ellipses are errors):");
+    console.warn("\nPlaceholder scan matches (review; not all ellipses are errors):");
     for(const item of report.placeholderMatches)console.warn(" - ["+item.namespace+"/"+item.language+"] "+item.key+" contains "+JSON.stringify(item.match));
   }
   if(report.unresolved.length){
