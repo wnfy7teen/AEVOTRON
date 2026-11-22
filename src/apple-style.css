@@ -2955,3 +2955,116 @@ html[data-theme="dark"] .aw-shell :where(button, a, input, textarea, select):foc
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Quickstart: explicit theme tokens and readable documentation typography. */
+.apple-app .mh-docs-layout {
+  display: grid;
+  gap: 16px;
+  color: #17212b;
+}
+.apple-app .mh-docs-layout .mh-docs {
+  color: #17212b;
+  background: #ffffff;
+  border: 1px solid #d7e0e7;
+  box-shadow: 0 1px 2px rgba(22, 34, 46, .06);
+}
+.apple-app .mh-docs-layout .mh-docs-title h3 {
+  color: #17212b;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 650;
+}
+.apple-app .mh-docs-layout .mh-docs > p {
+  color: #465768;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.apple-app .mh-docs-layout .mh-doc-step {
+  color: #075d7c;
+  background: #e8f4f8;
+  border: 1px solid #b9dce8;
+  font-size: 12px;
+}
+.apple-app .mh-docs-layout .mh-endpoint {
+  color: #075d7c;
+  background: #f2f7fa;
+  border: 1px solid #cbd9e2;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.apple-app .mh-docs-layout .mh-code {
+  color: #263746;
+  background: #f4f7f9;
+  border: 1px solid #cbd6df;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.apple-app .mh-docs-layout .mh-copy-button {
+  color: #17465a;
+  background: #edf5f8;
+  border: 1px solid #bfd1dc;
+  font-size: 13px;
+}
+.apple-app .mh-docs-layout .mh-copy-button:hover {
+  color: #08394f;
+  border-color: #6d9db3;
+}
+.apple-app .mh-docs-layout .mh-doc-warning {
+  color: #694b0a;
+  border-color: #d9c78f;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.apple-app .mh-docs-layout .mh-button-quiet {
+  color: #17465a;
+  background: #f4f8fa;
+  border: 1px solid #c5d4de;
+  font-size: 13px;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout {
+  color: #e8eef3;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs {
+  color: #e8eef3;
+  background: #111a23;
+  border-color: #354957;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .24);
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs-title h3 {
+  color: #f1f5f8;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs > p {
+  color: #c0ccd5;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-doc-step {
+  color: #b9e8f8;
+  background: #173443;
+  border-color: #376477;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-endpoint {
+  color: #d8f28b;
+  background: #0b1219;
+  border-color: #3b4c5a;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-code {
+  color: #d7e4d1;
+  background: #0b1219;
+  border-color: #354957;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-copy-button,
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-button-quiet {
+  color: #d8eaf2;
+  background: #1a2b37;
+  border-color: #466273;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-copy-button:hover,
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-button-quiet:hover {
+  color: #ffffff;
+  border-color: #79b8d0;
+}
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-doc-warning {
+  color: #f1d99b;
+  border-color: #625331;
+}
