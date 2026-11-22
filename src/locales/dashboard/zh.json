@@ -166,5 +166,12 @@
   "Tools": "工具",
   "Streaming": "流式输出",
   "Streaming unavailable": "不支持流式输出",
-  "Model metadata not verified": "模型元数据尚未验证"
+  "Model metadata not verified": "模型元数据尚未验证",
+  "File input": "支持文件输入",
+  "Price not published": "未提供价格",
+  "Pricing reference available": "可查看定价参考",
+  "Attached files": "已附加文件",
+  "A maximum of 40 files is allowed, including files from folders and ZIP archives.": "最多可添加 40 个文件，包括文件夹和 ZIP 压缩包中的文件。",
+  "Attach files / ZIP": "添加文件 / ZIP",
+  "Add folder": "添加文件夹"
 }
