@@ -316,3 +316,13 @@ test("MFA method setup is lazy-loaded only when enrollment or factor management 
     assert.doesNotMatch(source, /import \{ MfaMethodSetup \} from/);
   }
 });
+
+test("MFA enrollment-only controls stay out of the shared verification chunk", async () => {
+  const shared = await read("src/components/auth/MfaParts.jsx");
+  const setup = await read("src/components/auth/MfaSetupParts.jsx");
+  const methodSetup = await read("src/components/auth/MfaMethodSetup.jsx");
+  assert.doesNotMatch(shared, /@\/components\/ui\/(command|popover)|\b(DialCodePicker|PhoneField|CopyKeyButton)\b/);
+  assert.match(setup, /from "@\/components\/ui\/command"/);
+  assert.match(setup, /from "@\/components\/ui\/popover"/);
+  assert.match(methodSetup, /from "@\/components\/auth\/MfaSetupParts"/);
+});
