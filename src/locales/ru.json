@@ -785,5 +785,7 @@
   "Connect a provider to discover the models available to your account.": "Подключите провайдера, чтобы увидеть доступные вашему аккаунту модели.",
   "Billed by the connected provider": "Оплата взимается подключённым провайдером",
   "AEVOTRON — AI Workspace": "AEVOTRON — AI-пространство",
-  "Chat with connected AI models.": "Общайтесь с подключёнными AI-моделями."
+  "Chat with connected AI models.": "Общайтесь с подключёнными AI-моделями.",
+  "Gray theme": "Серая тема",
+  "Switch to gray theme": "Переключить на серую тему"
 }
