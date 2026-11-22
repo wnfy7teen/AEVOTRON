@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, createElement, useContext, useState } from "react";
 import { createStore } from "zustand/vanilla";
 import { useStore } from "zustand";
 
@@ -72,7 +72,7 @@ export function createWorkspaceStore() {
 
 export function WorkspaceStoreProvider({ children }) {
   const [store] = useState(createWorkspaceStore);
-  return <WorkspaceStoreContext.Provider value={store}>{children}</WorkspaceStoreContext.Provider>;
+  return createElement(WorkspaceStoreContext.Provider, { value: store }, children);
 }
 
 export function useWorkspaceStore(selector) {
