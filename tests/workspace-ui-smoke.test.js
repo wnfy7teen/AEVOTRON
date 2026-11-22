@@ -278,3 +278,14 @@ test("preview banner describes interactive local demo behavior accurately in all
     assert.ok(translations["Sample data · Interactive demo · Local changes only · No account or backend connection required"], "Missing preview banner translation: " + locale);
   }
 });
+
+test("public preview dashboard disables all account and provider summary queries", async () => {
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(dashboard, /export function PreviewDashboard\(\)\s*\{\s*return <HomePage preview \/>/);
+  for (const queryKey of ["workspace-account-profile", "usage-summary", "provider-models"]) {
+    const query = dashboard.split('queryKey: ["' + queryKey + '"]')[1]?.split("});")[0] || "";
+    assert.match(query, /enabled: !preview/, "Preview must disable query: " + queryKey);
+  }
+  assert.match(dashboard, /enabled: !preview && tab === "Security"/);
+  assert.match(dashboard, /if \(preview\) \{\s*setLoading\(false\);\s*return undefined;/);
+});
