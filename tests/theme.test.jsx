@@ -72,6 +72,13 @@ describe("workspace theme", () => {
     expect(getAppThemePreference()).toBe("light");
   });
 
+  it("keeps every CSS color literal inside the centralized palette token block", async () => {
+    const css = await readFile("src/apple-style.css", "utf8");
+    const componentRules = css.replace(/^\\/\\*[\\s\\S]*?\\*\\/\\s*:root\\s*\\{[\\s\\S]*?\\}\\s*/, "");
+    expect(componentRules).not.toMatch(/#[0-9a-fA-F]{3,8}\\b|rgba?\\(/);
+    expect(css).not.toMatch(/#000000|#000\\b/i);
+  });
+
   it("styles the model trust notice with readable light and gray variants", async () => {
     const css = await readFile("src/apple-style.css", "utf8");
 
