@@ -240,7 +240,7 @@ function WorkspaceChatView() {
         const isZip = file.name.toLowerCase().endsWith(".zip");
         const candidates = isZip
           ? await extractSafeZip(file)
-          : [{ name: file.name, path: file.webkitRelativePath || file.name, size: file.size, readText: () => file.text() }];
+          : [{ name: file.name, path: file.webkitRelativePath || file.name, size: file.size, readText: async () => new TextDecoder("utf-8", { fatal: true }).decode(await file.arrayBuffer()) }];
         for (const candidate of candidates) {
           if (initialCount + accepted.length >= 40) { setFileError(t("A maximum of 40 files is allowed, including files from folders and ZIP archives.")); break; }
           const extension = candidate.name.includes(".") ? candidate.name.split(".").pop().toLowerCase() : "";
