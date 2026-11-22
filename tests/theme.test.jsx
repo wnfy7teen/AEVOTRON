@@ -77,6 +77,8 @@ describe("workspace theme", () => {
     const componentRules = css.replace(/^\/\*[\s\S]*?\*\/\s*:root\s*\{[\s\S]*?\}\s*/, "");
     expect(componentRules).not.toMatch(/#[0-9a-fA-F]{3,8}\b|rgba?\(/);
     expect(css).not.toMatch(/#000000|#000\b/i);
+    const paletteNames = [...css.matchAll(/^\\s*(--palette-[\\w-]+):/gm)].map((match) => match[1]);
+    expect(new Set(paletteNames).size).toBe(paletteNames.length);
   });
 
   it("styles the model trust notice with readable light and gray variants", async () => {
