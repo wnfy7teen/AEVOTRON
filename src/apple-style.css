@@ -4535,3 +4535,21 @@ html[data-theme="gray"] .apple-app .aw-model-option:hover{background:var(--palet
 html[data-theme="gray"] .apple-app .mh-button-primary,
 html[data-theme="gray"] .apple-app .aw-send-button{background:var(--palette-hex-0a84ff);border-color:var(--palette-hex-0a84ff);color:var(--palette-hex-ffffff)}
 html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
+
+
+/* File tree and persistent Workspace telemetry. */
+.apple-app .aw-attachment-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;padding:10px;border:1px solid var(--app-border);border-radius:12px;background:var(--app-page-subtle)}
+.apple-app .aw-attachment-tree-heading{display:flex;align-items:center;gap:7px;color:var(--app-muted);font-size:12px}
+.apple-app .aw-attachment-tree-heading strong{color:var(--app-text);font-weight:600}
+.apple-app .aw-attachment-tree-heading span{margin-left:auto;font-variant-numeric:tabular-nums}
+.apple-app .aw-attachment-tree{list-style:none;margin:0;padding:0 0 0 12px;display:flex;flex-direction:column;gap:4px}
+.apple-app > .aw-attachment-tree{padding-left:0}
+.apple-app .aw-attachment-tree summary{display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--app-muted);font-size:12px;list-style:none;padding:4px 2px}
+.apple-app .aw-attachment-tree summary::-webkit-details-marker{display:none}
+.apple-app .aw-attachment-file{display:flex;align-items:center;gap:8px;min-width:0;padding:4px 2px}
+.apple-app .aw-attachment-file label{display:flex;align-items:center;gap:7px;min-width:0;flex:1;color:var(--app-text);font-size:12px}
+.apple-app .aw-attachment-file label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apple-app .aw-attachment-file button{display:grid;place-items:center;width:24px;height:24px;border:0;border-radius:7px;background:transparent;color:var(--app-muted)}
+.apple-app .aw-attachment-file button:hover{background:var(--app-hover);color:var(--app-text)}
+.apple-app .aw-statusbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.apple-app .aw-status-model strong,.apple-app .aw-status-cost{font-variant-numeric:tabular-nums}
