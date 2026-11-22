@@ -90,8 +90,12 @@ export async function extractSafeZip(file) {
     if (entry.isDirectory) continue;
     const extension = entry.path.includes(".") ? entry.path.split(".").pop().toLowerCase() : "";
     if (!TEXT_EXTENSIONS.has(extension)) continue;
+    const localFlags = view.getUint16(entry.localOffset + 6, true);
+    const localMethod = view.getUint16(entry.localOffset + 8, true);
     const localNameLength = view.getUint16(entry.localOffset + 26, true);
     const localExtraLength = view.getUint16(entry.localOffset + 28, true);
+    const localName = decoder.decode(bytes.subarray(entry.localOffset + 30, entry.localOffset + 30 + localNameLength));
+    if (localMethod !== entry.method || (localFlags & 0x0001) || localName !== entry.rawName) throw new Error("ZIP local and central directory metadata do not match.");
     const dataStart = entry.localOffset + 30 + localNameLength + localExtraLength;
     const dataEnd = dataStart + entry.compressedSize;
     if (dataEnd > centralOffset || dataEnd > bytes.length) throw new Error("ZIP entry data overlaps its directory or is truncated.");
