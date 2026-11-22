@@ -3449,3 +3449,65 @@ html[data-theme="dark"] :is(.apple-app, .aw-shell) :is(
 @media (prefers-reduced-motion: reduce) {
   .apple-app *, .aw-shell * { transition-duration: 0.01ms !important; }
 }
+
+/* Statistics cards: deterministic vertical layout and non-growing numeric values. */
+.apple-app .mh-stat{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:8px;
+  min-width:0;
+  box-sizing:border-box;
+  text-align:left;
+  text-align-last:auto;
+  overflow:hidden;
+}
+.apple-app .mh-stat > *{min-width:0;max-width:100%;box-sizing:border-box;}
+.apple-app .mh-stat-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;
+  height:20px;
+  min-width:20px;
+  min-height:20px;
+  flex:0 0 20px;
+  overflow:hidden;
+}
+.apple-app .mh-stat-icon svg{display:block;width:17px;height:17px;min-width:17px;min-height:17px;flex:0 0 17px;}
+.apple-app .mh-stat-label,.apple-app .mh-stat-note{
+  display:block;
+  width:100%;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:left;
+  text-align-last:auto;
+  letter-spacing:normal;
+  line-height:1.35;
+}
+.apple-app .mh-stat-value{
+  display:inline-block;
+  flex:0 0 auto;
+  width:fit-content;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+  color:#1d1d1f;
+  font-size:27px;
+  line-height:1;
+  letter-spacing:-.035em;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  text-align:left;
+  text-align-last:auto;
+  text-justify:auto;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+.apple-app .mh-stat-value :where(span,strong,em){display:inline;max-width:100%;letter-spacing:inherit;}
+.apple-app .mh-stat-note{white-space:normal;overflow-wrap:anywhere;}
+.apple-app *{box-sizing:border-box;}
