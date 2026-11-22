@@ -6,12 +6,20 @@ describe("Workspace Zustand slices", () => {
     const first = createWorkspaceStore();
     const second = createWorkspaceStore();
     first.getState().setSelectedModelId("groq/model-a");
+    first.getState().setModels([{ id: "groq/model-a" }]);
+    first.getState().setFavoriteModelIds(["groq/model-a"]);
+    first.getState().setRecentModelIds(["groq/model-a"]);
     first.getState().appendMessage({ id: "m1", role: "user", content: "hello" });
     first.getState().setAttachments([{ id: "f1", name: "notes.txt" }]);
     first.getState().setMetrics({ ttftMs: 120 });
+    first.getState().setSessionUsage({ total_input_tokens: 10 });
     first.getState().setIsStreaming(true);
 
     expect(first.getState().selectedModelId).toBe("groq/model-a");
+    expect(first.getState().models).toHaveLength(1);
+    expect(first.getState().favoriteModelIds).toEqual(["groq/model-a"]);
+    expect(first.getState().recentModelIds).toEqual(["groq/model-a"]);
+    expect(first.getState().sessionUsage.total_input_tokens).toBe(10);
     expect(first.getState().messages).toHaveLength(1);
     expect(first.getState().attachments).toHaveLength(1);
     expect(first.getState().metrics.ttftMs).toBe(120);
