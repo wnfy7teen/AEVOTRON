@@ -4543,7 +4543,7 @@ html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--pa
 .apple-app .aw-attachment-tree-heading strong{color:var(--app-text);font-weight:600}
 .apple-app .aw-attachment-tree-heading span{margin-left:auto;font-variant-numeric:tabular-nums}
 .apple-app .aw-attachment-tree{list-style:none;margin:0;padding:0 0 0 12px;display:flex;flex-direction:column;gap:4px}
-.apple-app > .aw-attachment-tree{padding-left:0}
+.apple-app .aw-attachment-list > .aw-attachment-tree{padding-left:0}
 .apple-app .aw-attachment-tree summary{display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--app-muted);font-size:12px;list-style:none;padding:4px 2px}
 .apple-app .aw-attachment-tree summary::-webkit-details-marker{display:none}
 .apple-app .aw-attachment-file{display:flex;align-items:center;gap:8px;min-width:0;padding:4px 2px}
