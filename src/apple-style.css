@@ -4599,3 +4599,21 @@ html[data-theme="gray"] .apple-app .mh-avatar{background:var(--app-hover);backgr
 .apple-app .min-h-screen.bg-background>div>div:first-child>div:first-child{
   background:var(--app-hover);background-image:none;color:var(--app-text);box-shadow:none
 }
+
+
+/* Dashboard footer: readable neutral text in the graphite theme. */
+html[data-theme="gray"] .apple-app .mh-footer {
+  color: var(--palette-hex-c2c2c7);
+  border-top-color: var(--palette-hex-3a3a3c);
+}
+html[data-theme="gray"] .apple-app .mh-footer > span:first-child,
+html[data-theme="gray"] .apple-app .mh-footer > span:last-child {
+  color: var(--palette-hex-a1a1a6);
+}
+html[data-theme="gray"] .apple-app .mh-footer-dot {
+  background: var(--palette-hex-34c759);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--palette-hex-34c759) 35%, transparent);
+}
+html[data-theme="gray"] .apple-app .mh-footer-sep {
+  color: var(--palette-hex-636366);
+}
