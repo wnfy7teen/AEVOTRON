@@ -86,12 +86,15 @@ function WorkspaceChatView() {
     retry: false,
     staleTime: 60_000,
   });
-  const models = modelQuery.data || [];
+  const models = useWorkspaceStore((state) => state.models);
+  const setModels = useWorkspaceStore((state) => state.setModels);
   const selectedModel = useWorkspaceStore((state) => state.selectedModelId);
   const setSelectedModel = useWorkspaceStore((state) => state.setSelectedModelId);
   const [modelSearch, setModelSearch] = useState("");
-  const [favoriteModels, setFavoriteModels] = useState([]);
-  const [recentModels, setRecentModels] = useState([]);
+  const favoriteModels = useWorkspaceStore((state) => state.favoriteModelIds);
+  const setFavoriteModels = useWorkspaceStore((state) => state.setFavoriteModelIds);
+  const recentModels = useWorkspaceStore((state) => state.recentModelIds);
+  const setRecentModels = useWorkspaceStore((state) => state.setRecentModelIds);
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const activeModel = models.find((model) => model.id === selectedModel) || models[0] || null;
   const messages = useWorkspaceStore((state) => state.messages);
@@ -105,6 +108,8 @@ function WorkspaceChatView() {
   const selectedAttachments = attachments.filter((file) => selectedAttachmentIds.includes(file.id));
   const attachmentTree = useMemo(() => buildAttachmentTree(attachments), [attachments]);
   const [fileError, setFileError] = useState("");
+  const isDraggingFiles = useWorkspaceStore((state) => state.isDraggingFiles);
+  const setDraggingFiles = useWorkspaceStore((state) => state.setDraggingFiles);
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
@@ -122,7 +127,8 @@ function WorkspaceChatView() {
   const metrics = useWorkspaceStore((state) => state.metrics);
   const setMetrics = useWorkspaceStore((state) => state.setMetrics);
   const chatUsageQuery = useQuery({ queryKey: ["workspace-chat-usage", activeConversation], queryFn: () => api.workspace.getChatUsage(activeConversation), enabled: !demoMode && activeConversation !== "current", staleTime: 0, refetchOnWindowFocus: false });
-  const sessionUsage = chatUsageQuery.data?.usage || null;
+  const sessionUsage = useWorkspaceStore((state) => state.sessionUsage);
+  const setSessionUsage = useWorkspaceStore((state) => state.setSessionUsage);
   const [compareOpen, setCompareOpen] = useState(false);
   const [compareSelection, setCompareSelection] = useState([]);
   const [compareResults, setCompareResults] = useState([]);
@@ -159,6 +165,14 @@ function WorkspaceChatView() {
   const isFavoriteModel = Boolean(activeModel && favoriteModels.includes(activeModel.id));
   const contextTruncated = contextMessages.length < messages.length;
   const filteredConversations = conversations.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
+
+  useEffect(() => {
+    if (modelQuery.data) setModels(modelQuery.data);
+  }, [modelQuery.data, setModels]);
+
+  useEffect(() => {
+    setSessionUsage(chatUsageQuery.data?.usage || null);
+  }, [chatUsageQuery.data, setSessionUsage]);
 
   useEffect(() => {
     try {
@@ -606,7 +620,7 @@ function WorkspaceChatView() {
             {messages.length === 0 ? <div className="aw-empty-state"><h2>{t("A clear space for your next idea.")}</h2><p>{t("Ask a question, explore an idea, or work through a technical problem.")}</p><div className="aw-prompt-suggestions">{[t("Explain a complex concept simply"),t("Review this code for potential issues"),t("Help me plan a technical project")].map((item) => <button key={item} type="button" onClick={() => {setDraft(item);composerRef.current?.focus();}} disabled={demoMode || !activeModel}>{item}<ArrowUp size={14}/></button>)}</div></div> : messages.map((message) => <article key={message.id} className={"aw-message aw-message-" + message.role}><div className="aw-message-avatar">{message.role === "assistant" ? <span aria-hidden="true">A</span> : <span>Y</span>}</div><div className="aw-message-body"><div className="aw-message-meta"><strong>{message.role === "assistant" ? (activeModel?.provider_model_id || t("Assistant")) : t("You")}</strong>{message.role === "assistant" && <span>{providerName}</span>}</div>{editingId === message.id ? <div className="aw-edit-box"><textarea value={editValue} onChange={(event) => setEditValue(event.target.value)} rows={4}/><div><button type="button" onClick={() => setEditingId(null)}>{t("Cancel")}</button><button type="button" onClick={() => saveEdit(message.id)}>{t("Save and resend")}</button></div></div> : <div className="aw-message-content">{message.role === "assistant" && message.content ? <ReactMarkdown>{message.content}</ReactMarkdown> : message.content || (isStreaming && message.role === "assistant" ? <span className="aw-thinking">{t("Thinking")}<i/><i/><i/></span> : null)}{message.error && <p className="aw-message-error">{message.error}</p>}{message.role === "assistant" && message.error && !isStreaming && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Retry")}</button>}</div>}{message.role === "user" && !isStreaming && message.id === messages.filter((item) => item.role === "user").slice(-1)[0]?.id && <button className="aw-message-action" type="button" onClick={() => {setEditingId(message.id);setEditValue(message.content);}}><Pencil size={13}/>{t("Edit")}</button>}{(message.role === "user" || (message.role === "assistant" && message.content)) && !isStreaming && !demoMode && <button className="aw-message-action" type="button" onClick={() => branchFromMessage(message)}><GitBranch size={13}/>{t("Branch here")}</button>}{message.role === "assistant" && message.content && !isStreaming && message.id === messages[messages.length - 1]?.id && <button className="aw-message-action" type="button" onClick={regenerate}><RefreshCw size={13}/>{t("Regenerate")}</button>}</div></article>)}
           </div>
 
-          <form className="aw-composer" onSubmit={send} onDragOver={(event) => event.preventDefault()} onDrop={(event) => {event.preventDefault();addFiles(event.dataTransfer?.files);}}>
+          <form className={"aw-composer" + (isDraggingFiles ? " is-dragging" : "")} onSubmit={send} onDragEnter={(event) => {event.preventDefault();setDraggingFiles(true);}} onDragOver={(event) => event.preventDefault()} onDragLeave={(event) => {if (!event.currentTarget.contains(event.relatedTarget)) setDraggingFiles(false);}} onDrop={(event) => {event.preventDefault();setDraggingFiles(false);addFiles(event.dataTransfer?.files);}}>
             <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".zip,.txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
             <input className="aw-hidden-file-input" type="file" multiple webkitdirectory="" directory="" onChange={(event) => {addFiles(event.target.files);event.target.value="";}} aria-label={t("Add a folder")}/>
             {attachments.length > 0 && <div className="aw-attachment-list"><div className="aw-attachment-tree-heading"><Folder size={14}/><strong>{t("Attached files")}</strong><span>{attachments.length}/40</span></div><AttachmentTree nodes={attachmentTree} selectedIds={selectedAttachmentIds} t={t} onToggle={(id, checked) => setSelectedAttachmentIds((items) => checked ? [...items, id] : items.filter((item) => item !== id))} onRemove={(id) => {setAttachments((items) => items.filter((item) => item.id !== id));setSelectedAttachmentIds((items) => items.filter((item) => item !== id));}}/></div>}
