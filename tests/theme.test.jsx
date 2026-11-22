@@ -77,8 +77,8 @@ describe("workspace theme", () => {
 
     expect(css).toMatch(/\.apple-app \.mh-detail-info\s*\{[^}]*display:\s*flex/s);
     expect(css).toMatch(/\.apple-app \.mh-detail-info-icon\s*\{[^}]*flex:\s*0 0 32px/s);
-    expect(css).toMatch(/\.apple-app\[data-theme="gray"\] \.mh-detail-info\s*\{[^}]*color:\s*#c3def7/s);
-    expect(css).toMatch(/\.apple-app\[data-theme="gray"\] \.mh-detail-info-icon\s*\{[^}]*color:\s*#a9d7ff/s);
+    expect(css).toMatch(/\.apple-app\[data-theme="gray"\] \.mh-detail-info\s*\{[^}]*color:\s*var\(--palette-hex-c3def7\)/s);
+    expect(css).toMatch(/\.apple-app\[data-theme="gray"\] \.mh-detail-info-icon\s*\{[^}]*color:\s*var\(--palette-hex-a9d7ff\)/s);
   });
 
   it("provides gray-theme overrides for workspace surfaces, typography, controls and navigation", async () => {
