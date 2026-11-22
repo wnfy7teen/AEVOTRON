@@ -21,7 +21,8 @@
     "i18n:fix": "node scripts/check-i18n.js --fix",
     "prebuild": "npm run i18n:fix && npm run i18n:check",
     "prebuild:cloudflare": "npm run i18n:fix && npm run i18n:check",
-    "predeploy:cloudflare": "npm run i18n:fix && npm run i18n:check"
+    "predeploy:cloudflare": "npm run i18n:fix && npm run i18n:check",
+    "predeploy": "npm run i18n:fix && npm run i18n:check"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
