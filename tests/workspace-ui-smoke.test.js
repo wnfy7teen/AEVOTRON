@@ -226,3 +226,17 @@ test("workspace sidebar has stable desktop geometry and a working mobile drawer"
   assert.match(css, /\.mh-main \{[^}]*margin-left:0;/);
   assert.match(css, /@media \(max-width:760px\)[\s\S]*?\.mh-sidebar \{[^}]*position:fixed;[^}]*transform:translateX\(-105%\);[\s\S]*?\.mh-sidebar\.mh-sidebar-open \{[^}]*transform:translateX\(0\);/);
 });
+
+
+test("dashboard footer has readable text and a distinct status indicator in the gray theme", async () => {
+  const css = await read("src/apple-style.css");
+  const theme = await read("src/lib/ThemeSwitcher.jsx");
+  const root = await read("src/routes/__root.jsx");
+  assert.match(root, /className="apple-app app-route-transition"/);
+  assert.match(theme, /document\.documentElement\.dataset\.theme = theme/);
+  assert.match(theme, /element\.dataset\.theme = theme/);
+  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer\s*\{[^}]*color:\s*var\(--palette-hex-c2c2c7\)/);
+  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer > span:first-child[\s\S]*?color:\s*var\(--palette-hex-a1a1a6\)/);
+  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-dot\s*\{[^}]*background:\s*var\(--palette-hex-34c759\)/);
+  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-sep\s*\{[^}]*color:\s*var\(--palette-hex-636366\)/);
+});
