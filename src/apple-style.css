@@ -4595,3 +4595,7 @@ html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai.active{
 }
 html[data-theme="gray"] .apple-app .mh-workspace-icon,
 html[data-theme="gray"] .apple-app .mh-avatar{background:var(--app-hover);background-image:none;color:var(--app-muted)}
+
+.apple-app .min-h-screen.bg-background>div>div:first-child>div:first-child{
+  background:var(--app-hover);background-image:none;color:var(--app-text);box-shadow:none
+}
