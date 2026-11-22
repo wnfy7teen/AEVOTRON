@@ -249,4 +249,6 @@ test("read-only workspace preview never mounts live provider, API key or usage p
   assert.match(source, /section === "Usage & logs" && \(preview \? <PreviewReadOnlySection title=\{t\("Usage & logs"\)\}\/> : <UsageDashboard\/>\)/);
   assert.match(source, /function PreviewReadOnlySection\(\{ title \}\)/);
   assert.match(source, /Sample data · Read-only mode · No account or backend connection required/);
+  assert.match(source, /disabled=\{preview && item\.name === "AI Workspace"\}/);
+  assert.match(source, /onClick=\{\(\) => modelQuery\.refetch\(\)\} disabled=\{preview \|\| modelQuery\.isFetching\}/);
 });
