@@ -27,10 +27,30 @@ function crc32(bytes) {
   return (crc ^ 0xffffffff) >>> 0;
 }
 
-async function inflateRaw(bytes) {
+async function inflateRaw(bytes, maxOutputBytes) {
   if (typeof DecompressionStream !== "function") throw new Error("This browser does not support safe ZIP extraction. Extract the archive locally and upload its text files.");
   const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
-  return new Uint8Array(await new Response(stream).arrayBuffer());
+  const reader = stream.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxOutputBytes) {
+        await reader.cancel().catch(() => {});
+        throw new Error("ZIP entry expands beyond its declared safe size.");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const output = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { output.set(chunk, offset); offset += chunk.byteLength; }
+  return output;
 }
 
 export async function extractSafeZip(file) {
@@ -86,6 +106,7 @@ export async function extractSafeZip(file) {
   if (cursor !== centralOffset + centralSize) throw new Error("ZIP central directory size does not match its entries.");
 
   const extracted = [];
+  let actualExpandedTotal = 0;
   for (const entry of metadata) {
     if (entry.isDirectory) continue;
     const extension = entry.path.includes(".") ? entry.path.split(".").pop().toLowerCase() : "";
@@ -95,12 +116,14 @@ export async function extractSafeZip(file) {
     const localNameLength = view.getUint16(entry.localOffset + 26, true);
     const localExtraLength = view.getUint16(entry.localOffset + 28, true);
     const localName = decoder.decode(bytes.subarray(entry.localOffset + 30, entry.localOffset + 30 + localNameLength));
-    if (localMethod !== entry.method || (localFlags & 0x0001) || localName !== entry.rawName) throw new Error("ZIP local and central directory metadata do not match.");
+    if (localMethod !== entry.method || localFlags !== (view.getUint16(entry.localOffset + 6, true)) || (localFlags & 0x0001) || localName !== entry.rawName) throw new Error("ZIP local and central directory metadata do not match.");
     const dataStart = entry.localOffset + 30 + localNameLength + localExtraLength;
     const dataEnd = dataStart + entry.compressedSize;
     if (dataEnd > centralOffset || dataEnd > bytes.length) throw new Error("ZIP entry data overlaps its directory or is truncated.");
     const compressed = bytes.subarray(dataStart, dataEnd);
-    const content = entry.method === 0 ? compressed.slice() : await inflateRaw(compressed);
+    const content = entry.method === 0 ? compressed.slice() : await inflateRaw(compressed, Math.min(entry.expandedSize, ZIP_LIMITS.entryBytes));
+    actualExpandedTotal += content.byteLength;
+    if (actualExpandedTotal > ZIP_LIMITS.totalBytes) throw new Error("ZIP expanded content exceeds the 2 MB total limit.");
     if (content.byteLength !== entry.expandedSize || crc32(content) !== entry.checksum) throw new Error("ZIP entry failed its size or integrity check.");
     let text;
     try { text = new TextDecoder("utf-8", { fatal: true }).decode(content); }
