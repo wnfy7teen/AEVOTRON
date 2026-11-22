@@ -100,7 +100,7 @@ export async function extractSafeZip(file) {
     totalExpanded += expandedSize;
     if (totalExpanded > ZIP_LIMITS.totalBytes) throw new Error("ZIP expanded content exceeds the 2 MB total limit.");
     if (localOffset + 30 > bytes.length || view.getUint32(localOffset, true) !== 0x04034b50) throw new Error("ZIP local file header is invalid.");
-    metadata.push({ path, isDirectory, method, checksum, compressedSize, expandedSize, localOffset, rawName });
+    metadata.push({ path, isDirectory, flags, method, checksum, compressedSize, expandedSize, localOffset, rawName });
     cursor = end;
   }
   if (cursor !== centralOffset + centralSize) throw new Error("ZIP central directory size does not match its entries.");
@@ -116,7 +116,7 @@ export async function extractSafeZip(file) {
     const localNameLength = view.getUint16(entry.localOffset + 26, true);
     const localExtraLength = view.getUint16(entry.localOffset + 28, true);
     const localName = decoder.decode(bytes.subarray(entry.localOffset + 30, entry.localOffset + 30 + localNameLength));
-    if (localMethod !== entry.method || localFlags !== (view.getUint16(entry.localOffset + 6, true)) || (localFlags & 0x0001) || localName !== entry.rawName) throw new Error("ZIP local and central directory metadata do not match.");
+    if (localMethod !== entry.method || localFlags !== entry.flags || (localFlags & 0x0001) || localName !== entry.rawName) throw new Error("ZIP local and central directory metadata do not match.");
     const dataStart = entry.localOffset + 30 + localNameLength + localExtraLength;
     const dataEnd = dataStart + entry.compressedSize;
     if (dataEnd > centralOffset || dataEnd > bytes.length) throw new Error("ZIP entry data overlaps its directory or is truncated.");
