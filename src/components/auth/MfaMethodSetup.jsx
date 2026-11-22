@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import { MfaNotice, ResendLine, useCooldown, CodeField } from "@/components/auth/MfaParts";
 import {
-  CodeField, CopyKeyButton, INVALID_PHONE, MfaNotice, PhoneField, ResendLine,
-  defaultDialCode, isPlausiblePhone, isTouchDevice, useCooldown,
+  CopyKeyButton, INVALID_PHONE, PhoneField, defaultDialCode, isPlausiblePhone, isTouchDevice,
 } from "@/components/auth/MfaSetupParts";
 
 const SMS_RESEND_SECONDS = 30;
