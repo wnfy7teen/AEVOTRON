@@ -9,7 +9,19 @@ export function readDemoUser() {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.sessionStorage.getItem(DEMO_AUTH_STORAGE_KEY);
-    if (!raw) return null;
+    if (!raw) {
+      // Cloudflare Workers Preview is intentionally a backend-free demo surface.
+      // Provide a local demo identity so protected routes never call /api/v1/auth/me.
+      if (!isDemoAuthEnabled()) return null;
+      return {
+        id: "demo-user",
+        email: "demo@aevotron.local",
+        display_name: "Preview User",
+        role: "user",
+        email_verified: true,
+        demo: true,
+      };
+    }
     const saved = JSON.parse(raw);
     if (saved?.authenticated !== true) return null;
     return {
