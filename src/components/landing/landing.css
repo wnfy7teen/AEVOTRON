@@ -1330,3 +1330,93 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   }
 }
 
+
+
+/* Landing theme picker — compact macOS segmented control. */
+.av-site .av-header .av-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 2px;
+  min-height: 40px;
+  padding: 3px;
+  border: 1px solid #d9d9de;
+  border-radius: 11px;
+  background: #f2f2f7;
+  box-shadow: none;
+}
+.av-site .av-header .av-theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #626269;
+  font: 500 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  box-shadow: none;
+  transform: none;
+  transition: color 150ms ease-out, background-color 150ms ease-out, border-color 150ms ease-out;
+}
+.av-site .av-header .av-theme-switch button.active {
+  background: #fff;
+  border-color: #e5e5ea;
+  color: #1d1d1f;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+.av-site .av-header .av-theme-switch button:hover:not(.active) {
+  background: rgba(255,255,255,.62);
+  color: #1d1d1f;
+}
+.av-site .av-header .av-theme-switch button:focus-visible {
+  outline: 2px solid #007aff;
+  outline-offset: 2px;
+}
+.av-site[data-theme="dark"] .av-header .av-theme-switch {
+  background: #2c2c2e;
+  border-color: #3a3a3c;
+}
+.av-site[data-theme="dark"] .av-header .av-theme-switch button {
+  color: #c2c2c7;
+}
+.av-site[data-theme="dark"] .av-header .av-theme-switch button.active {
+  background: #48484a;
+  border-color: #5a5a5e;
+  color: #f5f5f7;
+  box-shadow: none;
+}
+.av-site[data-theme="dark"] .av-header .av-theme-switch button:hover:not(.active) {
+  background: #38383a;
+  color: #f5f5f7;
+}
+@media (max-width: 900px) {
+  .av-site .av-header .av-theme-switch button {
+    min-width: 62px;
+    width: auto;
+    padding: 0 9px;
+  }
+}
+@media (max-width: 600px) {
+  .av-site .av-header .av-theme-switch {
+    min-height: 36px;
+    padding: 2px;
+    border-radius: 9px;
+  }
+  .av-site .av-header .av-theme-switch button {
+    min-width: 56px;
+    min-height: 30px;
+    height: 30px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-site .av-header .av-theme-switch button { transition: none; }
+}
