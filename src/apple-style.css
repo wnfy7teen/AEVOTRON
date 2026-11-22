@@ -4566,3 +4566,32 @@ html[data-theme="gray"] .apple-app .mh-mobile-menu{background:var(--app-card);co
 
 .apple-app .aw-model-details{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .apple-app .aw-model-badge{display:inline-flex;align-items:center;min-height:22px;padding:3px 7px;border:1px solid var(--app-border);border-radius:999px;background:var(--app-page-subtle);color:var(--app-muted);font-size:10px;font-weight:550;line-height:1.25}
+
+
+/* Remove decorative AI gradients and keep all workspace iconography monochrome. */
+.apple-app .mh-brand-mark{background:var(--app-accent);background-image:none;color:var(--palette-hex-ffffff);box-shadow:none}
+.apple-app .mh-workspace-icon,.apple-app .mh-avatar{background:var(--app-hover);background-image:none;color:var(--app-muted);box-shadow:none}
+.apple-app .mh-progress i{background:var(--app-accent);background-image:none}
+.apple-app .mh-preview-banner,.apple-app .mh-api-hero,.apple-app .min-h-screen.bg-background{
+  background:var(--app-card);background-image:none;color:var(--app-text);border-color:var(--app-border);box-shadow:none
+}
+.apple-app .mh-api-hero::after{display:none}
+.apple-app .mh-nav-item.mh-nav-item-ai,
+.apple-app .mh-nav-item.mh-nav-item-ai:hover,
+.apple-app .mh-nav-item.mh-nav-item-ai.active{
+  border-color:var(--app-border);background:var(--app-card);background-image:none;color:var(--app-muted);box-shadow:none;transform:none
+}
+.apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy strong{color:var(--app-text)}
+.apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy small{color:var(--app-muted)}
+.apple-app .mh-nav-item.mh-nav-item-ai::before{background:var(--app-accent)}
+.apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-cta{background:var(--app-accent);color:var(--palette-hex-ffffff)}
+html[data-theme="gray"] .apple-app .mh-preview-banner,
+html[data-theme="gray"] .apple-app .mh-api-hero,
+html[data-theme="gray"] .apple-app .min-h-screen.bg-background,
+html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai,
+html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai:hover,
+html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai.active{
+  background:var(--app-card);background-image:none;color:var(--app-text);border-color:var(--app-border);box-shadow:none
+}
+html[data-theme="gray"] .apple-app .mh-workspace-icon,
+html[data-theme="gray"] .apple-app .mh-avatar{background:var(--app-hover);background-image:none;color:var(--app-muted)}
