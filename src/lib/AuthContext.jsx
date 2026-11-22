@@ -7,34 +7,32 @@ export const DEMO_AUTH_STORAGE_KEY = "aevotron-demo-auth";
 
 export function readDemoUser() {
   if (typeof window === "undefined") return null;
+  const previewUser = {
+    id: "demo-user",
+    email: "demo@aevotron.local",
+    display_name: "Preview User",
+    role: "user",
+    email_verified: true,
+    demo: true,
+  };
   try {
     const raw = window.sessionStorage.getItem(DEMO_AUTH_STORAGE_KEY);
-    if (!raw) {
-      // Cloudflare Workers Preview is intentionally a backend-free demo surface.
-      // Provide a local demo identity so protected routes never call /api/v1/auth/me.
-      if (!isDemoAuthEnabled()) return null;
-      return {
-        id: "demo-user",
-        email: "demo@aevotron.local",
-        display_name: "Preview User",
-        role: "user",
-        email_verified: true,
-        demo: true,
-      };
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved?.authenticated === true) {
+        return {
+          ...previewUser,
+          email: saved.email || previewUser.email,
+          display_name: saved.display_name || "Demo User",
+        };
+      }
     }
-    const saved = JSON.parse(raw);
-    if (saved?.authenticated !== true) return null;
-    return {
-      id: "demo-user",
-      email: saved.email || "demo@aevotron.local",
-      display_name: saved.display_name || "Demo User",
-      role: "user",
-      email_verified: true,
-      demo: true,
-    };
   } catch {
-    return null;
+    // Ignore malformed or unavailable session storage in the isolated preview.
   }
+  // Cloudflare Workers Preview is a backend-free demo surface. Always supply a
+  // local identity there so the auth gate and workspace never call /api/v1/auth/me.
+  return isDemoAuthEnabled() ? previewUser : null;
 }
 
 export function isDemoAuthenticated() {
