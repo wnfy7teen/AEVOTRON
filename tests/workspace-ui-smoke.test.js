@@ -4,6 +4,15 @@ import test from "node:test";
 
 const read = (path) => readFile(new URL("../" + path, import.meta.url), "utf8");
 
+test("workspace markdown renderer is split into an on-demand browser chunk", async () => {
+  const source = await read("src/routes/_authed/workspace.jsx");
+  assert.match(source, /const ReactMarkdown = lazy\(\(\) => import\("react-markdown"\)\)/);
+  assert.match(source, /function MarkdownMessage\(\{ content \}\)/);
+  assert.match(source, /<Suspense fallback=\{<span aria-label="Loading formatted message" \/>\}>/);
+  assert.equal((source.match(/<MarkdownMessage content=/g) || []).length, 2);
+  assert.doesNotMatch(source, /^import ReactMarkdown from "react-markdown";/m);
+});
+
 test("workspace navigation exposes all primary account sections", async () => {
   const source = await read("src/routes/_authed/dashboard.jsx");
   for (const section of ["Overview", "Model catalog", "API keys", "Usage & logs", "Billing", "Team & projects", "Notifications", "Providers", "Preferences"]) {
