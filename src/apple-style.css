@@ -3574,3 +3574,97 @@ html[data-theme="gray"] :is(.apple-app, .aw-shell) :is(
 .apple-app :where(*, *::before, *::after){backface-visibility:hidden}
 html[data-theme="gray"] body{background:#1C1C1E;color:#F5F5F7}
 @media(prefers-reduced-motion:reduce){.apple-app :where(*, *::before, *::after){transition-duration:0ms!important;animation-duration:0.01ms!important;animation-iteration-count:1!important}}
+
+
+/* Final token-driven surfaces for the authenticated dashboard and Workspace. */
+.apple-app .mh-shell,.apple-app .aw-shell{background:var(--app-page-subtle);color:var(--app-text)}
+.apple-app .mh-sidebar,.apple-app .mh-topbar,.apple-app .aw-sidebar,.apple-app .aw-topbar{
+  background:var(--app-card);
+  border-color:var(--app-border);
+  color:var(--app-text);
+}
+.apple-app .mh-workspace,.apple-app .mh-usage-mini,.apple-app .mh-panel,.apple-app .mh-stat,
+.apple-app .mh-step,.apple-app .mh-provider-card,.apple-app .mh-model-card,
+.apple-app .aw-model-picker,.apple-app .aw-compare-panel,.apple-app .aw-compare-result,
+.apple-app .aw-empty-models,.apple-app .aw-notice,.apple-app .aw-composer,.apple-app .aw-statusbar{
+  background:var(--app-card);
+  border:1px solid var(--app-border);
+  color:var(--app-text);
+  box-shadow:none;
+}
+.apple-app .mh-page-heading h1,.apple-app .mh-section-heading h2,.apple-app .mh-panel-heading h3,
+.apple-app .mh-stat-value,.apple-app .aw-chat-heading h1,.apple-app .aw-message-body,
+.apple-app .aw-status-model strong{color:var(--app-text)}
+.apple-app .mh-page-heading p,.apple-app .mh-stat-label,.apple-app .mh-stat-note,
+.apple-app .mh-section-heading p,.apple-app .mh-panel-heading p,.apple-app .aw-chat-heading p,
+.apple-app .aw-statusbar,.apple-app .aw-status-metric,.apple-app .aw-disclaimer{color:var(--app-muted)}
+.apple-app .mh-brand-mark,.apple-app .mh-workspace-icon,.apple-app .mh-avatar{
+  background:var(--app-accent);
+  color:#FFFFFF;
+  box-shadow:none;
+}
+.apple-app .mh-nav-item:hover,.apple-app .mh-profile:hover,.apple-app .aw-history-item:hover,
+.apple-app .aw-model-option:hover{background:var(--app-hover);color:var(--app-text)}
+.apple-app .mh-button-primary,.apple-app .aw-send-button{background:var(--app-accent);border-color:var(--app-accent);color:#FFFFFF}
+.apple-app .mh-button-quiet,.apple-app .mh-field,.apple-app .mh-search,.apple-app .aw-model-search,
+.apple-app .aw-composer textarea,.apple-app .aw-history-rename-input{
+  background:var(--app-card);
+  color:var(--app-text);
+  border-color:var(--app-border);
+}
+.apple-app .mh-stat-value{font-variant-numeric:tabular-nums;white-space:nowrap}
+.apple-app .mh-stat-icon,.apple-app .aw-shell svg{backface-visibility:hidden}
+
+html[data-theme="gray"] .apple-app .mh-shell,
+html[data-theme="gray"] .apple-app .aw-shell{background:#1C1C1E;color:#F5F5F7}
+html[data-theme="gray"] .apple-app .mh-sidebar,
+html[data-theme="gray"] .apple-app .mh-topbar,
+html[data-theme="gray"] .apple-app .aw-sidebar,
+html[data-theme="gray"] .apple-app .aw-topbar{background:#2C2C2E;border-color:#3A3A3C;color:#F5F5F7}
+html[data-theme="gray"] .apple-app .mh-workspace,
+html[data-theme="gray"] .apple-app .mh-usage-mini,
+html[data-theme="gray"] .apple-app .mh-panel,
+html[data-theme="gray"] .apple-app .mh-stat,
+html[data-theme="gray"] .apple-app .mh-step,
+html[data-theme="gray"] .apple-app .mh-provider-card,
+html[data-theme="gray"] .apple-app .mh-model-card,
+html[data-theme="gray"] .apple-app .aw-model-picker,
+html[data-theme="gray"] .apple-app .aw-compare-panel,
+html[data-theme="gray"] .apple-app .aw-compare-result,
+html[data-theme="gray"] .apple-app .aw-empty-models,
+html[data-theme="gray"] .apple-app .aw-notice,
+html[data-theme="gray"] .apple-app .aw-composer,
+html[data-theme="gray"] .apple-app .aw-statusbar{
+  background:#2C2C2E;border-color:#3A3A3C;color:#F5F5F7;box-shadow:none;
+}
+html[data-theme="gray"] .apple-app .mh-page-heading h1,
+html[data-theme="gray"] .apple-app .mh-section-heading h2,
+html[data-theme="gray"] .apple-app .mh-panel-heading h3,
+html[data-theme="gray"] .apple-app .mh-stat-value,
+html[data-theme="gray"] .apple-app .aw-chat-heading h1,
+html[data-theme="gray"] .apple-app .aw-message-body,
+html[data-theme="gray"] .apple-app .aw-status-model strong{color:#F5F5F7}
+html[data-theme="gray"] .apple-app .mh-page-heading p,
+html[data-theme="gray"] .apple-app .mh-stat-label,
+html[data-theme="gray"] .apple-app .mh-stat-note,
+html[data-theme="gray"] .apple-app .mh-section-heading p,
+html[data-theme="gray"] .apple-app .mh-panel-heading p,
+html[data-theme="gray"] .apple-app .aw-chat-heading p,
+html[data-theme="gray"] .apple-app .aw-statusbar,
+html[data-theme="gray"] .apple-app .aw-status-metric,
+html[data-theme="gray"] .apple-app .aw-disclaimer{color:#98989D}
+html[data-theme="gray"] .apple-app .mh-button-quiet,
+html[data-theme="gray"] .apple-app .mh-field,
+html[data-theme="gray"] .apple-app .mh-search,
+html[data-theme="gray"] .apple-app .aw-model-search,
+html[data-theme="gray"] .apple-app .aw-composer textarea,
+html[data-theme="gray"] .apple-app .aw-history-rename-input{
+  background:#2C2C2E;color:#F5F5F7;border-color:#3A3A3C;
+}
+html[data-theme="gray"] .apple-app .mh-nav-item:hover,
+html[data-theme="gray"] .apple-app .mh-profile:hover,
+html[data-theme="gray"] .apple-app .aw-history-item:hover,
+html[data-theme="gray"] .apple-app .aw-model-option:hover{background:#3A3A3C;color:#F5F5F7}
+html[data-theme="gray"] .apple-app .mh-button-primary,
+html[data-theme="gray"] .apple-app .aw-send-button{background:#0A84FF;border-color:#0A84FF;color:#FFFFFF}
+html[data-theme="gray"] body{background:#1C1C1E;color:#F5F5F7}
