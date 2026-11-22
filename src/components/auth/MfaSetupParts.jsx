@@ -130,3 +130,8 @@ export function CopyKeyButton({ text, wide = false }) {
   );
 }
 
+
+// Phones and tablets run the authenticator app on this device, so a QR code can't be scanned.
+export function isTouchDevice() {
+  return typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
+}
