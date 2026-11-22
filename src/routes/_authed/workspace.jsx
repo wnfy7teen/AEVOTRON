@@ -212,13 +212,13 @@ function WorkspaceChatView() {
         const isZip = file.name.toLowerCase().endsWith(".zip");
         const candidates = isZip
           ? await extractSafeZip(file)
-          : [{ name: file.name, path: file.webkitRelativePath || file.name, size: file.size, text: await file.text() }];
+          : [{ name: file.name, path: file.webkitRelativePath || file.name, size: file.size, readText: () => file.text() }];
         for (const candidate of candidates) {
           if (initialCount + accepted.length >= 40) { setFileError(t("A maximum of 40 files is allowed, including files from folders and ZIP archives.")); break; }
           const extension = candidate.name.includes(".") ? candidate.name.split(".").pop().toLowerCase() : "";
           if (!allowed.has(extension)) { if (!isZip) setFileError(t("This file type is not supported yet. Use plain text or source code files.")); continue; }
           if (candidate.size > 512 * 1024) { setFileError(t("Each text attachment must be 512 KB or smaller.")); continue; }
-          const text = candidate.text;
+          const text = candidate.text ?? await candidate.readText();
           const controlCharacters = [...text].filter((character) => {
             const code = character.charCodeAt(0);
             return code <= 8 || code === 11 || code === 12 || (code >= 14 && code <= 31);
