@@ -785,5 +785,7 @@
   "Connect a provider to discover the models available to your account.": "连接服务提供商以查看账户可用的模型。",
   "Billed by the connected provider": "由已连接的服务提供商计费",
   "AEVOTRON — AI Workspace": "AEVOTRON — AI 工作空间",
-  "Chat with connected AI models.": "与已连接的 AI 模型对话。"
+  "Chat with connected AI models.": "与已连接的 AI 模型对话。",
+  "Gray theme": "灰色主题",
+  "Switch to gray theme": "切换到灰色主题"
 }
