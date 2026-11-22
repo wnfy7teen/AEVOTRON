@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { MfaMethodSetup } from "@/components/auth/MfaMethodSetup";
+const MfaMethodSetup = lazy(() => import("@/components/auth/MfaMethodSetup").then(({ MfaMethodSetup: Component }) => ({ default: Component })));
 import { CodeField, MfaHeader, MfaNotice, RememberDevice, ResendLine, useAppInfo, useCooldown } from "@/components/auth/MfaParts";
 import { finishSignIn, mfaSession } from "@/lib/authMfaFlow";
 
@@ -36,7 +36,7 @@ function Enroll({ session, onDone }) {
         description={method ? null : t("Add a second sign-in step to keep your account secure. Choose how you want to get your codes.")}
       />
       {method ? (
-        <MfaMethodSetup session={session} method={method} onDone={onDone} onBack={() => setMethod(null)} />
+        <Suspense fallback={<Loader2 className="mx-auto w-6 h-6 animate-spin text-muted-foreground" />}><MfaMethodSetup session={session} method={method} onDone={onDone} onBack={() => setMethod(null)} /></Suspense>
       ) : (
         <div className="space-y-3">
           <Button className="w-full h-12 font-medium" onClick={() => setMethod("totp")}>{t("Set up your authenticator app")}</Button>
