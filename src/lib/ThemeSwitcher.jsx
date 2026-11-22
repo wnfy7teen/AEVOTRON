@@ -15,9 +15,10 @@ function readThemePreference() {
   if (typeof window === "undefined") return "light";
   try {
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-    if (stored) return normalizeTheme(stored);
     const settings = JSON.parse(window.localStorage.getItem("aevotron-workspace-settings") || "{}");
-    return normalizeTheme(settings.theme);
+    const normalized = normalizeTheme(stored || settings.theme);
+    if (stored !== normalized) window.localStorage.setItem(THEME_STORAGE_KEY, normalized);
+    return normalized;
   } catch {
     return "light";
   }
