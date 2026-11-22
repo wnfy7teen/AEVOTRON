@@ -240,3 +240,13 @@ test("dashboard footer has readable text and a distinct status indicator in the 
   assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-dot\s*\{[^}]*background:\s*var\(--palette-hex-34c759\)/);
   assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-sep\s*\{[^}]*color:\s*var\(--palette-hex-636366\)/);
 });
+
+
+test("read-only workspace preview never mounts live provider, API key or usage pages", async () => {
+  const source = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(source, /section === "Providers" && \(preview \? <PreviewReadOnlySection title=\{t\("Provider connections"\)\}\/> : <ProviderConnections\/>\)/);
+  assert.match(source, /section === "API keys" && \(preview \? <PreviewReadOnlySection title=\{t\("API keys"\)\}\/> : <ApiKeyManager\/>\)/);
+  assert.match(source, /section === "Usage & logs" && \(preview \? <PreviewReadOnlySection title=\{t\("Usage & logs"\)\}\/> : <UsageDashboard\/>\)/);
+  assert.match(source, /function PreviewReadOnlySection\(\{ title \}\)/);
+  assert.match(source, /Sample data · Read-only mode · No account or backend connection required/);
+});
