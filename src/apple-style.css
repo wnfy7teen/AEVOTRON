@@ -4553,3 +4553,5 @@ html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--pa
 .apple-app .aw-attachment-file button:hover{background:var(--app-hover);color:var(--app-text)}
 .apple-app .aw-statusbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .apple-app .aw-status-model strong,.apple-app .aw-status-cost{font-variant-numeric:tabular-nums}
+
+.apple-app .aw-composer.is-dragging{border-color:var(--app-accent);background:var(--app-hover);box-shadow:inset 0 0 0 1px var(--app-accent)}
