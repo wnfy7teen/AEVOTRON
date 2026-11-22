@@ -20,7 +20,7 @@ describe("workspace theme", () => {
     setAppTheme("gray");
 
     expect(document.documentElement.dataset.theme).toBe("gray");
-    expect(document.documentElement.style.colorScheme).toBe("gray");
+    expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(document.querySelector("#workspace-one").dataset.theme).toBe("gray");
     expect(document.querySelector("#workspace-two").dataset.theme).toBe("gray");
   });
@@ -42,22 +42,25 @@ describe("workspace theme", () => {
     expect([...document.querySelectorAll(".apple-app")].every((element) => element.dataset.theme === "gray")).toBe(true);
   });
 
-  it("stores Gray as a fixed preference", () => {
-    window.matchMedia = vi.fn().mockReturnValue({ matches: true });
+  it("normalizes legacy dark and unsupported system preferences to the two supported themes", () => {
+    setAppTheme("dark");
+    expect(getAppThemePreference()).toBe("gray");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("gray");
+    expect(document.documentElement.dataset.theme).toBe("gray");
+    expect(document.documentElement.style.colorScheme).toBe("dark");
 
     setAppTheme("system");
-
     expect(getAppThemePreference()).toBe("light");
-    expect(window.localStorage.getItem("aevotron-theme")).toBe("system");
-    expect(document.documentElement.dataset.theme).toBe("gray");
-    expect(document.documentElement.style.colorScheme).toBe("gray");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("light");
+    expect(document.documentElement.dataset.theme).toBe("light");
+    expect(document.documentElement.style.colorScheme).toBe("light");
   });
 
   it("falls back to Light when the saved preference is invalid", () => {
     window.localStorage.setItem("aevotron-theme", "sepia");
     window.localStorage.setItem("aevotron-workspace-settings", JSON.stringify({ theme: "invalid" }));
 
-    expect(getAppThemePreference()).toBe("system");
+    expect(getAppThemePreference()).toBe("light");
   });
 
   it("styles the model trust notice with readable light and gray variants", async () => {
