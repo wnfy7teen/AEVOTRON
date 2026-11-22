@@ -8,6 +8,7 @@ import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
 import { WorkspaceStoreProvider, useWorkspaceStore } from "@/lib/workspace-store";
+import { extractSafeZip } from "@/lib/safe-zip";
 
 export const Route = createFileRoute("/_authed/workspace")({
   head: () => ({ meta: [{ title: "AEVOTRON — AI Workspace" }, { name: "description", content: "A focused workspace for connected AI models." }] }),
@@ -203,27 +204,34 @@ function WorkspaceChatView() {
     setFileError("");
     setIsProcessingFiles(true);
     const allowed = new Set(["txt","md","markdown","csv","tsv","json","yaml","yml","xml","html","css","js","jsx","ts","tsx","py","go","rs","java","kt","sql","sh","bash","log","toml","ini"]);
-    const currentCount = attachments.length;
+    const initialCount = attachments.length;
     let totalCharacters = attachments.reduce((sum, item) => sum + item.text.length, 0);
     const accepted = [];
     try {
       for (const file of files) {
-        if (currentCount + accepted.length >= 5) { setFileError(t("A maximum of five text attachments is allowed.")); break; }
-        const extension = file.name.includes(".") ? file.name.split(".").pop().toLowerCase() : "";
-        if (!allowed.has(extension)) { setFileError(t("This file type is not supported yet. Use plain text or source code files.")); continue; }
-        if (file.size > 512 * 1024) { setFileError(t("Each text attachment must be 512 KB or smaller.")); continue; }
-        const text = await file.text();
-        const controlCharacters = [...text].filter((character) => {
-          const code = character.charCodeAt(0);
-          return code <= 8 || code === 11 || code === 12 || (code >= 14 && code <= 31);
-        }).length;
-        if (controlCharacters > Math.max(2, text.length * 0.01)) { setFileError(t("This file does not appear to be valid UTF-8 text.")); continue; }
-        if (totalCharacters + text.length > 12_000) { setFileError(t("The combined text from attachments is limited to 12,000 characters.")); continue; }
-        totalCharacters += text.length;
-        accepted.push({ id: crypto.randomUUID(), name: file.name, size: file.size, text, tokens: Math.ceil(text.length / 4) });
+        const isZip = file.name.toLowerCase().endsWith(".zip");
+        const candidates = isZip
+          ? await extractSafeZip(file)
+          : [{ name: file.name, path: file.webkitRelativePath || file.name, size: file.size, text: await file.text() }];
+        for (const candidate of candidates) {
+          if (initialCount + accepted.length >= 40) { setFileError(t("A maximum of 40 files is allowed, including files from folders and ZIP archives.")); break; }
+          const extension = candidate.name.includes(".") ? candidate.name.split(".").pop().toLowerCase() : "";
+          if (!allowed.has(extension)) { if (!isZip) setFileError(t("This file type is not supported yet. Use plain text or source code files.")); continue; }
+          if (candidate.size > 512 * 1024) { setFileError(t("Each text attachment must be 512 KB or smaller.")); continue; }
+          const text = candidate.text;
+          const controlCharacters = [...text].filter((character) => {
+            const code = character.charCodeAt(0);
+            return code <= 8 || code === 11 || code === 12 || (code >= 14 && code <= 31);
+          }).length;
+          if (controlCharacters > Math.max(2, text.length * 0.01)) { setFileError(t("This file does not appear to be valid UTF-8 text.")); continue; }
+          if (totalCharacters + text.length > 12_000) { setFileError(t("The combined text from attachments is limited to 12,000 characters.")); continue; }
+          totalCharacters += text.length;
+          accepted.push({ id: crypto.randomUUID(), name: candidate.name, path: candidate.path, size: candidate.size, text, tokens: Math.ceil(text.length / 4) });
+        }
+        if (initialCount + accepted.length >= 40) break;
       }
       if (accepted.length) {
-        setAttachments((items) => [...items, ...accepted].slice(0,5));
+        setAttachments((items) => [...items, ...accepted].slice(0,40));
         setSelectedAttachmentIds((items) => [...items, ...accepted.map((file) => file.id)]);
       }
     } catch (error) {
@@ -570,11 +578,12 @@ function WorkspaceChatView() {
           </div>
 
           <form className="aw-composer" onSubmit={send} onDragOver={(event) => event.preventDefault()} onDrop={(event) => {event.preventDefault();addFiles(event.dataTransfer?.files);}}>
-            <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
-            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className={"aw-attachment-chip" + (selectedAttachmentIds.includes(file.id) ? " is-selected" : "")} key={file.id}><label className="aw-attachment-select"><input type="checkbox" checked={selectedAttachmentIds.includes(file.id)} aria-label={t("Include attachment") + ": " + file.name} onChange={(event) => setSelectedAttachmentIds((items) => event.target.checked ? [...items, file.id] : items.filter((id) => id !== file.id))}/><FileText size={13}/><span>{file.name} · ~{file.tokens} {t("tokens")}</span></label><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => {setAttachments((items) => items.filter((item) => item.id !== file.id));setSelectedAttachmentIds((items) => items.filter((id) => id !== file.id));}}><X size={12}/></button></span>)}</div>}
+            <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".zip,.txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
+            <input className="aw-hidden-file-input" type="file" multiple webkitdirectory="" directory="" onChange={(event) => {addFiles(event.target.files);event.target.value="";}} aria-label={t("Add a folder")}/>
+            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className={"aw-attachment-chip" + (selectedAttachmentIds.includes(file.id) ? " is-selected" : "")} key={file.id}><label className="aw-attachment-select"><input type="checkbox" checked={selectedAttachmentIds.includes(file.id)} aria-label={t("Include attachment") + ": " + file.name} onChange={(event) => setSelectedAttachmentIds((items) => event.target.checked ? [...items, file.id] : items.filter((id) => id !== file.id))}/><FileText size={13}/><span title={file.path || file.name}>{file.path || file.name} · ~{file.tokens} {t("tokens")}</span></label><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => {setAttachments((items) => items.filter((item) => item.id !== file.id));setSelectedAttachmentIds((items) => items.filter((id) => id !== file.id));}}><X size={12}/></button></span>)}</div>}
             {fileError && <div className="aw-file-error" role="alert">{fileError}</div>}
             <textarea ref={composerRef} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {if (event.key === "Enter" && !event.shiftKey) {event.preventDefault();send();}}} onPaste={(event) => {const files = Array.from(event.clipboardData?.files || []);if(files.length){event.preventDefault();addFiles(files);}}} placeholder={demoMode ? t("Live chat is disabled in demo mode") : t("Message AEVOTRON…")} aria-label={t("Message AEVOTRON")} rows={2} disabled={demoMode || !activeModel || isStreaming}/>
-            <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach")}</button></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !selectedAttachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
+            <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach files / ZIP")}</button><button className="aw-attach-button" type="button" onClick={(event) => event.currentTarget.parentElement?.parentElement?.querySelector('input[webkitdirectory]')?.click()} disabled={demoMode || isStreaming || isProcessingFiles}>{t("Add folder")}</button></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !selectedAttachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
           </form>
 
           <div className="aw-statusbar">
