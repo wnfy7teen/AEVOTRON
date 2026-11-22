@@ -18,7 +18,7 @@ const INTERPOLATION=/\{\{\s*([\w.-]+)(?:\s*,[^}]*)?\s*\}\}/g;
 const report={
   generatedAt:new Date().toISOString(),mode:FIX?"fix":"check",
   languages:LANGUAGES,namespaces:{},scannedSourceFiles:0,scannedLiteralKeys:0,
-  dynamicTranslationCalls:[],addedKeys:[],fallbackApplied:[],repairedPlaceholders:[],
+  dynamicTranslationCalls:[],placeholderMatches:[],addedKeys:[],fallbackApplied:[],repairedPlaceholders:[],
   interpolationRepairs:[],unresolved:[],errors:[],summary:{}
 };
 
@@ -105,6 +105,18 @@ async function main(){
     }
   }
 
+  for(const ns of NAMESPACES){
+    for(const lang of LANGUAGES){
+      for(const [key,value] of Object.entries(catalogs[ns][lang])){
+        if(typeof value!=="string")continue;
+        const matches=[...value.matchAll(/(?:\\.{3,}|…+|\\bTODO\\b|\\bFIXME\\b|\\bUntranslated\\b)/gi)];
+        for(const match of matches)report.placeholderMatches.push({
+          namespace:ns,language:lang,key,match:match[0],value
+        });
+      }
+    }
+  }
+
   const writes=[];
   for(const ns of NAMESPACES){
     const before=Object.fromEntries(LANGUAGES.map(l=>[l,JSON.stringify(catalogs[ns][l],null,2)+"\n"]));
@@ -163,7 +175,7 @@ async function main(){
   if(FIX)for(const item of writes)await writeFile(item.file,item.content,"utf8");
   report.summary={
     namespaces:NAMESPACES.length,scannedSourceFiles:report.scannedSourceFiles,
-    scannedLiteralKeys:report.scannedLiteralKeys,dynamicTranslationCalls:report.dynamicTranslationCalls.length,
+    scannedLiteralKeys:report.scannedLiteralKeys,dynamicTranslationCalls:report.dynamicTranslationCalls.length,placeholderMatches:report.placeholderMatches.length,
     filesToUpdate:writes.length,filesUpdated:FIX?writes.length:0,keysAdded:report.addedKeys.length,
     fallbacksApplied:report.fallbackApplied.length,placeholdersRepaired:report.repairedPlaceholders.length,
     interpolationRepairs:report.interpolationRepairs.length,unresolved:report.unresolved.length,errors:report.errors.length
@@ -173,6 +185,10 @@ async function main(){
   console.log("\nAEVOTRON i18n "+(FIX?"AUTO-FIX":"CHECK"));
   for(const [key,value] of Object.entries(report.summary))console.log(key+": "+value);
   console.log("Report: i18n-report.json");
+  if(report.placeholderMatches.length){
+    console.warn("\\nPlaceholder scan matches (review; not all ellipses are errors):");
+    for(const item of report.placeholderMatches)console.warn(" - ["+item.namespace+"/"+item.language+"] "+item.key+" contains "+JSON.stringify(item.match));
+  }
   if(report.unresolved.length){
     console.error("\nCRITICAL: automatic fallback is impossible:");
     for(const item of report.unresolved)console.error(" - ["+item.namespace+"] "+item.key+" — "+item.reason);
