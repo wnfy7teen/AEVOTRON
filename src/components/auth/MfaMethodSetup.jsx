@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import {
   CodeField, CopyKeyButton, INVALID_PHONE, MfaNotice, PhoneField, ResendLine,
   defaultDialCode, isPlausiblePhone, isTouchDevice, useCooldown,
-} from "@/components/auth/MfaParts";
+} from "@/components/auth/MfaSetupParts";
 
 const SMS_RESEND_SECONDS = 30;
 const FULL_CODE = "Enter the full 6-digit code";
