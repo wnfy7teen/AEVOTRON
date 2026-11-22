@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Loader2, Smartphone } from "lucide-react";
-import { MfaMethodSetup } from "@/components/auth/MfaMethodSetup";
+const MfaMethodSetup = lazy(() => import("@/components/auth/MfaMethodSetup").then(({ MfaMethodSetup: Component }) => ({ default: Component })));
 import { CodeField, MfaHeader, MfaNotice, ResendLine, useCooldown } from "@/components/auth/MfaParts";
 
 const METHODS = [
@@ -37,7 +37,7 @@ export function MfaManage({ session, returnTo }) {
     <div className="session-record-block">
       <MfaHeader title={t("Two-factor authentication")}
         description={t("Add an extra layer of protection when signing in. You'll be asked for a code each time you sign in.")} />
-      {view.name === "setup" && <MfaMethodSetup session={session} method={view.method} signInPath="/mfa" onDone={back} onBack={() => setView({ name: "list" })} />}
+      {view.name === "setup" && <Suspense fallback={<Loader2 className="mx-auto w-6 h-6 animate-spin text-muted-foreground" />}><MfaMethodSetup session={session} method={view.method} signInPath="/mfa" onDone={back} onBack={() => setView({ name: "list" })} /></Suspense>}
       {view.name === "disable" && <Disable session={session} method={view.method} onDone={back} onBack={() => setView({ name: "list" })} />}
       {view.name === "list" && (
         <div className="space-y-4">
