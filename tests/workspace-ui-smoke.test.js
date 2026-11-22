@@ -107,10 +107,10 @@ test("global theme and language controls follow the selected light or dark theme
   const css = await read("src/apple-style.css");
   assert.match(theme, /document\.documentElement\.dataset\.theme = theme/);
   assert.match(theme, /element\.dataset\.theme = theme/);
-  assert.match(css, /html\[data-theme="dark"\] \.av-theme-trigger/);
-  assert.match(css, /html\[data-theme="dark"\] \.av-language-trigger/);
-  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu/);
-  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu button\.active/);
+  assert.match(css, /html\[data-theme="gray"\] \.av-theme-trigger/);
+  assert.match(css, /html\[data-theme="gray"\] \.av-language-trigger/);
+  assert.match(css, /html\[data-theme="gray"\] \.av-language-menu/);
+  assert.match(css, /html\[data-theme="gray"\] \.av-language-menu button\.active/);
 });
 
 test("workspace interaction polish covers keyboard focus, disabled controls and reduced motion", async () => {
@@ -118,7 +118,7 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   assert.match(css, /:focus-visible/);
   assert.match(css, /:disabled/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
+  assert.match(css, /\.apple-app\[data-theme="gray"\] \.av-notification-row\.is-read/);
   assert.match(css, /@media \(max-width: 560px\)/);
 });
 
@@ -129,7 +129,7 @@ test("workspace dropdown menus share responsive light and dark styling", async (
   assert.doesNotMatch(css, /\.mh-toolbar select/);
   assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /\.av-dropdown-option\.is-selected/);
-  assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
+  assert.match(css, /data-theme="gray"\] \.av-dropdown-menu/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
 });
 
@@ -143,8 +143,8 @@ test("popular model list has explicit readable layout and contrast in light and 
   assert.match(css, /grid-template-columns: 9px minmax\(0, 1fr\) auto 16px/);
   assert.match(css, /\.mh-popular-row strong \{[\s\S]*?color: #17212d/);
   assert.match(css, /\.mh-popular-row \.mh-model-description \{[\s\S]*?color: #596879/);
-  assert.match(css, /data-theme="dark"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row strong/);
-  assert.match(css, /data-theme="dark"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row \.mh-model-description/);
+  assert.match(css, /data-theme="gray"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row strong/);
+  assert.match(css, /data-theme="gray"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row \.mh-model-description/);
 });
 
 test("dashboard buttons and forms have explicit actions and native validation", async () => {
@@ -204,7 +204,7 @@ test("Sonner success and error notifications remain readable above the workspace
   assert.match(toaster, /title: "aevotron-toast-title"/);
   assert.match(css, /\[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color: #17212d !important/);
-  assert.match(css, /html\[data-theme="dark"\] \[data-sonner-toaster\]\.aevotron-toaster/);
+  assert.match(css, /html\[data-theme="gray"\] \[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /color: #f1f5fa !important/);
   assert.match(css, /z-index: 10050 !important/);
 });
