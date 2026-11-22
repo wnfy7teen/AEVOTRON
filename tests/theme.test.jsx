@@ -56,6 +56,15 @@ describe("workspace theme", () => {
     expect(document.documentElement.style.colorScheme).toBe("light");
   });
 
+  it("migrates legacy and unsupported stored preferences to one of the two themes", () => {
+    window.localStorage.setItem("aevotron-theme", "dark");
+    expect(getAppThemePreference()).toBe("gray");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("gray");
+    window.localStorage.setItem("aevotron-theme", "system");
+    expect(getAppThemePreference()).toBe("light");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("light");
+  });
+
   it("falls back to Light when the saved preference is invalid", () => {
     window.localStorage.setItem("aevotron-theme", "sepia");
     window.localStorage.setItem("aevotron-workspace-settings", JSON.stringify({ theme: "invalid" }));
