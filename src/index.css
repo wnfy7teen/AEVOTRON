@@ -446,3 +446,14 @@ svg {
     will-change: transform;
   }
 }
+
+
+/* Consistent, crisp text and vector rendering across the application. */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+svg {
+  shape-rendering: geometricPrecision;
+}
