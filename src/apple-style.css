@@ -2869,86 +2869,86 @@ html[data-theme="dark"] .aw-attachment-chip.is-selected { border-color:#426a7c; 
 
 
 /* Workspace readability and theme contrast audit (scoped to AI chat workspace). */
-.apple-app .aw-shell {
+.aw-shell {
   color: #202b36;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
-.apple-app .aw-shell :where(p, li, .aw-message-content, .aw-empty-state, .aw-notice, .aw-sidebar-note, .aw-disclaimer) {
+.aw-shell :where(p, li, .aw-message-content, .aw-empty-state, .aw-notice, .aw-sidebar-note, .aw-disclaimer) {
   font-size: 14px;
   line-height: 1.65;
 }
-.apple-app .aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
+.aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
   color: #17212b;
   font-weight: 650;
   line-height: 1.3;
 }
-.apple-app .aw-shell :where(.aw-eyebrow, .aw-history-label, .aw-message-meta, .aw-statusbar, .aw-model-picker-meta, .aw-context-trimmed) {
+.aw-shell :where(.aw-eyebrow, .aw-history-label, .aw-message-meta, .aw-statusbar, .aw-model-picker-meta, .aw-context-trimmed) {
   font-size: 12px;
   line-height: 1.5;
 }
-.apple-app .aw-shell :where(.aw-message-content, .aw-message-body, .aw-edit-box, .aw-model-search, .aw-history-rename-input) {
+.aw-shell :where(.aw-message-content, .aw-message-body, .aw-edit-box, .aw-model-search, .aw-history-rename-input) {
   font-size: 14px;
   line-height: 1.65;
 }
-.apple-app .aw-shell :where(button, input, textarea, select) {
+.aw-shell :where(button, input, textarea, select) {
   font-size: 13px;
   line-height: 1.45;
 }
-.apple-app .aw-shell :where(.aw-message-avatar, .aw-empty-icon) svg,
-.apple-app .aw-shell svg {
+.aw-shell :where(.aw-message-avatar, .aw-empty-icon) svg,
+.aw-shell svg {
   shape-rendering: geometricPrecision;
   flex-shrink: 0;
 }
-.apple-app .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
+.aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
   border-color: #d7e0e7;
 }
-.apple-app .aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions) {
+.aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions) {
   color: #526273;
 }
-.apple-app .aw-shell :where(.aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta) {
+.aw-shell :where(.aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta) {
   color: #526273;
 }
-.apple-app .aw-shell :where(button, a, input, textarea, select) {
+.aw-shell :where(button, a, input, textarea, select) {
   -webkit-tap-highlight-color: transparent;
 }
-.apple-app .aw-shell :where(button, a, input, textarea, select):focus-visible {
+.aw-shell :where(button, a, input, textarea, select):focus-visible {
   outline: 2px solid #087da8;
   outline-offset: 2px;
 }
-.apple-app .aw-shell :where(.aw-message-content, .aw-compare-result, .aw-notice, .aw-empty-state) {
+.aw-shell :where(.aw-message-content, .aw-compare-result, .aw-notice, .aw-empty-state) {
   overflow-wrap: anywhere;
 }
-.apple-app .aw-shell :where(.aw-message-action, .aw-history-rename, .aw-history-delete) {
+.aw-shell :where(.aw-message-action, .aw-history-rename, .aw-history-delete) {
   opacity: 1;
 }
-.apple-app .aw-shell :where(.aw-composer, .aw-compare-panel, .aw-compare-result, .aw-empty-state, .aw-notice) {
+.aw-shell :where(.aw-composer, .aw-compare-panel, .aw-compare-result, .aw-empty-state, .aw-notice) {
   box-shadow: 0 1px 2px rgba(22, 34, 46, .06);
 }
-.apple-app .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-compare-panel, .aw-compare-result) {
+.aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-compare-panel, .aw-compare-result) {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-html[data-theme="dark"] .apple-app .aw-shell {
+html[data-theme="dark"] .aw-shell {
   color: #e5edf3;
 }
-html[data-theme="dark"] .apple-app .aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
+html[data-theme="dark"] .aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
   color: #f1f5f8;
 }
-html[data-theme="dark"] .apple-app .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
+html[data-theme="dark"] .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
   border-color: #354957;
 }
-html[data-theme="dark"] .apple-app .aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions, .aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta, .aw-context-trimmed) {
+html[data-theme="dark"] .aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions, .aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta, .aw-context-trimmed) {
   color: #b5c4cf;
 }
-html[data-theme="dark"] .apple-app .aw-shell :where(button, a, input, textarea, select):focus-visible {
+html[data-theme="dark"] .aw-shell :where(button, a, input, textarea, select):focus-visible {
   outline-color: #75c9e8;
 }
 @media (prefers-reduced-motion: reduce) {
-  .apple-app .aw-shell *,
-  .apple-app .aw-shell *::before,
-  .apple-app .aw-shell *::after {
+  .aw-shell *,
+  .aw-shell *::before,
+  .aw-shell *::after {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
