@@ -252,3 +252,16 @@ test("read-only workspace preview never mounts live provider, API key or usage p
   assert.match(source, /disabled=\{preview && item\.name === "AI Workspace"\}/);
   assert.match(source, /onClick=\{\(\) => modelQuery\.refetch\(\)\} disabled=\{preview \|\| modelQuery\.isFetching\}/);
 });
+
+test("Cloudflare Workers preview redirects every authenticated route to the isolated public preview", async () => {
+  const auth = await read("src/lib/AuthContext.jsx");
+  const gate = await read("src/components/auth/AuthGate.jsx");
+  assert.match(auth, /export function isCloudflareWorkersPreview\(\)/);
+  assert.match(auth, /hostname\.includes\("preview"\) && hostname\.endsWith\("\.workers\.dev"\)/);
+  assert.match(auth, /\|\| isCloudflareWorkersPreview\(\)/);
+  assert.match(gate, /import \{ authQuery, isCloudflareWorkersPreview \} from "@\/lib\/AuthContext"/);
+  assert.match(gate, /if \(isCloudflareWorkersPreview\(\)\)\s*\{\s*throw redirect\(\{ to: "\/workspace-preview", reloadDocument: true \}\);/);
+  const workspace = await read("src/routes/_authed/workspace.jsx");
+  assert.match(workspace, /api\.groq\.models\(\)/);
+  assert.match(workspace, /api\.groq\.streamChat/);
+});
