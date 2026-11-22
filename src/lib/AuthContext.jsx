@@ -39,12 +39,17 @@ export function isDemoAuthenticated() {
   return Boolean(readDemoUser());
 }
 
-export function isDemoAuthEnabled() {
+export function isCloudflareWorkersPreview() {
   if (typeof window === "undefined") return false;
   const hostname = window.location.hostname;
+  return hostname.includes("preview") && hostname.endsWith(".workers.dev");
+}
+
+export function isDemoAuthEnabled() {
+  if (typeof window === "undefined") return false;
   return import.meta.env.DEV
     || import.meta.env.VITE_DEMO_AUTH === "true"
-    || (hostname.includes("preview") && hostname.endsWith(".workers.dev"));
+    || isCloudflareWorkersPreview();
 }
 
 export const authQuery = queryOptions({
