@@ -261,7 +261,10 @@ test("Cloudflare Workers preview redirects every authenticated route to the isol
   assert.match(auth, /\|\| isCloudflareWorkersPreview\(\)/);
   assert.match(gate, /import \{ authQuery, isCloudflareWorkersPreview \} from "@\/lib\/AuthContext"/);
   assert.match(gate, /if \(isCloudflareWorkersPreview\(\)\)\s*\{\s*throw redirect\(\{ to: "\/workspace-preview", reloadDocument: true \}\);/);
-  const workspace = await read("src/routes/_authed/workspace.jsx");
-  assert.match(workspace, /api\.groq\.models\(\)/);
-  assert.match(workspace, /api\.groq\.streamChat/);
+  const authedRoute = await read("src/routes/_authed.jsx");
+  const previewRoute = await read("src/routes/workspace-preview.jsx");
+  assert.match(authedRoute, /beforeLoad: requireSignedIn/);
+  assert.match(authedRoute, /ssr: false/);
+  assert.match(previewRoute, /createFileRoute\("\/workspace-preview"\)/);
+  assert.doesNotMatch(previewRoute, /requireSignedIn|AuthGate/);
 });
