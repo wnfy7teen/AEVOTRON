@@ -268,3 +268,13 @@ test("Cloudflare Workers preview redirects every authenticated route to the isol
   assert.match(previewRoute, /createFileRoute\("\/workspace-preview"\)/);
   assert.doesNotMatch(previewRoute, /requireSignedIn|AuthGate/);
 });
+
+test("preview banner describes interactive local demo behavior accurately in all locales", async () => {
+  const dashboard = await read("src/routes/_authed/dashboard.jsx");
+  assert.match(dashboard, /Sample data · Interactive demo · Local changes only · No account or backend connection required/);
+  assert.match(dashboard, /name: "Demo workspace"/);
+  for (const locale of ["en", "ru", "zh"]) {
+    const translations = JSON.parse(await read("src/locales/" + locale + ".json"));
+    assert.ok(translations["Sample data · Interactive demo · Local changes only · No account or backend connection required"], "Missing preview banner translation: " + locale);
+  }
+});
