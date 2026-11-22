@@ -143,8 +143,6 @@ test("popular model list has explicit readable layout and contrast in light and 
   assert.match(css, /grid-template-columns: 9px minmax\(0, 1fr\) auto 16px/);
   assert.match(css, /\.mh-popular-row strong \{[\s\S]*?color:\s*var\(--palette-hex-17212d\)/);
   assert.match(css, /\.mh-popular-row \.mh-model-description \{[\s\S]*?color:\s*var\(--palette-hex-596879\)/);
-  assert.match(css, /\.mh-popular-row strong \{[\s\S]*?color:\s*var\(--palette-hex-17212d\)/);
-  assert.match(css, /\.mh-popular-row \.mh-model-description \{[\s\S]*?color:\s*var\(--palette-hex-596879\)/);
 });
 
 test("dashboard buttons and forms have explicit actions and native validation", async () => {
