@@ -4542,3 +4542,24 @@ html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--pa
 .apple-app .aw-status-model strong,.apple-app .aw-status-cost{font-variant-numeric:tabular-nums}
 
 .apple-app .aw-composer.is-dragging{border-color:var(--app-accent);background:var(--app-hover);box-shadow:inset 0 0 0 1px var(--app-accent)}
+
+
+/* Keep remaining account controls aligned with the same neutral palette. */
+.apple-app .mh-brand,.apple-app .mh-breadcrumb strong,.apple-app .mh-workspace strong,
+.apple-app .mh-profile strong,.apple-app .mh-top-actions{color:var(--app-text)}
+.apple-app .mh-breadcrumb,.apple-app .mh-workspace small,.apple-app .mh-profile small,
+.apple-app .mh-nav-label,.apple-app .mh-top-actions{color:var(--app-muted)}
+.apple-app .mh-nav-item.active{background:var(--app-hover);color:var(--app-accent);box-shadow:none}
+.apple-app .mh-nav-item.active svg{color:var(--app-accent)}
+.apple-app .mh-progress{background:var(--app-border)}
+.apple-app .mh-progress i{background:var(--app-accent)}
+.apple-app .mh-icon-button,.apple-app .mh-region,.apple-app .mh-mobile-menu{
+  background:var(--app-card);color:var(--app-muted);border-color:var(--app-border);box-shadow:none
+}
+.apple-app .mh-brand-mark,.apple-app .mh-workspace-icon,.apple-app .mh-avatar{
+  background:var(--app-accent);color:var(--palette-hex-ffffff);box-shadow:none
+}
+html[data-theme="gray"] .apple-app .mh-nav-item.active{background:var(--app-hover);color:var(--app-accent)}
+html[data-theme="gray"] .apple-app .mh-icon-button,
+html[data-theme="gray"] .apple-app .mh-region,
+html[data-theme="gray"] .apple-app .mh-mobile-menu{background:var(--app-card);color:var(--app-muted);border-color:var(--app-border)}
