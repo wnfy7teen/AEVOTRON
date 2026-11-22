@@ -49,7 +49,7 @@ export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
-  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
+  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "light");
   useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
@@ -236,7 +236,7 @@ export default function AppleLanding() {
       <div className="av-nav-actions"><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><span>{t("Тёмная")}</span></button>
-        <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label={t("Серая тема")} aria-pressed={theme === "gray"} title={t("Серая")}><span>{t("Серая")}</span></button>
+        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label={t("Светлая тема")} aria-pressed={theme === "light"} title={t("Светлая")}><span>{t("Светлая")}</span></button>
       </div>
       <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? t("Close navigation") : t("Open navigation")}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
