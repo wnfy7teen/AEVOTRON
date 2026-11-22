@@ -3570,8 +3570,7 @@ html[data-theme="gray"] :is(.apple-app, .aw-shell) :is(
 .apple-app .mh-stat-value{width:fit-content;max-width:100%;font-variant-numeric:tabular-nums;white-space:nowrap;flex:0 0 auto}
 .apple-app .mh-stat-label,.apple-app .mh-stat-note{color:var(--app-muted);min-width:0}
 .apple-app .aw-statusbar{position:sticky;bottom:0;z-index:20;background:var(--app-card);border-top:1px solid var(--app-border);color:var(--app-muted)}
-.apple-app :where(button,a,input,select,textarea){transition-property:background-color,border-color,color,box-shadow;transition-duration:160ms;transition-timing-function:ease}
-.apple-app :where(*, *::before, *::after){backface-visibility:hidden}
+.apple-app :where(button,a,input,select,textarea,.mh-panel,.mh-stat,.mh-step,.aw-shell,.aw-statusbar){transition-property:background-color,border-color,color,box-shadow;transition-duration:160ms;transition-timing-function:ease}
 html[data-theme="gray"] body{background:#1C1C1E;color:#F5F5F7}
 @media(prefers-reduced-motion:reduce){.apple-app :where(*, *::before, *::after){transition-duration:0ms!important;animation-duration:0.01ms!important;animation-iteration-count:1!important}}
 
