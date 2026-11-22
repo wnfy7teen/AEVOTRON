@@ -141,8 +141,8 @@ test("popular model list has explicit readable layout and contrast in light and 
   assert.match(dashboard, /className="mh-popular-row"/);
   assert.match(css, /\.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row \{/);
   assert.match(css, /grid-template-columns: 9px minmax\(0, 1fr\) auto 16px/);
-  assert.match(css, /\.mh-popular-row strong \{[\s\S]*?color: var(--palette-hex-17212d)/);
-  assert.match(css, /\.mh-popular-row \.mh-model-description \{[\s\S]*?color: var(--palette-hex-596879)/);
+  assert.match(css, /\.mh-popular-row strong \{[\s\S]*?color:\\s*var\\(--palette-hex-17212d\\)/);
+  assert.match(css, /\.mh-popular-row \.mh-model-description \{[\s\S]*?color:\\s*var\\(--palette-hex-596879\\)/);
   assert.match(css, /data-theme="gray"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row strong/);
   assert.match(css, /data-theme="gray"\] \.mh-bottom-grid > \.mh-panel:first-child \.mh-popular-row \.mh-model-description/);
 });
@@ -205,7 +205,7 @@ test("Sonner success and error notifications remain readable above the workspace
   assert.match(css, /\[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color: var(--palette-hex-17212d) !important/);
   assert.match(css, /html\[data-theme="gray"\] \[data-sonner-toaster\]\.aevotron-toaster/);
-  assert.match(css, /color: var(--palette-hex-f1f5fa) !important/);
+  assert.match(css, /color:\\s*var\\(--palette-hex-f1f5fa\\) !important/);
   assert.match(css, /z-index: 10050 !important/);
 });
 
