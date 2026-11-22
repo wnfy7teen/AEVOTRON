@@ -23,6 +23,19 @@ describe("Workspace Zustand slices", () => {
     expect(second.getState().isStreaming).toBe(false);
   });
 
+  it("supports React setState-style functional updates used by the chat screen", () => {
+    const store = createWorkspaceStore();
+    store.getState().setMessages((messages) => [...messages, { id: "m1" }]);
+    store.getState().setMessages((messages) => [...messages, { id: "m2" }]);
+    store.getState().setAttachments((files) => [...files, { id: "f1" }]);
+    store.getState().setAttachments((files) => [...files, { id: "f2" }]);
+    store.getState().setSelectedAttachmentIds((ids) => [...ids, "f1"]);
+    store.getState().setSelectedAttachmentIds((ids) => [...ids, "f2"]);
+    expect(store.getState().messages.map((item) => item.id)).toEqual(["m1", "m2"]);
+    expect(store.getState().attachments.map((item) => item.id)).toEqual(["f1", "f2"]);
+    expect(store.getState().selectedAttachmentIds).toEqual(["f1", "f2"]);
+  });
+
   it("removes an attachment from both the file list and selection", () => {
     const store = createWorkspaceStore();
     store.getState().setAttachments([{ id: "f1" }, { id: "f2" }]);
