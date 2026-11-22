@@ -787,5 +787,6 @@
   "AEVOTRON — AI Workspace": "AEVOTRON — AI 工作空间",
   "Chat with connected AI models.": "与已连接的 AI 模型对话。",
   "Gray theme": "灰色主题",
-  "Switch to gray theme": "切换到灰色主题"
+  "Switch to gray theme": "切换到灰色主题",
+  "Sample data · Interactive demo · Local changes only · No account or backend connection required": "示例数据 · 交互式演示 · 更改仅保存在本地 · 无需账户或后端连接"
 }
