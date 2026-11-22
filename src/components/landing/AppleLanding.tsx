@@ -1,6 +1,6 @@
 import "./landing.css";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Copy, Menu, Moon, ShieldCheck, Sparkles, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { createPortal } from "react-dom";
@@ -235,8 +235,8 @@ export default function AppleLanding() {
       </nav>
       <div className="av-nav-actions"><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
-        <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><span>{t("Тёмная")}</span></button>
-        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label={t("Светлая тема")} aria-pressed={theme === "light"} title={t("Светлая")}><span>{t("Светлая")}</span></button>
+        <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><Moon size={14} aria-hidden="true" /><span>{t("Тёмная")}</span></button>
+        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label={t("Светлая тема")} aria-pressed={theme === "light"} title={t("Светлая")}><Sun size={14} aria-hidden="true" /><span>{t("Светлая")}</span></button>
       </div>
       <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? t("Close navigation") : t("Open navigation")}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
