@@ -4563,3 +4563,6 @@ html[data-theme="gray"] .apple-app .mh-nav-item.active{background:var(--app-hove
 html[data-theme="gray"] .apple-app .mh-icon-button,
 html[data-theme="gray"] .apple-app .mh-region,
 html[data-theme="gray"] .apple-app .mh-mobile-menu{background:var(--app-card);color:var(--app-muted);border-color:var(--app-border)}
+
+.apple-app .aw-model-details{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.apple-app .aw-model-badge{display:inline-flex;align-items:center;min-height:22px;padding:3px 7px;border:1px solid var(--app-border);border-radius:999px;background:var(--app-page-subtle);color:var(--app-muted);font-size:10px;font-weight:550;line-height:1.25}
