@@ -7,6 +7,7 @@ import { ArrowUp, Check, ChevronDown, CircleStop, Clock3, Command, FileText, Mes
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
+import { WorkspaceStoreProvider, useWorkspaceStore } from "@/lib/workspace-store";
 
 export const Route = createFileRoute("/_authed/workspace")({
   head: () => ({ meta: [{ title: "AEVOTRON — AI Workspace" }, { name: "description", content: "A focused workspace for connected AI models." }] }),
@@ -34,7 +35,9 @@ function selectContextMessages(messages, tokenBudget = 24_000) {
   return [...systemMessages, ...selected];
 }
 
-function WorkspaceChat() {
+function WorkspaceChat() { return <WorkspaceStoreProvider><WorkspaceChatView /></WorkspaceStoreProvider>; }
+
+function WorkspaceChatView() {
   const { t } = useTranslation(["dashboard", "translation"]);
   const queryClient = useQueryClient();
   const demoMode = Boolean(readDemoUser());
@@ -58,31 +61,39 @@ function WorkspaceChat() {
     staleTime: 60_000,
   });
   const models = modelQuery.data || [];
-  const [selectedModel, setSelectedModel] = useState("");
+  const selectedModel = useWorkspaceStore((state) => state.selectedModelId);
+  const setSelectedModel = useWorkspaceStore((state) => state.setSelectedModelId);
   const [modelSearch, setModelSearch] = useState("");
   const [favoriteModels, setFavoriteModels] = useState([]);
   const [recentModels, setRecentModels] = useState([]);
   const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const activeModel = models.find((model) => model.id === selectedModel) || models[0] || null;
-  const [messages, setMessages] = useState([]);
-  const [draft, setDraft] = useState("");
-  const [attachments, setAttachments] = useState([]);
-  const [selectedAttachmentIds, setSelectedAttachmentIds] = useState([]);
+  const messages = useWorkspaceStore((state) => state.messages);
+  const setMessages = useWorkspaceStore((state) => state.setMessages);
+  const draft = useWorkspaceStore((state) => state.draft);
+  const setDraft = useWorkspaceStore((state) => state.setDraft);
+  const attachments = useWorkspaceStore((state) => state.attachments);
+  const setAttachments = useWorkspaceStore((state) => state.setAttachments);
+  const selectedAttachmentIds = useWorkspaceStore((state) => state.selectedAttachmentIds);
+  const setSelectedAttachmentIds = useWorkspaceStore((state) => state.setSelectedAttachmentIds);
   const selectedAttachments = attachments.filter((file) => selectedAttachmentIds.includes(file.id));
   const [fileError, setFileError] = useState("");
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
-  const [isStreaming, setIsStreaming] = useState(false);
+  const isStreaming = useWorkspaceStore((state) => state.isStreaming);
+  const setIsStreaming = useWorkspaceStore((state) => state.setIsStreaming);
   const [search, setSearch] = useState("");
   const [conversations, setConversations] = useState([{ id: "current", title: t("New conversation"), messages: [] }]);
-  const [activeConversation, setActiveConversation] = useState("current");
+  const activeConversation = useWorkspaceStore((state) => state.activeConversationId);
+  const setActiveConversation = useWorkspaceStore((state) => state.setActiveConversationId);
   const activeConversationRef = useRef("current");
   const skipSessionLoadRef = useRef(null);
   const [chatError, setChatError] = useState("");
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState("");
-  const [metrics, setMetrics] = useState(null);
+  const metrics = useWorkspaceStore((state) => state.metrics);
+  const setMetrics = useWorkspaceStore((state) => state.setMetrics);
   const chatUsageQuery = useQuery({ queryKey: ["workspace-chat-usage", activeConversation], queryFn: () => api.workspace.getChatUsage(activeConversation), enabled: !demoMode && activeConversation !== "current", staleTime: 0, refetchOnWindowFocus: false });
   const sessionUsage = chatUsageQuery.data?.usage || null;
   const [compareOpen, setCompareOpen] = useState(false);
