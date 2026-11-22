@@ -201,7 +201,7 @@ test("Sonner success and error notifications remain readable above the workspace
   assert.match(toaster, /aevotron-toaster/);
   assert.match(toaster, /title: "aevotron-toast-title"/);
   assert.match(css, /\[data-sonner-toaster\]\.aevotron-toaster/);
-  assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color: var(--palette-hex-17212d) !important/);
+  assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color:\s*var\(--palette-hex-17212d\) !important/);
   assert.match(css, /html\[data-theme="gray"\] \[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /color:\s*var\(--palette-hex-f1f5fa\) !important/);
   assert.match(css, /z-index: 10050 !important/);
