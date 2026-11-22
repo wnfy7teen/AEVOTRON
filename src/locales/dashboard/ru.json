@@ -166,5 +166,12 @@
   "Tools": "Инструменты",
   "Streaming": "Потоковая генерация",
   "Streaming unavailable": "Потоковая генерация недоступна",
-  "Model metadata not verified": "Метаданные модели не проверены"
+  "Model metadata not verified": "Метаданные модели не проверены",
+  "File input": "Поддержка файлов",
+  "Price not published": "Цена не опубликована",
+  "Pricing reference available": "Доступна справка о тарифах",
+  "Attached files": "Прикреплённые файлы",
+  "A maximum of 40 files is allowed, including files from folders and ZIP archives.": "Можно добавить не более 40 файлов, включая файлы из папок и ZIP-архивов.",
+  "Attach files / ZIP": "Прикрепить файлы / ZIP",
+  "Add folder": "Добавить папку"
 }
