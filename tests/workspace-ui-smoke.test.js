@@ -306,3 +306,13 @@ test("public preview dashboard disables all account and provider summary queries
   assert.match(dashboard, /enabled: !preview && tab === "Security"/);
   assert.match(dashboard, /if \(preview\) \{\s*setLoading\(false\);\s*return undefined;/);
 });
+
+test("MFA method setup is lazy-loaded only when enrollment or factor management opens it", async () => {
+  const flow = await read("src/components/auth/MfaFlow.jsx");
+  const manage = await read("src/components/auth/MfaManage.jsx");
+  for (const source of [flow, manage]) {
+    assert.match(source, /const MfaMethodSetup = lazy\(\(\) => import\("@\/components\/auth\/MfaMethodSetup"\)/);
+    assert.match(source, /<Suspense fallback=\{<Loader2/);
+    assert.doesNotMatch(source, /import \{ MfaMethodSetup \} from/);
+  }
+});
