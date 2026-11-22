@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import ReactMarkdown from "react-markdown";
-import { ArrowUp, Check, ChevronDown, CircleStop, Clock3, Command, FileText, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, X, Download, GitBranch, Paperclip, Star } from "lucide-react";
+import { ArrowUp, Check, ChevronDown, CircleStop, Clock3, Command, FileText, Folder, MessageSquarePlus, Pencil, Plus, RefreshCw, Search, X, Download, GitBranch, Paperclip, Star } from "lucide-react";
 import { api } from "@/api/client";
 import { readDemoUser } from "@/lib/AuthContext";
 import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
@@ -34,6 +34,31 @@ function selectContextMessages(messages, tokenBudget = 24_000) {
     usedTokens += messageTokens;
   }
   return [...systemMessages, ...selected];
+}
+
+function buildAttachmentTree(files) {
+  const root = { folders: new Map(), files: [] };
+  for (const file of files) {
+    const parts = String(file.path || file.name).split("/").filter(Boolean);
+    let node = root;
+    for (const part of parts.slice(0, -1)) {
+      if (!node.folders.has(part)) node.folders.set(part, { folders: new Map(), files: [] });
+      node = node.folders.get(part);
+    }
+    node.files.push(file);
+  }
+  const serialize = (node) => [
+    ...[...node.folders.entries()].map(([name, child]) => ({ type: "folder", name, children: serialize(child) })),
+    ...node.files.map((file) => ({ type: "file", file })),
+  ];
+  return serialize(root);
+}
+
+function AttachmentTree({ nodes, selectedIds, onToggle, onRemove, t }) {
+  return <ul className="aw-attachment-tree">{nodes.map((node) => node.type === "folder"
+    ? <li className="aw-attachment-folder" key={"folder:" + node.name}><details open><summary><Folder size={14}/><span>{node.name}</span></summary><AttachmentTree nodes={node.children} selectedIds={selectedIds} onToggle={onToggle} onRemove={onRemove} t={t}/></details></li>
+    : <li className="aw-attachment-file" key={node.file.id}><label><input type="checkbox" checked={selectedIds.includes(node.file.id)} aria-label={t("Include attachment") + ": " + node.file.path} onChange={(event) => onToggle(node.file.id, event.target.checked)}/><FileText size={13}/><span title={node.file.path}>{node.file.name} · ~{node.file.tokens} {t("tokens")}</span></label><button type="button" aria-label={t("Remove attachment") + ": " + node.file.name} onClick={() => onRemove(node.file.id)}><X size={12}/></button></li>
+  )}</ul>;
 }
 
 function WorkspaceChat() { return <WorkspaceStoreProvider><WorkspaceChatView /></WorkspaceStoreProvider>; }
@@ -78,6 +103,7 @@ function WorkspaceChatView() {
   const selectedAttachmentIds = useWorkspaceStore((state) => state.selectedAttachmentIds);
   const setSelectedAttachmentIds = useWorkspaceStore((state) => state.setSelectedAttachmentIds);
   const selectedAttachments = attachments.filter((file) => selectedAttachmentIds.includes(file.id));
+  const attachmentTree = useMemo(() => buildAttachmentTree(attachments), [attachments]);
   const [fileError, setFileError] = useState("");
   const [isProcessingFiles, setIsProcessingFiles] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -125,8 +151,10 @@ function WorkspaceChatView() {
   const modelDetails = [
     activeModel?.context_window ? Number(activeModel.context_window).toLocaleString() + " " + t("context tokens") : null,
     modelCapabilities.vision ? t("Vision") : null,
+    modelCapabilities.file_input || modelCapabilities.files || modelCapabilities.file_upload ? t("File input") : null,
     modelCapabilities.tools ? t("Tools") : null,
     modelCapabilities.streaming === true ? t("Streaming") : modelCapabilities.streaming === false ? t("Streaming unavailable") : null,
+    activeModel?.pricing_reference ? t("Pricing reference available") : t("Price not published"),
   ].filter(Boolean);
   const isFavoriteModel = Boolean(activeModel && favoriteModels.includes(activeModel.id));
   const contextTruncated = contextMessages.length < messages.length;
@@ -516,7 +544,8 @@ function WorkspaceChatView() {
   const sessionInputTokens = Number(sessionUsage?.total_input_tokens || 0);
   const sessionOutputTokens = Number(sessionUsage?.total_output_tokens || 0);
   const sessionRequestCount = Number(sessionUsage?.request_count || 0);
-  const sessionCost = sessionUsage?.estimated_cost == null ? null : Number(sessionUsage.estimated_cost);
+  const sessionCostValue = sessionUsage?.estimated_cost == null ? null : Number(sessionUsage.estimated_cost);
+  const sessionCost = Number.isFinite(sessionCostValue) ? sessionCostValue : null;
   const contextLimit = modelContextLimit;
   const contextRemaining = contextLimit ? Math.max(0, contextLimit - contextEstimate) : null;
   const contextLabel = contextLimit
@@ -580,7 +609,7 @@ function WorkspaceChatView() {
           <form className="aw-composer" onSubmit={send} onDragOver={(event) => event.preventDefault()} onDrop={(event) => {event.preventDefault();addFiles(event.dataTransfer?.files);}}>
             <input ref={fileInputRef} className="aw-hidden-file-input" type="file" multiple accept=".zip,.txt,.md,.markdown,.csv,.tsv,.json,.yaml,.yml,.xml,.html,.css,.js,.jsx,.ts,.tsx,.py,.go,.rs,.java,.kt,.sql,.sh,.bash,.log,.toml,.ini" onChange={(event) => {addFiles(event.target.files);event.target.value="";}}/>
             <input className="aw-hidden-file-input" type="file" multiple webkitdirectory="" directory="" onChange={(event) => {addFiles(event.target.files);event.target.value="";}} aria-label={t("Add a folder")}/>
-            {attachments.length > 0 && <div className="aw-attachment-list">{attachments.map((file) => <span className={"aw-attachment-chip" + (selectedAttachmentIds.includes(file.id) ? " is-selected" : "")} key={file.id}><label className="aw-attachment-select"><input type="checkbox" checked={selectedAttachmentIds.includes(file.id)} aria-label={t("Include attachment") + ": " + file.name} onChange={(event) => setSelectedAttachmentIds((items) => event.target.checked ? [...items, file.id] : items.filter((id) => id !== file.id))}/><FileText size={13}/><span title={file.path || file.name}>{file.path || file.name} · ~{file.tokens} {t("tokens")}</span></label><button type="button" aria-label={t("Remove attachment") + ": " + file.name} onClick={() => {setAttachments((items) => items.filter((item) => item.id !== file.id));setSelectedAttachmentIds((items) => items.filter((id) => id !== file.id));}}><X size={12}/></button></span>)}</div>}
+            {attachments.length > 0 && <div className="aw-attachment-list"><div className="aw-attachment-tree-heading"><Folder size={14}/><strong>{t("Attached files")}</strong><span>{attachments.length}/40</span></div><AttachmentTree nodes={attachmentTree} selectedIds={selectedAttachmentIds} t={t} onToggle={(id, checked) => setSelectedAttachmentIds((items) => checked ? [...items, id] : items.filter((item) => item !== id))} onRemove={(id) => {setAttachments((items) => items.filter((item) => item.id !== id));setSelectedAttachmentIds((items) => items.filter((item) => item !== id));}}/></div>}
             {fileError && <div className="aw-file-error" role="alert">{fileError}</div>}
             <textarea ref={composerRef} value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => {if (event.key === "Enter" && !event.shiftKey) {event.preventDefault();send();}}} onPaste={(event) => {const files = Array.from(event.clipboardData?.files || []);if(files.length){event.preventDefault();addFiles(files);}}} placeholder={demoMode ? t("Live chat is disabled in demo mode") : t("Message AEVOTRON…")} aria-label={t("Message AEVOTRON")} rows={2} disabled={demoMode || !activeModel || isStreaming}/>
             <div className="aw-composer-bottom"><div className="aw-composer-tools"><button className="aw-attach-button" type="button" onClick={() => fileInputRef.current?.click()} disabled={demoMode || isStreaming || isProcessingFiles}><Paperclip size={14}/>{isProcessingFiles ? t("Reading files…") : t("Attach files / ZIP")}</button><button className="aw-attach-button" type="button" onClick={(event) => event.currentTarget.parentElement?.parentElement?.querySelector('input[webkitdirectory]')?.click()} disabled={demoMode || isStreaming || isProcessingFiles}>{t("Add folder")}</button></div>{isStreaming ? <button className="aw-send-button is-stop" type="button" onClick={stop}><CircleStop size={16}/>{t("Stop")}</button> : <button className="aw-send-button" type="submit" disabled={(!draft.trim() && !selectedAttachments.length) || !activeModel || demoMode || isProcessingFiles}><ArrowUp size={17}/><span>{t("Send")}</span></button>}</div>
