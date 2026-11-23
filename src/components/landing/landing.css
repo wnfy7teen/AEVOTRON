@@ -795,19 +795,6 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 
 /* Mobile: keep the key protection label visible beside its shield icon. */
 @media (max-width: 520px) {
-  .av-site .av-key-status {
-    flex: 0 0 auto;
-    gap: 6px;
-    padding: 8px 10px;
-    font-size: 9px;
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .av-site .av-key-status svg {
-    flex: 0 0 auto;
-    width: 16px;
-    height: 16px;
-  }
 }
 
 
@@ -836,11 +823,6 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 
   .av-site .av-control-inner span {
     line-height: 1.45;
-  }
-
-  .av-site .av-key-status {
-    align-self: flex-start;
-    min-height: 32px;
   }
 
   .av-site .av-permissions {
@@ -2619,6 +2601,14 @@ html[data-theme="dark"] .av-site .av-visual.av-control .av-control-footer strong
 html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner strong,
 html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner strong {
   letter-spacing: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+}
+@keyframes av-key-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (max-width: 480px) {
 }
 
 /* 18 — macOS-style API key protection status badge. */
