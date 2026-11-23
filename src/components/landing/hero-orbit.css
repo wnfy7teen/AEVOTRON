@@ -128,24 +128,24 @@
   white-space: nowrap;
   transform: rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1)) translate(-50%, -50%);
 }
-.av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; }
-.av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; }
-.av-site .av-hero-art .av-label-right { --orbit-angle: 90deg; }
-.av-site .av-hero-art .av-label-bottom { --orbit-angle: 180deg; }
-.av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; }
-.av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; }
+.av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
+.av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; --orbit-counter-angle: -45deg; }
+.av-site .av-hero-art .av-label-right { --orbit-angle: 90deg; --orbit-counter-angle: -90deg; }
+.av-site .av-hero-art .av-label-bottom { --orbit-angle: 180deg; --orbit-counter-angle: -180deg; }
+.av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; --orbit-counter-angle: -225deg; }
+.av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; --orbit-counter-angle: -270deg; }
 .av-site .av-hero-art .av-orbit-label > span {
   display: block;
   animation: av-orbit-counter-spin 30s linear infinite;
-  transform: rotate(calc(var(--orbit-angle) * -1));
+  transform: rotate(var(--orbit-counter-angle));
 }
 @keyframes av-orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 @keyframes av-orbit-counter-spin {
-  from { transform: rotate(calc(var(--orbit-angle) * -1)); }
-  to { transform: rotate(calc((var(--orbit-angle) * -1) - 360deg)); }
+  from { transform: rotate(var(--orbit-counter-angle)); }
+  to { transform: rotate(calc(var(--orbit-counter-angle) - 360deg)); }
 }
 .av-site .av-hero-art .av-core:hover ~ .av-orbit-track,
 .av-site .av-hero-art:has(.av-core:hover) .av-orbit-track,
