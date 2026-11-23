@@ -1,5 +1,5 @@
 /* AEVOTRON Apple-style application layer. Scoped away from the public landing page. */
-.apple-app{--apple-bg:var(--palette-hex-f2f2f7);--apple-surface:var(--palette-hex-ffffff);--apple-solid:var(--palette-hex-ffffff);--apple-ink:var(--palette-hex-1c1c1e);--apple-muted:var(--palette-hex-636366);--apple-line:var(--palette-hex-e5e5ea);--apple-blue:var(--palette-hex-007aff);--apple-blue-hover:var(--palette-hex-0066d6);--apple-green:var(--palette-hex-248a52);--app-page:var(--palette-hex-f2f2f7);--app-card:var(--palette-hex-ffffff);--app-border:var(--palette-hex-e5e5ea);--app-text:var(--palette-hex-1c1c1e);--app-muted:var(--palette-hex-636366);--app-accent:var(--palette-hex-007aff);color:var(--app-text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+.apple-app{--apple-bg:var(--palette-hex-f2f2f7);--apple-surface:var(--palette-hex-ffffff);--apple-solid:var(--palette-hex-ffffff);--apple-ink:var(--palette-hex-1c1c1e);--apple-muted:var(--palette-hex-636366);--apple-line:var(--palette-hex-e5e5ea);--apple-blue:var(--palette-hex-007aff);--apple-blue-hover:var(--palette-hex-0066d6);--apple-green:var(--palette-hex-248a52);--app-page:var(--palette-hex-f2f2f7);--app-card:var(--palette-hex-ffffff);--app-text:var(--palette-hex-1c1c1e);--app-muted:var(--palette-hex-636366);color:var(--app-text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 .apple-app :where(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
 .apple-app :where(button,a):focus-visible,.apple-app :where(input,select,textarea):focus-visible{outline:3px solid var(--palette-rgba-0-113-227-38);outline-offset:3px}
 .apple-app .mh-shell{min-height:100vh;background:var(--apple-bg);color:var(--apple-ink);font-family:inherit;letter-spacing:-.012em}
@@ -3490,11 +3490,11 @@ html[data-theme="dark"] :is(.apple-app, .aw-shell) :is(
   --app-page-subtle:var(--palette-hex-f2f2f7);
   --app-card:var(--palette-hex-ffffff);
   --app-card-raised:var(--palette-hex-ffffff);
-  --app-border:var(--palette-hex-e5e5ea);
+  
   --app-divider:var(--palette-hex-e5e5ea);
   --app-text:var(--palette-hex-1c1c1e);
   --app-muted:var(--palette-hex-636366);
-  --app-accent:var(--palette-hex-007aff);
+  
   --app-hover:var(--palette-hex-f2f2f7);
   --apple-bg:var(--app-page-subtle);
   --apple-surface:var(--app-card);
@@ -3510,11 +3510,11 @@ html[data-theme="dark"] :is(.apple-app, .aw-shell) :is(
   --app-page-subtle:var(--palette-hex-1c1c1e);
   --app-card:var(--palette-hex-2c2c2e);
   --app-card-raised:var(--palette-hex-2c2c2e);
-  --app-border:var(--palette-hex-3a3a3c);
+  
   --app-divider:var(--palette-hex-3a3a3c);
   --app-text:var(--palette-hex-f5f5f7);
   --app-muted:var(--palette-hex-98989d);
-  --app-accent:var(--palette-hex-0a84ff);
+  
   --app-hover:var(--palette-hex-3a3a3c);
   --apple-bg:var(--app-page);
   --apple-surface:var(--app-card);
