@@ -187,8 +187,11 @@ it("migrates landing and authentication UI to domain namespaces with legacy fall
     readFile(new URL("../src/components/auth/RegisterPage.jsx", import.meta.url), "utf8"),
     readFile(new URL("../src/routes/verify-email.jsx", import.meta.url), "utf8"),
   ]);
-  assert.match(config, /landing: landingEn/);
-  assert.match(config, /auth: authEn/);
+  assert.match(config, /landing: async \(\) =>/);
+  assert.match(config, /auth: async \(\) =>/);
+  assert.match(config, /import\("\.\/locales\/landing\/en\.json"\)/);
+  assert.match(config, /import\("\.\/locales\/auth\/en\.json"\)/);
+  assert.match(config, /loadLocaleResources/);
   assert.match(config, /fallbackNS: "translation"/);
   assert.match(landing, /useLanguage\(\["landing", "translation"\]\)/);
   assert.match(login, /useTranslation\(\["auth", "translation"\]\)/);
