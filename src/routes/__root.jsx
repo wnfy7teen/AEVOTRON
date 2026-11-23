@@ -8,9 +8,11 @@ import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/i18n.functions";
 import { getRouteNamespace, loadLocaleResources, normalizeLanguage, translateForLanguage } from "@/i18n";
+import themeTokensCss from "@/theme-tokens.css?url";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 import appleLightRedesignCss from "@/apple-light-redesign.css?url";
+import themeOverridesCss from "@/theme-overrides.css?url";
 
 export const Route = createRootRoute({
   loader: async ({ location }) => {
@@ -29,9 +31,11 @@ export const Route = createRootRoute({
         { name: "description", content: translateForLanguage(locale, "Unified API infrastructure for AI models.") },
       ],
       links: [
+        { rel: "stylesheet", href: themeTokensCss },
         { rel: "stylesheet", href: appCss },
         { rel: "stylesheet", href: appleCss },
         { rel: "stylesheet", href: appleLightRedesignCss },
+        { rel: "stylesheet", href: themeOverridesCss },
       ],
     };
   },
@@ -102,7 +106,10 @@ function RootDocument({ children }) {
   const language = normalizeLanguage(loaderData?.locale || "en");
   return (
     <html lang={language === "zh" ? "zh-CN" : language}>
-      <head><HeadContent /></head>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var t=saved==="dark"||saved==="gray"?"dark":saved==="light"?"light":(p==="/"?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
+        <HeadContent />
+      </head>
       <body data-react-root="true">
         {children}
         <Scripts />
