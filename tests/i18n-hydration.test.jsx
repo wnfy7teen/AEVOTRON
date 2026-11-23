@@ -3,6 +3,7 @@ import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
+import { loadLocaleResources } from "@/i18n";
 
 function HydrationProbe() {
   const { language, t } = useLanguage();
@@ -34,8 +35,9 @@ describe("i18n SSR hydration", () => {
     ["ru", "С возвращением"],
     ["zh", "欢迎回来"],
   ])("hydrates the %s server locale without replacing translated markup", async (locale, expectedText) => {
+    const initialResources = await loadLocaleResources(locale);
     const app = (
-      <LanguageProvider initialLanguage={locale}>
+      <LanguageProvider initialLanguage={locale} initialResources={initialResources}>
         <HydrationProbe />
       </LanguageProvider>
     );
@@ -62,8 +64,9 @@ describe("i18n SSR hydration", () => {
 
   it("restores browser preferences after hydrating the matching server locale", async () => {
     localStorage.setItem("aevotron-language", "ru");
+    const initialResources = await loadLocaleResources("en");
     const app = (
-      <LanguageProvider initialLanguage="en">
+      <LanguageProvider initialLanguage="en" initialResources={initialResources}>
         <HydrationProbe />
       </LanguageProvider>
     );
