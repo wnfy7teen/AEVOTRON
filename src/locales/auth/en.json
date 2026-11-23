@@ -1,5 +1,6 @@
 {
-  "Back to home": "Back to home","Reset password": "Reset password",
+  "Back to home": "Back to home",
+  "Reset password": "Reset password",
   "We'll send you a link to reset it": "We'll send you a link to reset it",
   "If an account exists with that email, you'll receive a password reset link shortly.": "If an account exists with that email, you'll receive a password reset link shortly.",
   "Email address": "Email address",
@@ -113,5 +114,7 @@
   "Sign in required": "Sign in required",
   "Sign in to manage your two-factor authentication.": "Sign in to manage your two-factor authentication.",
   "Continue to sign in": "Continue to sign in",
-  "Sign up to get started": "Sign up to get started"
+  "Sign up to get started": "Sign up to get started",
+  "Show password": "Show password",
+  "Hide password": "Hide password"
 }
