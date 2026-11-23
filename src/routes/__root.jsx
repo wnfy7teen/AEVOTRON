@@ -13,6 +13,7 @@ import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 import themeOverridesCss from "@/theme-overrides.css?url";
 import authCss from "@/auth-theme.css?url";
+import responsiveCss from "@/responsive.css?url";
 
 export const Route = createRootRoute({
   loader: async ({ location }) => {
@@ -26,7 +27,7 @@ export const Route = createRootRoute({
     return {
       meta: [
         { charSet: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
         { title: translateForLanguage(locale, "Aevotron — One API. Every model.") },
         { name: "description", content: translateForLanguage(locale, "Unified API infrastructure for AI models.") },
       ],
@@ -36,6 +37,7 @@ export const Route = createRootRoute({
         { rel: "stylesheet", href: appleCss },
         { rel: "stylesheet", href: themeOverridesCss },
         { rel: "stylesheet", href: authCss },
+        { rel: "stylesheet", href: responsiveCss },
       ],
     };
   },
