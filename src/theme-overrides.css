@@ -403,7 +403,7 @@ html[data-theme="light"] .apple-app[data-theme="light"] :is(
 .av-site[data-theme="light"] .av-routing {
   background: var(--bg-secondary);
 }
-.av-site[data-theme="dark"] :is(.av-brand-mark, .av-core-mark, .av-node-mark) {
+.av-site[data-theme="dark"] :is(.av-brand-mark, .av-node-mark) {
   background: var(--accent);
   color: var(--accent-foreground);
 }
