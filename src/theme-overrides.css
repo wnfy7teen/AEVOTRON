@@ -335,7 +335,7 @@ html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-button-danger, .aw-compare-stop
 ) {
   background: var(--danger);
-  color: #ffffff;
+  color: var(--accent-foreground);
   border-color: var(--danger);
 }
 
