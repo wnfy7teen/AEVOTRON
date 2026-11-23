@@ -789,5 +789,13 @@
   "Gray theme": "Серая тема",
   "Switch to gray theme": "Переключить на серую тему",
   "Sample data · Interactive demo · Local changes only · No account or backend connection required": "Демонстрационные данные · Интерактивный демо-режим · Изменения сохраняются только локально · Аккаунт и подключение к backend не требуются",
-  "AEVOTRON": "AEVOTRON"
+  "AEVOTRON": "AEVOTRON",
+  "core.aevotron": "AEVOTRON",
+  "core.unified_api": "ЕДИНЫЙ API",
+  "orbit.top": "ЕДИНЫЙ ИНТЕРФЕЙС",
+  "orbit.bottom": "НЕСКОЛЬКО МОДЕЛЕЙ",
+  "orbit.left": "SECURE KEYS",
+  "orbit.right": "USAGE ANALYTICS",
+  "orbit.top_right": "LOW LATENCY",
+  "orbit.bottom_left": "SMART ROUTING"
 }
