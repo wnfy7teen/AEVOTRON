@@ -57,7 +57,139 @@ export default function AppleLanding() {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
-  // Scroll-triggered work is CSS-only; no observers or per-character timers.
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const codeExample = document.querySelector(".av-site .av-code");
+    if (!codeExample) return;
+    let observer: IntersectionObserver | undefined;
+    let timer: number | undefined;
+    let cancelled = false;
+    const startTyping = () => {
+      if (cancelled || codeExample.classList.contains("is-typing")) return;
+      codeExample.classList.add("is-typing");
+      const lines = Array.from(codeExample.querySelectorAll("pre"));
+      const characters: HTMLSpanElement[] = [];
+      lines.forEach((line) => {
+        const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+        const textNodes: Text[] = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode as Text;
+          if (node.parentElement?.closest(".av-typed-char")) continue;
+          textNodes.push(node);
+        }
+        textNodes.forEach((node) => {
+          const fragment = document.createDocumentFragment();
+          Array.from(node.textContent ?? "").forEach((character) => {
+            const span = document.createElement("span");
+            span.className = "av-typed-char";
+            span.textContent = character;
+            span.style.opacity = "0";
+            fragment.appendChild(span);
+            characters.push(span);
+          });
+          node.parentNode?.replaceChild(fragment, node);
+        });
+      });
+      const result = codeExample.querySelector(".av-code-result") as HTMLElement | null;
+      if (result) result.style.opacity = "0";
+      let index = 0;
+      const typeNext = () => {
+        if (cancelled) return;
+        if (index < characters.length) {
+          characters[index].style.opacity = "1";
+          index += 1;
+          timer = window.setTimeout(typeNext, 18);
+        } else if (result) {
+          result.style.opacity = "1";
+          result.classList.add("is-typed");
+        }
+      };
+      typeNext();
+    };
+    if (!("IntersectionObserver" in window)) {
+      startTyping();
+    } else {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          startTyping();
+          observer?.disconnect();
+        }
+      }, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" });
+      observer.observe(codeExample);
+    }
+    return () => {
+      cancelled = true;
+      if (timer !== undefined) window.clearTimeout(timer);
+      observer?.disconnect();
+    };
+  }, [language]);
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const controlExample = document.querySelector(".av-site .av-control");
+    if (!controlExample) return;
+    let observer: IntersectionObserver | undefined;
+    let timer: number | undefined;
+    let cancelled = false;
+
+    const startTyping = () => {
+      if (cancelled || controlExample.classList.contains("is-typing")) return;
+      controlExample.classList.add("is-typing");
+      const targets = controlExample.querySelectorAll(
+        ".av-control-inner small, .av-control-inner strong, .av-control-inner span, .av-key-status, .av-permissions span, .av-permissions b, .av-control-footer span, .av-control-footer strong"
+      );
+      const characters: HTMLSpanElement[] = [];
+      targets.forEach((target) => {
+        const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT);
+        const textNodes: Text[] = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode as Text;
+          if (node.parentElement?.closest(".av-typed-char")) continue;
+          if (node.textContent) textNodes.push(node);
+        }
+        textNodes.forEach((node) => {
+          const fragment = document.createDocumentFragment();
+          Array.from(node.textContent ?? "").forEach((character) => {
+            const span = document.createElement("span");
+            span.className = "av-typed-char";
+            span.textContent = character;
+            span.style.opacity = "0";
+            fragment.appendChild(span);
+            characters.push(span);
+          });
+          node.parentNode?.replaceChild(fragment, node);
+        });
+      });
+
+      let index = 0;
+      const typeNext = () => {
+        if (cancelled) return;
+        if (index < characters.length) {
+          characters[index].style.opacity = "1";
+          index += 1;
+          timer = window.setTimeout(typeNext, 24);
+        }
+      };
+      typeNext();
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      startTyping();
+    } else {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          startTyping();
+          observer?.disconnect();
+        }
+      }, { threshold: 0.08, rootMargin: "0px 0px 100px 0px" });
+      observer.observe(controlExample);
+    }
+
+    return () => {
+      cancelled = true;
+      if (timer !== undefined) window.clearTimeout(timer);
+      observer?.disconnect();
+    };
+  }, [language]);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
