@@ -8,7 +8,7 @@
 .av-inline-link{display:inline-flex;align-items:center;gap:8px;padding:0;border:0;background:transparent;color:var(--palette-hex-3b454f);font-size:13px;font-weight:600;margin-top:22px;cursor:pointer;transition:color .2s ease}
 .av-final-cta{padding:100px 24px 112px;text-align:center;background:var(--palette-hex-e9edf1)}.av-final-icon{width:48px;height:48px;border-radius:15px;background:var(--palette-hex-fff);border:1px solid var(--palette-hex-e5e9ed);display:grid;place-items:center;margin:0 auto 22px;color:var(--av-blue)}.av-final-cta h2{font-size:clamp(34px,5vw,54px);letter-spacing:-.055em;line-height:1.08;margin:0 auto 15px;max-width:700px}.av-final-cta p{font-size:15px;color:var(--palette-hex-727a84);margin:0 auto 27px;line-height:1.6}.av-footer{max-width:1200px;margin:auto;min-height:100px;padding:25px 30px;display:flex;align-items:center;gap:28px}.av-footer>span{font-size:10px;color:var(--palette-hex-8a919a)}.av-footer>div{display:flex;gap:18px;margin-left:auto}.av-footer>div a{font-size:11px;color:var(--palette-hex-68717b)}.av-footer>div a:hover{color:var(--av-blue)}.av-footer>small{font-size:10px;color:var(--palette-hex-9aa1a9)}
 @media(max-width:800px){.av-nav-wrap{height:60px;padding:0 20px}.av-nav-links{display:none;position:absolute;top:60px;left:0;right:0;margin:0;padding:22px 24px;background:var(--palette-color-ecb450d9);border-bottom:1px solid var(--av-line);flex-direction:column;align-items:flex-start;gap:20px}.av-nav-links.is-open{display:flex}.av-nav-actions{margin-left:auto;margin-right:15px;gap:14px}.av-menu-toggle{display:grid;place-items:center}.av-menu-toggle svg{width:20px;height:20px}.av-hero{padding:90px 22px 0;min-height:670px}.av-hero h1{font-size:clamp(55px,11vw,78px)}.av-hero-copy{font-size:16px}.av-hero-art{margin-top:55px;height:235px}.av-orbit-one{height:105px}.av-orbit-two{height:160px}.av-core{width:132px;height:132px;border-radius:31px}.av-intro{padding:80px 20px 60px}.av-feature,.av-feature-reverse{padding:80px 22px;grid-template-columns:1fr;gap:35px;min-height:0}.av-feature-reverse .av-feature-copy,.av-feature-reverse .av-visual{order:initial}.av-feature-copy{max-width:600px}.av-visual{min-height:300px;padding:22px}.av-footer{flex-wrap:wrap;gap:16px;padding:25px 22px}.av-footer>span{display:none}.av-footer>div{margin-left:auto}}
-@media(max-width:520px){.av-nav-actions .av-login{display:none}.av-nav-cta{height:33px;font-size:10px;padding:0 12px}.av-hero{padding-top:76px;min-height:620px}.av-hero h1{font-size:58px}.av-hero-copy{font-size:15px;line-height:1.55}.av-hero-actions{gap:16px;flex-direction:column}.av-primary-button{height:45px}.av-hero-footnote{max-width:300px;margin:18px auto 0;font-size:9px;line-height:1.5}.av-hero-art{width:100%;height:205px;margin-top:42px}.av-orbit-one{width:100%;height:82px}.av-orbit-two{width:85%;height:135px}.av-core{width:112px;height:112px;border-radius:27px}.av-core-mark{width:35px;height:35px;font-size:22px}.av-orbit-label{font-size:7px;padding:6px 9px}.av-label-top{right:0}.av-label-bottom{left:0}.av-intro h2{font-size:36px}.av-feature-copy h2{font-size:36px}.av-feature-copy p{font-size:14px}.av-visual{min-height:270px;padding:15px;border-radius:18px}.av-routing{gap:10px}.av-api-node{width:44%;height:160px}.av-api-node strong{font-size:9px}.av-api-node code{font-size:7px;padding:6px}.av-routing-lines{width:15px}.av-routing-lines i{width:15px}.av-provider-stack{width:40%;gap:8px}.av-provider{height:44px;padding:0 6px;gap:5px}.av-provider-symbol{width:22px;height:22px;font-size:10px}.av-provider strong{font-size:8px}.av-provider-state{font-size:0}.av-provider-state svg{width:11px}.av-control-inner{margin:22px 15px 18px;padding:15px;gap:8px}.av-control-inner strong{font-size:11px}.av-control-inner span{font-size:8px}.av-permissions{margin:0 15px;gap:5px}.av-permissions b{font-size:8px;padding:7px}.av-control-footer{margin:23px 15px 0;font-size:8px}.av-code pre{padding:0 14px;font-size:8px}.av-code-result{margin:17px 14px 0;font-size:9px}.av-final-cta{padding:75px 22px}.av-final-cta h2{font-size:37px}.av-final-cta p{font-size:13px}.av-footer{gap:14px}.av-footer>div{gap:12px}.av-footer>small{width:100%}}
+@media(max-width:520px){.av-nav-actions .av-login{display:none}.av-nav-cta{height:33px;font-size:10px;padding:0 12px}.av-hero{padding-top:76px;min-height:620px}.av-hero h1{font-size:58px}.av-hero-copy{font-size:15px;line-height:1.55}.av-hero-actions{gap:16px;flex-direction:column}.av-primary-button{height:45px}.av-hero-footnote{max-width:300px;margin:18px auto 0;font-size:9px;line-height:1.5}.av-hero-art{width:100%;height:205px;margin-top:42px}.av-orbit-one{width:100%;height:82px}.av-orbit-two{width:85%;height:135px}.av-core{width:112px;height:112px;border-radius:27px}.av-core-mark{width:35px;height:35px;font-size:22px}.av-orbit-label{font-size:7px;padding:6px 9px}.av-label-top{right:0}.av-label-bottom{left:0}.av-intro h2{font-size:36px}.av-feature-copy h2{font-size:36px}.av-feature-copy p{font-size:14px}.av-visual{min-height:270px;padding:15px;border-radius:18px}.av-routing{gap:10px}.av-api-node{width:44%;height:160px}.av-api-node strong{font-size:9px}.av-api-node code{font-size:7px;padding:6px}.av-routing-lines{width:15px}.av-routing-lines i{width:15px}.av-provider-stack{width:40%;gap:8px}.av-provider{height:44px;padding:0 6px;gap:5px}.av-provider-symbol{width:22px;height:22px;font-size:10px}.av-provider strong{font-size:8px}.av-provider-state{font-size:0}.av-provider-state svg{width:11px}.av-control-inner{margin:22px 15px 18px;padding:15px;gap:8px}.av-control-inner strong{font-size:11px}.av-control-inner span{font-size:8px}.av-control-footer{margin:23px 15px 0;font-size:8px}.av-code pre{padding:0 14px;font-size:8px}.av-code-result{margin:17px 14px 0;font-size:9px}.av-final-cta{padding:75px 22px}.av-final-cta h2{font-size:37px}.av-final-cta p{font-size:13px}.av-footer{gap:14px}.av-footer>div{gap:12px}.av-footer>small{width:100%}}
 @media(prefers-reduced-motion:reduce){.av-site *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
 /* Subtle readability and icon-size refinement */
@@ -2264,62 +2264,6 @@ html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner > div:f
   font-size: 12px;
 }
 
-/* Permission rows with a trailing checkmark. */
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
-}
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions > span,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions > span {
-  width: auto;
-  margin: 0;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions > span {
-  color: #6e6e73 !important;
-}
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions > span {
-  color: #a1a1a6 !important;
-}
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 40px;
-  padding: 0 16px;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0;
-  color: var(--text-primary) !important;
-  font-size: 14px;
-  font-weight: 400;
-  box-shadow: none !important;
-}
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b + b,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b + b {
-  border-top: 1px solid var(--border) !important;
-}
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b::after,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b::after {
-  content: "✓";
-  flex: 0 0 auto;
-  margin-left: 12px;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 600;
-}
-
 /* Footer row. */
 html[data-theme="light"] .av-site .av-visual.av-control .av-control-footer,
 html[data-theme="dark"] .av-site .av-visual.av-control .av-control-footer {
@@ -2556,28 +2500,6 @@ html[data-theme="dark"] .av-site .av-visual.av-code .av-code-result small {
   /* Opacity remains controlled by the existing typing script. */
 }
 
-/* Permission labels contain one span per character; they must not be flex rows. */
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b {
-  position: relative;
-  display: block !important;
-  justify-content: initial !important;
-  gap: 0 !important;
-  column-gap: 0 !important;
-  padding-right: 40px;
-  text-align: left !important;
-  word-spacing: normal !important;
-}
-
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b::after,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b::after {
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  margin: 0 !important;
-  transform: translateY(-50%);
-}
-
 /* Code lines stay block-level; syntax spans and typed characters stay inline. */
 html[data-theme="light"] .av-site .av-visual.av-code pre,
 html[data-theme="dark"] .av-site .av-visual.av-code pre {
@@ -2593,9 +2515,6 @@ html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner small,
 html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner small {
   letter-spacing: 0.04em;
 }
-
-html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b,
-html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b,
 html[data-theme="light"] .av-site .av-visual.av-control .av-control-footer strong,
 html[data-theme="dark"] .av-site .av-visual.av-control .av-control-footer strong,
 html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner strong,
@@ -2671,4 +2590,88 @@ html[data-theme="dark"] .av-control .av-key-status {
 }
 @media (max-width: 480px) {
   .av-control .av-key-status { align-self: flex-start; }
+}
+
+/* 19 — macOS Settings permission list. */
+.av-control .av-permissions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.av-control .av-permissions > span {
+  display: block;
+  padding: 10px 16px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border);
+  white-space: normal;
+}
+html[data-theme="light"] .av-control .av-permissions > span { color: #6e6e73; }
+html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
+.av-control .av-permissions b {
+  position: relative;
+  display: block;
+  min-height: 44px;
+  padding: 12px 64px 12px 52px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: var(--text-primary);
+  white-space: normal;
+  text-align: left;
+  word-spacing: normal;
+  box-shadow: none;
+}
+.av-control .av-permissions b + b { border-top: 1px solid var(--border); }
+.av-control .av-permissions b::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  border-radius: 6px;
+  background: var(--accent);
+}
+.av-control .av-permissions b:nth-of-type(2)::before { background: #30d158; }
+.av-control .av-permissions b:nth-of-type(3)::before { background: #ff9f0a; }
+.av-control .av-permissions b::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 36px;
+  height: 22px;
+  margin-top: -11px;
+  border-radius: 980px;
+  background: #30d158;
+  background-image: radial-gradient(circle at calc(100% - 11px) 50%, #ffffff 8px, transparent 8.5px);
+  box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.1);
+}
+.av-control .av-permissions .av-typed-char {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  letter-spacing: inherit;
+  word-spacing: normal;
+  white-space: pre;
+  color: inherit;
+  opacity: 1;
+}
+@media (max-width: 480px) {
+  .av-control .av-permissions b { padding-right: 60px; }
 }
