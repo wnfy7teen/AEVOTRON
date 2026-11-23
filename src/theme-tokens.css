@@ -1346,3 +1346,30 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
   --background:240 3% 11%; --foreground:240 5% 96%; --card:240 3% 17%; --card-foreground:240 5% 96%; --popover:240 3% 17%; --popover-foreground:240 5% 96%; --primary:211 100% 52%; --primary-foreground:0 0% 100%; --secondary:240 2% 23%; --secondary-foreground:240 5% 96%; --muted:240 2% 23%; --muted-foreground:240 4% 65%; --accent-foreground-hsl: 0 0% 100%; --destructive:3 100% 62%; --destructive-foreground:0 0% 100%; --input:0 0% 100% / 18%; --ring:211 100% 52%; --sidebar-background:240 3% 11%; --sidebar-foreground:240 5% 96%; --sidebar-primary:211 100% 52%; --sidebar-primary-foreground:0 0% 100%; --sidebar-accent:240 2% 23%; --sidebar-accent-foreground:240 5% 96%; --sidebar-border:0 0% 100% / 10%; --sidebar-ring:211 100% 52%;
   color-scheme: dark;
 }
+
+
+/* Unified AEVOTRON semantic tokens. */
+:root {
+  --app-bg: #FFFFFF;
+  --app-surface: #FFFFFF;
+  --app-border: #E5E5EA;
+  --app-text-primary: #1C1C1E;
+  --app-text-secondary: #636366;
+  --app-accent: #007AFF;
+  --app-accent-violet: #8E5CF6;
+  --app-accent-graphite: #636366;
+}
+.dark,
+html[data-theme="dark"],
+html[data-theme="gray"],
+[data-theme="dark"],
+[data-theme="gray"] {
+  --app-bg: #1C1C1E;
+  --app-surface: #2C2C2E;
+  --app-border: #3A3A3C;
+  --app-text-primary: #F5F5F7;
+  --app-text-secondary: #98989D;
+  --app-accent: #0A84FF;
+  --app-accent-violet: #BF9BFF;
+  --app-accent-graphite: #A1A1A6;
+}
