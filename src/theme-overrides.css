@@ -478,7 +478,7 @@ html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-backgro
   box-shadow: var(--shadow-sm);
 }
 .apple-app .app-route-transition { animation: none; }
-.av-site .av-reveal { opacity: 1; transform: none; transition: none; }
+
 
 
 /* Canonical token layer. Selectors intentionally outrank legacy theme rules in apple-style.css. */
