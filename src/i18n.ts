@@ -1,27 +1,50 @@
-import { createInstance, type i18n as I18nInstance } from "i18next";
+import { createInstance, type i18n as I18nInstance, type ResourceLanguage } from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
 import zh from "./locales/zh.json";
-import dashboardEn from "./locales/dashboard/en.json";
-import dashboardRu from "./locales/dashboard/ru.json";
-import dashboardZh from "./locales/dashboard/zh.json";
-import landingEn from "./locales/landing/en.json";
-import landingRu from "./locales/landing/ru.json";
-import landingZh from "./locales/landing/zh.json";
-import authEn from "./locales/auth/en.json";
-import authRu from "./locales/auth/ru.json";
-import authZh from "./locales/auth/zh.json";
 
 export const LANGUAGE_STORAGE_KEY = "aevotron-language";
 export const LANGUAGE_COOKIE_KEY = "aevotron-language";
 export const supportedLanguages = ["en", "ru", "zh"] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];
+export type LocaleNamespaces = {
+  dashboard: Record<string, string>;
+  landing: Record<string, string>;
+  auth: Record<string, string>;
+};
 
-const resources = {
-  en: { translation: en, dashboard: dashboardEn, landing: landingEn, auth: authEn },
-  ru: { translation: ru, dashboard: dashboardRu, landing: landingRu, auth: authRu },
-  zh: { translation: zh, dashboard: dashboardZh, landing: landingZh, auth: authZh },
+const translationResources = {
+  en: { translation: en },
+  ru: { translation: ru },
+  zh: { translation: zh },
+};
+
+const namespaceLoaders: Record<SupportedLanguage, () => Promise<LocaleNamespaces>> = {
+  en: async () => {
+    const [dashboard, landing, auth] = await Promise.all([
+      import("./locales/dashboard/en.json"),
+      import("./locales/landing/en.json"),
+      import("./locales/auth/en.json"),
+    ]);
+    return { dashboard: dashboard.default, landing: landing.default, auth: auth.default };
+  },
+  ru: async () => {
+    const [dashboard, landing, auth] = await Promise.all([
+      import("./locales/dashboard/ru.json"),
+      import("./locales/landing/ru.json"),
+      import("./locales/auth/ru.json"),
+    ]);
+    return { dashboard: dashboard.default, landing: landing.default, auth: auth.default };
+  },
+  zh: async () => {
+    const [dashboard, landing, auth] = await Promise.all([
+      import("./locales/dashboard/zh.json"),
+      import("./locales/landing/zh.json"),
+      import("./locales/auth/zh.json"),
+    ]);
+    return { dashboard: dashboard.default, landing: landing.default, auth: auth.default };
+  },
 };
 
 export function normalizeLanguage(value: string | null | undefined): SupportedLanguage {
@@ -41,13 +64,39 @@ export function readSavedLanguage(storage?: Pick<Storage, "getItem"> | null): Su
 type I18nOptions = {
   language?: string | null;
   storage?: Pick<Storage, "getItem" | "setItem"> | null;
+  resources?: Partial<Record<SupportedLanguage, Partial<LocaleNamespaces>>>;
 };
+
+export async function loadLocaleResources(language: string): Promise<LocaleNamespaces> {
+  return namespaceLoaders[normalizeLanguage(language)]();
+}
+
+export async function changeAppLanguage(instance: I18nInstance, language: string): Promise<void> {
+  const nextLanguage = normalizeLanguage(language);
+  const namespaces = ["dashboard", "landing", "auth"] as const;
+  const missing = namespaces.some((namespace) => !instance.hasResourceBundle(nextLanguage, namespace));
+  if (missing) {
+    const loaded = await loadLocaleResources(nextLanguage);
+    for (const namespace of namespaces) {
+      if (!instance.hasResourceBundle(nextLanguage, namespace)) {
+        instance.addResourceBundle(nextLanguage, namespace, loaded[namespace], true, true);
+      }
+    }
+  }
+  await instance.changeLanguage(nextLanguage);
+}
 
 export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "setItem"> | null = {}): I18nInstance {
   const normalizedOptions = options && "getItem" in options
     ? { storage: options as Pick<Storage, "getItem" | "setItem"> }
     : (options || {}) as I18nOptions;
-  const { language, storage } = normalizedOptions;
+  const { language, storage, resources: initialResources } = normalizedOptions;
+  const resources = Object.fromEntries(
+    supportedLanguages.map((locale) => [
+      locale,
+      { ...translationResources[locale], ...(initialResources?.[locale] || {}) },
+    ]),
+  ) as ResourceLanguage;
   const instance = createInstance();
   instance.use(initReactI18next).init({
     resources,
@@ -93,8 +142,8 @@ export function persistLanguageCookie(language: string) {
 
 export function translateForLanguage(language: string | null | undefined, key: string) {
   const locale = normalizeLanguage(language);
-  const catalog = resources[locale].translation;
-  const fallback = resources.en.translation;
+  const catalog = translationResources[locale].translation;
+  const fallback = translationResources.en.translation;
   const catalogValue = catalog[key as keyof typeof en];
   return catalogValue ?? fallback[key as keyof typeof en] ?? key;
 }
