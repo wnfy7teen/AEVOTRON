@@ -1,4 +1,33 @@
 /* Shared responsive safety net. Loaded after component styles. */
+/* Shared overlays and floating surfaces stay inside the visual viewport. */
+.apple-app [role="dialog"], .aw-shell [role="dialog"], [data-radix-dialog-content] {
+  box-sizing: border-box;
+  max-width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+}
+.apple-app [data-radix-popper-content-wrapper], .aw-shell [data-radix-popper-content-wrapper] {
+  max-width: calc(100vw - 32px);
+}
+.apple-app [data-sonner-toaster], [data-sonner-toaster] {
+  width: min(420px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+}
+.apple-app [data-sonner-toast], [data-sonner-toast] { max-width: 100%; overflow-wrap: anywhere; }
+.apple-app :where(.mh-empty, .mh-empty-panel, .mh-catalog-empty, .mh-secret-value, .mh-api-url, .mh-code) { min-width: 0; overflow-wrap: anywhere; }
+.apple-app :where(.mh-toolbar, .mh-pagination, .av-modal-actions) { flex-wrap: wrap; }
+@media (max-width: 767px) {
+  .auth-card input:not([type="checkbox"]):not([type="radio"]) { font-size: 16px; }
+  .auth-card button, .auth-card a, .auth-card input[type="checkbox"] { min-height: 44px; }
+  .apple-app .mh-nav-item, .apple-app .mh-icon-button, .apple-app .mh-mobile-menu,
+  .aw-shell :where(button, a), .av-site :where(button, a) { min-height: 44px; }
+  .aw-shell .aw-sidebar { gap: 8px; }
+  .aw-shell .aw-history { max-height: 96px; overflow-y: auto; overscroll-behavior: contain; }
+  .aw-shell .aw-new-chat, .aw-shell .aw-search { min-height: 44px; }
+  .aw-shell .aw-model-picker { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .aw-shell .aw-attachment-list { max-width: 100%; overflow-x: auto; }
+  .apple-app .av-modal-backdrop { padding-bottom: env(safe-area-inset-bottom); }
+}
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 html, body { max-width: 100%; overflow-x: hidden; }
