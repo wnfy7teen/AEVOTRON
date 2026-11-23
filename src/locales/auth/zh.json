@@ -116,5 +116,6 @@
   "Continue to sign in": "继续登录",
   "Sign up to get started": "注册即可开始使用",
   "Show password": "显示密码",
-  "Hide password": "隐藏密码"
+  "Hide password": "隐藏密码",
+  "Password strength": "密码强度"
 }
