@@ -67,9 +67,9 @@
   padding: 0.75rem;
   overflow: hidden;
   transform: translate(-50%, -50%);
-  border: 2px solid var(--border-strong);
+  border: 2px solid #e5e5ea;
   border-radius: 50%;
-  background: var(--bg-secondary);
+  background: #ffffff;
   box-shadow: none;
   color: var(--text-primary);
   text-align: center;
@@ -78,7 +78,7 @@
 .av-site .av-hero-art .av-core-mark {
   display: block;
   flex: 0 0 auto;
-  color: var(--accent);
+  color: #007aff;
   font-family: inherit;
   font-size: 36px;
   font-weight: 800;
@@ -108,6 +108,20 @@
   line-height: 1.2;
   text-align: center;
   white-space: nowrap;
+}
+
+/* Match the Apple system palette in both supported appearance modes. */
+html[data-theme="dark"] .av-site .av-hero-art .av-core {
+  border-color: #3a3a3c;
+  background: #1c1c1e;
+}
+
+html[data-theme="dark"] .av-site .av-hero-art .av-core-mark {
+  color: #0a84ff;
+}
+
+html[data-theme="dark"] .av-site .av-hero-art .av-core small {
+  color: #98989d;
 }
 
 .av-site .av-hero-art .av-orbit-label {
