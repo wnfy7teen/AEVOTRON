@@ -154,3 +154,289 @@ body {
     scroll-behavior: auto;
   }
 }
+
+
+/* Dashboard and workspace theme parity: override the legacy gray palette at component boundaries. */
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
+  .aw-shell, .aw-main, .aw-content
+) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
+  .aw-shell, .aw-main, .aw-content
+) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
+  .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
+  .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
+  .mh-usage-panel, .mh-secret-reveal, .mh-api-card, .mh-api-example,
+  .mh-catalog-side-note, .av-settings-panel, .av-mock-panel,
+  .aw-card, .aw-panel, .aw-message, .aw-composer, .aw-model-card,
+  .aw-model-picker, .aw-compare-panel, .aw-compare-result, .aw-empty-state
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
+  .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
+  .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
+  .mh-usage-panel, .mh-secret-reveal, .mh-api-card, .mh-api-example,
+  .mh-catalog-side-note, .av-settings-panel, .av-mock-panel,
+  .aw-card, .aw-panel, .aw-message, .aw-composer, .aw-model-card,
+  .aw-model-picker, .aw-compare-panel, .aw-compare-result, .aw-empty-state
+) {
+  background: var(--bg-secondary);
+  background-image: none;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  filter: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-shadow: none;
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
+  .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
+  .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
+  .aw-title, .aw-panel-title, .aw-message strong, .aw-message-content h1,
+  .aw-message-content h2, .aw-message-content h3
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
+  .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
+  .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
+  .aw-title, .aw-panel-title, .aw-message strong, .aw-message-content h1,
+  .aw-message-content h2, .aw-message-content h3
+) {
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
+  .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
+  .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
+  .mh-field-label, .mh-field-help, .aw-muted, .aw-description,
+  .aw-message-meta, .aw-history-label, .aw-disclaimer, .aw-empty-state p
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
+  .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
+  .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
+  .mh-field-label, .mh-field-help, .aw-muted, .aw-description,
+  .aw-message-meta, .aw-history-label, .aw-disclaimer, .aw-empty-state p
+) {
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
+  .mh-text-link, .mh-tab, .mh-provider-filters button,
+  .aw-model-picker button, .aw-model-option, .aw-history-item,
+  .aw-new-chat, .aw-export-button, .aw-attach-button, .aw-compare-toggle,
+  .aw-favorite-toggle, .aw-message-action
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
+  .mh-text-link, .mh-tab, .mh-provider-filters button,
+  .aw-model-picker button, .aw-model-option, .aw-history-item,
+  .aw-new-chat, .aw-export-button, .aw-attach-button, .aw-compare-toggle,
+  .aw-favorite-toggle, .aw-message-action
+) {
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
+  .mh-provider-filters button.active, .aw-model-option:hover,
+  .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
+  .mh-provider-filters button.active, .aw-model-option:hover,
+  .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
+) {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
+  .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
+  .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
+) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
+) {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
+  .mh-api-params, .mh-api-params th, .mh-api-params td
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
+  .mh-api-params, .mh-api-params th, .mh-api-params td
+) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-button-primary, .aw-send-button
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-button-primary, .aw-send-button
+) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-button-primary, .aw-send-button
+):hover,
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-button-primary, .aw-send-button
+):hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
+  .mh-button-danger, .aw-compare-stop
+),
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
+  .mh-button-danger, .aw-compare-stop
+) {
+  background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger);
+}
+
+.apple-app :is(button, a, input, select, textarea) {
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease);
+}
+.apple-app :is(button:disabled, input:disabled, select:disabled, textarea:disabled) {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+/* Landing palette and section rhythm: all decorative surfaces follow the document theme. */
+.av-site[data-theme="dark"] {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.av-site[data-theme="light"] {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.av-site[data-theme="dark"] .av-header,
+.av-site[data-theme="light"] .av-header {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.av-site[data-theme="dark"] :is(.av-hero, .av-feature, .av-footer),
+.av-site[data-theme="light"] :is(.av-hero, .av-feature, .av-footer) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.av-site[data-theme="dark"] :is(.av-intro, .av-final-cta) {
+  background: var(--landing-section-alt);
+  color: var(--text-primary);
+}
+.av-site[data-theme="light"] :is(.av-intro, .av-final-cta) {
+  background: var(--landing-section-alt);
+  color: var(--text-primary);
+}
+.av-site[data-theme="dark"] :is(.av-brand, .av-nav-links a, .av-login, .av-menu-toggle, .av-secondary-button),
+.av-site[data-theme="light"] :is(.av-brand, .av-nav-links a, .av-login, .av-menu-toggle, .av-secondary-button) {
+  color: var(--text-primary);
+}
+.av-site[data-theme="dark"] :is(.av-hero-copy, .av-feature-copy p, .av-final-cta p, .av-footer, .av-eyebrow, .av-hero-kicker, .av-hero-footnote),
+.av-site[data-theme="light"] :is(.av-hero-copy, .av-feature-copy p, .av-final-cta p, .av-footer, .av-eyebrow, .av-hero-kicker, .av-hero-footnote) {
+  color: var(--text-secondary);
+}
+.av-site[data-theme="dark"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-permissions b, .av-final-icon, .av-orbit-label, .av-control, .av-code),
+.av-site[data-theme="light"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-permissions b, .av-final-icon, .av-orbit-label, .av-control, .av-code) {
+  background: var(--bg-secondary);
+  background-image: none;
+  color: var(--text-primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+  filter: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-shadow: none;
+}
+.av-site[data-theme="dark"] .av-routing {
+  background: var(--bg-secondary);
+}
+.av-site[data-theme="light"] .av-routing {
+  background: var(--bg-secondary);
+}
+.av-site[data-theme="dark"] :is(.av-brand-mark, .av-core-mark, .av-node-mark) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.av-site[data-theme="dark"] .av-header .av-nav-cta,
+.av-site[data-theme="dark"] .av-primary-button,
+.av-site[data-theme="light"] .av-header .av-nav-cta,
+.av-site[data-theme="light"] .av-primary-button {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+}
+.av-site[data-theme="dark"] :is(.av-nav-cta, .av-primary-button):hover,
+.av-site[data-theme="light"] :is(.av-nav-cta, .av-primary-button):hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+.av-site[data-theme="dark"] .av-theme-switch,
+.av-site[data-theme="light"] .av-theme-switch {
+  background: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+.av-site[data-theme="dark"] .av-theme-switch button,
+.av-site[data-theme="light"] .av-theme-switch button {
+  color: var(--text-secondary);
+}
+.av-site[data-theme="dark"] .av-theme-switch button.active,
+.av-site[data-theme="light"] .av-theme-switch button.active {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.av-site .av-workspace-link { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 520px) {
+  .av-site .av-nav-actions .av-workspace-link { display: inline-flex; }
+}
