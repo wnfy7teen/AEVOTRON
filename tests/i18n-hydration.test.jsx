@@ -1,6 +1,5 @@
 import React, { act } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { waitFor } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
@@ -82,7 +81,7 @@ describe("i18n SSR hydration", () => {
     });
 
     expect(recoverableErrors).toEqual([]);
-    await waitFor(() => {
+    await vi.waitFor(() => {
       expect(container.querySelector('[data-testid="locale"]').textContent).toBe("ru:С возвращением");
     });
   });
