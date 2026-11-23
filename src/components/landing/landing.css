@@ -2588,3 +2588,18 @@ html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
 @media (max-width: 480px) {
   .av-control .av-permissions b { padding-right: 60px; }
 }
+
+/* Clear separation between the BYOK note and the orbital artwork. */
+.av-site .av-hero-footnote {
+  margin-bottom: 28px;
+}
+
+.av-site .av-hero-footnote + .av-hero-art {
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .av-site .av-hero-footnote {
+    margin-bottom: 22px;
+  }
+}
