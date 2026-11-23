@@ -671,3 +671,21 @@ html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-
   .auth-main { padding: 24px 0; }
   .auth-page .av-theme-trigger { top: 12px; right: 12px; min-height: 44px; }
 }
+
+.auth-card .flex.items-center > .relative.flex {
+  box-sizing: border-box;
+  width: 48px;
+  height: 56px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 24px;
+  font-weight: 650;
+}
+.auth-card .flex.items-center > .relative.flex.z-10 {
+  border-color: var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  outline-offset: 2px;
+}
