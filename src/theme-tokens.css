@@ -21,6 +21,7 @@ html[data-theme="light"], [data-theme="light"] {
   --border-strong: rgba(0,0,0,0.18);
   --accent: #0071e3;
   --accent-hover: #0077ed;
+  --accent-foreground:#ffffff;
   --success: #248a52;
   --warning: #9a5b00;
   --danger: #c9342b;
@@ -42,6 +43,7 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
   --border-strong: rgba(255,255,255,0.18);
   --accent: #0a84ff;
   --accent-hover: #409cff;
+  --accent-foreground:#ffffff;
   --success: #30d158;
   --warning: #ff9f0a;
   --danger: #ff453a;
