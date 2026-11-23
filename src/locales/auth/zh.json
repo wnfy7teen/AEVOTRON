@@ -1,5 +1,5 @@
 {
-  "Reset password": "重置密码",
+  "Back to home": "返回首页","Reset password": "重置密码",
   "We'll send you a link to reset it": "我们将向您发送密码重置链接",
   "If an account exists with that email, you'll receive a password reset link shortly.": "如果该邮箱对应的账户存在，您很快就会收到密码重置链接。",
   "Email address": "电子邮箱地址",
