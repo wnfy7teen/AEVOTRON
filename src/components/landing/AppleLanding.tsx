@@ -10,6 +10,12 @@ import { createPortal } from "react-dom";
 type FeatureVisualProps = { variant: "routing" | "control" | "integration"; t: (value: string) => string };
 
 function FeatureVisual({ variant, t }: FeatureVisualProps) {
+  const [enabledPermissions, setEnabledPermissions] = useState<string[]>(["chat", "embeddings", "usage"]);
+  const togglePermission = (permission: string) => {
+    setEnabledPermissions((current) => current.includes(permission)
+      ? current.filter((item) => item !== permission)
+      : [...current, permission]);
+  };
   if (variant === "routing") {
     return <div className="av-visual av-routing" aria-label={t("Схема единого API и подключённых моделей")}>
       <div className="av-api-node"><span className="av-node-mark">A</span><strong>AEVOTRON API</strong><small>{t("Единая точка доступа")}</small><code>POST /v1/chat/completions</code></div>
@@ -21,7 +27,12 @@ function FeatureVisual({ variant, t }: FeatureVisualProps) {
     return <div className="av-visual av-control" aria-label={t("Интерфейс управления API-ключами")}>
       <div className="av-window-bar"><span /><span /><span /><small>{t("Безопасность · API-ключи")}</small></div>
       <div className="av-control-inner"><div><small>{t("АКТИВНЫЙ КЛЮЧ")}</small><strong>sk-live-••••••••••••8F2A</strong><span>{t("Создан сегодня · Полный доступ")}</span></div><div className="av-key-status"><ShieldCheck size={18} /> {t("Защищён")}</div></div>
-      <div className="av-permissions"><span>{t("Разрешения")}</span><b>{t("Chat completions")}</b><b>{t("Embeddings")}</b><b>{t("Usage")}</b></div>
+      <div className="av-permissions" aria-label={t("Разрешения API-ключа")}>
+        <span>{t("Разрешения")}</span>
+        <button type="button" aria-pressed={enabledPermissions.includes("chat")} onClick={() => togglePermission("chat")}>{t("Chat completions")}</button>
+        <button type="button" aria-pressed={enabledPermissions.includes("embeddings")} onClick={() => togglePermission("embeddings")}>{t("Embeddings")}</button>
+        <button type="button" aria-pressed={enabledPermissions.includes("usage")} onClick={() => togglePermission("usage")}>{t("Usage")}</button>
+      </div>
       <div className="av-control-footer"><span>{t("Последнее использование")}</span><strong>{t("2 минуты назад")}</strong></div>
     </div>;
   }
@@ -174,7 +185,7 @@ export default function AppleLanding() {
       if (cancelled || controlExample.classList.contains("is-typing")) return;
       controlExample.classList.add("is-typing");
       const targets = controlExample.querySelectorAll(
-        ".av-control-inner small, .av-control-inner strong, .av-control-inner span, .av-key-status, .av-permissions span, .av-permissions b, .av-control-footer span, .av-control-footer strong"
+        ".av-control-inner small, .av-control-inner strong, .av-control-inner span, .av-key-status, .av-permissions span, .av-permissions button, .av-control-footer span, .av-control-footer strong"
       );
       const characters: HTMLSpanElement[] = [];
       targets.forEach((target) => {
