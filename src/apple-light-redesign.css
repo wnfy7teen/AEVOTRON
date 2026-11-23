@@ -654,3 +654,48 @@ html[data-theme] .apple-app .aw-composer textarea {
   color: var(--text-primary) !important;
   border-color: var(--border-strong) !important;
 }
+
+
+/* Final anti-softness pass: text ancestors never receive opacity or filters. */
+.apple-app.app-route-transition,
+.apple-app .app-route-transition {
+  animation: none !important;
+  will-change: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+.apple-app :where(*) {
+  filter: none !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+.apple-app :where(*) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.apple-app .mh-sidebar,
+.apple-app .aw-sidebar,
+.apple-app .mh-topbar,
+.apple-app [role="dialog"],
+.apple-app [data-radix-popper-content-wrapper] > *,
+.apple-app .mh-dropdown,
+.apple-app .aw-dropdown {
+  backdrop-filter: var(--blur) !important;
+  -webkit-backdrop-filter: var(--blur) !important;
+}
+.av-site :where(*) {
+  filter: none !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+.av-site :where(*) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.av-site .av-header,
+.av-site .av-language-menu,
+.av-site .av-language-switcher,
+.av-site .av-section-nav {
+  backdrop-filter: var(--blur) !important;
+  -webkit-backdrop-filter: var(--blur) !important;
+}
