@@ -38,14 +38,14 @@ describe("workspace theme", () => {
     expect(restoredPreference).toBe("dark");
     setAppTheme(restoredPreference);
 
-    expect(document.documentElement.dataset.theme).toBe("gray");
+    expect(document.documentElement.dataset.theme).toBe("dark");
     expect([...document.querySelectorAll(".apple-app")].every((element) => element.dataset.theme === "dark")).toBe(true);
   });
 
   it("normalizes legacy dark and unsupported system preferences to the two supported themes", () => {
     setAppTheme("dark");
     expect(getAppThemePreference()).toBe("dark");
-    expect(window.localStorage.getItem("aevotron-theme")).toBe("gray");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("dark");
     expect(document.documentElement.dataset.theme).toBe("gray");
     expect(document.documentElement.style.colorScheme).toBe("dark");
 
@@ -58,7 +58,7 @@ describe("workspace theme", () => {
 
   it("migrates legacy and unsupported stored preferences to one of the two themes", () => {
     window.localStorage.setItem("aevotron-theme", "dark");
-    expect(getAppThemePreference()).toBe("gray");
+    expect(getAppThemePreference()).toBe("dark");
     expect(window.localStorage.getItem("aevotron-theme")).toBe("gray");
     window.localStorage.setItem("aevotron-theme", "system");
     expect(getAppThemePreference()).toBe("light");
@@ -89,7 +89,7 @@ describe("workspace theme", () => {
     expect(css).toMatch(/\.apple-app\[data-theme="dark"\] \.mh-detail-info-icon\s*\{[^}]*color:\s*var\(--palette-hex-a9d7ff\)/s);
   });
 
-  it("provides gray-theme overrides for workspace surfaces, typography, controls and navigation", async () => {
+  it("provides dark-theme overrides for workspace surfaces, typography, controls and navigation", async () => {
     const css = await readFile("src/apple-style.css", "utf8");
     const requiredGrayRules = [
       /\.apple-app\[data-theme="dark"\] \.mh-shell/,
