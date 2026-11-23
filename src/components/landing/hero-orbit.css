@@ -6,10 +6,10 @@
   aspect-ratio: 1 / 1;
   height: auto;
   margin: 0 auto 54px;
-  contain: paint layout style;
+  contain: layout style;
   container-type: inline-size;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   pointer-events: none;
   color: var(--app-text-primary);
   font-family: var(--font-ui);
@@ -127,7 +127,8 @@
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transform: rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1)) translate(-50%, -50%);
+  /* Center the badge first, then place it on the orbit in its own local axis. */
+  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1));
 }
 .av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
 .av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; --orbit-counter-angle: -45deg; }
