@@ -289,6 +289,12 @@ export default function AppleLanding() {
         <span>{t("Developed by")} <strong>Kristofer Biksan</strong></span>
       </div>
     </footer>
+    <aside className="av-section-nav is-visible" data-theme={theme} aria-label={t("Навигация по разделам")}>
+      <span className="av-section-nav-label">{t("НА СТРАНИЦЕ")}</span>
+      <a href="#platform" onClick={() => setActiveSection("platform")} className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />{t("Platform")}</a>
+      <a href="#security" onClick={() => setActiveSection("security")} className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />{t("Security")}</a>
+      <a href="#developers" onClick={() => setActiveSection("developers")} className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />{t("Developers")}</a>
+    </aside>
   </main>
   {typeof document !== "undefined" && createPortal(
     <div className={"av-mobile-nav-layer " + (menuOpen ? "is-open" : "")} data-theme={theme} aria-hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
@@ -298,15 +304,6 @@ export default function AppleLanding() {
         <a href="#developers" onClick={() => { setMenuOpen(false); setActiveSection("developers"); }}>{t("Разработчикам")}</a>
       </nav>
     </div>,
-    document.body
-  )}
-  {typeof document !== "undefined" && createPortal(
-    <aside className="av-section-nav is-visible" data-theme={theme} aria-label={t("Навигация по разделам")}>
-      <span className="av-section-nav-label">{t("НА СТРАНИЦЕ")}</span>
-      <a href="#platform" onClick={() => setActiveSection("platform")} className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />{t("Platform")}</a>
-      <a href="#security" onClick={() => setActiveSection("security")} className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />{t("Security")}</a>
-      <a href="#developers" onClick={() => setActiveSection("developers")} className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />{t("Developers")}</a>
-    </aside>,
     document.body
   )}
   </>;
