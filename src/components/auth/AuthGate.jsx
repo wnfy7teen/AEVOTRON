@@ -32,7 +32,7 @@ export async function requireSignedIn({ context, location }) {
   if (error?.type === "user_not_registered") throw new NotRegisteredError(error.message);
   // A document navigation on purpose: an app served behind the platform login gets the
   // platform's /login, which reads from_url; the app's own /login page reads returnTo.
-  throw redirect({ to: "/login", search: { returnTo: location.href, from_url: location.href }, reloadDocument: true });
+  throw redirect({ to: "/login", search: { next: location.href, returnTo: location.href, from_url: location.href }, reloadDocument: true });
 }
 
 export function AuthGateError({ error }) {
