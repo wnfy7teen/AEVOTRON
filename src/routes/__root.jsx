@@ -12,6 +12,7 @@ import themeTokensCss from "@/theme-tokens.css?url";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 import themeOverridesCss from "@/theme-overrides.css?url";
+import authCss from "@/auth-theme.css?url";
 
 export const Route = createRootRoute({
   loader: async ({ location }) => {
@@ -34,6 +35,7 @@ export const Route = createRootRoute({
         { rel: "stylesheet", href: appCss },
         { rel: "stylesheet", href: appleCss },
         { rel: "stylesheet", href: themeOverridesCss },
+        { rel: "stylesheet", href: authCss },
       ],
     };
   },
