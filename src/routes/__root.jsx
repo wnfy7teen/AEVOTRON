@@ -7,14 +7,15 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/i18n.functions";
-import { loadLocaleResources, normalizeLanguage, translateForLanguage } from "@/i18n";
+import { getRouteNamespace, loadLocaleResources, normalizeLanguage, translateForLanguage } from "@/i18n";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 
 export const Route = createRootRoute({
-  loader: async () => {
+  loader: async ({ location }) => {
     const locale = await getRequestLocale();
-    const resources = await loadLocaleResources(locale);
+    const namespace = getRouteNamespace(location.pathname);
+    const resources = namespace ? await loadLocaleResources(locale, [namespace]) : {};
     return { locale, resources };
   },
   head: ({ loaderData }) => {
