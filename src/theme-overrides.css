@@ -118,8 +118,7 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-.av-site :where(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner,
-  .av-permissions b, .av-final-icon) {
+.av-site :where(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-final-icon) {
   background: var(--bg-secondary);
   background-image: none;
   color: var(--text-primary);
@@ -386,8 +385,8 @@ html[data-theme="light"] .apple-app[data-theme="light"] :is(
 .av-site[data-theme="light"] :is(.av-hero-copy, .av-feature-copy p, .av-final-cta p, .av-footer, .av-eyebrow, .av-hero-kicker, .av-hero-footnote) {
   color: var(--text-secondary);
 }
-.av-site[data-theme="dark"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-permissions b, .av-final-icon, .av-orbit-label, .av-control, .av-code),
-.av-site[data-theme="light"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-permissions b, .av-final-icon, .av-orbit-label, .av-control, .av-code) {
+.av-site[data-theme="dark"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-final-icon, .av-orbit-label, .av-control, .av-code),
+.av-site[data-theme="light"] :is(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner, .av-final-icon, .av-orbit-label, .av-control, .av-code) {
   background: var(--bg-secondary);
   background-image: none;
   color: var(--text-primary);
