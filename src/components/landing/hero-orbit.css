@@ -113,8 +113,19 @@
   top: 50%;
   left: 50%;
   display: block;
-  max-width: 38%;
-  padding: 6px 9px;
+  width: max-content;
+  max-width: 42%;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1));
+}
+.av-site .av-hero-art .av-orbit-label > span {
+  display: block;
+  max-width: 100%;
+  padding: 7px 11px;
   overflow: hidden;
   border: 1px solid var(--app-border);
   border-radius: 999px;
@@ -122,13 +133,13 @@
   color: var(--app-text-secondary);
   font-size: 10px;
   font-weight: 650;
-  letter-spacing: .025em;
+  letter-spacing: .015em;
   line-height: 1.2;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  /* Center the badge first, then place it on the orbit in its own local axis. */
-  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1));
+  animation: av-orbit-counter-spin 30s linear infinite;
+  transform: rotate(var(--orbit-counter-angle));
 }
 .av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
 .av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; --orbit-counter-angle: -45deg; }
@@ -136,11 +147,6 @@
 .av-site .av-hero-art .av-label-bottom { --orbit-angle: 180deg; --orbit-counter-angle: -180deg; }
 .av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; --orbit-counter-angle: -225deg; }
 .av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; --orbit-counter-angle: -270deg; }
-.av-site .av-hero-art .av-orbit-label > span {
-  display: block;
-  animation: av-orbit-counter-spin 30s linear infinite;
-  transform: rotate(var(--orbit-counter-angle));
-}
 @keyframes av-orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -161,14 +167,16 @@
   .av-site .av-hero-art .av-core-mark { font-size: 28px; }
   .av-site .av-hero-art .av-core strong { font-size: 12px; }
   .av-site .av-hero-art .av-core small { font-size: 8px; }
-  .av-site .av-hero-art .av-orbit-label { max-width: 37%; padding: 4px 7px; font-size: 8px; letter-spacing: .01em; }
+   .av-site .av-hero-art .av-orbit-label { max-width: 40%; }
+  .av-site .av-hero-art .av-orbit-label > span { padding: 5px 8px; font-size: 8px; letter-spacing: 0; }
   .av-site .av-hero-art .av-label-top-right,
   .av-site .av-hero-art .av-label-bottom-left { display: none; }
 }
 @media (max-width: 520px) { .av-site .av-hero-art { margin-bottom: 34px; } }
 @media (max-width: 360px) {
   .av-site .av-hero-art { --orbit-radius: 27cqw; }
-  .av-site .av-hero-art .av-orbit-label { max-width: 36%; padding-inline: 5px; font-size: 7px; }
+   .av-site .av-hero-art .av-orbit-label { max-width: 38%; }
+  .av-site .av-hero-art .av-orbit-label > span { padding-inline: 6px; font-size: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .av-site .av-hero-art .av-orbit-track,
