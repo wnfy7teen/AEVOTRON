@@ -1,5 +1,6 @@
 {
-  "Back to home": "返回首页","Reset password": "重置密码",
+  "Back to home": "返回首页",
+  "Reset password": "重置密码",
   "We'll send you a link to reset it": "我们将向您发送密码重置链接",
   "If an account exists with that email, you'll receive a password reset link shortly.": "如果该邮箱对应的账户存在，您很快就会收到密码重置链接。",
   "Email address": "电子邮箱地址",
@@ -113,5 +114,7 @@
   "Sign in required": "请先登录",
   "Sign in to manage your two-factor authentication.": "登录后即可管理双重身份验证。",
   "Continue to sign in": "继续登录",
-  "Sign up to get started": "注册即可开始使用"
+  "Sign up to get started": "注册即可开始使用",
+  "Show password": "显示密码",
+  "Hide password": "隐藏密码"
 }
