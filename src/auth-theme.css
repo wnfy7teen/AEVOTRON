@@ -230,3 +230,20 @@
   background: transparent;
   color: var(--text-tertiary);
 }
+
+.auth-password-strength {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+.auth-password-strength span {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+}
+.auth-password-strength[data-strength="1"] span:nth-child(-n+1) { background: var(--danger); }
+.auth-password-strength[data-strength="2"] span:nth-child(-n+2) { background: var(--warning); }
+.auth-password-strength[data-strength="3"] span:nth-child(-n+3) { background: var(--accent); }
+.auth-password-strength[data-strength="4"] span:nth-child(-n+4) { background: var(--success); }
