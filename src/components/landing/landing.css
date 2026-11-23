@@ -306,13 +306,11 @@ html:has(.av-site) { scroll-behavior: smooth; }
 .av-site .av-nav-cta,
 .av-site .av-provider,
 .av-site .av-api-node,
-.av-site .av-control-inner,
 .av-site .av-code {
   transition: transform 260ms cubic-bezier(.2,.7,.25,1), box-shadow 260ms ease, border-color 260ms ease;
 }
 .av-site .av-provider:hover,
-.av-site .av-api-node:hover,
-.av-site .av-control-inner:hover { transform: translateY(-4px); box-shadow: 0 18px 42px var(--palette-color-db6e78df); }
+.av-site .av-api-node:hover { transform: translateY(-4px); box-shadow: 0 18px 42px var(--palette-color-db6e78df); }
 .av-site .av-code:hover { transform: translateY(-3px); box-shadow: 0 26px 60px var(--palette-color-fb384a9a); }
 .av-site .av-section-nav a:active,
 .av-site .av-primary-button:active { transform: scale(.97); }
