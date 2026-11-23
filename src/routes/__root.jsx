@@ -105,7 +105,7 @@ function RootDocument({ children }) {
   return (
     <html lang={language === "zh" ? "zh-CN" : language} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var t=saved==="light"?"light":(p==="/"?"dark":"light");localStorage.setItem("aevotron-theme",t);var settings=JSON.parse(localStorage.getItem("aevotron-workspace-settings")||"{}");if(settings.theme==="gray"||settings.theme==="dark")localStorage.setItem("aevotron-workspace-settings",JSON.stringify(Object.assign({},settings,{theme:"dark"})));document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var settings=JSON.parse(localStorage.getItem("aevotron-workspace-settings")||"{}");var preference=saved||settings.theme;var t=preference==="light"?"light":(preference==="dark"||preference==="gray")?"dark":(p==="/"?"dark":"light");localStorage.setItem("aevotron-theme",t);if(settings.theme==="gray"||settings.theme==="dark")localStorage.setItem("aevotron-workspace-settings",JSON.stringify(Object.assign({},settings,{theme:"dark"})));document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
         <HeadContent />
       </head>
       <body data-react-root="true">
