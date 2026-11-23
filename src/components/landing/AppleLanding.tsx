@@ -1,4 +1,5 @@
 import "./landing.css";
+import "./hero-orbit.css";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, ChevronRight, Copy, Menu, Moon, ShieldCheck, Sparkles, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -55,6 +56,29 @@ export default function AppleLanding() {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
+  useEffect(() => {
+    const art = document.querySelector(".av-site .av-hero-art");
+    if (!art) return;
+    const media = window.matchMedia("(prefers-reduced-motion: no-preference)");
+    if (!media.matches) return;
+    let inView = false;
+    const syncPause = () => art.classList.toggle("is-paused", document.hidden || !inView);
+    const observer = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries) => {
+          inView = entries.some((entry) => entry.isIntersecting);
+          syncPause();
+        }, { threshold: 0.05 })
+      : null;
+    if (observer) observer.observe(art);
+    else inView = true;
+    document.addEventListener("visibilitychange", syncPause);
+    syncPause();
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", syncPause);
+      art.classList.remove("is-paused");
+    };
+  }, []);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
@@ -250,7 +274,7 @@ export default function AppleLanding() {
       <p className="av-hero-copy">{t("Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.")}</p>
       <div className="av-hero-actions"><Link to="/register" className="av-primary-button">{t("Создать аккаунт")} <ArrowRight size={17} /></Link><a href="#developers" className="av-secondary-button">{t("Как это работает")} <ChevronRight size={17} /></a></div>
       <div className="av-hero-footnote"><ShieldCheck size={15} /><span className="av-hero-footnote-text">{t("Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем")}</span></div>
-      <div className="av-hero-art" aria-label={t("Визуализация единого API AEVOTRON")}><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>AEVOTRON</strong><small>{t("UNIFIED API")}</small></div><div className="av-orbit-label av-label-top">{t("ONE INTERFACE")}</div><div className="av-orbit-label av-label-bottom">{t("MULTIPLE MODELS")}</div></div>
+      <div className="av-hero-art" aria-label={t("Визуализация единого API AEVOTRON")}><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>AEVOTRON</strong><small>{t("UNIFIED API")}</small></div><div className="av-orbit-label av-label-top">{t("ONE INTERFACE")}</div><div className="av-orbit-label av-label-bottom">{t("MULTIPLE MODELS")}</div><div className="av-orbit-label av-label-left" data-no-translate="true">SECURE KEYS</div><div className="av-orbit-label av-label-right" data-no-translate="true">USAGE ANALYTICS</div><div className="av-orbit-label av-label-top-right" data-no-translate="true">LOW LATENCY</div><div className="av-orbit-label av-label-bottom-left" data-no-translate="true">SMART ROUTING</div></div>
     </section>
     <section className="av-intro av-reveal"><p>{t("ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ")}</p><h2>{t("Меньше связующего кода.")}<br />{t("Больше времени на продукт.")}</h2></section>
     {features.map((feature, index) => <section className={"av-feature av-reveal " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
