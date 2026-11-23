@@ -105,7 +105,7 @@ function RootDocument({ children }) {
   });
   const language = normalizeLanguage(loaderData?.locale || "en");
   return (
-    <html lang={language === "zh" ? "zh-CN" : language}>
+    <html lang={language === "zh" ? "zh-CN" : language} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var t=saved==="dark"||saved==="gray"?"dark":saved==="light"?"light":(p==="/"?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
         <HeadContent />
