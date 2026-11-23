@@ -825,15 +825,9 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
     line-height: 1.45;
   }
 
-  .av-site .av-permissions {
-    margin: 0 14px;
-    gap: 6px;
-  }
+  .av-site .av-permissions { margin: 0 14px; }
 
-  .av-site .av-permissions b {
-    max-width: 100%;
-    white-space: nowrap;
-  }
+  
 
   .av-site .av-control-footer {
     margin: 21px 14px 0;
