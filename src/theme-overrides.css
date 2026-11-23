@@ -1,150 +1,156 @@
-/* Theme-aware rendering layer. All component colors resolve through semantic tokens. */
-html { background:var(--bg-primary); color:var(--text-primary); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; -webkit-text-size-adjust:100%; }
-body { background:var(--bg-primary) !important; color:var(--text-primary) !important; font-family:var(--font-ui); font-kerning:normal; font-feature-settings:"kern" 1,"liga" 1; }
-::selection { background:color-mix(in srgb,var(--accent) 28%,transparent); color:var(--text-primary); }
-:where(button,a,input,select,textarea,[role="button"],[tabindex]:not([tabindex="-1"])):focus-visible { outline:2px solid var(--accent) !important; outline-offset:3px !important; }
-input,select,textarea { color:var(--text-primary); background:var(--bg-secondary); border-color:var(--border-strong); }
-input::placeholder,textarea::placeholder { color:var(--text-tertiary); opacity:1; }
-input:-webkit-autofill,textarea:-webkit-autofill,select:-webkit-autofill { -webkit-text-fill-color:var(--text-primary); box-shadow:0 0 0 1000px var(--bg-secondary) inset; caret-color:var(--text-primary); }
-svg { shape-rendering:geometricPrecision; }
-img,svg { image-rendering:auto; }
-.card,[class*="card"] { backface-visibility:visible; -webkit-font-smoothing:antialiased; isolation:isolate; }
-.card:hover,[class*="card"]:hover { transform:translateY(-2px); }
-html[data-theme="light"] body,html[data-theme="dark"] body { color-scheme:inherit; }
-
-/* Landing is always dark by default; its own segmented selector may switch it to light. */
-.av-site { --bg-primary:#1c1c1e; --bg-secondary:#2c2c2e; --bg-tertiary:#3a3a3c; --bg-elevated:rgba(44,44,46,0.80); --text-primary:#f5f5f7; --text-secondary:#a1a1a6; --text-tertiary:#b0b0b5; --border:rgba(255,255,255,0.10); --border-strong:rgba(255,255,255,0.18); --accent:#0a84ff; --accent-hover:#409cff; --success:#30d158; --warning:#ff9f0a; --danger:#ff453a; --shadow-sm:0 1px 2px rgba(0,0,0,.30),0 1px 3px rgba(0,0,0,.20); --shadow-md:0 4px 12px rgba(0,0,0,.35); --shadow-lg:0 12px 32px rgba(0,0,0,.45); color-scheme:dark; background:var(--bg-primary)!important; color:var(--text-primary)!important; }
-.av-site[data-theme="light"] { --bg-primary:#f5f5f7; --bg-secondary:#fff; --bg-tertiary:#e8e8ed; --bg-elevated:rgba(255,255,255,.80); --text-primary:#1d1d1f; --text-secondary:#6e6e73; --text-tertiary:#68686d; --border:rgba(0,0,0,.10); --border-strong:rgba(0,0,0,.18); --accent:#0071e3; --accent-hover:#0077ed; --success:#248a52; --warning:#9a5b00; --danger:#c9342b; --shadow-sm:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06); --shadow-md:0 4px 12px rgba(0,0,0,.06); --shadow-lg:0 12px 32px rgba(0,0,0,.10); color-scheme:light; }
-.av-site,.av-site * { box-sizing:border-box; }
-.av-site :where(h1,h2,h3,h4,strong,b) { color:var(--text-primary)!important; }
-.av-site :where(p,small,span,label,li) { color:inherit; }
-.av-site p,.av-site small,.av-site .av-hero-copy,.av-site .av-feature-copy p,.av-site .av-final-cta p,.av-site .av-footer { color:var(--text-secondary)!important; }
-.av-site a:not(.av-nav-cta):not(.av-primary-button),.av-site .av-inline-link { color:var(--accent)!important; }
-.av-site .av-header { position:sticky;top:0;z-index:50;min-height:54px;background:var(--bg-elevated)!important;border-bottom:1px solid var(--border)!important;backdrop-filter:var(--blur)!important;-webkit-backdrop-filter:var(--blur)!important; }
-.av-site .av-nav-wrap { min-height:54px;height:54px; }
-.av-site .av-brand,.av-site .av-nav-links a,.av-site .av-login,.av-site .av-menu-toggle { color:var(--text-primary)!important; }
-.av-site .av-nav-cta,.av-site .av-primary-button { min-height:44px;padding:12px 24px;border-radius:980px;background:var(--accent)!important;border:1px solid var(--accent)!important;color:#fff!important;transition:background-color 250ms var(--ease),transform 250ms var(--ease); }
-.av-site .av-nav-cta:hover,.av-site .av-primary-button:hover { background:var(--accent-hover)!important;transform:translateY(-1px); }
-.av-site .av-secondary-button { color:var(--accent)!important; }
-.av-site .av-hero,.av-site .av-feature { background:var(--bg-primary)!important;color:var(--text-primary)!important; }
-.av-site .av-intro,.av-site .av-final-cta { background:var(--bg-secondary)!important;color:var(--text-primary)!important; }
-.av-site .av-hero h1 { color:var(--text-primary)!important;font-size:clamp(40px,7vw,80px);font-weight:700;letter-spacing:-.04em; }
-.av-site .av-visual,.av-site .av-core,.av-site .av-api-node,.av-site .av-provider,.av-site .av-control-inner,.av-site .av-permissions b,.av-site .av-final-icon { background:var(--bg-secondary)!important;background-image:none!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)!important;filter:none!important;backdrop-filter:none!important; }
-.av-site .av-routing,.av-site .av-provider-symbol,.av-site .av-window-bar,.av-site .av-routing-lines { background:var(--bg-tertiary)!important;color:var(--text-secondary)!important; }
-.av-site .av-window-bar,.av-site .av-control,.av-site .av-code { background:var(--bg-secondary)!important; }
-.av-site .av-code,.av-site .av-code pre { color:var(--text-primary)!important; }
-.av-site .av-code-muted { color:var(--text-tertiary)!important; }.av-site .av-code-blue { color:var(--accent)!important; }.av-site .av-code-green { color:var(--success)!important; }
-.av-site .av-footer { background:var(--bg-primary)!important;border-top:1px solid var(--border)!important;color:var(--text-secondary)!important;font-size:12px; }
-.av-site .av-footer * { color:var(--text-secondary)!important; }
-.av-site .av-language-menu,.av-site .av-section-nav,.av-site .av-nav-links.is-open { background:var(--bg-elevated)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-lg)!important;backdrop-filter:var(--blur)!important;-webkit-backdrop-filter:var(--blur)!important; }
-.av-site .av-theme-switch { background:var(--bg-tertiary)!important;border:1px solid var(--border-strong)!important; }
-.av-site .av-theme-switch button { color:var(--text-secondary)!important;min-height:32px; }
-.av-site .av-theme-switch button.active { background:var(--bg-secondary)!important;color:var(--text-primary)!important; }
-.av-site .av-reveal,.av-site .av-reveal-ready,.av-site .av-reveal.is-visible { opacity:1!important;transform:none!important; }
-.av-site [class*="card"],.av-site .av-provider,.av-site .av-visual { filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;text-shadow:none!important; }
-.av-site .av-header,.av-site .av-language-menu,.av-site .av-section-nav,.av-site .av-nav-links.is-open { backdrop-filter:var(--blur)!important;-webkit-backdrop-filter:var(--blur)!important; }
-.av-site[data-theme="dark"] .av-header { background:rgba(28,28,30,.80)!important; }
-.av-site[data-theme="light"] .av-header { background:rgba(245,245,247,.80)!important; }
-
-/* Dashboard, settings, forms, workspace and all shared Radix/portal surfaces. */
-.apple-app { min-height:100vh;background:var(--bg-primary)!important;color:var(--text-primary)!important;color-scheme:inherit; }
-.apple-app :where(.mh-shell,.mh-main,.mh-content,.mh-topbar,.mh-page,.mh-section,.mh-workspace-shell,.aw-shell,.aw-main,.aw-content) { background:var(--bg-primary)!important;color:var(--text-primary)!important; }
-.apple-app .mh-sidebar,.apple-app .aw-sidebar { background:var(--bg-elevated)!important;border-color:var(--border)!important;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur); }
-.apple-app :where(.mh-topbar,.mh-footer,.aw-topbar) { border-color:var(--border)!important; }
-.apple-app :where(.mh-brand,.mh-page-heading h1,.mh-section-heading h2,.mh-panel-heading h3,.mh-step-copy h3,.mh-model-detail h2,.mh-provider-info strong,.mh-docs-title h3,.mh-workspace strong,.mh-profile strong,.aw-title,.aw-panel-title,.aw-message strong) { color:var(--text-primary)!important; }
-.apple-app :where(p,small,.mh-breadcrumb,.mh-page-heading p,.mh-section-heading p,.mh-nav-label,.mh-stat-label,.mh-stat-note,.mh-step-copy p,.mh-panel-heading p,.mh-provider-info small,.mh-model-name small,.mh-model-detail>p,.mh-detail-stats small,.mh-empty,.mh-footer,.mh-field-help,.mh-docs>p,.aw-muted,.aw-description) { color:var(--text-secondary)!important; }
-.apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-detail,.mh-model-card,.mh-catalog-overview,.mh-catalog-browser,.mh-catalog-side-note,.mh-workspace,.mh-usage-mini,.mh-profile,.mh-empty-panel,.mh-callout,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-secret-reveal,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-sidebar-card,.aw-attachment-panel,.aw-model-card,.aw-empty-state) { background:var(--bg-secondary)!important;background-image:none!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)!important; }
-.apple-app :where(.mh-stat-value,.mh-model-detail strong,.mh-model-card-name,.aw-metric,.metric) { color:var(--text-primary)!important;font-variant-numeric:tabular-nums; }
-.apple-app :where(.mh-nav-item,.mh-popular-row,.mh-model-row,.mh-provider-filters button,.mh-catalog-provider-strip>button,.mh-tab,[role="tab"]) { color:var(--text-secondary)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-nav-item:hover,.mh-nav-item.active,.mh-popular-row:hover,.mh-model-row:hover,.mh-model-row.selected,.mh-provider-filters button.active,.mh-catalog-provider-strip>button.active,.mh-tab[aria-selected="true"],[role="tab"][aria-selected="true"]) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;box-shadow:none!important; }
-.apple-app :where(.mh-nav-item.active svg,.mh-text-link,.mh-detail-info svg,.mh-docs-title svg) { color:var(--accent)!important; }
-.apple-app :where(.mh-button-primary,.aw-send-button) { background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important; }
-.apple-app :where(.mh-button-quiet,.mh-copy-button,.mh-code-language,.mh-tags span,.mh-method,.mh-endpoint,.mh-search,.mh-toolbar select,.mh-field,.aw-input,.aw-select,.aw-textarea) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border-strong)!important; }
-.apple-app :where(.mh-code,.mh-secret-value,.aw-code,.aw-code-block) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important; }
-.apple-app :where(.mh-progress,.aw-progress) { background:var(--bg-tertiary)!important; }.apple-app :where(.mh-progress i,.aw-progress-fill) { background:var(--accent)!important; }
-.apple-app :where(.mh-status,.mh-beta,.mh-method,.mh-preview-label) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;border-radius:999px; }
-.apple-app :where(.mh-field-label,.aw-label) { color:var(--text-secondary)!important; }
-.apple-app :where(.mh-field,.mh-search input,.mh-toolbar select,.aw-input,.aw-textarea,select,input,textarea) { color:var(--text-primary)!important; }
-.apple-app :where(.mh-field:focus,.mh-search:focus-within,.aw-input:focus,.aw-textarea:focus,input:focus,select:focus,textarea:focus) { border-color:var(--accent)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)!important;outline:none; }
-.apple-app :where(.mh-empty-panel p,.mh-catalog-empty p,.aw-empty-state p) { color:var(--text-secondary)!important; }
-.apple-app :where(.mh-inline-error,.mh-inline-success,.mh-callout,.mh-preview-banner,.mh-catalog-side-note) { border-color:var(--border)!important; }
-.apple-app .mh-footer { background:var(--bg-primary)!important;color:var(--text-secondary)!important; }
-.apple-app .mh-brand-mark { background:var(--accent)!important;color:#fff!important; }
-.apple-app :where(.mh-provider-logo,.mh-provider-card .mh-provider-logo,.mh-step-icon,.mh-empty-icon,.mh-catalog-empty-icon) { background:var(--bg-tertiary)!important;color:var(--accent)!important;border-color:var(--border)!important; }
-
-/* Portal components: menus, dialogs, dropdowns, tooltips and notifications inherit html theme. */
-[role="dialog"],[data-radix-popper-content-wrapper] [role="menu"],[data-radix-popper-content-wrapper] [role="listbox"],[data-radix-popper-content-wrapper] [role="dialog"],.av-language-menu,.mh-dropdown,.mh-popover,.aw-dropdown,.aw-popover { background:var(--bg-elevated)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-lg)!important;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur); }
-[data-sonner-toaster] [data-sonner-toast],.aevotron-toast { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-md)!important; }
-[data-sonner-toaster] [data-title],.aevotron-toast-title { color:var(--text-primary)!important; }
-[data-sonner-toaster] [data-description],.aevotron-toast-description { color:var(--text-secondary)!important; }
-html[data-theme="dark"] :where(.auth-page,.auth-shell,.auth-card,.login-page,.register-page,.forgot-password-page,.mfa-page,.verify-email-page,.error-page,.not-found-page) { background:var(--bg-primary)!important;color:var(--text-primary)!important; }
-html[data-theme="light"] :where(.auth-page,.auth-shell,.auth-card,.login-page,.register-page,.forgot-password-page,.mfa-page,.verify-email-page,.error-page,.not-found-page) { color:var(--text-primary)!important; }
-html[data-theme="dark"] :where(.auth-card,.auth-panel,.auth-form,.auth-side,.login-card,.register-card,.error-card,.not-found-card) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-html[data-theme="light"] :where(.auth-card,.auth-panel,.auth-form,.auth-side,.login-card,.register-card,.error-card,.not-found-card) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-
-/* Complete workspace surface coverage, including secondary panels and nested controls. */
-.apple-app :where(.aw-history-item,.aw-history-empty,.aw-model-picker,.aw-model-option,.aw-model-details,.aw-compare-panel,.aw-compare-result,.aw-attachment-list,.aw-attachment-chip,.aw-sidebar-note,.aw-notice,.aw-edit-box,.aw-thread,.aw-thinking,.aw-prompt-suggestions button,.aw-message-assistant,.aw-message-user,.aw-message-error,.aw-model-badge,.aw-model-select,.aw-model-search,.aw-search,.aw-history-rename-input,.aw-attachment-select) {
-  background:var(--bg-secondary)!important;
-  background-image:none!important;
-  color:var(--text-primary)!important;
-  border-color:var(--border)!important;
-  box-shadow:var(--shadow-sm);
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-  filter:none!important;
-  text-shadow:none!important;
+/* Semantic theme layer. Component styles remain owned by their original modules. */
+html {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
 }
-.apple-app :where(.aw-sidebar,.aw-topbar) { background:var(--bg-elevated)!important; }
-.apple-app .aw-statusbar { background:var(--bg-secondary)!important; border:1px solid var(--border)!important; color:var(--text-secondary)!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
-.apple-app :where(.aw-message-content,.aw-message-body,.aw-message-meta,.aw-history-label,.aw-model-details,.aw-attachment-file,.aw-attachment-folder,.aw-disclaimer,.aw-empty-state,.aw-history-empty,.aw-sidebar-note,.aw-notice) { color:var(--text-secondary)!important; }
-.apple-app :where(.aw-message-content strong,.aw-message-content h1,.aw-message-content h2,.aw-message-content h3,.aw-history-item strong,.aw-model-option strong,.aw-model-details strong) { color:var(--text-primary)!important; }
-.apple-app :where(.aw-model-picker button,.aw-model-option,.aw-history-item,.aw-new-chat,.aw-export-button,.aw-attach-button,.aw-compare-toggle,.aw-favorite-toggle,.aw-message-action,.aw-attachment-file button) { color:var(--text-secondary)!important; border-color:var(--border)!important; }
-.apple-app :where(.aw-model-picker button:hover,.aw-model-option:hover,.aw-history-item:hover,.aw-history-item.active,.aw-prompt-suggestions button:hover) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important; }
-.apple-app :where(.aw-composer,.aw-composer textarea,.aw-edit-box textarea,.aw-history-rename-input,.aw-model-search,.aw-search) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border-strong)!important; }
-.apple-app :where(.aw-send-button,.aw-compare-actions button:first-child) { background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important; }
-.apple-app :where(.aw-model-badge,.aw-attachment-chip,.aw-status-cost,.aw-status-metric,.aw-status-model) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important; }
-.apple-app :where(.aw-empty-icon,.aw-message-avatar) { background:var(--bg-tertiary)!important;color:var(--accent)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-catalog-overview,.mh-catalog-browser,.mh-catalog-side-note,.mh-catalog-provider-strip,.mh-catalog-controls,.mh-model-card-grid,.mh-catalog-result-count,.mh-catalog-filter-row,.mh-model-detail-meta) { background:var(--bg-secondary)!important;background-image:none!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-catalog-overview-copy>span,.mh-catalog-provider-strip>span:first-child,.mh-catalog-filter-label,.mh-catalog-result-count,.mh-model-detail-meta span) { color:var(--text-tertiary)!important; }
-.apple-app :where(.mh-catalog-overview-copy>strong,.mh-catalog-browser-head h2,.mh-catalog-overview-stats strong,.mh-model-detail-meta strong,.mh-model-detail-meta code) { color:var(--text-primary)!important; }
-.apple-app :where(.mh-provider-dot.green,.mh-provider-dot.orange,.mh-provider-dot.blue,.mh-provider-dot.cyan,.mh-provider-dot.purple,.mh-provider-dot.pink,.mh-provider-dot.violet) { background:var(--accent)!important;box-shadow:none!important; }
-.apple-app :where(.mh-callout,.mh-preview-banner,.mh-secret-reveal,.mh-inline-error,.mh-inline-success) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-inline-error,.mh-button-danger,.mh-usage-error-code) { color:var(--danger-text)!important; }
-.apple-app :where(.mh-inline-success) { color:var(--success-text)!important; }
-.apple-app :where(.mh-secret-value,.mh-endpoint,.mh-code,.mh-usage-table,.mh-usage-table th,.mh-usage-table td) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-list-header,.mh-key-row,.mh-model-row,.mh-popular-row,.mh-detail-stats,.mh-detail-info,.mh-trust-note,.mh-usage-table th,.mh-usage-table td) { border-color:var(--border)!important; }
-.apple-app :where(.mh-list-header,.mh-usage-table th,.mh-model-provider,.mh-catalog-empty>strong) { color:var(--text-secondary)!important; }
-.apple-app :where(.mh-model-card-brand,.mh-model-card-access,.mh-model-card-bottom,.mh-catalog-count) { background:var(--bg-tertiary)!important;color:var(--text-secondary)!important;border-color:var(--border)!important; }
-.apple-app :where(.mh-model-card,.mh-model-card.selected,.mh-catalog-overview,.mh-catalog-browser) { box-shadow:var(--shadow-sm)!important; }
-.apple-app :where(.mh-model-card:hover,.mh-model-card.selected) { border-color:var(--border-strong)!important;background:var(--bg-tertiary)!important; }
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="light"] { color-scheme: light; }
 
-/* Auth, verification, MFA, error and not-found pages use the same semantic palette. */
-.apple-app .min-h-screen.bg-background { background:var(--bg-primary)!important;color:var(--text-primary)!important; }
-.apple-app .min-h-screen.bg-background>div>div:nth-child(2) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-md)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
-.apple-app .bg-card { background:var(--bg-secondary)!important;color:var(--text-primary)!important; }
-.apple-app .text-foreground,.apple-app .text-card-foreground { color:var(--text-primary)!important; }
-.apple-app .text-muted-foreground { color:var(--text-secondary)!important; }
-.apple-app .border-border { border-color:var(--border)!important; }
-.apple-app .bg-background { background:var(--bg-primary)!important; }
-.apple-app .bg-primary { background:var(--accent)!important; }
-.apple-app .text-primary-foreground { color:#fff!important; }
-.apple-app :where(.text-black,.text-gray-900,.text-slate-900) { color:var(--text-primary)!important; }
-.apple-app :where(.bg-white,.bg-gray-50,.bg-gray-100,.bg-slate-50,.bg-slate-100) { background:var(--bg-secondary)!important; }
-.apple-app :where(.border-gray-100,.border-gray-200,.border-slate-100,.border-slate-200) { border-color:var(--border)!important; }
-
-/* Crisp cards: no filters, translucent surfaces, text shadows or compositing hints. */
-.apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-card,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,.mh-secret-reveal,.mh-api-card,.mh-api-example,.mh-catalog-side-note,.mh-mock-panel,.av-danger-card,.av-settings-panel,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-compare-panel,.aw-model-picker,.aw-model-option) {
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important;text-shadow:none!important;opacity:1!important;
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-kerning: normal;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
-html[data-theme] { --av-font-sans:var(--font-ui);--av-bg:var(--bg-primary);--av-surface:var(--bg-secondary);--av-surface-secondary:var(--bg-tertiary);--av-border:var(--border);--av-text:var(--text-primary);--av-text-secondary:var(--text-secondary);--av-text-tertiary:var(--text-tertiary);--av-accent:var(--accent);--av-accent-soft:var(--bg-tertiary);--av-radius-card:var(--radius-lg);--av-radius-control:var(--radius-sm);--av-card-padding:20px; }
-.av-site .av-section-nav { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
-.apple-app .av-theme-trigger { backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
-.app-route-transition { animation:none!important;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important; }
 
-/* Text remains fully opaque and sharp in every interaction state. */
-.av-site :where(h1,h2,h3,h4,p,span,strong,b,small,label,a,button,li,code,pre) { opacity:1!important;text-shadow:none!important; }
-.apple-app :where(h1,h2,h3,h4,p,span,strong,b,small,label,a,button,li,code,pre,td,th) { opacity:1!important;text-shadow:none!important; }
-.av-site :where(.av-typed-char,.av-code-result) { opacity:1!important; }
-.apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-card,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,.mh-secret-reveal,.mh-api-card,.mh-api-example,.mh-catalog-side-note,.mh-mock-panel,.av-danger-card,.av-settings-panel,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-compare-panel,.aw-model-picker,.aw-model-option) { transform:none; }
-.apple-app :where(.mh-stat:hover,.mh-step:hover,.mh-panel:hover,.mh-provider-card:hover,.mh-model-card:hover,.aw-card:hover,.aw-panel:hover) { transform:translateY(-2px); }
+.apple-app {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.apple-app .mh-shell,
+.apple-app .mh-main,
+.apple-app .mh-content,
+.apple-app .aw-shell,
+.apple-app .aw-main,
+.apple-app .aw-content {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.apple-app :where(.mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
+  .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser, .mh-connection-panel,
+  .mh-key-create, .mh-key-list-panel, .mh-usage-panel, .mh-secret-reveal,
+  .aw-card, .aw-panel, .aw-message, .aw-composer, .aw-model-card,
+  .aw-compare-panel, .aw-compare-result, .aw-empty-state) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  filter: none;
+  text-shadow: none;
+}
+
+.apple-app :where(.mh-sidebar, .aw-sidebar) {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+
+.apple-app :where(input, select, textarea, .mh-field, .mh-search, .aw-input, .aw-select, .aw-textarea) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.apple-app :where(input, textarea)::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+.apple-app :where(button, a, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible,
+.av-site :where(button, a, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.apple-app :where(.mh-button-primary, .aw-send-button) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+}
+
+.apple-app :where(.mh-button-quiet, .mh-copy-button, .mh-icon-button, .aw-export-button,
+  .aw-attach-button, .aw-compare-toggle, .aw-favorite-toggle) {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.apple-app :where(button:disabled, input:disabled, select:disabled, textarea:disabled) {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+/* Landing is a dark gray surface by default; its own theme switch changes html[data-theme]. */
+.av-site {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+}
+
+.av-site :where(h1, h2, h3, h4, strong, b) { color: var(--text-primary); }
+.av-site :where(p, small, .av-hero-copy, .av-feature-copy p, .av-final-cta p, .av-footer) {
+  color: var(--text-secondary);
+}
+.av-site .av-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.av-site :where(.av-hero, .av-feature, .av-intro, .av-final-cta, .av-footer) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+.av-site :where(.av-visual, .av-core, .av-api-node, .av-provider, .av-control-inner,
+  .av-permissions b, .av-final-icon) {
+  background: var(--bg-secondary);
+  background-image: none;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.av-site :where(.av-primary-button, .av-nav-cta) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+  border-radius: 980px;
+}
+.av-site :where(.av-primary-button, .av-nav-cta):hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+.av-site :where(a, .av-inline-link) { color: var(--accent); }
+.av-site .av-footer {
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-app *, .apple-app *::before, .apple-app *::after,
+  .av-site *, .av-site *::before, .av-site *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}
