@@ -2530,7 +2530,7 @@ html[data-theme="dark"] .av-control .av-key-status {
 }
 html[data-theme="light"] .av-control .av-permissions > span { color: #6e6e73; }
 html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
-.av-control .av-permissions b {
+.av-control .av-permissions button {
   position: relative;
   display: block;
   min-height: 44px;
@@ -2548,8 +2548,8 @@ html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
   word-spacing: normal;
   box-shadow: none;
 }
-.av-control .av-permissions b + b { border-top: 1px solid var(--border); }
-.av-control .av-permissions b::before {
+.av-control .av-permissions button + button { border-top: 1px solid var(--border); }
+.av-control .av-permissions button::before {
   content: "";
   position: absolute;
   left: 16px;
@@ -2560,9 +2560,9 @@ html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
   border-radius: 6px;
   background: var(--accent);
 }
-.av-control .av-permissions b:nth-of-type(2)::before { background: #30d158; }
-.av-control .av-permissions b:nth-of-type(3)::before { background: #ff9f0a; }
-.av-control .av-permissions b::after {
+.av-control .av-permissions button:nth-of-type(2)::before { background: #30d158; }
+.av-control .av-permissions button:nth-of-type(3)::before { background: #ff9f0a; }
+.av-control .av-permissions button::after {
   content: "";
   position: absolute;
   right: 16px;
@@ -2586,7 +2586,7 @@ html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
   opacity: 1;
 }
 @media (max-width: 480px) {
-  .av-control .av-permissions b { padding-right: 60px; }
+  .av-control .av-permissions button { padding-right: 60px; }
 }
 
 /* Clear separation between the BYOK note and the orbital artwork. */
@@ -2917,4 +2917,32 @@ body:has(.av-site) .av-site {
     padding: 0 6px;
     font-size: 9px;
   }
+}
+
+
+/* Interactive API permission controls: retain the original switch visual. */
+.av-site .av-control .av-permissions button {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.av-site .av-control .av-permissions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+.av-site .av-control .av-permissions button[aria-pressed="false"]::after {
+  background: #8e8e93;
+  background-image: radial-gradient(circle at 11px 50%, #ffffff 8px, transparent 8.5px);
+}
+.av-site .av-control .av-permissions button[aria-pressed="false"]::before {
+  opacity: .42;
+}
+@media (prefers-reduced-motion: reduce) {
+  .av-site .av-control .av-permissions button { transition: none; }
 }
