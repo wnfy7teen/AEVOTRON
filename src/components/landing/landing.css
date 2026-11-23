@@ -645,21 +645,6 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 }
 
 
-/* Optical centering for the AEVOTRON core monogram */
-.av-site .av-core-mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-  letter-spacing: 0;
-  text-align: center;
-  font-size: 25px;
-  font-weight: 700;
-  font-family: Arial, Helvetica, sans-serif;
-  font-kerning: none;
-  font-variant-ligatures: none;
-}
 
 /* Keep the API code sample dark and readable on the gray page theme.
    The light theme's generic .av-visual background otherwise overrides
