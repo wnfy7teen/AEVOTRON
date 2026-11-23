@@ -906,3 +906,50 @@ html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-o
   outline: 2px solid var(--accent) !important;
   outline-offset: 3px !important;
 }
+
+
+/* Canonical design tokens; darker text companions preserve WCAG contrast. */
+:root {
+  --success: #30d158;
+  --warning: #ff9f0a;
+  --danger: #ff3b30;
+  --success-text: #176b3a;
+  --warning-text: #754600;
+  --danger-text: #c5221f;
+}
+.apple-app .mh-button-danger,
+.apple-app .mh-inline-error,
+.apple-app .mh-usage-error-code { color: var(--danger-text) !important; }
+.apple-app .aw-notice.is-warning,
+.apple-app .aw-file-error,
+.apple-app .aw-message-error { color: var(--warning-text) !important; }
+.apple-app .mh-inline-success { color: var(--success-text) !important; }
+
+/* Card grids retain hierarchy while collapsing cleanly on narrow viewports. */
+.apple-app .mh-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.apple-app .mh-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.apple-app .mh-provider-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.apple-app .mh-model-card-grid { gap: 16px; }
+.apple-app .aw-prompt-suggestions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 1023px) {
+  .apple-app .mh-stats,
+  .apple-app .mh-steps,
+  .apple-app .mh-provider-grid,
+  .apple-app .mh-model-card-grid,
+  .apple-app .aw-prompt-suggestions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 639px) {
+  .apple-app .mh-stats,
+  .apple-app .mh-steps,
+  .apple-app .mh-provider-grid,
+  .apple-app .mh-model-card-grid,
+  .apple-app .aw-prompt-suggestions { grid-template-columns: minmax(0, 1fr); }
+  .apple-app .mh-stat,
+  .apple-app .mh-step,
+  .apple-app .mh-panel,
+  .apple-app .mh-provider-card,
+  .apple-app .mh-model-card,
+  .apple-app .aw-model-picker,
+  .apple-app .aw-compare-panel,
+  .apple-app .aw-composer { padding: 20px; }
+}
