@@ -2622,3 +2622,66 @@ html[data-theme="dark"] .av-site .av-visual.av-code .av-code-result small {
     gap: 5px;
   }
 }
+
+/* 17R-fix2 — keep each typed character in a normal inline text flow. */
+.av-site .av-visual .av-typed-char {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  letter-spacing: inherit !important;
+  word-spacing: normal !important;
+  white-space: pre !important;
+  color: inherit;
+  /* Opacity remains controlled by the existing typing script. */
+}
+
+/* Permission labels contain one span per character; they must not be flex rows. */
+html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b {
+  position: relative;
+  display: block !important;
+  justify-content: initial !important;
+  gap: 0 !important;
+  column-gap: 0 !important;
+  padding-right: 40px;
+  text-align: left !important;
+  word-spacing: normal !important;
+}
+
+html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b::after,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b::after {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  margin: 0 !important;
+  transform: translateY(-50%);
+}
+
+/* Code lines stay block-level; syntax spans and typed characters stay inline. */
+html[data-theme="light"] .av-site .av-visual.av-code pre,
+html[data-theme="dark"] .av-site .av-visual.av-code pre {
+  display: block !important;
+}
+
+html[data-theme="light"] .av-site .av-visual.av-code pre > span:not(.av-typed-char),
+html[data-theme="dark"] .av-site .av-visual.av-code pre > span:not(.av-typed-char) {
+  display: inline !important;
+}
+
+html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner small,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner small {
+  letter-spacing: 0.04em;
+}
+
+html[data-theme="light"] .av-site .av-visual.av-control .av-permissions b,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-permissions b,
+html[data-theme="light"] .av-site .av-visual.av-control .av-control-footer strong,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-control-footer strong,
+html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner strong,
+html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner strong {
+  letter-spacing: 0;
+}
+
