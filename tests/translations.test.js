@@ -119,6 +119,8 @@ it("uses request-scoped locale resolution and does not mutate the DOM with an ob
   assert.match(root, /getRequestLocale/);
   assert.match(root, /getRouteNamespace\(location\.pathname\)/);
   assert.match(root, /loadLocaleResources\(locale, \[namespace\]\)/);
+  assert.match(root, /function RouteNamespaceGate/);
+  assert.match(root, /i18n\.addResourceBundle\(language, namespace/);
   assert.match(root, /<html lang=/);
   assert.match(serverLocale, /getRequestHeader\("cookie"\)/);
   assert.match(serverLocale, /accept-language/);
