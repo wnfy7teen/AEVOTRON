@@ -58,29 +58,6 @@ export default function AppleLanding() {
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
   useEffect(() => {
-    const art = document.querySelector(".av-site .av-hero-art");
-    if (!art) return;
-    const media = window.matchMedia("(prefers-reduced-motion: no-preference)");
-    if (!media.matches) return;
-    let inView = false;
-    const syncPause = () => art.classList.toggle("is-paused", document.hidden || !inView);
-    const observer = "IntersectionObserver" in window
-      ? new IntersectionObserver((entries) => {
-          inView = entries.some((entry) => entry.isIntersecting);
-          syncPause();
-        }, { threshold: 0.05 })
-      : null;
-    if (observer) observer.observe(art);
-    else inView = true;
-    document.addEventListener("visibilitychange", syncPause);
-    syncPause();
-    return () => {
-      observer?.disconnect();
-      document.removeEventListener("visibilitychange", syncPause);
-      art.classList.remove("is-paused");
-    };
-  }, []);
-  useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       sections.forEach((section) => section.classList.add("is-visible"));
