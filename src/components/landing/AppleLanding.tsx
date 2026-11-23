@@ -57,177 +57,7 @@ export default function AppleLanding() {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
-  useEffect(() => {
-    const sections = document.querySelectorAll(".av-site .av-reveal");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-      sections.forEach((section) => section.classList.add("is-visible"));
-      return;
-    }
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: "0px 0px -24px 0px" });
-    sections.forEach((section) => {
-      section.classList.add("av-reveal-ready");
-      if (section.getBoundingClientRect().top < window.innerHeight * 0.92) {
-        section.classList.add("is-visible");
-      } else {
-        observer.observe(section);
-      }
-    });
-    return () => observer.disconnect();
-  }, []);
-  useEffect(() => {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    const codeExample = document.querySelector(".av-site .av-code");
-    if (!codeExample) return;
-    let observer: IntersectionObserver | undefined;
-    let timer: number | undefined;
-    let cancelled = false;
-    const startTyping = () => {
-      if (cancelled || codeExample.classList.contains("is-typing")) return;
-      codeExample.classList.add("is-typing");
-      const lines = Array.from(codeExample.querySelectorAll("pre"));
-      const characters: HTMLSpanElement[] = [];
-      lines.forEach((line) => {
-        const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
-        const textNodes: Text[] = [];
-        while (walker.nextNode()) {
-          const node = walker.currentNode as Text;
-          if (node.parentElement?.closest(".av-typed-char")) continue;
-          textNodes.push(node);
-        }
-        textNodes.forEach((node) => {
-          const fragment = document.createDocumentFragment();
-          Array.from(node.textContent ?? "").forEach((character) => {
-            const span = document.createElement("span");
-            span.className = "av-typed-char";
-            span.textContent = character;
-            span.style.opacity = "0";
-            fragment.appendChild(span);
-            characters.push(span);
-          });
-          node.parentNode?.replaceChild(fragment, node);
-        });
-      });
-      const result = codeExample.querySelector(".av-code-result") as HTMLElement | null;
-      if (result) result.style.opacity = "0";
-      let index = 0;
-      const typeNext = () => {
-        if (cancelled) return;
-        if (index < characters.length) {
-          characters[index].style.opacity = "1";
-          index += 1;
-          timer = window.setTimeout(typeNext, 18);
-        } else if (result) {
-          result.style.opacity = "1";
-          result.classList.add("is-typed");
-        }
-      };
-      typeNext();
-    };
-    if (!("IntersectionObserver" in window)) {
-      startTyping();
-    } else {
-      observer = new IntersectionObserver((entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          startTyping();
-          observer?.disconnect();
-        }
-      }, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" });
-      observer.observe(codeExample);
-    }
-    return () => {
-      cancelled = true;
-      if (timer !== undefined) window.clearTimeout(timer);
-      observer?.disconnect();
-    };
-  }, [language]);
-  useEffect(() => {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    const controlExample = document.querySelector(".av-site .av-control");
-    if (!controlExample) return;
-    let observer: IntersectionObserver | undefined;
-    let timer: number | undefined;
-    let cancelled = false;
-
-    const startTyping = () => {
-      if (cancelled || controlExample.classList.contains("is-typing")) return;
-      controlExample.classList.add("is-typing");
-      const targets = controlExample.querySelectorAll(
-        ".av-control-inner small, .av-control-inner strong, .av-control-inner span, .av-key-status, .av-permissions span, .av-permissions b, .av-control-footer span, .av-control-footer strong"
-      );
-      const characters: HTMLSpanElement[] = [];
-      targets.forEach((target) => {
-        const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT);
-        const textNodes: Text[] = [];
-        while (walker.nextNode()) {
-          const node = walker.currentNode as Text;
-          if (node.parentElement?.closest(".av-typed-char")) continue;
-          if (node.textContent) textNodes.push(node);
-        }
-        textNodes.forEach((node) => {
-          const fragment = document.createDocumentFragment();
-          Array.from(node.textContent ?? "").forEach((character) => {
-            const span = document.createElement("span");
-            span.className = "av-typed-char";
-            span.textContent = character;
-            span.style.opacity = "0";
-            fragment.appendChild(span);
-            characters.push(span);
-          });
-          node.parentNode?.replaceChild(fragment, node);
-        });
-      });
-
-      let index = 0;
-      const typeNext = () => {
-        if (cancelled) return;
-        if (index < characters.length) {
-          characters[index].style.opacity = "1";
-          index += 1;
-          timer = window.setTimeout(typeNext, 24);
-        }
-      };
-      typeNext();
-    };
-
-    if (!("IntersectionObserver" in window)) {
-      startTyping();
-    } else {
-      observer = new IntersectionObserver((entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          startTyping();
-          observer?.disconnect();
-        }
-      }, { threshold: 0.08, rootMargin: "0px 0px 100px 0px" });
-      observer.observe(controlExample);
-    }
-
-    return () => {
-      cancelled = true;
-      if (timer !== undefined) window.clearTimeout(timer);
-      observer?.disconnect();
-    };
-  }, [language]);
-  useEffect(() => {
-    const sectionIds = ["platform", "security", "developers"];
-    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (visible[0]) setActiveSection(visible[0].target.id);
-    }, { rootMargin: "-22% 0px -58% 0px", threshold: [0, 0.1, 0.25, 0.5] });
-    sections.forEach((section) => observer.observe(section));
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  // Scroll-triggered work is CSS-only; no observers or per-character timers.
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
@@ -237,7 +67,7 @@ export default function AppleLanding() {
     <header className="av-header"><div className="av-nav-wrap">
       <Link to="/" className="av-brand" aria-label={t("AEVOTRON — главная")}><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
       <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label={t("Основная навигация")}>
-        <a href="#platform" onClick={() => setMenuOpen(false)}>{t("Платформа")}</a><a href="#security" onClick={() => setMenuOpen(false)}>{t("Безопасность")}</a><a href="#developers" onClick={() => setMenuOpen(false)}>{t("Разработчикам")}</a>
+        <a href="#platform" onClick={() => { setMenuOpen(false); setActiveSection("platform"); }}>{t("Платформа")}</a><a href="#security" onClick={() => { setMenuOpen(false); setActiveSection("security"); }}>{t("Безопасность")}</a><a href="#developers" onClick={() => { setMenuOpen(false); setActiveSection("developers"); }}>{t("Разработчикам")}</a>
       </nav>
       <div className="av-nav-actions"><Link to="/workspace" className="av-login av-workspace-link">{t("Workspace")}</Link><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
@@ -292,9 +122,9 @@ export default function AppleLanding() {
   {typeof document !== "undefined" && createPortal(
     <aside className="av-section-nav is-visible" data-theme={theme} aria-label={t("Навигация по разделам")}>
       <span className="av-section-nav-label">{t("НА СТРАНИЦЕ")}</span>
-      <a href="#platform" className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />{t("Platform")}</a>
-      <a href="#security" className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />{t("Security")}</a>
-      <a href="#developers" className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />{t("Developers")}</a>
+      <a href="#platform" onClick={() => setActiveSection("platform")} className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />{t("Platform")}</a>
+      <a href="#security" onClick={() => setActiveSection("security")} className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />{t("Security")}</a>
+      <a href="#developers" onClick={() => setActiveSection("developers")} className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />{t("Developers")}</a>
     </aside>,
     document.body
   )}
