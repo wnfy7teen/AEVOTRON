@@ -1,18 +1,38 @@
-// Full-screen card shared by the auth pages; it sets its own color tokens so it stays readable under any theme.
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
+
+// Shared visual shell for login, registration, recovery, reset and verification.
 export function AuthLayout({ icon: Icon, title, subtitle, footer, children }) {
+  const { t } = useTranslation(["auth", "translation"]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 text-foreground">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary">
-            <Icon className="h-7 w-7 text-primary-foreground" aria-hidden="true" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-          {subtitle && <p className="mt-2 text-muted-foreground">{subtitle}</p>}
+    <div className="auth-page">
+      <header className="auth-topbar">
+        <Link to="/" className="auth-brand" aria-label="AEVOTRON — Home">
+          <span className="auth-brand-mark" aria-hidden="true">A</span>
+          <span>AEVOTRON</span>
+        </Link>
+        <div className="auth-top-actions">
+          <Link to="/" className="auth-home-link">{t("Back to home")}</Link>
+          <ThemeSwitcher />
         </div>
-        <div className="rounded-2xl border border-border bg-card p-8 text-card-foreground shadow-sm">{children}</div>
-        {footer && <p className="mt-6 text-center text-sm text-muted-foreground">{footer}</p>}
-      </div>
+      </header>
+
+      <main className="auth-main">
+        <section className="auth-card" aria-labelledby="auth-title">
+          <div className="auth-heading">
+            <div className="auth-icon">
+              {Icon && <Icon aria-hidden="true" />}
+            </div>
+            <h1 id="auth-title">{title}</h1>
+            {subtitle && <p>{subtitle}</p>}
+          </div>
+
+          <div className="auth-card-content">{children}</div>
+          {footer && <p className="auth-card-footer">{footer}</p>}
+        </section>
+      </main>
     </div>
   );
 }
