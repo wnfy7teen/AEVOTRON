@@ -77,7 +77,7 @@ test("AI Workspace discloses estimates instead of inventing provider usage and c
 test("AI Workspace styles support both themes, mobile layout, focus and reduced motion", async () => {
   const css = await read("src/apple-style.css");
   assert.match(css, /\.aw-shell/);
-  assert.match(css, /html\[data-theme="gray"\] \.aw-shell/);
+  assert.match(css, /html\[data-theme="dark"\] \.aw-shell/);
   assert.match(css, /@media \(max-width: 720px\)/);
   assert.match(css, /\.aw-shell button:focus-visible/);
   assert.match(css, /prefers-reduced-motion: reduce/);
