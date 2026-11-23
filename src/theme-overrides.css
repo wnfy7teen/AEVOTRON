@@ -440,3 +440,43 @@ html[data-theme="light"] .apple-app[data-theme="light"] :is(
 @media (max-width: 520px) {
   .av-site .av-nav-actions .av-workspace-link { display: inline-flex; }
 }
+
+
+/* Authentication surfaces are solid cards, not translucent overlays. */
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background h1,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background h1 {
+  color: var(--text-primary);
+}
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background p,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background p {
+  color: var(--text-secondary);
+}
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background > div > div:nth-child(2),
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background > div > div:nth-child(2) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.apple-app .min-h-screen.bg-background > div > div:nth-child(2),
+.apple-app .aw-statusbar,
+.apple-app .av-theme-trigger {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.apple-app .av-theme-trigger {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.apple-app .app-route-transition { animation: none; }
+.av-site .av-reveal { opacity: 1; transform: none; transition: none; }
