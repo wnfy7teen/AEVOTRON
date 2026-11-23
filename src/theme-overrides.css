@@ -137,5 +137,7 @@ html[data-theme="light"] :where(.auth-card,.auth-panel,.auth-form,.auth-side,.lo
 .apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-card,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,.mh-secret-reveal,.mh-api-card,.mh-api-example,.mh-catalog-side-note,.mh-mock-panel,.av-danger-card,.av-settings-panel,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-compare-panel,.aw-model-picker,.aw-model-option) {
   backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important;text-shadow:none!important;opacity:1!important;
 }
+html[data-theme] { --av-font-sans:var(--font-ui);--av-bg:var(--bg-primary);--av-surface:var(--bg-secondary);--av-surface-secondary:var(--bg-tertiary);--av-border:var(--border);--av-text:var(--text-primary);--av-text-secondary:var(--text-secondary);--av-text-tertiary:var(--text-tertiary);--av-accent:var(--accent);--av-accent-soft:var(--bg-tertiary);--av-radius-card:var(--radius-lg);--av-radius-control:var(--radius-sm);--av-card-padding:20px; }
 .av-site .av-section-nav { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
-.app-route-transition { animation:none!important;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;will-change:auto!important; }
+.apple-app .av-theme-trigger { backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
+.app-route-transition { animation:none!important;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important; }
