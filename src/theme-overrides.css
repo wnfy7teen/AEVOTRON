@@ -481,72 +481,185 @@ html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-backgro
 .av-site .av-reveal { opacity: 1; transform: none; transition: none; }
 
 
-/* Unified workspace surfaces and controls — overrides legacy page-specific rules. */
-.apple-app { color: var(--app-text-primary); background: var(--app-bg); }
-.apple-app :where(.mh-panel, .mh-catalog-provider-strip) {
+/* Canonical token layer. Selectors intentionally outrank legacy theme rules in apple-style.css. */
+html[data-theme] .apple-app[data-theme] {
+  min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+html[data-theme] .apple-app[data-theme] :is(.mh-shell,.mh-main,.mh-content,.aw-shell,.aw-main,.aw-content) {
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+html[data-theme] .apple-app[data-theme] :is(
+  .mh-panel,.mh-stat,.mh-step,.mh-provider-card,.mh-model-card,.mh-model-detail,
+  .mh-catalog-overview,.mh-catalog-browser,.mh-catalog-provider-strip,
+  .mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,
+  .mh-secret-reveal,.av-settings-panel,.aw-card,.aw-panel,.aw-model-card,
+  .aw-compare-panel,.aw-compare-result,.aw-empty-state
+) {
   background: var(--app-surface);
   border: 1px solid var(--app-border);
-  border-radius: 12px;
   color: var(--app-text-primary);
   box-shadow: none;
+  text-shadow: none;
 }
-.apple-app .mh-panel :where(h1,h2,h3,h4,strong) { color: var(--app-text-primary); }
-.apple-app .av-dropdown-trigger {
+html[data-theme] .apple-app[data-theme] .mh-panel { border-radius: 12px; }
+html[data-theme] .apple-app[data-theme] :is(
+  .mh-sidebar,.mh-topbar,.aw-sidebar,.aw-topbar
+) {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  color: var(--app-text-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html[data-theme] .apple-app[data-theme] :is(
+  .mh-brand,.mh-workspace strong,.mh-profile strong,.mh-breadcrumb strong,
+  .mh-page-heading h1,.mh-section-heading h2,.mh-panel-heading h3,
+  .mh-stat-value,.mh-model-name strong,.mh-model-detail h2,.aw-title,.aw-panel-title
+) { color: var(--app-text-primary); }
+html[data-theme] .apple-app[data-theme] :is(
+  .mh-workspace small,.mh-profile small,.mh-nav-label,.mh-breadcrumb,
+  .mh-page-heading p,.mh-section-heading p,.mh-panel-heading p,
+  .mh-model-name small,.mh-model-context,.mh-model-description,
+  .mh-stat-label,.mh-stat-note,.mh-field-label,.mh-field-help,
+  .aw-muted,.aw-description,.aw-message-meta,.aw-disclaimer
+) { color: var(--app-text-secondary); }
+
+html[data-theme] .apple-app[data-theme] .av-dropdown-trigger {
+  width: 100%;
+  min-width: 0;
   background: var(--app-surface);
   color: var(--app-text-primary);
   border: 1px solid var(--app-border);
 }
-.apple-app .av-dropdown-trigger[aria-expanded="true"] {
+html[data-theme] .apple-app[data-theme] .av-dropdown-trigger[aria-expanded="true"] {
   outline: 2px solid var(--app-accent);
   outline-offset: 2px;
 }
-.apple-app .av-settings-grid {
+html[data-theme] .apple-app[data-theme] .av-dropdown-menu {
+  background: var(--app-surface);
+  color: var(--app-text-primary);
+  border: 1px solid var(--app-border);
+}
+html[data-theme] .apple-app[data-theme] .av-dropdown-option {
+  color: var(--app-text-primary);
+}
+html[data-theme] .apple-app[data-theme] .av-dropdown-option:hover,
+html[data-theme] .apple-app[data-theme] .av-dropdown-option.is-active {
+  background: var(--app-border);
+}
+
+html[data-theme] .apple-app[data-theme] .av-settings-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  min-width: 0;
 }
-.apple-app .av-settings-grid input,
-.apple-app .av-settings-grid select,
-.apple-app .av-settings-grid textarea {
+html[data-theme] .apple-app[data-theme] .av-settings-grid > *,
+html[data-theme] .apple-app[data-theme] .av-settings-grid .av-setting-field {
+  min-width: 0;
+}
+html[data-theme] .apple-app[data-theme] .av-settings-grid :is(input,select,textarea) {
+  width: 100%;
+  min-width: 0;
   background: var(--app-bg);
   color: var(--app-text-primary);
   border: 1px solid var(--app-border);
 }
-.apple-app .mh-search {
+html[data-theme] .apple-app[data-theme] .av-settings-grid .av-dropdown-trigger {
+  background: var(--app-bg);
+}
+@media (max-width: 640px) {
+  html[data-theme] .apple-app[data-theme] .av-settings-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+html[data-theme] .apple-app[data-theme] .mh-search {
   background: var(--app-surface);
   color: var(--app-text-secondary);
-  border-color: var(--app-border);
+  border: 1px solid var(--app-border);
 }
-.apple-app .mh-search input { background: transparent; color: var(--app-text-primary); border: 0; }
-.apple-app .mh-search svg { stroke: var(--app-text-secondary); }
-.apple-app .mh-search input::placeholder { color: var(--app-text-secondary); }
-.apple-app .mh-popular-row {
+html[data-theme] .apple-app[data-theme] .mh-search input {
+  min-width: 0;
+  background: transparent;
+  color: var(--app-text-primary);
+  border: 0;
+  box-shadow: none;
+}
+html[data-theme] .apple-app[data-theme] .mh-search input::placeholder {
+  color: var(--app-text-secondary);
+  opacity: 1;
+}
+html[data-theme] .apple-app[data-theme] .mh-search svg {
+  color: var(--app-text-secondary);
+  stroke: var(--app-text-secondary);
+}
+
+html[data-theme] .apple-app[data-theme] .mh-popular-row {
+  border-top: 0;
   border-bottom: 1px solid var(--app-border);
+  background: transparent;
+  color: var(--app-text-primary);
+  transform: none;
+}
+html[data-theme] .apple-app[data-theme] .mh-popular-row:hover {
+  background: color-mix(in srgb, var(--app-border) 48%, transparent);
+  transform: none;
+}
+html[data-theme] .apple-app[data-theme] .mh-popular-row strong {
   color: var(--app-text-primary);
 }
-.apple-app .mh-popular-row:hover { background: color-mix(in srgb, var(--app-border) 45%, transparent); }
-.apple-app .mh-popular-row strong { color: var(--app-text-primary); }
-.apple-app .mh-popular-row small,
-.apple-app .mh-model-description { color: var(--app-text-secondary); }
-.apple-app .mh-catalog-provider-strip {
+html[data-theme] .apple-app[data-theme] .mh-popular-row small,
+html[data-theme] .apple-app[data-theme] .mh-model-description {
+  color: var(--app-text-secondary);
+}
+
+html[data-theme] .apple-app[data-theme] .mh-catalog-provider-strip {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: .5rem;
   padding: .75rem;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+  color: var(--app-text-primary);
 }
-.apple-app .mh-catalog-provider-strip .mh-provider-dot { background: currentColor; box-shadow: none; }
-.apple-app .mh-footer {
+html[data-theme] .apple-app[data-theme] .mh-catalog-provider-strip button {
+  color: var(--app-text-primary);
+  background: transparent;
+  border-color: var(--app-border);
+}
+html[data-theme] .apple-app[data-theme] .mh-catalog-provider-strip .mh-provider-dot {
+  background: currentColor;
+  box-shadow: none;
+}
+
+html[data-theme] .apple-app[data-theme] .mh-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-height: 52px;
+  height: auto;
+  background: var(--app-bg);
   color: var(--app-text-secondary);
   border-top: 1px solid var(--app-border);
-  background: var(--app-bg);
 }
-.apple-app .av-accent-options { display: flex; align-items: center; gap: 12px; }
-.apple-app .av-accent-options button {
+html[data-theme] .apple-app[data-theme] .mh-footer :is(span,small,a) {
+  color: var(--app-text-secondary);
+}
+
+html[data-theme] .apple-app[data-theme] .av-accent-options {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+html[data-theme] .apple-app[data-theme] .av-accent-options button {
+  display: block;
   width: 24px;
   height: 24px;
   min-width: 24px;
@@ -554,62 +667,20 @@ html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-backgro
   padding: 0;
   border: 1px solid var(--app-border);
   border-radius: 50%;
-  background: var(--app-accent);
+  background-image: none;
   box-shadow: none;
   cursor: pointer;
 }
-.apple-app .av-accent-options button[data-accent="blue"] { background: var(--app-accent); }
-.apple-app .av-accent-options button[data-accent="violet"] { background: var(--app-accent-violet); }
-.apple-app .av-accent-options button[data-accent="graphite"] { background: var(--app-accent-graphite); }
-.apple-app .av-accent-options button.selected {
+html[data-theme] .apple-app[data-theme] .av-accent-options button[data-accent="blue"] { background: var(--app-accent-blue); }
+html[data-theme] .apple-app[data-theme] .av-accent-options button[data-accent="violet"] { background: var(--app-accent-violet); }
+html[data-theme] .apple-app[data-theme] .av-accent-options button[data-accent="graphite"] { background: var(--app-accent-graphite); }
+html[data-theme] .apple-app[data-theme] .av-accent-options button.selected {
   outline: 2px solid var(--app-accent);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px var(--app-surface);
 }
-@media (max-width: 640px) {
-  .apple-app .av-settings-grid { grid-template-columns: minmax(0, 1fr); }
-}
-
-
-/* Workspace chrome shares the same semantic surface hierarchy. */
-.apple-app .mh-shell,
-.apple-app .mh-main {
-  background: var(--app-bg);
-  color: var(--app-text-primary);
-}
-.apple-app .mh-sidebar,
-.apple-app .mh-topbar {
-  background: var(--app-surface);
-  color: var(--app-text-primary);
-  border-color: var(--app-border);
-}
-.apple-app .mh-brand,
-.apple-app .mh-workspace strong,
-.apple-app .mh-profile strong,
-.apple-app .mh-breadcrumb strong,
-.apple-app .mh-page-heading h1,
-.apple-app .mh-section-heading h2,
-.apple-app .mh-panel-heading h3 {
-  color: var(--app-text-primary);
-}
-.apple-app .mh-workspace,
-.apple-app .mh-usage-mini {
-  background: var(--app-bg);
-  border-color: var(--app-border);
-}
-.apple-app .mh-workspace small,
-.apple-app .mh-profile small,
-.apple-app .mh-nav-label,
-.apple-app .mh-nav-item,
-.apple-app .mh-breadcrumb,
-.apple-app .mh-region {
-  color: var(--app-text-secondary);
-}
-.apple-app .mh-nav-item:hover,
-.apple-app .mh-nav-item.active {
+html[data-theme] .apple-app[data-theme] .mh-nav-item:hover,
+html[data-theme] .apple-app[data-theme] .mh-nav-item.active {
   background: color-mix(in srgb, var(--app-accent) 12%, var(--app-surface));
   color: var(--app-accent);
-}
-.apple-app .mh-catalog-provider-strip button {
-  color: var(--app-text-primary);
 }
