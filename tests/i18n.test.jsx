@@ -13,6 +13,11 @@ function LanguageProbe() {
   );
 }
 
+function DashboardProbe() {
+  const { t } = useTranslation(["dashboard", "translation"]);
+  return <output data-testid="dashboard-translation">{t("model.description.default")}</output>;
+}
+
 let container;
 let root;
 
@@ -43,6 +48,22 @@ describe("application i18n", () => {
 
     await act(async () => changeAppLanguage(instance, "zh"));
     expect(container.querySelector('[data-testid="translated"]').textContent).toBe("欢迎回来");
+  });
+
+  it("preloads only the active route namespace when switching languages", async () => {
+    const instance = createAppI18n({ language: "en", storage: null });
+    await act(async () => {
+      root.render(<I18nextProvider i18n={instance}><DashboardProbe /></I18nextProvider>);
+      await instance.loadNamespaces(["dashboard"]);
+    });
+
+    expect(container.querySelector('[data-testid="dashboard-translation"]').textContent)
+      .toBe("A text AI model for conversations, generation, and content analysis.");
+    await act(async () => changeAppLanguage(instance, "zh"));
+    expect(container.querySelector('[data-testid="dashboard-translation"]').textContent)
+      .toBe("用于对话、内容生成和分析的文本 AI 模型。");
+    expect(instance.hasResourceBundle("zh", "landing")).toBe(false);
+    expect(instance.hasResourceBundle("zh", "auth")).toBe(false);
   });
 
   it("persists the selected locale and restores it for a fresh page instance", async () => {
