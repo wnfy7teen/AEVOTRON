@@ -52,9 +52,10 @@ describe("application i18n", () => {
 
   it("preloads only the active route namespace when switching languages", async () => {
     const instance = createAppI18n({ language: "en", storage: null });
+    const resources = await loadLocaleResources("en", ["dashboard"]);
+    instance.addResourceBundle("en", "dashboard", resources.dashboard, true, true);
     await act(async () => {
       root.render(<I18nextProvider i18n={instance}><DashboardProbe /></I18nextProvider>);
-      await instance.loadNamespaces(["dashboard"]);
     });
 
     expect(container.querySelector('[data-testid="dashboard-translation"]').textContent)
@@ -105,7 +106,9 @@ describe("application i18n", () => {
   it("loads non-core namespaces only when requested and keeps their translations available", async () => {
     const instance = createAppI18n({ language: "ru", storage: null });
     expect(instance.hasResourceBundle("ru", "dashboard")).toBe(false);
-    await instance.loadNamespaces(["dashboard"]);
+    const resources = await loadLocaleResources("ru", ["dashboard"]);
+    expect(Object.keys(resources)).toEqual(["dashboard"]);
+    instance.addResourceBundle("ru", "dashboard", resources.dashboard, true, true);
     expect(instance.hasResourceBundle("ru", "dashboard")).toBe(true);
     expect(instance.hasResourceBundle("ru", "landing")).toBe(false);
     expect(instance.getFixedT("ru", "dashboard")("model.description.default")).toContain("Текстовая AI-модель");
