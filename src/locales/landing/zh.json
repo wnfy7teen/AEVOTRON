@@ -74,8 +74,8 @@
   "core.unified_api": "统一 API",
   "orbit.top": "统一接口",
   "orbit.bottom": "多种模型",
-  "orbit.left": "SECURE KEYS",
-  "orbit.right": "USAGE ANALYTICS",
-  "orbit.top_right": "LOW LATENCY",
-  "orbit.bottom_left": "SMART ROUTING"
+  "orbit.left": "安全密钥",
+  "orbit.right": "用量分析",
+  "orbit.top_right": "低延迟",
+  "orbit.bottom_left": "智能路由"
 }
