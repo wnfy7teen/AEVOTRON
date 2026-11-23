@@ -615,6 +615,15 @@ function WorkspaceSettings({ preview = false, account }) {
   const { language: currentLanguage } = useLanguage();
   const { t } = useTranslation(["dashboard", "translation"]);
   const [settings, setSettings] = useState(readSettings);
+  useEffect(() => {
+    const dark = ["dark", "gray"].includes(document.documentElement.dataset.theme || "");
+    const accentValues = {
+      blue: dark ? "#0A84FF" : "#007AFF",
+      violet: dark ? "#BF9BFF" : "#8E5CF6",
+      graphite: dark ? "#A1A1A6" : "#636366",
+    };
+    document.documentElement.style.setProperty("--app-accent", accentValues[settings.accent] || accentValues.blue);
+  }, [settings.accent, settings.theme]);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [mfaCode, setMfaCode] = useState("");
@@ -683,7 +692,7 @@ function WorkspaceSettings({ preview = false, account }) {
         {tab==="Notifications" && <><div className="av-settings-heading"><h2>{t("Notifications")}</h2><p>{t("Choose which events can reach you.")}</p></div>{toggle("Security alerts","emailSecurity","Important sign-in and account security events by email.")}{toggle("Usage summaries","emailUsage","Periodic usage and spend summaries by email.")}{toggle("Push notifications","pushUsage","Browser notifications for important account events.")}{toggle("In-app product updates","inAppProduct","Service announcements and product changes.")}</>}
         {tab==="Billing" && <><div className="av-settings-heading"><h2>{t("Billing preferences")}</h2><p>{t("Configure spending safeguards. Changes are stored locally in this preview.")}</p></div>{select("Billing currency","currency",["USD","EUR","GBP","RUB"])}{toggle("Automatic top-up","autoTopUp","Automatically add funds when your balance is low (demo).")}{field("Monthly spending limit (USD)","monthlyLimit")}</>}
         {tab==="API" && <><div className="av-settings-heading"><h2>{t("API controls")}</h2><p>{t("Set request limits and trusted destinations.")}</p></div>{field("Requests per minute","requestLimit")}{field("IP allowlist (comma-separated)","ipWhitelist","203.0.113.10, 198.51.100.0/24")}{field("Webhook URL","webhookUrl","https://example.com/webhooks/aevotron")}<button className="mh-button mh-button-quiet av-settings-action" onClick={()=>{if(settings.webhookUrl && !/^https:\/\//i.test(settings.webhookUrl)){toast.error(t("Webhook URL must use HTTPS"));return;}toast.success(t("API controls saved"));}}>{t("Validate and save API controls")}</button></>}
-        {tab==="Appearance" && <><div className="av-settings-heading"><h2>{t("Appearance")}</h2><p>{t("Make the workspace comfortable on every device.")}</p></div><div className="av-appearance-options">{[{value:"light",label:"Light",icon:Sun},{value:"dark",label:"Dark",icon:Moon},{value:"system",label:"System",icon:Monitor}].map(option=><button key={option.value} className={settings.theme===option.value?"selected":""} onClick={()=>update("theme",option.value)}><option.icon size={20}/>{t(option.label)}</button>)}</div><div className="av-settings-subtitle">{t("Accent color")}</div><div className="av-accent-options">{["blue","violet","graphite"].map(color=><button key={color} aria-label={t(color+" accent")} className={settings.accent===color?"selected":""} data-accent={color} onClick={()=>update("accent",color)}/>)}</div></>}
+        {tab==="Appearance" && <><div className="av-settings-heading"><h2>{t("Appearance")}</h2><p>{t("Make the workspace comfortable on every device.")}</p></div><div className="av-appearance-options">{[{value:"light",label:"Light",icon:Sun},{value:"dark",label:"Dark",icon:Moon},{value:"system",label:"System",icon:Monitor}].map(option=><button key={option.value} className={settings.theme===option.value?"selected":""} onClick={()=>update("theme",option.value)}><option.icon size={20}/>{t(option.label)}</button>)}</div><div className="av-settings-subtitle">{t("Accent color")}</div><div className="av-accent-options">{["blue","violet","graphite"].map(color=><button key={color} type="button" aria-label={t(color+" accent")} aria-pressed={settings.accent===color} className={settings.accent===color?"selected":""} data-accent={color} onClick={()=>update("accent",color)}/>)}</div></>}
         {tab==="Danger zone" && <><div className="av-settings-heading"><h2>{t("Danger zone")}</h2><p>{t("Irreversible actions for your account.")}</p></div><div className="av-danger-card"><div><strong>{t("Delete account")}</strong><small>{t("This demo only clears local preview preferences. It does not contact the production account service.")}</small></div><button className="mh-button mh-button-danger" onClick={()=>setDeleteOpen(true)}>{t("Delete account")}</button></div></>}
       </section>
     </div>
