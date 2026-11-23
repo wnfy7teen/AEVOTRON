@@ -634,7 +634,7 @@ html[data-theme] .apple-app .aw-composer textarea {
 .apple-app.app-route-transition,
 .apple-app .app-route-transition {
   animation: none !important;
-  will-change: auto !important;
+  
   transform: none !important;
   opacity: 1 !important;
 }
@@ -867,7 +867,6 @@ html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-o
   transform: none !important;
   animation: none !important;
 }
-.apple-app :where(*) { will-change: auto !important; }
 .apple-app :is(.mh-nav-item:disabled,.mh-text-link:disabled,.mh-popular-row:disabled) {
   opacity: 1 !important;
   color: var(--text-tertiary) !important;
@@ -882,15 +881,7 @@ html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-o
 }
 
 
-/* Canonical design tokens; darker text companions preserve WCAG contrast. */
-:root {
-  --success: #30d158;
-  --warning: #ff9f0a;
-  --danger: #ff3b30;
-  --success-text: #176b3a;
-  --warning-text: #754600;
-  --danger-text: #c5221f;
-}
+/* Status text tokens are centralized in theme-tokens.css. */
 .apple-app .mh-button-danger,
 .apple-app .mh-inline-error,
 .apple-app .mh-usage-error-code { color: var(--danger-text) !important; }
