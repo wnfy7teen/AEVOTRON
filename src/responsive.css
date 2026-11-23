@@ -1,0 +1,163 @@
+/* Shared responsive safety net. Loaded after component styles. */
+/* Shared overlays and floating surfaces stay inside the visual viewport. */
+.apple-app [role="dialog"], .aw-shell [role="dialog"], [data-radix-dialog-content] {
+  box-sizing: border-box;
+  max-width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+}
+.apple-app [data-radix-popper-content-wrapper], .aw-shell [data-radix-popper-content-wrapper] {
+  max-width: calc(100vw - 32px);
+}
+.apple-app [data-sonner-toaster], [data-sonner-toaster] {
+  width: min(420px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+}
+.apple-app [data-sonner-toast], [data-sonner-toast] { max-width: 100%; overflow-wrap: anywhere; }
+.apple-app :where(.mh-empty, .mh-empty-panel, .mh-catalog-empty, .mh-secret-value, .mh-api-url, .mh-code) { min-width: 0; overflow-wrap: anywhere; }
+.apple-app :where(.mh-toolbar, .mh-pagination, .av-modal-actions) { flex-wrap: wrap; }
+@media (max-width: 767px) {
+  .auth-card input:not([type="checkbox"]):not([type="radio"]) { font-size: 16px; }
+  .auth-card button, .auth-card a, .auth-card input[type="checkbox"] { min-height: 44px; }
+  .apple-app .mh-nav-item, .apple-app .mh-icon-button, .apple-app .mh-mobile-menu,
+  .aw-shell :where(button, a), .av-site :where(button, a) { min-height: 44px; }
+  .aw-shell .aw-sidebar { gap: 8px; }
+  .aw-shell .aw-history { max-height: 96px; overflow-y: auto; overscroll-behavior: contain; }
+  .aw-shell .aw-new-chat, .aw-shell .aw-search { min-height: 44px; }
+  .aw-shell .aw-model-picker { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .aw-shell .aw-attachment-list { max-width: 100%; overflow-x: auto; }
+  .apple-app .av-modal-backdrop { padding-bottom: env(safe-area-inset-bottom); }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+h1, h2, h3, h4, h5, h6, p, li, td, th, label, a, button, span, strong, small, code {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+.no-wrap, [class*="nowrap"] { white-space: normal; }
+pre, code, kbd { overflow-wrap: normal; }
+html, body { max-width: 100%; overflow-x: hidden; }
+body { min-height: 100dvh; }
+img, video, canvas, iframe { max-width: 100%; height: auto; }
+svg { max-width: 100%; }
+pre, .aw-message-content pre, .mh-code { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.apple-app, .apple-app :where(.mh-shell, .mh-main, .mh-content, .mh-catalog-layout, .mh-docs-layout, .mh-bottom-grid, .mh-api-doc-grid, .aw-shell, .aw-main, .aw-content, .aw-thread, .aw-message, .aw-message-body, .aw-composer), .av-site, .av-site :where(.av-container, .av-hero, .av-feature, .av-visual, .av-hero-art) { min-width: 0; }
+.apple-app :where(.mh-content, .mh-key-main, .mh-model-description, .mh-api-url, .mh-api-reference-row code, .mh-code, .aw-content, .aw-message-content, .aw-message-body, .aw-sidebar-note), .av-site :where(.av-hero-copy, .av-feature-copy, .av-footer) { overflow-wrap: anywhere; }
+.apple-app :where(.mh-page-heading, .mh-topbar, .mh-top-actions, .mh-stats, .mh-steps, .mh-bottom-grid, .mh-catalog-layout, .aw-topbar, .aw-topbar-actions, .aw-chat-heading, .aw-heading-controls, .aw-composer-bottom, .aw-message, .aw-compare-models, .aw-compare-results) > * { min-width: 0; }
+.apple-app :where(button, a, input, select, textarea) { touch-action: manipulation; }
+.apple-app :where(input, select, textarea), .auth-page :where(input, select, textarea) { max-width: 100%; }
+.aw-shell { width: 100%; max-width: 100%; min-width: 0; }
+.aw-message-content pre, .aw-message-content table { max-width: 100%; overflow-x: auto; }
+.aw-message-content img, .aw-attachment-list img { max-width: 100%; height: auto; }
+.aw-composer { margin-bottom: env(safe-area-inset-bottom); }
+.apple-app .mh-table-wrap, .apple-app .mh-usage-table-wrap, .apple-app .mh-usage-table, .apple-app .mh-api-params-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.apple-app .mh-usage-table, .apple-app .mh-api-params { min-width: 560px; }
+.apple-app .mh-button, .apple-app .mh-icon-button, .apple-app .mh-mobile-menu, .aw-shell button, .av-site button { min-height: 40px; }
+@media (max-width: 1023px) {
+  .av-site .av-nav-wrap { position: relative; }
+  .av-site .av-menu-toggle { display: grid; width: 44px; height: 44px; place-items: center; }
+  .av-site .av-nav-links { display: none; position: absolute; z-index: 2; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; margin: 0; padding: 10px 20px 0; background: var(--bg-primary); border: 0; }
+  .av-site .av-nav-links.is-open { display: flex; }
+  .av-site .av-nav-links.is-open a { display: flex; min-height: 44px; align-items: center; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open)::before { content: ""; position: absolute; z-index: 1; top: 100%; left: 0; right: 0; height: 330px; background: var(--bg-primary); border-bottom: 1px solid var(--border); }
+  .av-site .av-nav-actions, .av-site .av-theme-switch { display: none; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-nav-actions { position: absolute; z-index: 2; top: calc(100% + 148px); left: 20px; right: 20px; display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin: 0; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-nav-actions > * { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-theme-switch { position: absolute; z-index: 2; top: calc(100% + 282px); left: 20px; right: 20px; display: flex; justify-content: center; }
+  .apple-app .mh-shell { display: flex; width: 100%; min-width: 0; }
+  .apple-app .mh-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 10020; width: min(280px, calc(100% - 48px)); height: 100dvh; max-height: 100dvh; overflow-y: auto; transform: translateX(-105%); transition: transform 220ms ease; }
+  .apple-app .mh-sidebar.mh-sidebar-open { transform: translateX(0); }
+  .apple-app .mh-mobile-menu { display: inline-flex; width: 44px; height: 44px; flex: 0 0 44px; align-items: center; justify-content: center; }
+  .apple-app .mh-main { width: 100%; min-width: 0; margin-left: 0; }
+  .apple-app .mh-topbar { min-height: 60px; height: auto; padding: 8px 18px; gap: 12px; }
+  .apple-app .mh-content { width: 100%; padding: 28px 22px 32px; }
+  .apple-app .mh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .apple-app .mh-steps, .apple-app .mh-bottom-grid, .apple-app .mh-api-doc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .apple-app .mh-catalog-layout, .apple-app .mh-docs-layout { grid-template-columns: minmax(0, 1fr); }
+  .aw-shell { flex-direction: column; min-height: 100dvh; }
+  .aw-sidebar { display: flex; flex: 0 0 auto; width: 100%; min-width: 0; min-height: 0; max-height: 30dvh; overflow: auto; padding: 12px 16px; border-right: 0; border-bottom: 1px solid var(--border); }
+  .aw-sidebar .aw-history { max-height: 100px; overflow-y: auto; }
+  .aw-sidebar .aw-sidebar-bottom { margin-top: 8px; }
+  .aw-main { width: 100%; min-width: 0; min-height: 70dvh; }
+  .aw-content { width: 100%; min-width: 0; padding: 22px 20px 16px; }
+}
+@media (max-width: 767px) {
+  .apple-app .mh-content { padding: 22px 16px 28px; }
+  .apple-app .mh-page-heading { align-items: stretch; flex-direction: column; gap: 14px; }
+  .apple-app .mh-page-heading > :last-child, .apple-app .mh-page-heading .mh-button { width: 100%; }
+  .apple-app .mh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .apple-app .mh-stat { min-width: 0; padding: 14px; }
+  .apple-app .mh-stat-value { font-size: clamp(20px, 6vw, 26px); overflow-wrap: anywhere; }
+  .apple-app .mh-steps, .apple-app .mh-bottom-grid, .apple-app .mh-api-doc-grid, .apple-app .mh-model-card-grid { grid-template-columns: minmax(0, 1fr); }
+  .apple-app .mh-section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .apple-app .mh-toolbar, .apple-app .mh-catalog-controls, .apple-app .mh-catalog-filter-row { flex-wrap: wrap; }
+  .apple-app .mh-search, .apple-app .mh-field { min-width: 0; max-width: 100%; }
+  .apple-app .mh-top-actions { gap: 8px; }
+  .apple-app .mh-region { display: none; }
+  .apple-app .mh-footer { flex-wrap: wrap; }
+  .aw-topbar { min-height: 56px; height: auto; flex-wrap: wrap; padding: 10px 14px; gap: 8px; }
+  .aw-topbar-title { min-width: 0; overflow-wrap: anywhere; }
+  .aw-topbar-actions { max-width: 100%; flex-wrap: wrap; gap: 8px; }
+  .aw-content { padding: 18px 14px 14px; }
+  .aw-chat-heading { align-items: stretch; flex-direction: column; gap: 14px; }
+  .aw-heading-controls { width: 100%; flex-wrap: wrap; }
+  .aw-model-picker, .aw-model-select-wrap, .aw-model-search { width: 100%; min-width: 0; }
+  .aw-thread { min-width: 0; padding: 16px 0; }
+  .aw-thread.has-messages { gap: 18px; }
+  .aw-message { width: 100%; max-width: 100%; gap: 8px; }
+  .aw-message-content { min-width: 0; overflow-wrap: anywhere; }
+  .aw-message-content pre, .aw-message-content table { display: block; max-width: 100%; overflow-x: auto; }
+  .aw-composer { width: 100%; max-width: 100%; padding: 10px; border-radius: 14px; }
+  .aw-composer > textarea { min-height: 48px; max-height: 180px; font-size: 16px; }
+  .aw-composer-bottom { flex-wrap: wrap; align-items: flex-start; }
+  .aw-composer-tools { flex-wrap: wrap; }
+  .aw-compare-models, .aw-compare-results { grid-template-columns: minmax(0, 1fr); }
+  .aw-compare-panel { max-width: 100%; overflow-x: auto; }
+  .av-site .av-container { width: min(100% - 32px, 1200px); }
+  .av-site .av-hero { display: flex; flex-direction: column; min-height: 0; padding: 72px 16px 0; }
+  .av-site .av-hero-copy { width: 100%; max-width: 100%; }
+  .av-site .av-hero-art { width: 100%; max-width: min(100%, 340px); }
+  .av-site .av-hero h1 { font-size: clamp(32px, 8vw, 54px); }
+  .av-site .av-hero-actions { width: 100%; flex-wrap: wrap; }
+  .av-site .av-visual { width: 100%; max-width: 100%; min-width: 0; }
+  .av-site .av-window-bar { min-width: 0; flex-wrap: wrap; }
+  .av-site .av-control-inner { flex-direction: column; align-items: stretch; }
+  .av-site .av-footer { flex-wrap: wrap; }
+  .av-site .av-footer > * { min-width: 0; }
+  .auth-page { padding: 12px 14px calc(22px + env(safe-area-inset-bottom)); }
+  .auth-main { min-height: 0; }
+  .auth-card { width: min(100%, 420px); }
+  .auth-card .flex.items-center > .relative.flex { width: clamp(40px, 12vw, 48px); height: 56px; }
+  .apple-app .av-modal-backdrop { align-items: end; padding: 0; }
+  .apple-app .av-modal { width: min(100% - 24px, 560px); max-height: calc(100dvh - 16px); overflow-y: auto; margin: 0 auto; border-radius: 24px 24px 0 0; padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+  .apple-app .av-modal-actions { flex-wrap: wrap; }
+}
+@media (max-width: 420px) {
+  .apple-app .mh-stats { grid-template-columns: minmax(0, 1fr); }
+  .apple-app .mh-content { padding-inline: 12px; }
+  .apple-app .mh-topbar { padding-inline: 10px; }
+  .aw-content { padding-inline: 12px; }
+  .aw-message-avatar { display: none; }
+  .aw-composer-bottom { gap: 8px; }
+  .aw-composer-tools { gap: 6px; }
+  .av-site .av-hero-actions { flex-direction: column; align-items: stretch; }
+  .av-site .av-hero-actions > * { width: 100%; justify-content: center; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .av-site .av-hero { min-height: 0; padding-top: 44px; }
+  .av-site .av-hero-art { max-width: min(46vw, 340px); margin-top: 24px; }
+  .auth-main { align-items: flex-start; padding-block: 12px; }
+  .auth-page { min-height: 100dvh; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .apple-app .mh-button:hover, .apple-app .mh-nav-item:hover, .aw-shell button:hover { transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apple-app *, .apple-app *::before, .apple-app *::after, .aw-shell *, .aw-shell *::before, .aw-shell *::after, .av-site *, .av-site *::before, .av-site *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

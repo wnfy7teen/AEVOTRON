@@ -3,9 +3,60 @@ import { createContext, useContext, useMemo } from "react";
 import { api } from "@/api/client";
 import { currentUrl } from "@/lib/authReturnTo";
 
+export const DEMO_AUTH_STORAGE_KEY = "aevotron-demo-auth";
+
+export function readDemoUser() {
+  if (typeof window === "undefined") return null;
+  const previewUser = {
+    id: "demo-user",
+    email: "demo@aevotron.local",
+    display_name: "Preview User",
+    role: "user",
+    email_verified: true,
+    demo: true,
+  };
+  try {
+    const raw = window.sessionStorage.getItem(DEMO_AUTH_STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved?.authenticated === true) {
+        return {
+          ...previewUser,
+          email: saved.email || previewUser.email,
+          display_name: saved.display_name || "Demo User",
+        };
+      }
+    }
+  } catch {
+    // Ignore malformed or unavailable session storage in the isolated preview.
+  }
+  // Cloudflare Workers Preview is a backend-free demo surface. Always supply a
+  // local identity there so the auth gate and workspace never call /api/v1/auth/me.
+  return isDemoAuthEnabled() ? previewUser : null;
+}
+
+export function isDemoAuthenticated() {
+  return Boolean(readDemoUser());
+}
+
+export function isCloudflareWorkersPreview() {
+  if (typeof window === "undefined") return false;
+  const hostname = window.location.hostname;
+  return hostname.includes("preview") && hostname.endsWith(".workers.dev");
+}
+
+export function isDemoAuthEnabled() {
+  if (typeof window === "undefined") return false;
+  return import.meta.env.DEV
+    || import.meta.env.VITE_DEMO_AUTH === "true"
+    || isCloudflareWorkersPreview();
+}
+
 export const authQuery = queryOptions({
   queryKey: ["auth", "me"],
   queryFn: async () => {
+    const demoUser = readDemoUser();
+    if (demoUser) return { user: demoUser, error: null };
     if (!api.auth.hasToken()) return { user: null, error: null };
     try {
       return { user: await api.auth.me(), error: null };
@@ -30,7 +81,33 @@ export function AuthProvider({ children }) {
     isLoadingAuth: isPending,
     authError: error ? { type: "unknown", message: error.message ?? "Failed to load session" } : null,
     refresh: () => queryClient.fetchQuery({ ...authQuery, staleTime: 0 }),
+    signInDemo: (email = "demo@aevotron.local") => {
+      const normalizedEmail = String(email).trim().toLowerCase() || "demo@aevotron.local";
+      const user = {
+        id: "demo-user",
+        email: normalizedEmail,
+        display_name: normalizedEmail.split("@")[0] || "Demo User",
+        role: "user",
+        email_verified: true,
+        demo: true,
+      };
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem(DEMO_AUTH_STORAGE_KEY, JSON.stringify({
+          authenticated: true,
+          email: user.email,
+          display_name: user.display_name,
+        }));
+      }
+      queryClient.setQueryData(authQuery.queryKey, { user, error: null });
+      return user;
+    },
     logout: () => {
+      if (typeof window !== "undefined" && isDemoAuthenticated()) {
+        window.sessionStorage.removeItem(DEMO_AUTH_STORAGE_KEY);
+        queryClient.setQueryData(authQuery.queryKey, { user: null, error: null });
+        window.location.assign("/");
+        return Promise.resolve();
+      }
       queryClient.setQueryData(authQuery.queryKey, { user: null, error: null });
       return api.auth.logout();
     },

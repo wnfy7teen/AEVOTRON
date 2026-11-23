@@ -2,7 +2,7 @@ import animate from "tailwindcss-animate";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+    darkMode: ["selector", '[data-theme="dark"]'],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
@@ -14,11 +14,11 @@ export default {
   		},
   		colors: {
             av: {
-              blue: '#0877D1',
-              ink: '#111318',
-              muted: '#6E737C',
-              line: '#E6E8EB',
-              surface: '#F5F7F9'
+              blue: 'var(--accent)',
+              ink: 'var(--text-primary)',
+              muted: 'var(--text-secondary)',
+              line: 'var(--border)',
+              surface: 'var(--bg-secondary)'
             },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -43,14 +43,14 @@ export default {
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
+  				DEFAULT: 'var(--accent)',
+  				foreground: 'var(--accent-foreground)'
   			},
   			destructive: {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-  			border: 'hsl(var(--border))',
+  			border: 'var(--border)',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			chart: {

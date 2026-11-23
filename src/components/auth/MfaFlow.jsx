@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { MfaMethodSetup } from "@/components/auth/MfaMethodSetup";
+const MfaMethodSetup = lazy(() => import("@/components/auth/MfaMethodSetup").then(({ MfaMethodSetup: Component }) => ({ default: Component })));
 import { CodeField, MfaHeader, MfaNotice, RememberDevice, ResendLine, useAppInfo, useCooldown } from "@/components/auth/MfaParts";
 import { finishSignIn, mfaSession } from "@/lib/authMfaFlow";
 
@@ -12,6 +13,7 @@ const SMS_RESEND_SECONDS = 60;
 // session-record-block keeps the QR code, setup key and codes out of session recordings.
 // onManage(session) is called instead of finishing when the sign-in was for managing factors.
 export function MfaFlow({ challenge, returnTo, onManage }) {
+  const { t } = useTranslation(["auth", "translation"]);
   const session = useMemo(() => mfaSession(challenge), [challenge]);
   const finish = (result) => (result.mfa_management_token && onManage ? onManage(session) : finishSignIn(result.access_token, returnTo));
   return (
@@ -24,20 +26,21 @@ export function MfaFlow({ challenge, returnTo, onManage }) {
 }
 
 function Enroll({ session, onDone }) {
+  const { t } = useTranslation(["auth", "translation"]);
   const [method, setMethod] = useState(null);
   const info = useAppInfo();
   return (
     <>
       <MfaHeader
-        title={info && `${info.name || "This app"} requires multi-factor authentication`}
-        description={method ? null : "Add a second sign-in step to keep your account secure. Choose how you want to get your codes."}
+        title={info && t("{{appName}} requires multi-factor authentication", { appName: info.name || t("This app") })}
+        description={method ? null : t("Add a second sign-in step to keep your account secure. Choose how you want to get your codes.")}
       />
       {method ? (
-        <MfaMethodSetup session={session} method={method} onDone={onDone} onBack={() => setMethod(null)} />
+        <Suspense fallback={<Loader2 className="mx-auto w-6 h-6 animate-spin text-muted-foreground" />}><MfaMethodSetup session={session} method={method} onDone={onDone} onBack={() => setMethod(null)} /></Suspense>
       ) : (
         <div className="space-y-3">
-          <Button className="w-full h-12 font-medium" onClick={() => setMethod("totp")}>Set up your authenticator app</Button>
-          <Button variant="outline" className="w-full h-12 font-medium" onClick={() => setMethod("sms")}>Enter your phone number</Button>
+          <Button className="w-full h-12 font-medium" onClick={() => setMethod("totp")}>{t("Set up your authenticator app")}</Button>
+          <Button variant="outline" className="w-full h-12 font-medium" onClick={() => setMethod("sms")}>{t("Enter your phone number")}</Button>
         </div>
       )}
     </>
@@ -45,6 +48,7 @@ function Enroll({ session, onDone }) {
 }
 
 function Verify({ session, challenge, returnTo, onDone }) {
+  const { t } = useTranslation(["auth", "translation"]);
   const methods = challenge.mfa_methods;
   const [method, setMethod] = useState(methods.includes("totp") ? "totp" : "sms");
   const [code, setCode] = useState("");
@@ -92,27 +96,27 @@ function Verify({ session, challenge, returnTo, onDone }) {
   const other = methods.find((value) => value !== method);
   return (
     <>
-      <MfaHeader title="Verify your identity" />
+      <MfaHeader title={t("Verify your identity")} />
       <div className="space-y-4">
         <MfaNotice error={error} />
         <p className="text-sm text-muted-foreground text-center">
-          {method === "totp" ? "Enter the code from your authenticator app"
-            : sending && !cooldown ? `Sending code to ${phone}…` : `Enter the code sent to ${phone}`}
+          {method === "totp" ? t("Enter the code from your authenticator app")
+            : sending && !cooldown ? t("Sending code to {{phone}}…", { phone }) : t("Enter the code sent to {{phone}}", { phone })}
         </p>
         <CodeField id="mfa-code" value={code} onChange={setCode} onComplete={verify} />
         <RememberDevice checked={remember} onChange={setRemember} />
         <Button className="w-full h-12 font-medium" disabled={busy || code.length < 6} onClick={() => verify()}>
           {busy && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-          {busy ? "Verifying..." : "Verify"}
+          {busy ? t("Verifying...") : t("Verify")}
         </Button>
         {method === "sms" && <ResendLine cooldown={cooldown} disabled={sending} onResend={sendCode} />}
         {other && (
           <Button variant="outline" className="w-full" onClick={() => { setMethod(other); setCode(""); setError(null); }}>
-            {other === "sms" ? "Verify via Text Message" : "Verify via Authenticator App"}
+            {other === "sms" ? t("Verify via Text Message") : t("Verify via Authenticator App")}
           </Button>
         )}
         <div className="text-center">
-          <a href={returnTo && returnTo !== "/" ? "/login?returnTo=" + encodeURIComponent(returnTo) : "/login"} className="text-sm text-muted-foreground hover:underline">Back to Login</a>
+          <a href={returnTo && returnTo !== "/" ? "/login?returnTo=" + encodeURIComponent(returnTo) : "/login"} className="text-sm text-muted-foreground hover:underline">{t("Back to Login")}</a>
         </div>
       </div>
     </>

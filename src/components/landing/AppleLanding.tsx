@@ -1,6 +1,8 @@
 import "./landing.css";
+import "./hero-orbit.css";
+import { OrbitalBadge } from "./OrbitalBadge";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ChevronRight, Copy, Menu, ShieldCheck, Sparkles, X, Moon, Cloud } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Copy, Menu, Moon, ShieldCheck, Sparkles, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/i18n";
 import { createPortal } from "react-dom";
@@ -24,7 +26,7 @@ function FeatureVisual({ variant, t }: FeatureVisualProps) {
     </div>;
   }
   return <div className="av-visual av-code" aria-label={t("Пример запроса к API AEVOTRON")}>
-    <div className="av-window-bar"><span /><span /><span /><small>request.ts</small></div>
+    <div className="av-window-bar"><span /><span /><span /><small>{t("request.ts")}</small></div>
     <pre><span className="av-code-muted">const</span> response = <span className="av-code-blue">await</span> fetch(</pre>
     <pre>  <span className="av-code-green">"https://api.aevotron.com/v1/chat/completions"</span>,</pre>
     <pre>  {"{"} method: <span className="av-code-green">"POST"</span>,</pre>
@@ -33,7 +35,7 @@ function FeatureVisual({ variant, t }: FeatureVisualProps) {
     <pre>      model: <span className="av-code-green">"provider/model-name"</span>,</pre>
     <pre>      messages: [{"{"} role: <span className="av-code-green">"user"</span>, content: <span className="av-code-green">"Hello"</span> {"}"}]</pre>
     <pre>    {"}"})</pre><pre>  {"}"});</pre>
-    <div className="av-code-result"><span /><span>200 OK</span><small>Ответ получен</small></div>
+    <div className="av-code-result"><span /><span>200 OK</span><small>{t("Ответ получен")}</small></div>
   </div>;
 }
 
@@ -45,12 +47,31 @@ const features: Feature[] = [
 ];
 
 export default function AppleLanding() {
-  const { language, t } = useLanguage();
+  const { language, t } = useLanguage(["landing", "translation"]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
-  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "gray");
-  useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
+  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "light" ? "light" : "dark");
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    const closeOnDesktop = () => {
+      if (window.innerWidth > 800) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeOnDesktop);
+    };
+  }, [menuOpen]);
+  useEffect(() => {
+    window.localStorage.setItem("aevotron-theme", theme);
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
@@ -208,20 +229,6 @@ export default function AppleLanding() {
       observer?.disconnect();
     };
   }, [language]);
-  useEffect(() => {
-    const sectionIds = ["platform", "security", "developers"];
-    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      if (visible[0]) setActiveSection(visible[0].target.id);
-    }, { rootMargin: "-22% 0px -58% 0px", threshold: [0, 0.1, 0.25, 0.5] });
-    sections.forEach((section) => observer.observe(section));
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
   const copyEndpoint = async () => {
     try { await navigator.clipboard.writeText("https://api.aevotron.com/v1"); setCopied(true); window.setTimeout(() => setCopied(false), 1800); }
     catch { setCopied(false); }
@@ -229,67 +236,74 @@ export default function AppleLanding() {
   return <>
   <main className="av-site" data-theme={theme}>
     <header className="av-header"><div className="av-nav-wrap">
-      <Link to="/" className="av-brand" aria-label="AEVOTRON — главная"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
-      <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label="Основная навигация">
-        <a href="#platform" onClick={() => setMenuOpen(false)}>Платформа</a><a href="#security" onClick={() => setMenuOpen(false)}>Безопасность</a><a href="#developers" onClick={() => setMenuOpen(false)}>Разработчикам</a>
+      <Link to="/" className="av-brand" aria-label={t("AEVOTRON — главная")}><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
+      <nav className="av-nav-links av-desktop-nav" aria-label={t("Основная навигация")}>
+        <a href="#platform" onClick={() => setActiveSection("platform")}>{t("Платформа")}</a><a href="#security" onClick={() => setActiveSection("security")}>{t("Безопасность")}</a><a href="#developers" onClick={() => setActiveSection("developers")}>{t("Разработчикам")}</a>
       </nav>
-      <div className="av-nav-actions"><Link to="/login" className="av-login">Войти</Link><Link to="/register" className="av-nav-cta">Начать работу <ArrowRight size={15} /></Link></div>
-      <div className="av-theme-switch" role="group" aria-label="Тема оформления">
-        <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label="Тёмная тема" aria-pressed={theme === "dark"} title="Тёмная"><Moon size={16} /><span>Тёмная</span></button>
-        <button type="button" className={theme === "gray" ? "active" : ""} onClick={() => setTheme("gray")} aria-label="Серая тема" aria-pressed={theme === "gray"} title="Серая"><Cloud size={16} /><span>Серая</span></button>
+      <div className="av-nav-actions"><Link to="/workspace" className="av-login av-workspace-link">{t("Workspace")}</Link><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
+      <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
+        <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><Moon size={14} aria-hidden="true" /><span>{t("Тёмная")}</span></button>
+        <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label={t("Светлая тема")} aria-pressed={theme === "light"} title={t("Светлая")}><Sun size={14} aria-hidden="true" /><span>{t("Светлая")}</span></button>
       </div>
-      <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}>{menuOpen ? <X /> : <Menu />}</button>
+      <button type="button" className="av-menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label={menuOpen ? t("Close navigation") : t("Open navigation")}>{menuOpen ? <X /> : <Menu />}</button>
     </div></header>
     <section className="av-hero av-reveal" id="platform">
-      <div className="av-hero-kicker"><span /> ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ</div>
-      <h1>Все модели.<br /><span>Один API.</span></h1>
-      <p className="av-hero-copy">Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.</p>
-      <div className="av-hero-actions"><Link to="/register" className="av-primary-button">Создать аккаунт <ArrowRight size={17} /></Link><a href="#developers" className="av-secondary-button">Как это работает <ChevronRight size={17} /></a></div>
-      <div className="av-hero-footnote"><ShieldCheck size={15} /><span className="av-hero-footnote-text">Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем</span></div>
-      <div className="av-hero-art" aria-label="Визуализация единого API AEVOTRON"><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>AEVOTRON</strong><small>UNIFIED API</small></div><div className="av-orbit-label av-label-top">ONE INTERFACE</div><div className="av-orbit-label av-label-bottom">MULTIPLE MODELS</div></div>
+      <div className="av-hero-kicker"><span /> {t("ИНФРАСТРУКТУРА ДЛЯ AI-ПРОДУКТОВ")}</div>
+      <h1>{t("Все модели.")}<br /><span>{t("Один API.")}</span></h1>
+      <p className="av-hero-copy">{t("Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.")}</p>
+      <div className="av-hero-actions"><Link to="/register" className="av-primary-button">{t("Создать аккаунт")} <ArrowRight size={17} /></Link><a href="#developers" className="av-secondary-button">{t("Как это работает")} <ChevronRight size={17} /></a></div>
+      <div className="av-hero-footnote"><ShieldCheck size={15} /><span className="av-hero-footnote-text">{t("Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем")}</span></div>
+      <OrbitalBadge />
     </section>
-    <section className="av-intro av-reveal"><p>ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ</p><h2>Меньше связующего кода.<br />Больше времени на продукт.</h2></section>
+    <section className="av-intro av-reveal"><p>{t("ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ")}</p><h2>{t("Меньше связующего кода.")}<br />{t("Больше времени на продукт.")}</h2></section>
     {features.map((feature, index) => <section className={"av-feature av-reveal " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
-      <div className="av-feature-copy"><span className="av-eyebrow">{t(feature.eyebrow)}</span><h2>{t(feature.title)}</h2><p>{t(feature.description)}</p>{index === 2 && <button className="av-inline-link" onClick={copyEndpoint}>{copied ? <><Check size={15} /> Скопировано</> : <><Copy size={15} /> Скопировать адрес API</>}</button>}</div>
+      <div className="av-feature-copy"><span className="av-eyebrow">{t(feature.eyebrow)}</span><h2>{t(feature.title)}</h2><p>{t(feature.description)}</p>{index === 2 && <button className="av-inline-link" onClick={copyEndpoint}>{copied ? <><Check size={15} /> {t("Скопировано")}</> : <><Copy size={15} /> {t("Скопировать адрес API")}</>}</button>}</div>
       <FeatureVisual key={`${feature.variant}-${language}`} variant={feature.variant} t={t} />
     </section>)}
-    <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>Создайте свою следующую интеграцию.</h2><p>Начните с одного API и подключайте нужные модели по мере роста проекта.</p><Link to="/register" className="av-primary-button">Начать работу <ArrowRight size={17} /></Link></section>
+    <section className="av-final-cta av-reveal"><div className="av-final-icon"><Sparkles size={22} /></div><h2>{t("Создайте свою следующую интеграцию.")}</h2><p>{t("Начните с одного API и подключайте нужные модели по мере роста проекта.")}</p><Link to="/register" className="av-primary-button">{t("Начать работу")} <ArrowRight size={17} /></Link></section>
     <footer className="av-footer av-reveal">
       <div className="av-footer-main">
         <div className="av-footer-brand">
           <Link to="/" className="av-brand"><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
-          <p>Единый интерфейс для AI-моделей.</p>
+          <p>{t("Единый интерфейс для AI-моделей.")}</p>
         </div>
         <div className="av-footer-column">
-          <span className="av-footer-heading">РАЗДЕЛЫ</span>
-          <a href="#platform">Платформа</a>
-          <a href="#security">Безопасность</a>
-          <a href="#developers">Разработчикам</a>
+          <span className="av-footer-heading">{t("РАЗДЕЛЫ")}</span>
+          <a href="#platform">{t("Платформа")}</a>
+          <a href="#security">{t("Безопасность")}</a>
+          <a href="#developers">{t("Разработчикам")}</a>
         </div>
         <div className="av-footer-column">
-          <span className="av-footer-heading">АККАУНТ</span>
-          <Link to="/login">Войти</Link>
-          <Link to="/register">Регистрация</Link>
+          <span className="av-footer-heading">{t("АККАУНТ")}</span>
+          <Link to="/login" search={{ demo: "1" }}>{t("Войти")}</Link>
+          <Link to="/register">{t("Регистрация")}</Link>
         </div>
         <div className="av-footer-column av-footer-contact">
-          <span className="av-footer-heading">СВЯЗАТЬСЯ</span>
-          <a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">Telegram · @web3ResearchCN</a>
+          <span className="av-footer-heading">{t("СВЯЗАТЬСЯ")}</span>
+          <a href="https://t.me/web3ResearchCN" target="_blank" rel="noreferrer">{t("Telegram · @web3ResearchCN")}</a>
           <a href="mailto:usdtuser1@proton.me">usdtuser1@proton.me</a>
         </div>
       </div>
       <div className="av-footer-bottom">
-        <small>© {new Date().getFullYear()} AEVOTRON. <span>Все права защищены.</span></small>
-        <span>Developed by <strong>Kristofer Biksan</strong></span>
+        <small>© {new Date().getFullYear()} AEVOTRON. <span>{t("Все права защищены.")}</span></small>
+        <span>{t("Developed by")} <strong>Kristofer Biksan</strong></span>
       </div>
     </footer>
+    <aside className="av-section-nav is-visible" data-theme={theme} aria-label={t("Навигация по разделам")}>
+      <span className="av-section-nav-label">{t("НА СТРАНИЦЕ")}</span>
+      <a href="#platform" onClick={() => setActiveSection("platform")} className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />{t("Platform")}</a>
+      <a href="#security" onClick={() => setActiveSection("security")} className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />{t("Security")}</a>
+      <a href="#developers" onClick={() => setActiveSection("developers")} className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />{t("Developers")}</a>
+    </aside>
   </main>
   {typeof document !== "undefined" && createPortal(
-    <aside className="av-section-nav is-visible" data-theme={theme} aria-label="Навигация по разделам">
-      <span className="av-section-nav-label">НА СТРАНИЦЕ</span>
-      <a href="#platform" className={activeSection === "platform" ? "active" : ""} aria-current={activeSection === "platform" ? "location" : undefined}><i />Platform</a>
-      <a href="#security" className={activeSection === "security" ? "active" : ""} aria-current={activeSection === "security" ? "location" : undefined}><i />Security</a>
-      <a href="#developers" className={activeSection === "developers" ? "active" : ""} aria-current={activeSection === "developers" ? "location" : undefined}><i />Developers</a>
-    </aside>,
+    <div className={"av-mobile-nav-layer " + (menuOpen ? "is-open" : "")} data-theme={theme} aria-hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
+      <nav className="av-mobile-nav" aria-label={t("Основная навигация")} onClick={(event) => event.stopPropagation()}>
+        <a href="#platform" onClick={() => { setMenuOpen(false); setActiveSection("platform"); }}>{t("Платформа")}</a>
+        <a href="#security" onClick={() => { setMenuOpen(false); setActiveSection("security"); }}>{t("Безопасность")}</a>
+        <a href="#developers" onClick={() => { setMenuOpen(false); setActiveSection("developers"); }}>{t("Разработчикам")}</a>
+      </nav>
+    </div>,
     document.body
   )}
   </>;

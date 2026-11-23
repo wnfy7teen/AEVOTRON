@@ -39,18 +39,20 @@ Never place the master key, provider credentials, session tokens, or full AEVOTR
 | `GET /api/v1/auth/mfa/status`, `POST /api/v1/auth/mfa/enroll`, `/confirm`, `/disable` | Manage TOTP MFA |
 | `GET /api/v1/workspaces/current`, `POST /api/v1/workspaces` | Read or create a workspace |
 | `GET /api/v1/api-keys`, `POST /api/v1/api-keys` | List or create workspace API keys |
-| `/api/v1/providers/openai` | Connect, test, or revoke an OpenAI credential |
-| `GET /api/v1/providers`, `/api/v1/providers/openai/models`, `/api/v1/models` | List provider connections and available models |
+| `/api/v1/providers/openai`, `/api/v1/providers/groq` | Connect, test, or revoke provider credentials |
+| `GET /api/v1/providers`, `GET /api/v1/providers/{openai|groq}/models`, `/api/v1/models` | List provider connections and available models |
 | `GET /api/v1/usage/summary`, `/api/v1/usage/events` | Read usage summaries and metadata-only events |
 | `POST /v1/chat/completions` | OpenAI-compatible gateway endpoint |
 
 ## Current gateway limitations
 
-- OpenAI is the only provider adapter currently implemented.
+- OpenAI and Groq adapters are implemented using fixed HTTPS provider origins and OpenAI-compatible Chat Completions APIs.
+- Model IDs are namespaced as `openai/{model-id}` or `groq/{model-id}` so the gateway can route requests to the correct connected provider.
 - Chat Completions supports non-streaming text requests only.
 - Streaming, tool calls, embeddings, image/audio/video, and other multimodal requests are rejected until explicitly implemented and tested.
 - Request size, message count, output-token limits, API-key scope, and per-key rate limits are enforced server-side.
 - No platform-funded API balance or markup is implemented; the connected provider bills its own account.
+- Groq API base URL: `https://api.groq.com/openai/v1`; the backend fetches the provider model catalog and stores the user's credential encrypted with workspace-bound AES-256-GCM AAD.
 - The gateway does not yet provide complete OpenAI API parity or a public `/v1/models` contract for every provider.
 
 Do not market this beta as a full OpenAI-compatible replacement or promise availability in regions not supported by the upstream provider.

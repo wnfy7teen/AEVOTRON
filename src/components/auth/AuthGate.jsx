@@ -1,7 +1,7 @@
 import { redirect } from "@tanstack/react-router";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import { UserNotRegistered } from "@/components/auth/UserNotRegistered";
-import { authQuery } from "@/lib/AuthContext";
+import { authQuery, isCloudflareWorkersPreview } from "@/lib/AuthContext";
 
 class NotRegisteredError extends Error {}
 
@@ -19,6 +19,11 @@ class NotRegisteredError extends Error {}
  * so these pages render in the browser only, and children inherit that.
  */
 export async function requireSignedIn({ context, location }) {
+  // Workers Preview keeps account routes read-only, but permits the isolated
+  // demo-mode chat workspace, which does not load authenticated chat history.
+  if (isCloudflareWorkersPreview() && location.pathname !== "/workspace") {
+    throw redirect({ to: "/workspace-preview", reloadDocument: true });
+  }
   // A /me outage (429, 503) is not a sign-out: it rejects here and reaches the error
   // boundary, whose "Try again" asks the server again (a failed query caches nothing).
   const { user, error } = await context.queryClient.ensureQueryData(authQuery);
@@ -27,7 +32,7 @@ export async function requireSignedIn({ context, location }) {
   if (error?.type === "user_not_registered") throw new NotRegisteredError(error.message);
   // A document navigation on purpose: an app served behind the platform login gets the
   // platform's /login, which reads from_url; the app's own /login page reads returnTo.
-  throw redirect({ to: "/login", search: { returnTo: location.href, from_url: location.href }, reloadDocument: true });
+  throw redirect({ to: "/login", search: { next: location.href, returnTo: location.href, from_url: location.href }, reloadDocument: true });
 }
 
 export function AuthGateError({ error }) {

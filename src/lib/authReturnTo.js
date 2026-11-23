@@ -16,7 +16,7 @@ const AUTH_PAGES = new Set(["/login", "/register", "/forgot-password", "/reset-p
 export function safeReturnTo(search) {
   if (typeof window === "undefined") return "/";
   const params = new URLSearchParams(search ?? window.location.search);
-  return sanitizeReturnTo(params.get("returnTo") || params.get("from_url"));
+  return sanitizeReturnTo(params.get("next") || params.get("returnTo") || params.get("from_url"));
 }
 
 export function sanitizeReturnTo(raw) {

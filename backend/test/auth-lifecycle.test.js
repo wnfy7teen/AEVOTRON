@@ -28,3 +28,15 @@ test("password reset serializes per-user token consumption and invalidates all a
   assert.match(route, /DELETE FROM sessions WHERE user_id=\$1/);
   assert.ok(route.indexOf("FOR UPDATE") < route.indexOf("UPDATE password_reset_tokens SET consumed_at=now()"));
 });
+
+test("password change rejects reusing the current password server-side", () => {
+  const start = source.indexOf('if (req.method === "POST" && path === "/api/v1/auth/password/change")');
+  const end = source.indexOf('if (req.method === "POST" && path === "/api/v1/auth/password/forgot")', start);
+  assert.notEqual(start, -1);
+  assert.notEqual(end, -1);
+  const route = source.slice(start, end);
+  assert.match(route, /verifyPassword\(nextPassword, account\.rows\[0\]\.password_hash\)/);
+  assert.match(route, /PASSWORD_UNCHANGED/);
+  assert.ok(route.indexOf("PASSWORD_UNCHANGED") < route.indexOf("hashPassword(nextPassword)"));
+  assert.match(route, /Choose a new password that differs from your current password/);
+});

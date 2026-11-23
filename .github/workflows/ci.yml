@@ -7,6 +7,7 @@ on:
       - "chore/**"
       - "feat/**"
       - "fix/**"
+      - "infra/**"
   pull_request:
     branches:
       - main
@@ -33,7 +34,10 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Repair and validate translations
+        run: npm run i18n:fix && npm run i18n:check
 
       - name: Run security policy tests
         run: npm test
@@ -58,5 +62,8 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Build production application
+      - name: Build production application (Vercel / Docker Nitro)
         run: npm run build
+
+      - name: Build Cloudflare Workers preview
+        run: npm run build:cloudflare

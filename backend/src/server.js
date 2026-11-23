@@ -7,6 +7,7 @@ import {
   newTotpSecret, randomToken, sha256, totpUri, verifyPassword, verifyTotp,
 } from "./security.js";
 import { mailConfigured, sendActionEmail } from "./mailer.js";
+import { getProvider, isValidProviderCredential, normalizeProviderModels } from "./providers.js";
 
 const PORT = Number(process.env.PORT || 3001);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -27,7 +28,7 @@ const json = (res, status, data, headers = {}) => {
   });
   res.end(body);
 };
-const fail = (res, status, code, message) => json(res, status, { error: { code, message } });
+const fail = (res, status, code, message, headers = {}) => json(res, status, { error: { code, message } }, headers);
 const normalizeEmail = (value) => String(value || "").trim().toLowerCase();
 const validEmail = (value) => value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (c) => ({
@@ -49,12 +50,12 @@ function cookieHeader(token, maxAge) {
 function clearCookie() {
   return `${cookieName}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${process.env.COOKIE_SECURE === "false" ? "" : "; Secure"}`;
 }
-async function readBody(req) {
+async function readBody(req, limit = JSON_LIMIT) {
   const chunks = [];
   let size = 0;
   for await (const chunk of req) {
     size += chunk.length;
-    if (size > JSON_LIMIT) throw Object.assign(new Error("PAYLOAD_TOO_LARGE"), { status: 413 });
+    if (size > limit) throw Object.assign(new Error("PAYLOAD_TOO_LARGE"), { status: 413 });
     chunks.push(chunk);
   }
   if (!chunks.length) return {};
@@ -226,7 +227,8 @@ async function handle(req, res) {
   const path = url.pathname;
   if (req.method === "GET" && path === "/healthz") return json(res, 200, { status: "ok" });
   if (req.method !== "GET" && req.method !== "HEAD") assertSameOrigin(req);
-  const body = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) ? await readBody(req) : {};
+  const bodyLimit = path === "/api/v1/workspace/chat/completions" ? 1024 * 1024 : JSON_LIMIT;
+  const body = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) ? await readBody(req, bodyLimit) : {};
 
   if (req.method === "POST" && path === "/api/v1/auth/register") {
     await rateLimit(req, "register", 5, 3600);
@@ -348,6 +350,63 @@ async function handle(req, res) {
   if (req.method === "GET" && path === "/api/v1/auth/me") {
     const user = await sessionUser(req);
     return user ? json(res, 200, { user: publicUser(user) }) : fail(res, 401, "UNAUTHORIZED", "Sign in to continue.");
+  }
+  if (req.method === "GET" && path === "/api/v1/auth/sessions") {
+    const user = await requireUser(req, res); if (!user) return;
+    const result = await pool.query(
+      `SELECT id,user_agent,created_at,last_seen_at,expires_at
+       FROM sessions WHERE user_id=$1 AND expires_at>now()
+       ORDER BY last_seen_at DESC LIMIT 25`,
+      [user.id],
+    );
+    return json(res, 200, { current_session_id: user.session_id, sessions: result.rows });
+  }
+
+  const sessionMatch = path.match(/^\/api\/v1\/auth\/sessions\/([0-9a-f-]{36})$/i);
+  if (req.method === "DELETE" && sessionMatch) {
+    const user = await requireUser(req, res); if (!user) return;
+    if (sessionMatch[1] === user.session_id) {
+      return fail(res, 400, "CURRENT_SESSION", "Use sign out to end the current session.");
+    }
+    const result = await pool.query(
+      "DELETE FROM sessions WHERE id=$1 AND user_id=$2 RETURNING id",
+      [sessionMatch[1], user.id],
+    );
+    if (!result.rowCount) return fail(res, 404, "SESSION_NOT_FOUND", "Session not found.");
+    return json(res, 200, { success: true });
+  }
+
+  if (req.method === "POST" && path === "/api/v1/auth/password/change") {
+    const user = await requireUser(req, res); if (!user) return;
+    await rateLimit(req, "password-change", 5, 900);
+    const currentPassword = String(body.current_password || "");
+    const nextPassword = body.new_password;
+    if (typeof nextPassword !== "string" || nextPassword.length < 12 || nextPassword.length > 256) {
+      return fail(res, 400, "PASSWORD_POLICY", "New password must contain 12–256 characters.");
+    }
+    const changed = await transaction(async (client) => {
+      const account = await client.query("SELECT password_hash FROM users WHERE id=$1 AND status='active' FOR UPDATE", [user.id]);
+      if (!account.rowCount || !await verifyPassword(currentPassword, account.rows[0].password_hash)) return { error: "INVALID_CURRENT_PASSWORD" };
+      if (await verifyPassword(nextPassword, account.rows[0].password_hash)) return { error: "PASSWORD_UNCHANGED" };
+      const factor = await client.query(
+        "SELECT secret_ciphertext FROM mfa_factors WHERE user_id=$1 AND type='totp' AND confirmed_at IS NOT NULL",
+        [user.id],
+      );
+      if (factor.rowCount) {
+        const secret = decryptSecret(factor.rows[0].secret_ciphertext, `totp:${user.id}`);
+        if (!verifyTotp(secret, body.mfa_code)) return { error: "INVALID_MFA_CODE" };
+      }
+      const passwordHash = await hashPassword(nextPassword);
+      await client.query("UPDATE users SET password_hash=$2,updated_at=now() WHERE id=$1", [user.id, passwordHash]);
+      await client.query("DELETE FROM sessions WHERE user_id=$1 AND id<>$2", [user.id, user.session_id]);
+      await client.query("UPDATE password_reset_tokens SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL", [user.id]);
+      await client.query("UPDATE mfa_challenges SET consumed_at=now() WHERE user_id=$1 AND consumed_at IS NULL", [user.id]);
+      return { success: true };
+    });
+    if (changed.error === "INVALID_CURRENT_PASSWORD") return fail(res, 401, "INVALID_CURRENT_PASSWORD", "Current password is incorrect.");
+    if (changed.error === "PASSWORD_UNCHANGED") return fail(res, 400, "PASSWORD_UNCHANGED", "Choose a new password that differs from your current password.");
+    if (changed.error === "INVALID_MFA_CODE") return fail(res, 401, "INVALID_MFA_CODE", "Enter a valid authenticator code.");
+    return json(res, 200, { success: true, other_sessions_revoked: true });
   }
 
   if (req.method === "POST" && path === "/api/v1/auth/password/forgot") {
@@ -517,55 +576,128 @@ async function handle(req, res) {
     return json(res, 200, { success: true });
   }
 
-  if (req.method === "POST" && path === "/api/v1/providers/openai") {
+  const providerRoute = path.match(/^\/api\/v1\/providers\/(openai|groq)(?:\/(test|models))?$/);
+  if (providerRoute && req.method === "POST") {
     const user = await requireUser(req, res); if (!user) return;
-    const credential = String(body.api_key || "");
-    if (!credential.startsWith("sk-") || credential.length < 20 || credential.length > 500) return fail(res, 400, "INVALID_PROVIDER_KEY", "Enter a valid OpenAI API key.");
+    const provider = getProvider(providerRoute[1]);
+    const action = providerRoute[2];
     const workspace = await currentWorkspace(user);
+    if (action === "test") {
+      const saved = await pool.query(
+        "SELECT id,credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status<>'revoked'",
+        [workspace.id, user.id, provider.code],
+      );
+      if (!saved.rowCount) return fail(res, 404, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+      const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+      let upstream;
+      try {
+        upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+      } catch {
+        return fail(res, 502, "PROVIDER_UNREACHABLE", provider.name + " could not be reached. Try again.");
+      }
+      await pool.query("UPDATE provider_connections SET status=$2,last_tested_at=now(),updated_at=now() WHERE id=$1", [saved.rows[0].id, upstream.ok ? "active" : "error"]);
+      if (!upstream.ok) {
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, 422, "PROVIDER_AUTH_FAILED", provider.name + " rejected the saved API key.");
+      }
+      await upstream.body?.cancel().catch(() => {});
+      return json(res, 200, { success: true, status: "active" });
+    }
+    if (action === "models") {
+      const saved = await pool.query(
+        "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+        [workspace.id, user.id, provider.code],
+      );
+      if (!saved.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+      const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+      let upstream;
+      try {
+        upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+      } catch {
+        return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+      }
+      if (!upstream.ok) {
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+      }
+      const result = await upstream.json();
+      return json(res, 200, { models: normalizeProviderModels(provider.code, result.data || []) });
+    }
+    const credential = String(body.api_key || "");
+    if (!isValidProviderCredential(provider.code, credential)) {
+      return fail(res, 400, "INVALID_PROVIDER_KEY", "Enter a valid " + provider.name + " API key.");
+    }
     let providerCheck;
     try {
-      providerCheck = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
+      providerCheck = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
     } catch {
-      return fail(res, 502, "PROVIDER_UNREACHABLE", "OpenAI could not be reached. Try again.");
+      return fail(res, 502, "PROVIDER_UNREACHABLE", provider.name + " could not be reached. Try again.");
     }
     if (!providerCheck.ok) {
       await providerCheck.body?.cancel().catch(() => {});
-      return fail(res, 422, "PROVIDER_AUTH_FAILED", "OpenAI rejected this API key.");
+      return fail(res, 422, "PROVIDER_AUTH_FAILED", provider.name + " rejected this API key.");
     }
-    const aad = "provider:openai:" + user.id + ":" + workspace.id;
+    await providerCheck.body?.cancel().catch(() => {});
+    const aad = "provider:" + provider.code + ":" + user.id + ":" + workspace.id;
     const ciphertext = encryptSecret(credential, aad);
     const result = await pool.query(
-      "INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status,last_tested_at) VALUES($1,$2,$3,$4,$5,$6,now()) ON CONFLICT(workspace_id,provider_code) DO UPDATE SET credential_ciphertext=EXCLUDED.credential_ciphertext,status=EXCLUDED.status,last_tested_at=now(),updated_at=now() RETURNING id,provider_code,display_name,status,last_tested_at",
-      [workspace.id, user.id, "openai", "OpenAI", ciphertext, "active"],
+      "INSERT INTO provider_connections(workspace_id,owner_user_id,provider_code,display_name,credential_ciphertext,status,last_tested_at) VALUES($1,$2,$3,$4,$5,'active',now()) ON CONFLICT(workspace_id,provider_code) DO UPDATE SET display_name=EXCLUDED.display_name,credential_ciphertext=EXCLUDED.credential_ciphertext,status='active',last_tested_at=now(),updated_at=now() RETURNING id,provider_code,display_name,status,last_tested_at",
+      [workspace.id, user.id, provider.code, provider.name, ciphertext],
     );
     return json(res, 201, { connection: result.rows[0] });
   }
-
-  if (req.method === "POST" && path === "/api/v1/providers/openai/test") {
+  if (providerRoute && req.method === "DELETE" && !providerRoute[2]) {
     const user = await requireUser(req, res); if (!user) return;
-    const workspace = await currentWorkspace(user);
-    const result = await pool.query(
-      "SELECT id,credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai' AND status<>'revoked'",
-      [workspace.id, user.id],
-    );
-    if (!result.rowCount) return fail(res, 404, "PROVIDER_NOT_CONNECTED", "Connect OpenAI first.");
-    const credential = decryptSecret(result.rows[0].credential_ciphertext, `provider:openai:${user.id}:${workspace.id}`);
-    const upstream = await fetch("https://api.openai.com/v1/models", { headers: { authorization: `Bearer ${credential}` }, signal: AbortSignal.timeout(10_000) });
-    await pool.query("UPDATE provider_connections SET status=$2,last_tested_at=now(),updated_at=now() WHERE id=$1", [result.rows[0].id, upstream.ok ? "active" : "error"]);
-    if (!upstream.ok) return fail(res, 422, "PROVIDER_AUTH_FAILED", "The provider rejected this API key.");
-    return json(res, 200, { success: true, status: "active" });
-  }
-
-  if (req.method === "DELETE" && path === "/api/v1/providers/openai") {
-    const user = await requireUser(req, res); if (!user) return;
+    const provider = getProvider(providerRoute[1]);
     const workspace = await currentWorkspace(user);
     await pool.query(
-      "UPDATE provider_connections SET status='revoked',credential_ciphertext='',updated_at=now() WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai'",
-      [workspace.id, user.id],
+      "UPDATE provider_connections SET status='revoked',credential_ciphertext='',updated_at=now() WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3",
+      [workspace.id, user.id, provider.code],
     );
     return json(res, 200, { success: true });
   }
-
+  if (providerRoute && req.method === "GET" && providerRoute[2] === "models") {
+    const user = await requireUser(req, res); if (!user) return;
+    const provider = getProvider(providerRoute[1]);
+    const workspace = await currentWorkspace(user);
+    const saved = await pool.query(
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [workspace.id, user.id, provider.code],
+    );
+    if (!saved.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect " + provider.name + " first.");
+    const credential = decryptSecret(saved.rows[0].credential_ciphertext, "provider:" + provider.code + ":" + user.id + ":" + workspace.id);
+    let upstream;
+    try {
+      upstream = await fetch(provider.baseUrl + "/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10_000) });
+    } catch {
+      return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+    }
+    if (!upstream.ok) {
+      await upstream.body?.cancel().catch(() => {});
+      return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", provider.name + " model list could not be loaded.");
+    }
+    const result = await upstream.json();
+    const normalized = normalizeProviderModels(provider.code, result.data || []);
+    const catalogRows = await pool.query(
+      "SELECT provider_model_id,display_name,modality,context_window,capabilities,pricing_reference,status FROM models WHERE provider_code=$1",
+      [provider.code],
+    );
+    const catalog = new Map(catalogRows.rows.map((row) => [row.provider_model_id, row]));
+    const models = normalized.map((model) => {
+      const metadata = catalog.get(model.provider_model_id);
+      if (!metadata) return { ...model, context_window: null, capabilities: {}, pricing_reference: null, modality: "chat", catalog_status: "unlisted" };
+      return {
+        ...model,
+        display_name: metadata.display_name,
+        modality: metadata.modality,
+        context_window: metadata.context_window,
+        capabilities: metadata.capabilities || {},
+        pricing_reference: metadata.pricing_reference,
+        catalog_status: metadata.status,
+      };
+    });
+    return json(res, 200, { models });
+  }
   if (req.method === "GET" && path === "/api/v1/providers") {
     const user = await requireUser(req, res); if (!user) return;
     const workspace = await currentWorkspace(user);
@@ -601,25 +733,382 @@ async function handle(req, res) {
     return json(res, 200, { events: rows.rows });
   }
 
-  if (req.method === "GET" && path === "/api/v1/providers/openai/models") {
-    const user = await requireUser(req, res); if (!user) return;
-    const workspace = await currentWorkspace(user);
-    const provider = await pool.query("SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status=$4", [workspace.id, user.id, "openai", "active"]);
-    if (!provider.rowCount) return fail(res, 409, "PROVIDER_NOT_CONNECTED", "Connect OpenAI first.");
-    const aad = "provider:openai:" + user.id + ":" + workspace.id;
-    const credential = decryptSecret(provider.rows[0].credential_ciphertext, aad);
-    const upstream = await fetch("https://api.openai.com/v1/models", { headers: { authorization: "Bearer " + credential }, signal: AbortSignal.timeout(10000) });
-    if (!upstream.ok) return fail(res, 502, "PROVIDER_MODELS_UNAVAILABLE", "OpenAI model list could not be loaded.");
-    const result = await upstream.json();
-    const found = (result.data || []).filter((item) => /^(gpt-|chatgpt-)/i.test(item.id)).map((item) => ({ id: item.id, owned_by: item.owned_by || "OpenAI" }));
-    return json(res, 200, { models: found });
-  }
   if (req.method === "GET" && path === "/api/v1/models") {
     const user = await requireUser(req, res); if (!user) return;
     const rows = await pool.query(
       "SELECT provider_code,provider_model_id,display_name,modality,context_window,capabilities,status FROM models WHERE status IN ('active','preview') ORDER BY provider_code,display_name",
     );
     return json(res, 200, { models: rows.rows });
+  }
+
+  const chatUsageRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})\/usage$/i);
+  if (chatUsageRoute && req.method === "GET") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const usage = await pool.query(
+      "SELECT total_input_tokens,total_output_tokens,request_count,usage_estimated,estimated_cost,currency FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+      [chatUsageRoute[1],workspace.id,user.id],
+    );
+    if (!usage.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    return json(res, 200, { usage: usage.rows[0] });
+  }
+
+  if (req.method === "GET" && path === "/api/v1/workspace/chats") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const result = await pool.query(
+      `SELECT s.id,s.title,s.model_id,s.created_at,s.updated_at,
+       (SELECT left(m.content,180) FROM workspace_chat_messages m
+        WHERE m.session_id=s.id AND m.role='user' ORDER BY m.created_at LIMIT 1) AS preview
+       FROM workspace_chat_sessions s
+       WHERE s.workspace_id=$1 AND s.owner_user_id=$2
+       ORDER BY s.updated_at DESC LIMIT 100`,
+      [workspace.id,user.id],
+    );
+    return json(res, 200, { sessions: result.rows });
+  }
+
+  if (req.method === "POST" && path === "/api/v1/workspace/chats") {
+    const user = await requireUser(req, res); if (!user) return;
+    const title = typeof body.title === "string" ? body.title.trim().slice(0,120) : "New conversation";
+    const modelId = typeof body.model_id === "string" && /^[A-Za-z0-9._/-]{1,100}$/.test(body.model_id) ? body.model_id : null;
+    const workspace = await currentWorkspace(user);
+    await rateLimit(req, "workspace-chat-session:" + user.id, 30, 60);
+    const result = await pool.query(
+      "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id,title,model_id,created_at,updated_at",
+      [workspace.id,user.id,title || "New conversation",modelId],
+    );
+    return json(res, 201, { session: result.rows[0] });
+  }
+
+  const chatBranchRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})\/branch$/i);
+  if (chatBranchRoute && req.method === "POST") {
+    const user = await requireUser(req, res); if (!user) return;
+    if (typeof body.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.message_id)) {
+      return fail(res, 400, "INVALID_BRANCH_MESSAGE", "Select a saved user message to branch from.");
+    }
+    const workspace = await currentWorkspace(user);
+    await rateLimit(req, "workspace-chat-branch:" + user.id, 20, 60);
+    const source = await pool.query(
+      "SELECT id,title,model_id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+      [chatBranchRoute[1],workspace.id,user.id],
+    );
+    if (!source.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    const target = await pool.query(
+      "SELECT id,created_at FROM workspace_chat_messages WHERE id=$1 AND session_id=$2 AND workspace_id=$3 AND owner_user_id=$4 AND role IN ('user','assistant')",
+      [body.message_id,chatBranchRoute[1],workspace.id,user.id],
+    );
+    if (!target.rowCount) return fail(res, 404, "CHAT_MESSAGE_NOT_FOUND", "The selected message was not found.");
+    const title = typeof body.title === "string" && body.title.trim()
+      ? body.title.trim().slice(0,120)
+      : (source.rows[0].title + " — branch").slice(0,120);
+    const created = await pool.query(
+      "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id,title,model_id,created_at,updated_at",
+      [workspace.id,user.id,title,source.rows[0].model_id],
+    );
+    await pool.query(
+      "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata,created_at) SELECT $4,$2,$3,role,content,model_id,metadata,created_at FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 AND (created_at < $5 OR (created_at = $5 AND id <= $6)) ORDER BY created_at,id",
+      [chatBranchRoute[1],workspace.id,user.id,created.rows[0].id,target.rows[0].created_at,body.message_id],
+    );
+    const messages = await pool.query(
+      "SELECT id,role,content,model_id,metadata,created_at FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 ORDER BY created_at,id",
+      [created.rows[0].id,workspace.id,user.id],
+    );
+    return json(res, 201, { session: created.rows[0], messages: messages.rows });
+  }
+
+  const chatSessionRoute = path.match(/^\/api\/v1\/workspace\/chats\/([0-9a-f-]{36})$/i);
+  if (chatSessionRoute && req.method === "GET") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const session = await pool.query(
+      "SELECT id,title,model_id,created_at,updated_at FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+      [chatSessionRoute[1],workspace.id,user.id],
+    );
+    if (!session.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    const messages = await pool.query(
+      "SELECT id,role,content,model_id,metadata,created_at FROM workspace_chat_messages WHERE session_id=$1 AND workspace_id=$2 AND owner_user_id=$3 ORDER BY created_at,id",
+      [chatSessionRoute[1],workspace.id,user.id],
+    );
+    return json(res, 200, { session: session.rows[0], messages: messages.rows });
+  }
+
+  if (chatSessionRoute && req.method === "PATCH") {
+    const user = await requireUser(req, res); if (!user) return;
+    if (typeof body.title !== "string" || !body.title.trim() || body.title.trim().length > 120) {
+      return fail(res, 400, "INVALID_CHAT_TITLE", "Conversation titles must contain 1–120 characters.");
+    }
+    const workspace = await currentWorkspace(user);
+    const result = await pool.query(
+      "UPDATE workspace_chat_sessions SET title=$4,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3 RETURNING id,title,model_id,created_at,updated_at",
+      [chatSessionRoute[1],workspace.id,user.id,body.title.trim()],
+    );
+    if (!result.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    return json(res, 200, { session: result.rows[0] });
+  }
+
+  if (chatSessionRoute && req.method === "DELETE") {
+    const user = await requireUser(req, res); if (!user) return;
+    const workspace = await currentWorkspace(user);
+    const result = await pool.query(
+      "DELETE FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3 RETURNING id",
+      [chatSessionRoute[1],workspace.id,user.id],
+    );
+    if (!result.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+    return json(res, 200, { success: true });
+  }
+
+  // First-party Workspace chat uses the signed-in HttpOnly session, never a browser-held API key.
+  if (req.method === "POST" && path === "/api/v1/workspace/chat/completions") {
+    const user = await requireUser(req, res); if (!user) return;
+    const invalid = validateChat({ ...body, stream: false });
+    if (invalid) return fail(res, 400, invalid, "The workspace chat request is invalid.");
+    if (body.stream !== true) return fail(res, 400, "streaming_required", "Workspace chat currently requires stream=true.");
+    const modelMatch = body.model.match(/^(openai|groq)\/(.+)$/);
+    if (!modelMatch) return fail(res, 400, "invalid_model", "Select a model from a connected provider.");
+    const [, providerCode, providerModel] = modelMatch;
+    const providerConfig = getProvider(providerCode);
+    if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
+    if (body.assistant_message_id !== undefined && (typeof body.assistant_message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.assistant_message_id))) {
+      return fail(res, 400, "INVALID_CHAT_MESSAGE", "The assistant message identifier is invalid.");
+    }
+    if (body.message_id !== undefined && (typeof body.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.message_id))) {
+      return fail(res, 400, "INVALID_CHAT_MESSAGE", "The message identifier is invalid.");
+    }
+    if (body.replace_last_user_message !== undefined && typeof body.replace_last_user_message !== "boolean") {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "The message replacement option must be a boolean.");
+    }
+    if (body.persist_conversation !== undefined && typeof body.persist_conversation !== "boolean") {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "The persistence option must be a boolean.");
+    }
+    const persistConversation = body.persist_conversation !== false;
+    if (body.session_id !== undefined && (typeof body.session_id !== "string" || !/^[0-9a-f-]{36}$/i.test(body.session_id))) {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "The conversation identifier is invalid.");
+    }
+    if (body.messages[body.messages.length - 1]?.role !== "user") {
+      return fail(res, 400, "INVALID_MESSAGES", "The latest conversation message must be from the user.");
+    }
+    const workspace = await currentWorkspace(user);
+    let chatSessionId = null;
+    if (persistConversation) {
+      chatSessionId = body.session_id || null;
+      if (chatSessionId) {
+        const ownedSession = await pool.query(
+          "SELECT id FROM workspace_chat_sessions WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+          [chatSessionId,workspace.id,user.id],
+        );
+        if (!ownedSession.rowCount) return fail(res, 404, "CHAT_NOT_FOUND", "The conversation was not found.");
+      } else {
+        const firstPrompt = body.messages[body.messages.length - 1].content.trim().slice(0, 100);
+        const createdSession = await pool.query(
+          "INSERT INTO workspace_chat_sessions(workspace_id,owner_user_id,title,model_id) VALUES($1,$2,$3,$4) RETURNING id",
+          [workspace.id,user.id,firstPrompt || "New conversation",body.model],
+        );
+        chatSessionId = createdSession.rows[0].id;
+      }
+      const latestPrompt = body.messages[body.messages.length - 1].content;
+      if (body.replace_last_user_message === true) {
+        const updatedUser = await pool.query(
+          "UPDATE workspace_chat_messages SET content=$2,model_id=$3 WHERE id=COALESCE($4,(SELECT id FROM workspace_chat_messages WHERE session_id=$1 AND role='user' ORDER BY created_at DESC,id DESC LIMIT 1)) AND session_id=$1 RETURNING id,created_at",
+          [chatSessionId,latestPrompt,body.model,body.message_id || null],
+        );
+        if (!updatedUser.rowCount) return fail(res, 409, "CHAT_MESSAGE_NOT_FOUND", "The message to edit no longer exists.");
+        await pool.query(
+          "DELETE FROM workspace_chat_messages WHERE session_id=$1 AND role='assistant' AND created_at >= $2",
+          [chatSessionId,updatedUser.rows[0].created_at],
+        );
+      } else if (body.persist_user_message !== false) {
+        if (body.message_id) {
+          await pool.query(
+            "INSERT INTO workspace_chat_messages(id,session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,$4,'user',$5,$6)",
+            [body.message_id,chatSessionId,workspace.id,user.id,latestPrompt,body.model],
+          );
+        } else {
+          await pool.query(
+            "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id) VALUES($1,$2,$3,'user',$4,$5)",
+            [chatSessionId,workspace.id,user.id,latestPrompt,body.model],
+          );
+        }
+      } else {
+        await pool.query(
+          "DELETE FROM workspace_chat_messages WHERE session_id=$1 AND role='assistant' AND created_at > (SELECT COALESCE(MAX(created_at),'epoch'::timestamptz) FROM workspace_chat_messages WHERE session_id=$1 AND role='user')",
+          [chatSessionId],
+        );
+      }
+      await pool.query("UPDATE workspace_chat_sessions SET model_id=$4,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+        [chatSessionId,workspace.id,user.id,body.model]);
+    } else if (body.session_id !== undefined) {
+      return fail(res, 400, "INVALID_CHAT_SESSION", "Non-persistent requests cannot target a saved conversation.");
+    }
+    await rateLimit(req, "workspace-chat:" + user.id, 20, 60);
+    const savedProvider = await pool.query(
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [workspace.id, user.id, providerCode],
+    );
+    if (!savedProvider.rowCount) return fail(res, 403, "provider_not_connected", "Connect " + providerConfig.name + " before using this model.");
+    const credential = decryptSecret(
+      savedProvider.rows[0].credential_ciphertext,
+      "provider:" + providerCode + ":" + user.id + ":" + workspace.id,
+    );
+    const requestId = randomUUID();
+    const started = Date.now();
+    const controller = new AbortController();
+    let clientDisconnected = false;
+    let responseStatus = 500;
+    let errorCode = "internal_error";
+    let inputTokens = 0;
+    let outputTokens = 0;
+    let hasProviderInputUsage = false;
+    let hasProviderOutputUsage = false;
+    let usageEstimated = false;
+    let assistantContent = "";
+    let upstream;
+    const onResponseClose = () => {
+      if (!res.writableEnded) {
+        clientDisconnected = true;
+        controller.abort();
+      }
+    };
+    res.once("close", onResponseClose);
+    try {
+      upstream = await fetch(providerConfig.baseUrl + "/chat/completions", {
+        method: "POST",
+        headers: { authorization: "Bearer " + credential, "content-type": "application/json" },
+        body: JSON.stringify({
+          model: providerModel,
+          messages: body.messages,
+          stream: true,
+          stream_options: { include_usage: true },
+          ...(body.max_tokens !== undefined ? { max_tokens: body.max_tokens } : {}),
+          ...(body.temperature !== undefined ? { temperature: body.temperature } : {}),
+          ...(body.top_p !== undefined ? { top_p: body.top_p } : {}),
+        }),
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(120_000)]),
+      });
+      if (!upstream.ok) {
+        responseStatus = upstream.status === 429 ? 429 : 502;
+        errorCode = upstream.status === 429 ? "provider_rate_limited" : "upstream_provider_error";
+        await upstream.body?.cancel().catch(() => {});
+        return fail(res, responseStatus, errorCode, "The provider could not start this response.", { "x-request-id": requestId });
+      }
+      if (!upstream.body) {
+        responseStatus = 502;
+        errorCode = "empty_provider_stream";
+        return fail(res, 502, errorCode, "The provider returned an empty response stream.", { "x-request-id": requestId });
+      }
+      res.writeHead(200, {
+        "content-type": "text/event-stream; charset=utf-8",
+        "cache-control": "no-cache, no-transform",
+        connection: "keep-alive",
+        "x-content-type-options": "nosniff",
+        "x-request-id": requestId,
+        ...(chatSessionId ? { "x-chat-session-id": chatSessionId } : {}),
+        "x-accel-buffering": "no",
+      });
+      const reader = upstream.body.getReader();
+      const decoder = new TextDecoder();
+      let pending = "";
+      const collectUsage = (line) => {
+        if (!line.startsWith("data:")) return;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === "[DONE]") return;
+        try {
+          const event = JSON.parse(payload);
+          const providerUsage = event.usage || event.x_groq?.usage;
+          if (providerUsage) {
+            const rawInputTokens = providerUsage.prompt_tokens ?? providerUsage.input_tokens;
+            const rawOutputTokens = providerUsage.completion_tokens ?? providerUsage.output_tokens;
+            if (rawInputTokens !== undefined && rawInputTokens !== null && Number.isFinite(Number(rawInputTokens)) && Number(rawInputTokens) >= 0) {
+              inputTokens = Math.floor(Number(rawInputTokens));
+              hasProviderInputUsage = true;
+            }
+            if (rawOutputTokens !== undefined && rawOutputTokens !== null && Number.isFinite(Number(rawOutputTokens)) && Number(rawOutputTokens) >= 0) {
+              outputTokens = Math.floor(Number(rawOutputTokens));
+              hasProviderOutputUsage = true;
+            }
+          }
+          const delta = event.choices?.[0]?.delta?.content;
+          if (typeof delta === "string" && assistantContent.length < 200_000) {
+            assistantContent += delta.slice(0, 200_000 - assistantContent.length);
+          }
+        } catch { /* Ignore non-JSON provider event data; the original bytes are forwarded unchanged. */ }
+      };
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (clientDisconnected) break;
+        if (!res.write(value)) {
+          await new Promise((resolve) => {
+            const onReady = () => {
+              res.removeListener("drain", onReady);
+              res.removeListener("close", onReady);
+              resolve();
+            };
+            res.once("drain", onReady);
+            res.once("close", onReady);
+          });
+        }
+        if (clientDisconnected) break;
+        pending += decoder.decode(value, { stream: true });
+        const lines = pending.split(/\r?\n/);
+        pending = lines.pop() || "";
+        for (const line of lines) collectUsage(line);
+      }
+      pending += decoder.decode();
+      if (pending) collectUsage(pending);
+      if (clientDisconnected) {
+        responseStatus = 499;
+        errorCode = "client_cancelled";
+      } else {
+        responseStatus = 200;
+        errorCode = null;
+        if (!res.writableEnded) res.end();
+      }
+    } catch (error) {
+      responseStatus = clientDisconnected ? 499 : 504;
+      errorCode = clientDisconnected ? "client_cancelled" : "upstream_stream_failed";
+      if (!res.headersSent) {
+        return fail(res, responseStatus === 499 ? 499 : 504, errorCode, "The provider stream could not be completed.", { "x-request-id": requestId });
+      }
+      if (!clientDisconnected && !res.destroyed && !res.writableEnded) {
+        res.write("data: " + JSON.stringify({ error: { code: errorCode, message: "The provider stream could not be completed." } }) + "\n\n");
+        res.end();
+      }
+    } finally {
+      res.removeListener("close", onResponseClose);
+      if (assistantContent && chatSessionId) {
+        const assistantMetadata = JSON.stringify({ partial: responseStatus !== 200 });
+        const saveAssistant = body.assistant_message_id
+          ? pool.query(
+              "INSERT INTO workspace_chat_messages(id,session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,$4,'assistant',$5,$6,$7::jsonb)",
+              [body.assistant_message_id,chatSessionId,workspace.id,user.id,assistantContent,body.model,assistantMetadata],
+            )
+          : pool.query(
+              "INSERT INTO workspace_chat_messages(session_id,workspace_id,owner_user_id,role,content,model_id,metadata) VALUES($1,$2,$3,'assistant',$4,$5,$6::jsonb)",
+              [chatSessionId,workspace.id,user.id,assistantContent,body.model,assistantMetadata],
+            );
+        await saveAssistant.catch((error) => process.stderr.write("[aevotron-api] workspace message write failed: " + error.message + "\n"));
+      }
+      if (!hasProviderInputUsage) {
+        inputTokens = Math.ceil(body.messages.reduce((sum, message) => sum + String(message.content || "").length, 0) / 4);
+        usageEstimated = true;
+      }
+      if (!hasProviderOutputUsage) {
+        outputTokens = Math.ceil(assistantContent.length / 4);
+        usageEstimated = true;
+      }
+      if (chatSessionId) {
+        await pool.query(
+          "UPDATE workspace_chat_sessions SET total_input_tokens=total_input_tokens+$4,total_output_tokens=total_output_tokens+$5,request_count=request_count+1,usage_estimated=usage_estimated OR $6,updated_at=now() WHERE id=$1 AND workspace_id=$2 AND owner_user_id=$3",
+          [chatSessionId,workspace.id,user.id,inputTokens,outputTokens,usageEstimated],
+        ).catch((error) => process.stderr.write("[aevotron-api] workspace usage aggregate failed: " + error.message + "\n"));
+      }
+      await pool.query(
+        "INSERT INTO usage_events(workspace_id,owner_user_id,request_id,model_id,provider_code,input_tokens,output_tokens,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)",
+        [workspace.id,user.id,requestId,body.model,providerCode,inputTokens,outputTokens,Date.now()-started,responseStatus,errorCode],
+      ).catch((error) => process.stderr.write("[aevotron-api] workspace usage write failed: " + error.message + "\n"));
+    }
+    return;
   }
 
   if (req.method === "POST" && (path === "/api/v1/chat/completions" || path === "/v1/chat/completions")) {
@@ -664,13 +1153,18 @@ async function handle(req, res) {
     } finally {
       client.release();
     }
+    const modelMatch = body.model.match(/^(openai|groq)\/(.+)$/);
+    const providerCode = modelMatch?.[1] || "openai";
+    const providerModel = modelMatch?.[2] || body.model;
+    const providerConfig = getProvider(providerCode);
+    if (!providerConfig) return fail(res, 400, "invalid_model", "The requested model provider is not supported.");
     const provider = await pool.query(
-      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code='openai' AND status='active'",
-      [key.workspace_id,key.owner_user_id],
+      "SELECT credential_ciphertext FROM provider_connections WHERE workspace_id=$1 AND owner_user_id=$2 AND provider_code=$3 AND status='active'",
+      [key.workspace_id, key.owner_user_id, providerCode],
     );
-    if (!provider.rowCount) return fail(res, 403, "provider_not_connected", "Connect an OpenAI provider account before using this model.");
-    const credential = decryptSecret(provider.rows[0].credential_ciphertext, `provider:openai:${key.owner_user_id}:${key.workspace_id}`);
-    const model = body.model.startsWith("openai/") ? body.model.slice(7) : body.model;
+    if (!provider.rowCount) return fail(res, 403, "provider_not_connected", "Connect " + providerConfig.name + " before using this model.");
+    const credential = decryptSecret(provider.rows[0].credential_ciphertext, "provider:" + providerCode + ":" + key.owner_user_id + ":" + key.workspace_id);
+    const model = providerModel;
     const upstreamBody = {
       model, messages: body.messages,
       ...(body.max_tokens !== undefined ? { max_tokens: body.max_tokens } : {}),
@@ -679,7 +1173,7 @@ async function handle(req, res) {
     };
     let upstream;
     try {
-      upstream = await fetch("https://api.openai.com/v1/chat/completions", {
+      upstream = await fetch(providerConfig.baseUrl + "/chat/completions", {
         method: "POST",
         headers: { authorization: `Bearer ${credential}`, "content-type": "application/json" },
         body: JSON.stringify(upstreamBody),
@@ -688,8 +1182,8 @@ async function handle(req, res) {
     } catch {
       responseStatus = 504; errorCode = "upstream_timeout";
       await pool.query(
-        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8)",
-        [key.workspace_id,key.owner_user_id,key.id,model,requestId,Date.now()-started,responseStatus,errorCode],
+        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,Date.now()-started,responseStatus,errorCode],
       );
       return json(res, responseStatus, { error: { message: "The provider request timed out.", type: "aevotron_error", code: errorCode } }, { "x-request-id": requestId });
     }
@@ -697,8 +1191,8 @@ async function handle(req, res) {
       responseStatus = upstream.status === 429 ? 429 : 502; errorCode = upstream.status === 429 ? "provider_rate_limited" : "upstream_provider_error";
       await upstream.body?.cancel().catch(() => {});
       await pool.query(
-        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8)",
-        [key.workspace_id,key.owner_user_id,key.id,model,requestId,Date.now()-started,responseStatus,errorCode],
+        "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,latency_ms,status_code,error_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+        [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,Date.now()-started,responseStatus,errorCode],
       );
       return json(res, responseStatus, { error: { message: "The provider could not complete this request.", type: "aevotron_error", code: errorCode } }, { "x-request-id": requestId });
     }
@@ -708,8 +1202,8 @@ async function handle(req, res) {
     responseStatus = 200;
     await pool.query("UPDATE api_keys SET last_used_at=now() WHERE id=$1", [key.id]);
     await pool.query(
-      "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,input_tokens,output_tokens,latency_ms,status_code) VALUES($1,$2,$3,$4,'openai',$5,$6,$7,$8,200)",
-      [key.workspace_id,key.owner_user_id,key.id,model,requestId,inputTokens,outputTokens,Date.now()-started],
+      "INSERT INTO usage_events(workspace_id,owner_user_id,api_key_id,model_id,provider_code,request_id,input_tokens,output_tokens,latency_ms,status_code) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,200)",
+      [key.workspace_id,key.owner_user_id,key.id,model,providerCode,requestId,inputTokens,outputTokens,Date.now()-started],
     );
     return json(res, 200, result, { "x-request-id": requestId });
   }

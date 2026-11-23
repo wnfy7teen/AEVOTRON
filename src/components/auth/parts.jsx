@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { returnToSearch } from "@/lib/authReturnTo";
 
@@ -29,16 +30,16 @@ export function SubmitButton({ busy, busyLabel, children, ...props }) {
   );
 }
 
-export function GoogleButton() { return null; }
 
 export function OrDivider() {
+  const { t } = useTranslation(["auth", "translation"]);
   return (
     <div className="relative mb-6">
       <div className="absolute inset-0 flex items-center">
         <div className="w-full border-t border-border" />
       </div>
       <div className="relative flex justify-center text-xs uppercase">
-        <span className="bg-card px-3 text-muted-foreground">or</span>
+        <span className="bg-card px-3 text-muted-foreground">{t("or")}</span>
       </div>
     </div>
   );
