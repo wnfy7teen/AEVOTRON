@@ -76,8 +76,8 @@
   "core.unified_api": "ЕДИНЫЙ API",
   "orbit.top": "ЕДИНЫЙ ИНТЕРФЕЙС",
   "orbit.bottom": "НЕСКОЛЬКО МОДЕЛЕЙ",
-  "orbit.left": "SECURE KEYS",
-  "orbit.right": "USAGE ANALYTICS",
-  "orbit.top_right": "LOW LATENCY",
-  "orbit.bottom_left": "SMART ROUTING"
+  "orbit.left": "ЗАЩИЩЁННЫЕ КЛЮЧИ",
+  "orbit.right": "АНАЛИТИКА ИСПОЛЬЗОВАНИЯ",
+  "orbit.top_right": "НИЗКАЯ ЗАДЕРЖКА",
+  "orbit.bottom_left": "УМНАЯ МАРШРУТИЗАЦИЯ"
 }
