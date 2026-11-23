@@ -80,7 +80,8 @@ pre, .aw-message-content pre, .mh-code { max-width: 100%; overflow-x: auto; -web
   .aw-compare-panel { max-width: 100%; overflow-x: auto; }
   .av-site .av-container { width: min(100% - 32px, 1200px); }
   .av-site .av-hero { display: flex; flex-direction: column; min-height: 0; padding: 72px 16px 0; }
-  .av-site .av-hero-copy, .av-site .av-hero-art { width: 100%; max-width: 100%; }
+  .av-site .av-hero-copy { width: 100%; max-width: 100%; }
+  .av-site .av-hero-art { width: 100%; max-width: min(100%, 340px); }
   .av-site .av-hero h1 { font-size: clamp(32px, 8vw, 54px); }
   .av-site .av-hero-actions { width: 100%; flex-wrap: wrap; }
   .av-site .av-visual { width: 100%; max-width: 100%; min-width: 0; }
