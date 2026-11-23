@@ -53,6 +53,21 @@ export default function AppleLanding() {
   const [activeSection, setActiveSection] = useState("platform");
   const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "light" ? "light" : "dark");
   useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    const closeOnDesktop = () => {
+      if (window.innerWidth > 800) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeOnDesktop);
+    };
+  }, [menuOpen]);
+  useEffect(() => {
     window.localStorage.setItem("aevotron-theme", theme);
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
@@ -222,8 +237,8 @@ export default function AppleLanding() {
   <main className="av-site" data-theme={theme}>
     <header className="av-header"><div className="av-nav-wrap">
       <Link to="/" className="av-brand" aria-label={t("AEVOTRON — главная")}><span className="av-brand-mark">A</span><span>AEVOTRON</span></Link>
-      <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label={t("Основная навигация")}>
-        <a href="#platform" onClick={() => { setMenuOpen(false); setActiveSection("platform"); }}>{t("Платформа")}</a><a href="#security" onClick={() => { setMenuOpen(false); setActiveSection("security"); }}>{t("Безопасность")}</a><a href="#developers" onClick={() => { setMenuOpen(false); setActiveSection("developers"); }}>{t("Разработчикам")}</a>
+      <nav className="av-nav-links av-desktop-nav" aria-label={t("Основная навигация")}>
+        <a href="#platform" onClick={() => setActiveSection("platform")}>{t("Платформа")}</a><a href="#security" onClick={() => setActiveSection("security")}>{t("Безопасность")}</a><a href="#developers" onClick={() => setActiveSection("developers")}>{t("Разработчикам")}</a>
       </nav>
       <div className="av-nav-actions"><Link to="/workspace" className="av-login av-workspace-link">{t("Workspace")}</Link><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
@@ -275,6 +290,16 @@ export default function AppleLanding() {
       </div>
     </footer>
   </main>
+  {typeof document !== "undefined" && createPortal(
+    <div className={"av-mobile-nav-layer " + (menuOpen ? "is-open" : "")} data-theme={theme} aria-hidden={!menuOpen} onClick={() => setMenuOpen(false)}>
+      <nav className="av-mobile-nav" aria-label={t("Основная навигация")} onClick={(event) => event.stopPropagation()}>
+        <a href="#platform" onClick={() => { setMenuOpen(false); setActiveSection("platform"); }}>{t("Платформа")}</a>
+        <a href="#security" onClick={() => { setMenuOpen(false); setActiveSection("security"); }}>{t("Безопасность")}</a>
+        <a href="#developers" onClick={() => { setMenuOpen(false); setActiveSection("developers"); }}>{t("Разработчикам")}</a>
+      </nav>
+    </div>,
+    document.body
+  )}
   {typeof document !== "undefined" && createPortal(
     <aside className="av-section-nav is-visible" data-theme={theme} aria-label={t("Навигация по разделам")}>
       <span className="av-section-nav-label">{t("НА СТРАНИЦЕ")}</span>
