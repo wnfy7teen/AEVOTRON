@@ -74,7 +74,8 @@
   background: var(--app-surface);
   color: var(--app-text-primary);
   text-align: center;
-  pointer-events: auto;
+  /* The orbit is decorative: it must never capture mouse, wheel or touch input. */
+  pointer-events: none;
   transform: translate(-50%, -50%);
 }
 .av-site .av-hero-art .av-core-mark {
@@ -177,11 +178,7 @@
   from { transform: rotate(var(--orbit-counter-angle)); }
   to { transform: rotate(calc(var(--orbit-counter-angle) - 360deg)); }
 }
-.av-site .av-hero-art:has(.av-core:hover) .av-orbit-track,
-.av-site .av-hero-art:has(.av-core:hover) .av-orbit-label > span,
-.av-site .av-hero-art:has(.av-core:hover) .av-orbit::after {
-  animation-play-state: paused;
-}
+/* Decorative orbit motion is independent of pointer hover. */
 
 @media (max-width: 640px) {
   .av-site .av-hero-art { width: min(100%, 420px); --orbit-radius: 28cqw; margin-bottom: 42px; }
@@ -250,4 +247,21 @@ html[data-theme] .av-site[data-theme] .av-code .av-code-result,
 html[data-theme] .av-site[data-theme] .av-code .av-typed-char,
 html[data-theme] .av-site[data-theme] .av-control .av-typed-char {
   opacity: 1;
+}
+
+
+/* The complete orbital illustration is visual-only on every input device.
+   Keep this rule in the orbit stylesheet so later component rules cannot
+   accidentally re-enable hit testing on the center or animated labels. */
+.av-site .av-hero-art,
+.av-site .av-hero-art *,
+.av-site .av-hero-art *::before,
+.av-site .av-hero-art *::after {
+  pointer-events: none !important;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.av-site .av-hero-art,
+.av-site .av-hero-art * {
+  touch-action: pan-y pinch-zoom;
 }
