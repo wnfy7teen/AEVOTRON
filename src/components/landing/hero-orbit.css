@@ -1,223 +1,231 @@
-/* Apple-style orbital badge. Colors come from the active Light/Gray theme tokens. */
+/* Orbital hero illustration — isolated, layout-stable and transform-only. */
 .av-site .av-hero-art {
+  --orbit-bg: #ffffff;
+  --orbit-surface: #ffffff;
+  --orbit-border: #e5e5ea;
+  --orbit-text: #1c1c1e;
+  --orbit-muted: #636366;
+  --orbit-accent: #007aff;
+  --orbit-radius: 34%;
+
   position: relative;
-  display: block;
-  isolation: isolate;
-  width: 100%;
-  max-width: 560px;
+  display: grid;
+  place-items: center;
+  width: min(100%, 560px);
   aspect-ratio: 1 / 1;
   height: auto;
   margin-inline: auto;
+  isolation: isolate;
+  contain: paint layout style;
+  overflow: hidden;
+  color: var(--orbit-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
+
+html[data-theme="dark"] .av-site .av-hero-art,
+html[data-theme="gray"] .av-site .av-hero-art {
+  --orbit-bg: #2c2c2e;
+  --orbit-surface: #2c2c2e;
+  --orbit-border: #3a3a3c;
+  --orbit-text: #f5f5f7;
+  --orbit-muted: #a1a1a6;
+  --orbit-accent: #0a84ff;
 }
 
 .av-site .av-hero-art .av-orbit {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px dashed var(--border-strong);
+  inset: 4%;
+  z-index: 0;
+  border: 1px solid var(--orbit-border);
   border-radius: 50%;
   pointer-events: none;
 }
 
 .av-site .av-hero-art .av-orbit-one {
-  inset: 0;
+  border-style: dashed;
+  opacity: 0.9;
 }
 
 .av-site .av-hero-art .av-orbit-two {
-  inset: 12%;
-  width: 76%;
-  height: 76%;
+  inset: 16%;
   border-style: solid;
-  opacity: 0.72;
+  opacity: 0.7;
 }
 
-.av-site .av-hero-art .av-orbit-one::before,
-.av-site .av-hero-art .av-orbit-two::before {
-  content: "";
+.av-site .av-hero-art .av-orbit::after {
   position: absolute;
-  top: -4px;
+  top: 50%;
   left: 50%;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--accent);
-  transform: translateX(-50%);
+  background: var(--orbit-accent);
+  content: "";
+  transform: translate(-50%, -50%);
 }
 
-.av-site .av-hero-art .av-orbit-two::before {
+.av-site .av-hero-art .av-orbit-one::after {
+  top: 0;
+}
+
+.av-site .av-hero-art .av-orbit-two::after {
   top: auto;
-  bottom: -4px;
-  background: var(--text-secondary);
+  bottom: 0;
+  background: var(--orbit-muted);
 }
 
 .av-site .av-hero-art .av-core {
-  --size: 120px;
-  position: absolute;
+  --core-size: 120px;
+
+  position: relative;
   z-index: 2;
-  top: 50%;
-  left: 50%;
   display: flex;
-  width: var(--size);
-  height: var(--size);
+  grid-area: 1 / 1;
+  width: var(--core-size);
+  height: var(--core-size);
+  flex: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.75rem;
+  gap: 4px;
+  padding: 12px;
   overflow: hidden;
-  transform: translate(-50%, -50%);
-  border: 2px solid #e5e5ea;
+  border: 1px solid var(--orbit-border);
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: none;
-  color: var(--text-primary);
+  background: var(--orbit-surface);
+  color: var(--orbit-text);
   text-align: center;
 }
 
 .av-site .av-hero-art .av-core-mark {
   display: block;
   flex: 0 0 auto;
-  color: #007aff;
-  font-family: inherit;
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.06em;
+  color: var(--orbit-accent);
+  font-size: 34px;
+  font-weight: 750;
+  letter-spacing: -0.07em;
   line-height: 1;
 }
 
 .av-site .av-hero-art .av-core strong {
   display: block;
   max-width: 100%;
-  color: var(--text-primary);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  color: var(--orbit-text);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.035em;
   line-height: 1.1;
-  text-align: center;
   white-space: nowrap;
 }
 
 .av-site .av-hero-art .av-core small {
   display: block;
   max-width: 100%;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  color: var(--orbit-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.055em;
   line-height: 1.2;
-  text-align: center;
   white-space: nowrap;
 }
 
-/* Match the Apple system palette in both supported appearance modes. */
-html[data-theme="dark"] .av-site .av-hero-art .av-core {
-  border-color: #3a3a3c;
-  background: #1c1c1e;
-}
-
-html[data-theme="dark"] .av-site .av-hero-art .av-core-mark {
-  color: #0a84ff;
-}
-
-html[data-theme="dark"] .av-site .av-hero-art .av-core small {
-  color: #98989d;
+/* The track is the only rotating layer; it never changes document geometry. */
+.av-site .av-hero-art .av-orbit-track {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: av-orbit-revolution 32s linear infinite;
+  will-change: transform;
 }
 
 .av-site .av-hero-art .av-orbit-label {
-  --orbit-radius: 39%;
+  --orbit-angle: 0deg;
+
   position: absolute;
-  z-index: 3;
   top: 50%;
   left: 50%;
   display: block;
-  max-width: 44%;
-  padding: 6px 11px;
-  overflow: visible;
-  transform-origin: 0 0;
-  transform: rotate(var(--orbit-start, 0deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
-  border: 1px solid var(--border-strong);
+  max-width: 32%;
+  padding: 6px 9px;
+  overflow: hidden;
+  border: 1px solid var(--orbit-border);
   border-radius: 999px;
-  background: var(--bg-secondary);
-  box-shadow: none;
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.045em;
-  line-height: 1.25;
+  background: var(--orbit-bg);
+  color: var(--orbit-muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.035em;
+  line-height: 1.2;
   text-align: center;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  backface-visibility: hidden;
-  will-change: transform;
-  animation: av-label-orbit 20s linear infinite;
+  transform: rotate(var(--orbit-angle))
+    translateY(calc(var(--orbit-radius) * -1))
+    translate(-50%, -50%);
 }
 
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="-90deg"] { --orbit-start: -90deg; }
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="90deg"] { --orbit-start: 90deg; }
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="180deg"] { --orbit-start: 180deg; }
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="0deg"] { --orbit-start: 0deg; }
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="-45deg"] { --orbit-start: -45deg; }
-.av-site .av-hero-art .av-orbit-label[data-orbit-start="135deg"] { --orbit-start: 135deg; }
+.av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; }
+.av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; }
+.av-site .av-hero-art .av-label-right { --orbit-angle: 90deg; }
+.av-site .av-hero-art .av-label-bottom { --orbit-angle: 180deg; }
+.av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; }
+.av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; }
 
 .av-site .av-hero-art .av-orbit-label > span {
   display: block;
-  animation: av-label-counter-spin 20s linear infinite;
-  backface-visibility: hidden;
+  transform: rotate(calc(var(--orbit-angle) * -1));
+  animation: av-orbit-label-counter 32s linear infinite;
 }
 
-@keyframes av-label-orbit {
-  from {
-    transform: rotate(var(--orbit-start, 0deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
-  }
-  to {
-    transform: rotate(calc(var(--orbit-start, 0deg) + 360deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
-  }
+@keyframes av-orbit-revolution {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes av-label-counter-spin {
+@keyframes av-orbit-label-counter {
   from { transform: rotate(0deg); }
   to { transform: rotate(-360deg); }
 }
 
-.av-site .av-hero-art:hover .av-orbit-label,
-.av-site .av-hero-art:hover .av-orbit-label > span {
-  animation-play-state: paused;
-}
-
-.av-site .av-hero-art.is-paused .av-orbit-label,
+.av-site .av-hero-art:hover .av-orbit-track,
+.av-site .av-hero-art:hover .av-orbit-label > span,
+.av-site .av-hero-art.is-paused .av-orbit-track,
 .av-site .av-hero-art.is-paused .av-orbit-label > span {
   animation-play-state: paused;
 }
 
 @media (max-width: 640px) {
   .av-site .av-hero-art {
-    max-width: 340px;
+    width: min(100%, 340px);
+    --orbit-radius: 30%;
   }
 
   .av-site .av-hero-art .av-core {
-    --size: 96px;
-    gap: 0.15rem;
-    padding: 0.45rem;
+    --core-size: 96px;
+    gap: 3px;
+    padding: 8px;
   }
 
   .av-site .av-hero-art .av-core-mark {
-    font-size: 29px;
+    font-size: 28px;
   }
 
   .av-site .av-hero-art .av-core strong {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .av-site .av-hero-art .av-core small {
-    font-size: 10px;
+    font-size: 8px;
   }
 
   .av-site .av-hero-art .av-orbit-label {
-    --orbit-radius: 38%;
-    max-width: 46%;
-    padding: 4px 8px;
-    font-size: 9px;
-    letter-spacing: 0.025em;
+    max-width: 38%;
+    padding: 4px 7px;
+    font-size: 8px;
+    letter-spacing: 0.015em;
   }
 
   .av-site .av-hero-art .av-label-top-right,
@@ -227,16 +235,19 @@ html[data-theme="dark"] .av-site .av-hero-art .av-core small {
 }
 
 @media (max-width: 360px) {
+  .av-site .av-hero-art {
+    --orbit-radius: 28%;
+  }
+
   .av-site .av-hero-art .av-orbit-label {
-    --orbit-radius: 36%;
-    max-width: 44%;
-    padding-inline: 6px;
-    font-size: 8px;
+    max-width: 36%;
+    padding-inline: 5px;
+    font-size: 7px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .av-site .av-hero-art .av-orbit-label,
+  .av-site .av-hero-art .av-orbit-track,
   .av-site .av-hero-art .av-orbit-label > span {
     animation: none;
     will-change: auto;
