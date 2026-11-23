@@ -6,6 +6,7 @@
   --radius-xl: 28px;
   --blur: saturate(180%) blur(20px);
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --success-text:#176b3a; --warning-text:#754600; --danger-text:#c5221f;
   --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, "Helvetica Neue", Arial, sans-serif;
 }
 html[data-theme="light"], [data-theme="light"] {
@@ -26,6 +27,7 @@ html[data-theme="light"], [data-theme="light"] {
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+  --background:240 5% 96%; --foreground:240 4% 12%; --card:0 0% 100%; --card-foreground:240 4% 12%; --popover:0 0% 100%; --popover-foreground:240 4% 12%; --primary:211 100% 45%; --primary-foreground:0 0% 100%; --secondary:240 5% 92%; --secondary-foreground:240 4% 12%; --muted:240 5% 92%; --muted-foreground:240 3% 43%; --accent-foreground:0 0% 100%; --destructive:3 68% 47%; --destructive-foreground:0 0% 100%; --input:0 0% 0% / 18%; --ring:211 100% 45%; --sidebar-background:240 5% 96%; --sidebar-foreground:240 4% 12%; --sidebar-primary:211 100% 45%; --sidebar-primary-foreground:0 0% 100%; --sidebar-accent:240 5% 92%; --sidebar-accent-foreground:240 4% 12%; --sidebar-border:0 0% 0% / 10%; --sidebar-ring:211 100% 45%;
   color-scheme: light;
 }
 html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
@@ -46,5 +48,7 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.30), 0 1px 3px rgba(0,0,0,0.20);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.35);
   --shadow-lg: 0 12px 32px rgba(0,0,0,0.45);
+  --success-text:#30d158; --warning-text:#ffbd66; --danger-text:#ff6961;
+  --background:240 3% 11%; --foreground:240 5% 96%; --card:240 3% 17%; --card-foreground:240 5% 96%; --popover:240 3% 17%; --popover-foreground:240 5% 96%; --primary:211 100% 52%; --primary-foreground:0 0% 100%; --secondary:240 2% 23%; --secondary-foreground:240 5% 96%; --muted:240 2% 23%; --muted-foreground:240 4% 65%; --accent-foreground:0 0% 100%; --destructive:3 100% 62%; --destructive-foreground:0 0% 100%; --input:0 0% 100% / 18%; --ring:211 100% 52%; --sidebar-background:240 3% 11%; --sidebar-foreground:240 5% 96%; --sidebar-primary:211 100% 52%; --sidebar-primary-foreground:0 0% 100%; --sidebar-accent:240 2% 23%; --sidebar-accent-foreground:240 5% 96%; --sidebar-border:0 0% 100% / 10%; --sidebar-ring:211 100% 52%;
   color-scheme: dark;
 }
