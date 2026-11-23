@@ -119,7 +119,7 @@ function HomePage({ preview = false }) {
       <aside className={`mh-sidebar ${mobileNav ? "mh-sidebar-open" : ""}`}>
         <div className="mh-brand"><div className="mh-brand-mark"><Command size={19}/></div><span>AEVOTRON</span><span className="mh-beta">{t("BETA")}</span></div>
         <div className="mh-workspace"><div className="mh-workspace-icon">C</div><div><strong>{workspaceLabel}</strong><small>{usageQuery.data?.workspace?.region ? (usageQuery.data.workspace.region.toLowerCase() === "global" ? t("Global") : usageQuery.data.workspace.region.toUpperCase()) : t("Personal workspace")}</small></div><ChevronDown size={15}/></div>
-        {nav.map(group => <div className="mh-nav-group" key={group.label}><div className="mh-nav-label">{t(group.label)}</div>{group.items.map(item => <button key={item.name} type="button" className={`mh-nav-item ${item.name === "AI Workspace" ? "mh-nav-item-ai" : ""} ${section === item.name ? "active" : ""}`} aria-label={item.name === "AI Workspace" ? t("Open AI Workspace") : undefined} disabled={preview && item.name === "AI Workspace"} onClick={() => {if(item.name === "AI Workspace"){window.location.assign("/workspace");return;}setSection(item.name);setMobileNav(false)}}><item.icon size={18}/>{item.name === "AI Workspace" ? <><span className="mh-nav-item-copy"><strong>{t(item.name)}</strong><small>{t("Chat with AI models")}</small><span className="mh-nav-cta">{t("START HERE")}</span></span></> : <><span>{t(item.name)}</span>{item.name === "API keys" && <span className="mh-nav-count">0</span>}</>}</button>)}</div>)}
+        {nav.map(group => <div className="mh-nav-group" key={group.label}><div className="mh-nav-label">{t(group.label)}</div>{group.items.map(item => <button key={item.name} type="button" className={`mh-nav-item ${item.name === "AI Workspace" ? "mh-nav-item-ai" : ""} ${section === item.name ? "active" : ""}`} aria-label={item.name === "AI Workspace" ? t("Open AI Workspace") : undefined} onClick={() => {if(item.name === "AI Workspace"){window.location.assign("/workspace");return;}setSection(item.name);setMobileNav(false)}}><item.icon size={18}/>{item.name === "AI Workspace" ? <><span className="mh-nav-item-copy"><strong>{t(item.name)}</strong><small>{t("Chat with AI models")}</small><span className="mh-nav-cta">{t("START HERE")}</span></span></> : <><span>{t(item.name)}</span>{item.name === "API keys" && <span className="mh-nav-count">0</span>}</>}</button>)}</div>)}
         <div className="mh-sidebar-bottom"><div className="mh-usage-mini"><div className="mh-usage-top"><span>{t("Free plan")}</span><span>{t("0 / 1,000 req")}</span></div><div className="mh-progress"><i/></div><small>{t("Bring your own provider keys to get started.")}</small></div><button className="mh-profile" type="button" aria-label={t("Open workspace preferences")} onClick={() => {setSection("Preferences");setMobileNav(false)}}><div className="mh-avatar">{accountInitial}</div><div><strong>{accountName}</strong><small>{accountQuery.data?.email || (preview ? t("Read-only preview") : t("Account profile"))}</small></div><Settings2 size={16}/></button></div>
       </aside>
       <main className="mh-main">
@@ -211,11 +211,24 @@ function HomePage({ preview = false }) {
 
 function PreviewReadOnlySection({ title }) {
   const { t } = useTranslation(["dashboard", "translation"]);
+  const section = title === t("Provider connections")
+    ? { icon: Layers3, heading: t("No provider connections in preview"), description: t("Connect Groq or OpenAI after signing in. Provider credentials are stored securely and are never displayed again."), action: t("Sign in to connect a provider") }
+    : title === t("API keys")
+      ? { icon: KeyRound, heading: t("No API keys in preview"), description: t("API keys belong to your signed-in workspace. Sign in to create, review, or revoke credentials."), action: t("Sign in to manage API keys") }
+      : { icon: Activity, heading: t("No usage records in preview"), description: t("Usage events appear here after requests are sent through your connected provider accounts."), action: t("Sign in to view usage") };
+  const Icon = section.icon;
   return (
-    <div className="mh-callout av-settings-notice" role="status">
-      <ShieldCheck size={18}/>
-      <span><strong>{title}</strong> {t("Sample data · Read-only mode · No account or backend connection required")}</span>
-    </div>
+    <>
+      <div className="mh-page-heading">
+        <div><div className="mh-eyebrow">{t("READ-ONLY PREVIEW")}</div><h1>{title}</h1><p>{t("This section is available in a connected account. Preview mode does not read or change account data.")}</p></div>
+      </div>
+      <section className="mh-panel mh-empty-panel av-preview-empty" role="status">
+        <div className="mh-empty-icon"><Icon size={22}/></div>
+        <h3>{section.heading}</h3>
+        <p>{section.description}</p>
+        <button type="button" className="mh-button mh-button-primary" onClick={() => window.location.assign("/login?returnTo=%2Fdashboard")}>{section.action}</button>
+      </section>
+    </>
   );
 }
 
