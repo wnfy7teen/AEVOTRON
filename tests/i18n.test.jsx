@@ -2,15 +2,13 @@ import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { I18nextProvider, useTranslation } from "react-i18next";
-import { createAppI18n, LANGUAGE_STORAGE_KEY } from "@/i18n";
+import { changeAppLanguage, createAppI18n, LANGUAGE_STORAGE_KEY, loadLocaleResources } from "@/i18n";
 
 function LanguageProbe() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <section>
       <output data-testid="translated">{t("Welcome back")}</output>
-      <button type="button" onClick={() => i18n.changeLanguage("ru")}>Switch to Russian</button>
-      <button type="button" onClick={() => i18n.changeLanguage("zh")}>Switch to Chinese</button>
     </section>
   );
 }
@@ -33,23 +31,23 @@ describe("application i18n", () => {
     root = null;
   });
 
-  it("rerenders translated React content immediately when the language changes", async () => {
+  it("loads the selected locale bundles before rerendering translated React content", async () => {
     const instance = createAppI18n(localStorage);
     await act(async () => {
       root.render(<I18nextProvider i18n={instance}><LanguageProbe /></I18nextProvider>);
     });
 
     expect(container.querySelector('[data-testid="translated"]').textContent).toBe("Welcome back");
-    await act(async () => instance.changeLanguage("ru"));
+    await act(async () => changeAppLanguage(instance, "ru"));
     expect(container.querySelector('[data-testid="translated"]').textContent).toBe("С возвращением");
 
-    await act(async () => instance.changeLanguage("zh"));
+    await act(async () => changeAppLanguage(instance, "zh"));
     expect(container.querySelector('[data-testid="translated"]').textContent).toBe("欢迎回来");
   });
 
   it("persists the selected locale and restores it for a fresh page instance", async () => {
     const firstPage = createAppI18n(localStorage);
-    await firstPage.changeLanguage("ru");
+    await changeAppLanguage(firstPage, "ru");
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe("ru");
 
     const reloadedPage = createAppI18n(localStorage);
@@ -63,18 +61,32 @@ describe("application i18n", () => {
     expect(freshPage.resolvedLanguage).toBe("en");
     expect(freshPage.t("Welcome back")).toBe("Welcome back");
   });
-  it("isolates locale state between independent SSR request instances", () => {
-    const englishRequest = createAppI18n({ language: "en", storage: null });
-    const russianRequest = createAppI18n({ language: "ru", storage: null });
-    const chineseRequest = createAppI18n({ language: "zh", storage: null });
+
+  it("isolates locale state and loaded namespace bundles between independent SSR request instances", async () => {
+    const [enResources, ruResources, zhResources] = await Promise.all([
+      loadLocaleResources("en"),
+      loadLocaleResources("ru"),
+      loadLocaleResources("zh"),
+    ]);
+    const englishRequest = createAppI18n({ language: "en", storage: null, resources: { en: enResources } });
+    const russianRequest = createAppI18n({ language: "ru", storage: null, resources: { ru: ruResources } });
+    const chineseRequest = createAppI18n({ language: "zh", storage: null, resources: { zh: zhResources } });
 
     expect(englishRequest.t("Welcome back")).toBe("Welcome back");
     expect(russianRequest.t("Welcome back")).toBe("С возвращением");
     expect(chineseRequest.t("Welcome back")).toBe("欢迎回来");
 
-    russianRequest.changeLanguage("zh");
+    await changeAppLanguage(russianRequest, "zh");
     expect(englishRequest.language).toBe("en");
     expect(chineseRequest.language).toBe("zh");
+  });
+
+  it("loads non-core namespaces only when requested and keeps their translations available", async () => {
+    const instance = createAppI18n({ language: "ru", storage: null });
+    expect(instance.hasResourceBundle("ru", "dashboard")).toBe(false);
+    await changeAppLanguage(instance, "ru");
+    expect(instance.hasResourceBundle("ru", "dashboard")).toBe(true);
+    expect(instance.getResourceBundle("ru", "dashboard")).toBeTruthy();
   });
 
   it("supports locale-aware plural forms and interpolation", () => {
@@ -96,5 +108,4 @@ describe("application i18n", () => {
     expect(normalizeLanguage("fr-FR")).toBe("en");
     expect(normalizeLanguage(null)).toBe("en");
   });
-
 });
