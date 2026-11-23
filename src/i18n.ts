@@ -91,26 +91,6 @@ export async function loadLocaleResources(
   return Object.fromEntries(entries) as Partial<LocaleNamespaces>;
 }
 
-const localeBackend = {
-  type: "backend" as const,
-  init() {},
-  read(language: string, namespace: string, callback: (error: Error | null, data?: Record<string, string> | false) => void) {
-    const locale = normalizeLanguage(language);
-    if (namespace === "translation") {
-      callback(null, translationResources[locale].translation);
-      return;
-    }
-    if (namespace !== "dashboard" && namespace !== "landing" && namespace !== "auth") {
-      callback(new Error(`Unsupported i18n namespace: ${namespace}`), false);
-      return;
-    }
-    void loadNamespace(locale, namespace).then(
-      (resources) => callback(null, resources),
-      (error: unknown) => callback(error instanceof Error ? error : new Error(String(error)), false),
-    );
-  },
-};
-
 export async function changeAppLanguage(instance: I18nInstance, language: string): Promise<void> {
   const nextLanguage = normalizeLanguage(language);
   const currentLanguage = normalizeLanguage(instance.resolvedLanguage || instance.language);
@@ -143,7 +123,7 @@ export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "
     ]),
   ) as Resource;
   const instance = createInstance();
-  instance.use(localeBackend).use(initReactI18next).init({
+  instance.use(initReactI18next).init({
     resources,
     lng: language ? normalizeLanguage(language) : readSavedLanguage(storage),
     fallbackLng: "en",
