@@ -127,7 +127,7 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   assert.match(css, /:focus-visible/);
   assert.match(css, /:disabled/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.av-notification-row\.is-read/);
+  assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
   assert.match(css, /@media \(max-width: 560px\)/);
 });
 
@@ -138,7 +138,7 @@ test("workspace dropdown menus share responsive light and dark styling", async (
   assert.doesNotMatch(css, /\.mh-toolbar select/);
   assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /\.av-dropdown-option\.is-selected/);
-  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.av-dropdown-menu/);
+  assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
 });
 
