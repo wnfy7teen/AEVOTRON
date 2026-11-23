@@ -2760,3 +2760,38 @@ html[data-theme="dark"] .av-control .av-permissions > span { color: #a1a1a6; }
     transition: none;
   }
 }
+
+
+/* Landing document scroll contract.
+   Keep the browser document as the only vertical scroll container. This
+   prevents an app/root wrapper from trapping wheel, trackpad or touch scroll
+   while the pointer is over the hero/orbit. Scoped to the public landing. */
+html:has(body .av-site) {
+  height: auto !important;
+  min-height: 100%;
+  max-height: none !important;
+  overflow-x: clip !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto !important;
+}
+body:has(.av-site) {
+  height: auto !important;
+  min-height: 100vh;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior-y: auto !important;
+}
+body:has(.av-site) > * {
+  height: auto !important;
+  min-height: 100vh;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior-y: auto !important;
+}
+body:has(.av-site) .av-site {
+  height: auto !important;
+  min-height: 100vh;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior-y: auto !important;
+}
