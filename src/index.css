@@ -60,8 +60,10 @@ body {
 /* Consistent transitions when switching application pages */
 .app-route-transition {
   min-height: 100%;
-  animation: app-route-enter 420ms cubic-bezier(.2,.7,.25,1) both;
-  will-change: opacity, transform;
+  animation: none;
+  transform: none;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
 }
 @keyframes app-route-enter {
   from { opacity: 0; transform: translate3d(0, 12px, 0); }
@@ -436,14 +438,13 @@ svg {
   shape-rendering: geometricPrecision;
 }
 .app-route-transition {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
 }
 @media (max-width: 760px) {
   .mh-sidebar {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    will-change: transform;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
   }
 }
 
