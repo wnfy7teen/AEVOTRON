@@ -789,5 +789,13 @@
   "Gray theme": "灰色主题",
   "Switch to gray theme": "切换到灰色主题",
   "Sample data · Interactive demo · Local changes only · No account or backend connection required": "示例数据 · 交互式演示 · 更改仅保存在本地 · 无需账户或后端连接",
-  "AEVOTRON": "AEVOTRON"
+  "AEVOTRON": "AEVOTRON",
+  "core.aevotron": "AEVOTRON",
+  "core.unified_api": "统一 API",
+  "orbit.top": "统一接口",
+  "orbit.bottom": "多种模型",
+  "orbit.left": "SECURE KEYS",
+  "orbit.right": "USAGE ANALYTICS",
+  "orbit.top_right": "LOW LATENCY",
+  "orbit.bottom_left": "SMART ROUTING"
 }
