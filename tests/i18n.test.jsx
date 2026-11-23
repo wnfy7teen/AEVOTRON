@@ -2,7 +2,7 @@ import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { I18nextProvider, useTranslation } from "react-i18next";
-import { changeAppLanguage, createAppI18n, LANGUAGE_STORAGE_KEY, loadLocaleResources } from "@/i18n";
+import { changeAppLanguage, createAppI18n, getRouteNamespace, LANGUAGE_STORAGE_KEY, loadLocaleResources } from "@/i18n";
 
 function LanguageProbe() {
   const { t } = useTranslation();
@@ -84,9 +84,20 @@ describe("application i18n", () => {
   it("loads non-core namespaces only when requested and keeps their translations available", async () => {
     const instance = createAppI18n({ language: "ru", storage: null });
     expect(instance.hasResourceBundle("ru", "dashboard")).toBe(false);
-    await changeAppLanguage(instance, "ru");
+    await instance.loadNamespaces(["dashboard"]);
     expect(instance.hasResourceBundle("ru", "dashboard")).toBe(true);
-    expect(instance.getResourceBundle("ru", "dashboard")).toBeTruthy();
+    expect(instance.hasResourceBundle("ru", "landing")).toBe(false);
+    expect(instance.getFixedT("ru", "dashboard")("model.description.default")).toContain("Текстовая AI-модель");
+  });
+
+  it("loads only the namespace required by the requested route during SSR", () => {
+    expect(getRouteNamespace("/")).toBe("landing");
+    expect(getRouteNamespace("/login")).toBe("auth");
+    expect(getRouteNamespace("/forgot-password")).toBe("auth");
+    expect(getRouteNamespace("/dashboard")).toBe("dashboard");
+    expect(getRouteNamespace("/workspace")).toBe("dashboard");
+    expect(getRouteNamespace("/workspace-preview")).toBe("dashboard");
+    expect(getRouteNamespace("/unknown")).toBeUndefined();
   });
 
   it("supports locale-aware plural forms and interpolation", () => {
