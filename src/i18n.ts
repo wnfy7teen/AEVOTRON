@@ -1,4 +1,4 @@
-import { createInstance, type i18n as I18nInstance, type ResourceLanguage } from "i18next";
+import { createInstance, type i18n as I18nInstance, type Resource } from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
@@ -96,7 +96,7 @@ export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "
       locale,
       { ...translationResources[locale], ...(initialResources?.[locale] || {}) },
     ]),
-  ) as ResourceLanguage;
+  ) as Resource;
   const instance = createInstance();
   instance.use(initReactI18next).init({
     resources,
