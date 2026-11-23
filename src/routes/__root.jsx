@@ -11,7 +11,6 @@ import { getRouteNamespace, loadLocaleResources, normalizeLanguage, translateFor
 import themeTokensCss from "@/theme-tokens.css?url";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
-import appleLightRedesignCss from "@/apple-light-redesign.css?url";
 import themeOverridesCss from "@/theme-overrides.css?url";
 
 export const Route = createRootRoute({
@@ -34,7 +33,6 @@ export const Route = createRootRoute({
         { rel: "stylesheet", href: themeTokensCss },
         { rel: "stylesheet", href: appCss },
         { rel: "stylesheet", href: appleCss },
-        { rel: "stylesheet", href: appleLightRedesignCss },
         { rel: "stylesheet", href: themeOverridesCss },
       ],
     };
@@ -107,7 +105,7 @@ function RootDocument({ children }) {
   return (
     <html lang={language === "zh" ? "zh-CN" : language} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var t=saved==="dark"||saved==="gray"?"dark":saved==="light"?"light":(p==="/"?"dark":"light");document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var p=location.pathname;var saved=localStorage.getItem("aevotron-theme");var t=saved==="light"?"light":(p==="/"?"dark":"light");localStorage.setItem("aevotron-theme",t);var settings=JSON.parse(localStorage.getItem("aevotron-workspace-settings")||"{}");if(settings.theme==="gray"||settings.theme==="dark")localStorage.setItem("aevotron-workspace-settings",JSON.stringify(Object.assign({},settings,{theme:"dark"})));document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"dark":"light";}})();` }} />
         <HeadContent />
       </head>
       <body data-react-root="true">
