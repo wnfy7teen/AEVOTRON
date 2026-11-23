@@ -2781,17 +2781,33 @@ body:has(.av-site) {
   overflow: visible !important;
   overscroll-behavior-y: auto !important;
 }
-body:has(.av-site) > * {
-  height: auto !important;
-  min-height: 100vh;
-  max-height: none !important;
-  overflow: visible !important;
-  overscroll-behavior-y: auto !important;
-}
+/* Do not apply document sizing/overflow rules to body children.
+   The section sidebar and mobile menu are React portals mounted directly in body. */
 body:has(.av-site) .av-site {
   height: auto !important;
   min-height: 100vh;
   max-height: none !important;
   overflow: visible !important;
   overscroll-behavior-y: auto !important;
+}
+
+/* The floating section navigator is a desktop affordance only.
+   On touch layouts the header menu is the single, predictable navigation entry. */
+@media (max-width: 800px) {
+  body:has(.av-site) > .av-section-nav {
+    display: none !important;
+  }
+}
+@media (min-width: 801px) {
+  body:has(.av-site) > .av-section-nav {
+    position: fixed;
+    z-index: 40;
+    pointer-events: auto;
+    min-height: 0;
+    height: auto;
+    max-height: calc(100vh - 32px);
+    overflow: visible;
+    right: clamp(18px, 3vw, 48px);
+    top: 50%;
+  }
 }
