@@ -569,3 +569,47 @@ html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-backgro
 @media (max-width: 640px) {
   .apple-app .av-settings-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* Workspace chrome shares the same semantic surface hierarchy. */
+.apple-app .mh-shell,
+.apple-app .mh-main {
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+.apple-app .mh-sidebar,
+.apple-app .mh-topbar {
+  background: var(--app-surface);
+  color: var(--app-text-primary);
+  border-color: var(--app-border);
+}
+.apple-app .mh-brand,
+.apple-app .mh-workspace strong,
+.apple-app .mh-profile strong,
+.apple-app .mh-breadcrumb strong,
+.apple-app .mh-page-heading h1,
+.apple-app .mh-section-heading h2,
+.apple-app .mh-panel-heading h3 {
+  color: var(--app-text-primary);
+}
+.apple-app .mh-workspace,
+.apple-app .mh-usage-mini {
+  background: var(--app-bg);
+  border-color: var(--app-border);
+}
+.apple-app .mh-workspace small,
+.apple-app .mh-profile small,
+.apple-app .mh-nav-label,
+.apple-app .mh-nav-item,
+.apple-app .mh-breadcrumb,
+.apple-app .mh-region {
+  color: var(--app-text-secondary);
+}
+.apple-app .mh-nav-item:hover,
+.apple-app .mh-nav-item.active {
+  background: color-mix(in srgb, var(--app-accent) 12%, var(--app-surface));
+  color: var(--app-accent);
+}
+.apple-app .mh-catalog-provider-strip button {
+  color: var(--app-text-primary);
+}
