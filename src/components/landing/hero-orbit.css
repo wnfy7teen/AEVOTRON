@@ -25,6 +25,7 @@
 }
 .av-site .av-hero-art .av-orbit-one { border-style: dashed; opacity: .9; }
 .av-site .av-hero-art .av-orbit-two { inset: 16%; opacity: .7; }
+/* Each orbital marker travels around the center of its own ring. */
 .av-site .av-hero-art .av-orbit::after {
   position: absolute;
   top: 50%;
@@ -32,15 +33,24 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--app-accent);
   content: "";
-  transform: translate(-50%, -50%);
+  transform-origin: center;
+  animation: av-orbit-dot-spin 32s linear infinite;
 }
-.av-site .av-hero-art .av-orbit-one::after { top: 0; }
+.av-site .av-hero-art .av-orbit-one::after {
+  --dot-radius: 46cqw;
+  background: var(--app-accent);
+  transform: rotate(0deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%);
+}
 .av-site .av-hero-art .av-orbit-two::after {
-  top: auto;
-  bottom: 0;
+  --dot-radius: 34cqw;
   background: var(--app-text-secondary);
+  animation-direction: reverse;
+  transform: rotate(0deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%);
+}
+@keyframes av-orbit-dot-spin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
 }
 
 /* The center is the only interactive surface in the artwork. */
@@ -97,30 +107,38 @@
   white-space: nowrap;
 }
 
-/* The track moves only through transform; each label counter-rotates its text. */
+/* Independent tracks: three labels on each ring, always keeping text horizontal. */
 .av-site .av-hero-art .av-orbit-track {
   position: absolute;
   z-index: 1;
   inset: 0;
   pointer-events: none;
   transform-origin: 50% 50%;
-  animation: av-orbit-spin 30s linear infinite;
   will-change: transform;
+}
+.av-site .av-hero-art .av-orbit-track-inner {
+  --orbit-radius: 26cqw;
+  animation: av-orbit-spin 28s linear infinite;
+}
+.av-site .av-hero-art .av-orbit-track-outer {
+  --orbit-radius: 39cqw;
+  animation: av-orbit-spin 42s linear infinite reverse;
 }
 .av-site .av-hero-art .av-orbit-label {
   --orbit-angle: 0deg;
+  --orbit-counter-angle: 0deg;
   position: absolute;
   top: 50%;
   left: 50%;
   display: block;
   width: max-content;
-  max-width: 42%;
+  max-width: 34%;
   padding: 0;
   overflow: visible;
   border: 0;
   border-radius: 0;
   background: transparent;
-  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1));
+  transform: translate(-50%, -50%) rotate(var(--orbit-angle)) translateY(calc(-1 * var(--orbit-radius)));
 }
 .av-site .av-hero-art .av-orbit-label > span {
   display: block;
@@ -138,26 +156,30 @@
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  animation: av-orbit-counter-spin 30s linear infinite;
-  transform: rotate(var(--orbit-counter-angle));
 }
-.av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
-.av-site .av-hero-art .av-label-top-right { --orbit-angle: 45deg; --orbit-counter-angle: -45deg; }
-.av-site .av-hero-art .av-label-right { --orbit-angle: 90deg; --orbit-counter-angle: -90deg; }
-.av-site .av-hero-art .av-label-bottom { --orbit-angle: 180deg; --orbit-counter-angle: -180deg; }
-.av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; --orbit-counter-angle: -225deg; }
-.av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; --orbit-counter-angle: -270deg; }
+.av-site .av-hero-art .av-orbit-track-inner .av-orbit-label > span {
+  animation: av-orbit-counter-clockwise 28s linear infinite;
+}
+.av-site .av-hero-art .av-orbit-track-outer .av-orbit-label > span {
+  animation: av-orbit-counter-clockwise 42s linear infinite reverse;
+}
+.av-site .av-hero-art .av-label-inner-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
+.av-site .av-hero-art .av-label-inner-right { --orbit-angle: 120deg; --orbit-counter-angle: -120deg; }
+.av-site .av-hero-art .av-label-inner-bottom { --orbit-angle: 240deg; --orbit-counter-angle: -240deg; }
+.av-site .av-hero-art .av-label-outer-top-right { --orbit-angle: 60deg; --orbit-counter-angle: -60deg; }
+.av-site .av-hero-art .av-label-outer-bottom { --orbit-angle: 180deg; --orbit-counter-angle: -180deg; }
+.av-site .av-hero-art .av-label-outer-left { --orbit-angle: 300deg; --orbit-counter-angle: -300deg; }
 @keyframes av-orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-@keyframes av-orbit-counter-spin {
+@keyframes av-orbit-counter-clockwise {
   from { transform: rotate(var(--orbit-counter-angle)); }
   to { transform: rotate(calc(var(--orbit-counter-angle) - 360deg)); }
 }
-.av-site .av-hero-art .av-core:hover ~ .av-orbit-track,
 .av-site .av-hero-art:has(.av-core:hover) .av-orbit-track,
-.av-site .av-hero-art:has(.av-core:hover) .av-orbit-label > span {
+.av-site .av-hero-art:has(.av-core:hover) .av-orbit-label > span,
+.av-site .av-hero-art:has(.av-core:hover) .av-orbit::after {
   animation-play-state: paused;
 }
 
@@ -167,20 +189,22 @@
   .av-site .av-hero-art .av-core-mark { font-size: 28px; }
   .av-site .av-hero-art .av-core strong { font-size: 12px; }
   .av-site .av-hero-art .av-core small { font-size: 8px; }
-   .av-site .av-hero-art .av-orbit-label { max-width: 40%; }
-  .av-site .av-hero-art .av-orbit-label > span { padding: 5px 8px; font-size: 8px; letter-spacing: 0; }
-  .av-site .av-hero-art .av-label-top-right,
-  .av-site .av-hero-art .av-label-bottom-left { display: none; }
+   .av-site .av-hero-art .av-orbit-track-inner { --orbit-radius: 26cqw; }
+  .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 39cqw; }
+  .av-site .av-hero-art .av-orbit-label { max-width: 34%; }
+  .av-site .av-hero-art .av-orbit-label > span { padding: 5px 7px; font-size: 8px; letter-spacing: 0; }
 }
 @media (max-width: 520px) { .av-site .av-hero-art { margin-bottom: 34px; } }
 @media (max-width: 360px) {
   .av-site .av-hero-art { --orbit-radius: 27cqw; }
-   .av-site .av-hero-art .av-orbit-label { max-width: 38%; }
-  .av-site .av-hero-art .av-orbit-label > span { padding-inline: 6px; font-size: 7px; }
+   .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 37cqw; }
+  .av-site .av-hero-art .av-orbit-label { max-width: 32%; }
+  .av-site .av-hero-art .av-orbit-label > span { padding-inline: 5px; font-size: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .av-site .av-hero-art .av-orbit-track,
-  .av-site .av-hero-art .av-orbit-label > span { animation: none; }
+  .av-site .av-hero-art .av-orbit-label > span,
+  .av-site .av-hero-art .av-orbit::after { animation: none; }
 }
 
 /* Landing surfaces now use the same light/graphite tokens as the Workspace. */
