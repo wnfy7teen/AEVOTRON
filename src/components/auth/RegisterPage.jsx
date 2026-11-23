@@ -154,7 +154,6 @@ export function RegisterPage() {
           <div className="auth-password-strength" role="meter" aria-label={t("Password strength")} aria-valuemin={0} aria-valuemax={4} aria-valuenow={passwordStrength} data-strength={passwordStrength}>
             <span /><span /><span /><span />
           </div>
-          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="register-confirm">{t("Confirm password")}</Label>
