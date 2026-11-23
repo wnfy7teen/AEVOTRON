@@ -14,8 +14,7 @@
   width: min(100%, 560px);
   aspect-ratio: 1 / 1;
   height: auto;
-  margin-block: 0;
-  margin-inline: auto;
+  margin: 0 auto 54px;
   isolation: isolate;
   contain: paint layout style;
   container-type: inline-size;
@@ -199,6 +198,10 @@ html[data-theme="gray"] .av-site .av-hero-art {
   animation-play-state: paused;
 }
 
+@media (max-width: 800px) {
+  .av-site .av-hero-art { margin-bottom: 42px; }
+}
+
 @media (max-width: 640px) {
   .av-site .av-hero-art {
     width: min(100%, 340px);
@@ -234,6 +237,10 @@ html[data-theme="gray"] .av-site .av-hero-art {
   .av-site .av-hero-art .av-label-bottom-left {
     display: none;
   }
+}
+
+@media (max-width: 520px) {
+  .av-site .av-hero-art { margin-bottom: 34px; }
 }
 
 @media (max-width: 360px) {
