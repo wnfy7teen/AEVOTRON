@@ -116,10 +116,10 @@ test("global theme and language controls follow the selected light or dark theme
   const css = await read("src/apple-style.css");
   assert.match(theme, /document\.documentElement\.dataset\.theme = theme/);
   assert.match(theme, /element\.dataset\.theme = theme/);
-  assert.match(css, /html\[data-theme="gray"\] \.av-theme-trigger/);
-  assert.match(css, /html\[data-theme="gray"\] \.av-language-trigger/);
-  assert.match(css, /html\[data-theme="gray"\] \.av-language-menu/);
-  assert.match(css, /html\[data-theme="gray"\] \.av-language-menu button\.active/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-theme-trigger/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-trigger/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu/);
+  assert.match(css, /html\[data-theme="dark"\] \.av-language-menu button\.active/);
 });
 
 test("workspace interaction polish covers keyboard focus, disabled controls and reduced motion", async () => {
@@ -127,7 +127,7 @@ test("workspace interaction polish covers keyboard focus, disabled controls and 
   assert.match(css, /:focus-visible/);
   assert.match(css, /:disabled/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.match(css, /\.apple-app\[data-theme="gray"\] \.av-notification-row\.is-read/);
+  assert.match(css, /\.apple-app\[data-theme="dark"\] \.av-notification-row\.is-read/);
   assert.match(css, /@media \(max-width: 560px\)/);
 });
 
@@ -138,7 +138,7 @@ test("workspace dropdown menus share responsive light and dark styling", async (
   assert.doesNotMatch(css, /\.mh-toolbar select/);
   assert.match(css, /\.av-dropdown-menu/);
   assert.match(css, /\.av-dropdown-option\.is-selected/);
-  assert.match(css, /data-theme="gray"\] \.av-dropdown-menu/);
+  assert.match(css, /data-theme="dark"\] \.av-dropdown-menu/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.av-dropdown-trigger/);
 });
 
@@ -211,7 +211,7 @@ test("Sonner success and error notifications remain readable above the workspace
   assert.match(toaster, /title: "aevotron-toast-title"/);
   assert.match(css, /\[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /\[data-sonner-toast\] \[data-title\][\s\S]*?color:\s*var\(--palette-hex-17212d\) !important/);
-  assert.match(css, /html\[data-theme="gray"\] \[data-sonner-toaster\]\.aevotron-toaster/);
+  assert.match(css, /html\[data-theme="dark"\] \[data-sonner-toaster\]\.aevotron-toaster/);
   assert.match(css, /color:\s*var\(--palette-hex-f1f5fa\) !important/);
   assert.match(css, /z-index: 10050 !important/);
 });
@@ -244,10 +244,10 @@ test("dashboard footer has readable text and a distinct status indicator in the 
   assert.match(root, /className="apple-app app-route-transition"/);
   assert.match(theme, /document\.documentElement\.dataset\.theme = theme/);
   assert.match(theme, /element\.dataset\.theme = theme/);
-  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer\s*\{[^}]*color:\s*var\(--palette-hex-c2c2c7\)/);
-  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer > span:first-child[\s\S]*?color:\s*var\(--palette-hex-a1a1a6\)/);
-  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-dot\s*\{[^}]*background:\s*var\(--palette-hex-34c759\)/);
-  assert.match(css, /html\[data-theme="gray"\] \.apple-app \.mh-footer-sep\s*\{[^}]*color:\s*var\(--palette-hex-636366\)/);
+  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.mh-footer\s*\{[^}]*color:\s*var\(--palette-hex-c2c2c7\)/);
+  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.mh-footer > span:first-child[\s\S]*?color:\s*var\(--palette-hex-a1a1a6\)/);
+  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.mh-footer-dot\s*\{[^}]*background:\s*var\(--palette-hex-34c759\)/);
+  assert.match(css, /html\[data-theme="dark"\] \.apple-app \.mh-footer-sep\s*\{[^}]*color:\s*var\(--palette-hex-636366\)/);
 });
 
 
@@ -257,8 +257,10 @@ test("read-only workspace preview never mounts live provider, API key or usage p
   assert.match(source, /section === "API keys" && \(preview \? <PreviewReadOnlySection title=\{t\("API keys"\)\}\/> : <ApiKeyManager\/>\)/);
   assert.match(source, /section === "Usage & logs" && \(preview \? <PreviewReadOnlySection title=\{t\("Usage & logs"\)\}\/> : <UsageDashboard\/>\)/);
   assert.match(source, /function PreviewReadOnlySection\(\{ title \}\)/);
-  assert.match(source, /Sample data · Read-only mode · No account or backend connection required/);
-  assert.match(source, /disabled=\{preview && item\.name === "AI Workspace"\}/);
+  assert.match(source, /No provider connections in preview/);
+  assert.match(source, /No API keys in preview/);
+  assert.match(source, /No usage records in preview/);
+  assert.doesNotMatch(source, /disabled=\{preview && item\.name === "AI Workspace"\}/);
   assert.match(source, /onClick=\{\(\) => modelQuery\.refetch\(\)\} disabled=\{preview \|\| modelQuery\.isFetching\}/);
 });
 
@@ -269,7 +271,7 @@ test("Cloudflare Workers preview redirects every authenticated route to the isol
   assert.match(auth, /hostname\.includes\("preview"\) && hostname\.endsWith\("\.workers\.dev"\)/);
   assert.match(auth, /\|\| isCloudflareWorkersPreview\(\)/);
   assert.match(gate, /import \{ authQuery, isCloudflareWorkersPreview \} from "@\/lib\/AuthContext"/);
-  assert.match(gate, /if \(isCloudflareWorkersPreview\(\)\)\s*\{\s*throw redirect\(\{ to: "\/workspace-preview", reloadDocument: true \}\);/);
+  assert.match(gate, /if \(isCloudflareWorkersPreview\(\) && location\.pathname !== "\/workspace"\)\s*\{\s*throw redirect\(\{ to: "\/workspace-preview", reloadDocument: true \}\);/);
   const authedRoute = await read("src/routes/_authed.jsx");
   const previewRoute = await read("src/routes/workspace-preview.jsx");
   assert.match(authedRoute, /beforeLoad: requireSignedIn/);
