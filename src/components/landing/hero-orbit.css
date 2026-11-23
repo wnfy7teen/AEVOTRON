@@ -6,7 +6,7 @@
   --orbit-text: #1c1c1e;
   --orbit-muted: #636366;
   --orbit-accent: #007aff;
-  --orbit-radius: 34%;
+  --orbit-radius: 34cqw;
 
   position: relative;
   display: grid;
@@ -17,6 +17,7 @@
   margin-inline: auto;
   isolation: isolate;
   contain: paint layout style;
+  container-type: inline-size;
   overflow: hidden;
   color: var(--orbit-text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
@@ -200,7 +201,7 @@ html[data-theme="gray"] .av-site .av-hero-art {
 @media (max-width: 640px) {
   .av-site .av-hero-art {
     width: min(100%, 340px);
-    --orbit-radius: 30%;
+    --orbit-radius: 30cqw;
   }
 
   .av-site .av-hero-art .av-core {
@@ -236,7 +237,7 @@ html[data-theme="gray"] .av-site .av-hero-art {
 
 @media (max-width: 360px) {
   .av-site .av-hero-art {
-    --orbit-radius: 28%;
+    --orbit-radius: 28cqw;
   }
 
   .av-site .av-hero-art .av-orbit-label {
