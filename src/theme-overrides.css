@@ -593,7 +593,7 @@ html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-
   font-size: 13px;
   font-weight: 600;
 }
-.auth-card input:not([type="checkbox"]):not([type="radio"]) {
+.auth-card input:not([type="checkbox"]):not([type="radio"]):not([autocomplete="one-time-code"]) {
   box-sizing: border-box;
   min-height: 44px;
   height: 44px;
