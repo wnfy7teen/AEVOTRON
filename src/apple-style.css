@@ -1,858 +1,3 @@
-/* Centralized legacy palette aliases. Components consume variables, never literal color values. */
-html {
-  --palette-hex-f2f2f7: #F2F2F7;
-  --palette-hex-ffffff: #FFFFFF;
-  --palette-hex-1c1c1e: #1C1C1E;
-  --palette-hex-636366: #636366;
-  --palette-hex-e5e5ea: #E5E5EA;
-  --palette-hex-007aff: #007AFF;
-  --palette-hex-0066d6: #0066D6;
-  --palette-hex-248a52: #248A52;
-  --palette-hex-1d1d1f: #1d1d1f;
-  --palette-hex-1688f8: #1688f8;
-  --palette-hex-005ac8: #005ac8;
-  --palette-hex-fff: #fff;
-  --palette-hex-d8e9fa: #d8e9fa;
-  --palette-hex-eff7ff: #eff7ff;
-  --palette-hex-1769b2: #1769b2;
-  --palette-hex-e7f2ff: #e7f2ff;
-  --palette-hex-cfe5ff: #cfe5ff;
-  --palette-hex-075da8: #075da8;
-  --palette-hex-202124: #202124;
-  --palette-hex-85858b: #85858b;
-  --palette-hex-96969c: #96969c;
-  --palette-hex-626269: #626269;
-  --palette-hex-f0f4f8: #f0f4f8;
-  --palette-hex-25252a: #25252a;
-  --palette-hex-e8f2ff: #e8f2ff;
-  --palette-hex-0066cc: #0066cc;
-  --palette-hex-0071e3: #0071e3;
-  --palette-hex-dcecff: #dcecff;
-  --palette-hex-56565c: #56565c;
-  --palette-hex-e8e8ed: #e8e8ed;
-  --palette-hex-63b3ff: #63b3ff;
-  --palette-hex-f0f0f4: #f0f0f4;
-  --palette-hex-30343b: #30343b;
-  --palette-hex-202833: #202833;
-  --palette-hex-e5ebf3: #e5ebf3;
-  --palette-hex-898990: #898990;
-  --palette-hex-c0c0c5: #c0c0c5;
-  --palette-hex-28282d: #28282d;
-  --palette-hex-65656c: #65656c;
-  --palette-hex-696970: #696970;
-  --palette-hex-f0f6fc: #f0f6fc;
-  --palette-hex-cde4fa: #cde4fa;
-  --palette-hex-f4f9ff: #f4f9ff;
-  --palette-hex-edf6ff: #edf6ff;
-  --palette-hex-194f7b: #194f7b;
-  --palette-hex-174e7b: #174e7b;
-  --palette-hex-597b98: #597b98;
-  --palette-hex-26a269: #26a269;
-  --palette-hex-c8e2f9: #c8e2f9;
-  --palette-hex-e2f1ff: #e2f1ff;
-  --palette-hex-1768a8: #1768a8;
-  --palette-hex-73737a: #73737a;
-  --palette-hex-20a464: #20a464;
-  --palette-hex-77777e: #77777e;
-  --palette-hex-dedee3: #dedee3;
-  --palette-hex-3d3d43: #3d3d43;
-  --palette-hex-f8fbff: #f8fbff;
-  --palette-hex-b8d8f7: #b8d8f7;
-  --palette-hex-075eac: #075eac;
-  --palette-hex-fff2f1: #fff2f1;
-  --palette-hex-f4d2cf: #f4d2cf;
-  --palette-hex-bd3b34: #bd3b34;
-  --palette-hex-ffe8e5: #ffe8e5;
-  --palette-hex-eeb4ae: #eeb4ae;
-  --palette-hex-929299: #929299;
-  --palette-hex-242428: #242428;
-  --palette-hex-818188: #818188;
-  --palette-hex-e3e3e8: #e3e3e8;
-  --palette-hex-c9def4: #c9def4;
-  --palette-hex-9aa0a8: #9aa0a8;
-  --palette-hex-85858c: #85858c;
-  --palette-hex-f0f0f3: #f0f0f3;
-  --palette-hex-35353b: #35353b;
-  --palette-hex-f5f9ff: #f5f9ff;
-  --palette-hex-28282e: #28282e;
-  --palette-hex-818189: #818189;
-  --palette-hex-e8f7ef: #e8f7ef;
-  --palette-hex-ccebd9: #ccebd9;
-  --palette-hex-21804c: #21804c;
-  --palette-hex-f1f2f4: #f1f2f4;
-  --palette-hex-e3e4e8: #e3e4e8;
-  --palette-hex-e7e7eb: #e7e7eb;
-  --palette-hex-f7f7f9: #f7f7f9;
-  --palette-hex-262d39: #262d39;
-  --palette-hex-171c25: #171c25;
-  --palette-hex-e8edf5: #e8edf5;
-  --palette-hex-e1e1e6: #e1e1e6;
-  --palette-hex-4f4f56: #4f4f56;
-  --palette-hex-f4f8fd: #f4f8fd;
-  --palette-hex-b9d7f3: #b9d7f3;
-  --palette-hex-d6eadf: #d6eadf;
-  --palette-hex-f2faf5: #f2faf5;
-  --palette-hex-47765a: #47765a;
-  --palette-hex-236a42: #236a42;
-  --palette-hex-e0e0e5: #e0e0e5;
-  --palette-hex-8abdf0: #8abdf0;
-  --palette-hex-2c2c31: #2c2c31;
-  --palette-hex-93939a: #93939a;
-  --palette-hex-eeeef1: #eeeef1;
-  --palette-hex-8b8b92: #8b8b92;
-  --palette-hex-33333a: #33333a;
-  --palette-hex-f8f8fa: #f8f8fa;
-  --palette-hex-66666e: #66666e;
-  --palette-hex-d8e8f7: #d8e8f7;
-  --palette-hex-f3f8fe: #f3f8fe;
-  --palette-hex-386789: #386789;
-  --palette-hex-245d87: #245d87;
-  --palette-hex-63819a: #63819a;
-  --palette-hex-606068: #606068;
-  --palette-hex-a0a0a7: #a0a0a7;
-  --palette-hex-80b8ef: #80b8ef;
-  --palette-hex-f0d1cf: #f0d1cf;
-  --palette-hex-fff4f2: #fff4f2;
-  --palette-hex-b6423a: #b6423a;
-  --palette-hex-f0faf4: #f0faf4;
-  --palette-hex-237449: #237449;
-  --palette-hex-ededf0: #ededf0;
-  --palette-hex-25a66a: #25a66a;
-  --palette-hex-d9d9df: #d9d9df;
-  --palette-hex-eff6ff: #eff6ff;
-  --palette-hex-d8e9fb: #d8e9fb;
-  --palette-hex-1672bf: #1672bf;
-  --palette-hex-e8f3ff: #e8f3ff;
-  --palette-hex-f5f5f7: #f5f5f7;
-  --palette-hex-dedee4: #dedee4;
-  --palette-hex-222: #222;
-  --palette-hex-006edb: #006edb;
-  --palette-hex-8c9aaa: #8c9aaa;
-  --palette-hex-fbfdff: #fbfdff;
-  --palette-hex-cbdff4: #cbdff4;
-  --palette-hex-29292e: #29292e;
-  --palette-hex-216c43: #216c43;
-  --palette-hex-5e806b: #5e806b;
-  --palette-hex-d7e9de: #d7e9de;
-  --palette-hex-245d3e: #245d3e;
-  --palette-hex-eaf4ff: #eaf4ff;
-  --palette-hex-d5e9fb: #d5e9fb;
-  --palette-hex-0969b4: #0969b4;
-  --palette-hex-f4f8fc: #f4f8fc;
-  --palette-hex-dce8f2: #dce8f2;
-  --palette-hex-17639e: #17639e;
-  --palette-hex-7b6a3d: #7b6a3d;
-  --palette-hex-e9e9ed: #e9e9ed;
-  --palette-hex-5e5e66: #5e5e66;
-  --palette-hex-29292f: #29292f;
-  --palette-hex-53535b: #53535b;
-  --palette-hex-d6dce4: #d6dce4;
-  --palette-hex-263442: #263442;
-  --palette-hex-f7fbff: #f7fbff;
-  --palette-hex-0877d1: #0877d1;
-  --palette-hex-667789: #667789;
-  --palette-hex-dce2e9: #dce2e9;
-  --palette-hex-687789: #687789;
-  --palette-hex-344454: #344454;
-  --palette-hex-edf5fc: #edf5fc;
-  --palette-hex-e5f2ff: #e5f2ff;
-  --palette-hex-075f9f: #075f9f;
-  --palette-hex-f0f3f6: #f0f3f6;
-  --palette-hex-536273: #536273;
-  --palette-hex-d5e9f8: #d5e9f8;
-  --palette-hex-f2f7fc: #f2f7fc;
-  --palette-hex-11151c: #11151c;
-  --palette-hex-1b222c: #1b222c;
-  --palette-hex-edf2f8: #edf2f8;
-  --palette-hex-aab5c3: #aab5c3;
-  --palette-hex-f1f5fa: #f1f5fa;
-  --palette-hex-b4bfcc: #b4bfcc;
-  --palette-hex-293545: #293545;
-  --palette-hex-173b5d: #173b5d;
-  --palette-hex-8cc8ff: #8cc8ff;
-  --palette-hex-aab6c5: #aab6c5;
-  --palette-hex-182c40: #182c40;
-  --palette-hex-294d6c: #294d6c;
-  --palette-hex-d7eaff: #d7eaff;
-  --palette-hex-c3def7: #c3def7;
-  --palette-hex-183328: #183328;
-  --palette-hex-28583e: #28583e;
-  --palette-hex-b7e6c8: #b7e6c8;
-  --palette-hex-182b3d: #182b3d;
-  --palette-hex-294b68: #294b68;
-  --palette-hex-8492a3: #8492a3;
-  --palette-hex-c4ceda: #c4ceda;
-  --palette-hex-3a4a5e: #3a4a5e;
-  --palette-hex-d6e1ed: #d6e1ed;
-  --palette-hex-1b3046: #1b3046;
-  --palette-hex-151c25: #151c25;
-  --palette-hex-3a4655: #3a4655;
-  --palette-hex-8794a4: #8794a4;
-  --palette-hex-9acfff: #9acfff;
-  --palette-hex-354255: #354255;
-  --palette-hex-465568: #465568;
-  --palette-hex-f4f7fb: #f4f7fb;
-  --palette-hex-b8c4d2: #b8c4d2;
-  --palette-hex-e8eef6: #e8eef6;
-  --palette-hex-a9bfd5: #a9bfd5;
-  --palette-hex-294968: #294968;
-  --palette-hex-1b3650: #1b3650;
-  --palette-hex-c9e6ff: #c9e6ff;
-  --palette-hex-e1e5eb: #e1e5eb;
-  --palette-hex-707984: #707984;
-  --palette-hex-697789: #697789;
-  --palette-hex-f7faff: #f7faff;
-  --palette-hex-b5c0ce: #b5c0ce;
-  --palette-hex-667085: #667085;
-  --palette-hex-e9edf3: #e9edf3;
-  --palette-hex-e5f1ff: #e5f1ff;
-  --palette-hex-747982: #747982;
-  --palette-hex-51565e: #51565e;
-  --palette-hex-d8dce2: #d8dce2;
-  --palette-hex-0071e31c: #0071e31c;
-  --palette-hex-e8eaee: #e8eaee;
-  --palette-hex-7b818a: #7b818a;
-  --palette-hex-31343a: #31343a;
-  --palette-hex-eceef1: #eceef1;
-  --palette-hex-24262a: #24262a;
-  --palette-hex-7a8089: #7a8089;
-  --palette-hex-d1d5db: #d1d5db;
-  --palette-hex-0002: #0002;
-  --palette-hex-34c759: #34c759;
-  --palette-hex-e0e3e8: #e0e3e8;
-  --palette-hex-626873: #626873;
-  --palette-hex-f0f7ff: #f0f7ff;
-  --palette-hex-cbd0d8: #cbd0d8;
-  --palette-hex-8b5cf6: #8b5cf6;
-  --palette-hex-59616d: #59616d;
-  --palette-hex-f0c9cc: #f0c9cc;
-  --palette-hex-fffafa: #fffafa;
-  --palette-hex-a12b35: #a12b35;
-  --palette-hex-7d6265: #7d6265;
-  --palette-hex-10182866: #10182866;
-  --palette-hex-e5e7eb: #e5e7eb;
-  --palette-hex-0003: #0003;
-  --palette-hex-6b7280: #6b7280;
-  --palette-hex-737b86: #737b86;
-  --palette-hex-656c76: #656c76;
-  --palette-hex-8b919a: #8b919a;
-  --palette-hex-38383a: #38383a;
-  --palette-hex-a1a1a6: #a1a1a6;
-  --palette-hex-2c2c2e: #2c2c2e;
-  --palette-hex-48484a: #48484a;
-  --palette-hex-d1d1d6: #d1d1d6;
-  --palette-hex-0a84ff: #0a84ff;
-  --palette-hex-2c1c20: #2c1c20;
-  --palette-hex-704047: #704047;
-  --palette-hex-ff9da6: #ff9da6;
-  --palette-hex-d2aeb2: #d2aeb2;
-  --palette-hex-737982: #737982;
-  --palette-hex-e9ebef: #e9ebef;
-  --palette-hex-cbdcf0: #cbdcf0;
-  --palette-hex-fcfdff: #fcfdff;
-  --palette-hex-536477: #536477;
-  --palette-hex-f4f6f8: #f4f6f8;
-  --palette-hex-eceff2: #eceff2;
-  --palette-hex-f0f1f3: #f0f1f3;
-  --palette-hex-1683e8: #1683e8;
-  --palette-hex-f8f9fb: #f8f9fb;
-  --palette-hex-777e88: #777e88;
-  --palette-hex-edf0f3: #edf0f3;
-  --palette-hex-f9fafb: #f9fafb;
-  --palette-hex-eaf3ff: #eaf3ff;
-  --palette-hex-c3c8cf: #c3c8cf;
-  --palette-hex-fbfcfd: #fbfcfd;
-  --palette-hex-c1ccda: #c1ccda;
-  --palette-hex-171e27: #171e27;
-  --palette-hex-e8edf4: #e8edf4;
-  --palette-hex-697586: #697586;
-  --palette-hex-202b38: #202b38;
-  --palette-hex-d7dce3: #d7dce3;
-  --palette-hex-aab8c8: #aab8c8;
-  --palette-hex-687587: #687587;
-  --palette-hex-263446: #263446;
-  --palette-hex-f0f6fd: #f0f6fd;
-  --palette-hex-075fb5: #075fb5;
-  --palette-hex-465364: #465364;
-  --palette-hex-71839a: #71839a;
-  --palette-hex-263241: #263241;
-  --palette-hex-c2cedc: #c2cedc;
-  --palette-hex-e3eaf3: #e3eaf3;
-  --palette-hex-2b394a: #2b394a;
-  --palette-hex-8fc5ff: #8fc5ff;
-  --palette-hex-244a6b: #244a6b;
-  --palette-hex-b8dcff: #b8dcff;
-  --palette-hex-252b33: #252b33;
-  --palette-hex-687585: #687585;
-  --palette-hex-e7ebf0: #e7ebf0;
-  --palette-hex-17212d: #17212d;
-  --palette-hex-667487: #667487;
-  --palette-hex-596879: #596879;
-  --palette-hex-435267: #435267;
-  --palette-hex-687b90: #687b90;
-  --palette-hex-f1f6fb: #f1f6fb;
-  --palette-hex-d8e1e9: #d8e1e9;
-  --palette-hex-526174: #526174;
-  --palette-hex-16834a: #16834a;
-  --palette-hex-f3f6f9: #f3f6f9;
-  --palette-hex-202a37: #202a37;
-  --palette-hex-c0ccda: #c0ccda;
-  --palette-hex-65d49a: #65d49a;
-  --palette-hex-dce6f1: #dce6f1;
-  --palette-hex-2c3949: #2c3949;
-  --palette-hex-eef6fc: #eef6fc;
-  --palette-hex-e9edf2: #e9edf2;
-  --palette-hex-68717d: #68717d;
-  --palette-hex-20252c: #20252c;
-  --palette-hex-3b4653: #3b4653;
-  --palette-hex-b8c4d3: #b8c4d3;
-  --palette-hex-dbe5ef: #dbe5ef;
-  --palette-hex-f9fbfd: #f9fbfd;
-  --palette-hex-17283a: #17283a;
-  --palette-hex-34729f: #34729f;
-  --palette-hex-d8e3ed: #d8e3ed;
-  --palette-hex-65778a: #65778a;
-  --palette-hex-607286: #607286;
-  --palette-hex-b9dfce: #b9dfce;
-  --palette-hex-167447: #167447;
-  --palette-hex-d5e1ec: #d5e1ec;
-  --palette-hex-24425d: #24425d;
-  --palette-hex-e0e8ef: #e0e8ef;
-  --palette-hex-f7fafc: #f7fafc;
-  --palette-hex-4c6a84: #4c6a84;
-  --palette-hex-b8d0e3: #b8d0e3;
-  --palette-hex-edf5fb: #edf5fb;
-  --palette-hex-e3e8ee: #e3e8ee;
-  --palette-hex-dce9f4: #dce9f4;
-  --palette-hex-f0f6fb: #f0f6fb;
-  --palette-hex-3978a7: #3978a7;
-  --palette-hex-d4ecdf: #d4ecdf;
-  --palette-hex-eff9f3: #eff9f3;
-  --palette-hex-278052: #278052;
-  --palette-hex-f0e4ca: #f0e4ca;
-  --palette-hex-fff8eb: #fff8eb;
-  --palette-hex-a87525: #a87525;
-  --palette-hex-778493: #778493;
-  --palette-hex-e1e9f0: #e1e9f0;
-  --palette-hex-28445e: #28445e;
-  --palette-hex-718092: #718092;
-  --palette-hex-405b73: #405b73;
-  --palette-hex-f7f9fb: #f7f9fb;
-  --palette-hex-245b86: #245b86;
-  --palette-hex-637487: #637487;
-  --palette-hex-263748: #263748;
-  --palette-hex-172330: #172330;
-  --palette-hex-e9f0f7: #e9f0f7;
-  --palette-hex-80b8e2: #80b8e2;
-  --palette-hex-3a4c5e: #3a4c5e;
-  --palette-hex-223243: #223243;
-  --palette-hex-aebed0: #aebed0;
-  --palette-hex-35495c: #35495c;
-  --palette-hex-101a25: #101a25;
-  --palette-hex-d9e8f6: #d9e8f6;
-  --palette-hex-435a70: #435a70;
-  --palette-hex-26394b: #26394b;
-  --palette-hex-e5eef7: #e5eef7;
-  --palette-hex-314a60: #314a60;
-  --palette-hex-657487: #657487;
-  --palette-hex-dce9e1: #dce9e1;
-  --palette-hex-f2f8f4: #f2f8f4;
-  --palette-hex-337452: #337452;
-  --palette-hex-f0e3cc: #f0e3cc;
-  --palette-hex-fffaf1: #fffaf1;
-  --palette-hex-a66c1e: #a66c1e;
-  --palette-hex-7c6749: #7c6749;
-  --palette-hex-9a876b: #9a876b;
-  --palette-hex-34485d: #34485d;
-  --palette-hex-202f3f: #202f3f;
-  --palette-hex-1b2937: #1b2937;
-  --palette-hex-edf4fb: #edf4fb;
-  --palette-hex-f0f5fb: #f0f5fb;
-  --palette-hex-a9b8c8: #a9b8c8;
-  --palette-hex-8fc6ef: #8fc6ef;
-  --palette-hex-43566a: #43566a;
-  --palette-hex-263647: #263647;
-  --palette-hex-b9c8d8: #b9c8d8;
-  --palette-hex-405267: #405267;
-  --palette-hex-d5e6f5: #d5e6f5;
-  --palette-hex-354354: #354354;
-  --palette-hex-1b2531: #1b2531;
-  --palette-hex-eef3f9: #eef3f9;
-  --palette-hex-3a5269: #3a5269;
-  --palette-hex-9bc8ec: #9bc8ec;
-  --palette-hex-315b48: #315b48;
-  --palette-hex-20392e: #20392e;
-  --palette-hex-81d5a5: #81d5a5;
-  --palette-hex-665238: #665238;
-  --palette-hex-3b3021: #3b3021;
-  --palette-hex-e4bd7c: #e4bd7c;
-  --palette-hex-39495a: #39495a;
-  --palette-hex-202d3a: #202d3a;
-  --palette-hex-d3e4f3: #d3e4f3;
-  --palette-hex-b1becc: #b1becc;
-  --palette-hex-aab9c9: #aab9c9;
-  --palette-hex-2b3a49: #2b3a49;
-  --palette-hex-b4c0ce: #b4c0ce;
-  --palette-hex-365544: #365544;
-  --palette-hex-20372c: #20372c;
-  --palette-hex-a2dfba: #a2dfba;
-  --palette-hex-382f22: #382f22;
-  --palette-hex-f0c47d: #f0c47d;
-  --palette-hex-e1c99f: #e1c99f;
-  --palette-hex-c4ad86: #c4ad86;
-  --palette-hex-e3e6eb: #e3e6eb;
-  --palette-hex-202733: #202733;
-  --palette-hex-e2e6ec: #e2e6ec;
-  --palette-hex-e0e5eb: #e0e5eb;
-  --palette-hex-526071: #526071;
-  --palette-hex-aebdce: #aebdce;
-  --palette-hex-9ab9d8: #9ab9d8;
-  --palette-hex-14558a: #14558a;
-  --palette-hex-e9edf1: #e9edf1;
-  --palette-hex-dce3ea: #dce3ea;
-  --palette-hex-f8fafc: #f8fafc;
-  --palette-hex-f1f7fc: #f1f7fc;
-  --palette-hex-397db5: #397db5;
-  --palette-hex-eaf3ec: #eaf3ec;
-  --palette-hex-287044: #287044;
-  --palette-hex-fff1e8: #fff1e8;
-  --palette-hex-a45120: #a45120;
-  --palette-hex-eef3f7: #eef3f7;
-  --palette-hex-536579: #536579;
-  --palette-hex-526b82: #526b82;
-  --palette-hex-64748b: #64748b;
-  --palette-hex-315f87: #315f87;
-  --palette-hex-303b49: #303b49;
-  --palette-hex-171e28: #171e28;
-  --palette-hex-a4b0bf: #a4b0bf;
-  --palette-hex-9aa8b8: #9aa8b8;
-  --palette-hex-1b2430: #1b2430;
-  --palette-hex-62748a: #62748a;
-  --palette-hex-222e3c: #222e3c;
-  --palette-hex-557da2: #557da2;
-  --palette-hex-1e3549: #1e3549;
-  --palette-hex-b9dcf8: #b9dcf8;
-  --palette-hex-1b2c3b: #1b2c3b;
-  --palette-hex-75a9d5: #75a9d5;
-  --palette-hex-233b2d: #233b2d;
-  --palette-hex-a9d8b4: #a9d8b4;
-  --palette-hex-422f24: #422f24;
-  --palette-hex-f0b58e: #f0b58e;
-  --palette-hex-c4d4e5: #c4d4e5;
-  --palette-hex-a9c8e5: #a9c8e5;
-  --palette-hex-b9d7f1: #b9d7f1;
-  --palette-hex-dfe4ea: #dfe4ea;
-  --palette-hex-344256: #344256;
-  --palette-hex-a8bfd5: #a8bfd5;
-  --palette-hex-f6f9fc: #f6f9fc;
-  --palette-hex-b8cfe3: #b8cfe3;
-  --palette-hex-f2f7fb: #f2f7fb;
-  --palette-hex-245b85: #245b85;
-  --palette-hex-e5e8ed: #e5e8ed;
-  --palette-hex-626b78: #626b78;
-  --palette-hex-566170: #566170;
-  --palette-hex-dfe3e8: #dfe3e8;
-  --palette-hex-687484: #687484;
-  --palette-hex-80b6e8: #80b6e8;
-  --palette-hex-818b99: #818b99;
-  --palette-hex-e1e5ea: #e1e5ea;
-  --palette-hex-b8c6d5: #b8c6d5;
-  --palette-hex-9fc4e8: #9fc4e8;
-  --palette-hex-edf5fd: #edf5fd;
-  --palette-hex-e5e9ee: #e5e9ee;
-  --palette-hex-c7d7e7: #c7d7e7;
-  --palette-hex-82b3e0: #82b3e0;
-  --palette-hex-f4f9fe: #f4f9fe;
-  --palette-hex-586779: #586779;
-  --palette-hex-1769ad: #1769ad;
-  --palette-hex-354252: #354252;
-  --palette-hex-f0f4f9: #f0f4f9;
-  --palette-hex-b0bdcc: #b0bdcc;
-  --palette-hex-3c4a5a: #3c4a5a;
-  --palette-hex-202a36: #202a36;
-  --palette-hex-3b4858: #3b4858;
-  --palette-hex-d4deea: #d4deea;
-  --palette-hex-1d2733: #1d2733;
-  --palette-hex-c2cddb: #c2cddb;
-  --palette-hex-60758d: #60758d;
-  --palette-hex-253342: #253342;
-  --palette-hex-f2f6fb: #f2f6fb;
-  --palette-hex-5d8db8: #5d8db8;
-  --palette-hex-203b52: #203b52;
-  --palette-hex-c5e3ff: #c5e3ff;
-  --palette-hex-5a6e83: #5a6e83;
-  --palette-hex-202c39: #202c39;
-  --palette-hex-6b9bc5: #6b9bc5;
-  --palette-hex-203448: #203448;
-  --palette-hex-2b3948: #2b3948;
-  --palette-hex-d0dce9: #d0dce9;
-  --palette-hex-a8d3fa: #a8d3fa;
-  --palette-hex-cfe2f5: #cfe2f5;
-  --palette-hex-e5f1fc: #e5f1fc;
-  --palette-hex-3477a8: #3477a8;
-  --palette-hex-365b79: #365b79;
-  --palette-hex-243f56: #243f56;
-  --palette-hex-a9d7ff: #a9d7ff;
-  --palette-hex-f6f8fb: #f6f8fb;
-  --palette-hex-182432: #182432;
-  --palette-hex-e5eaf0: #e5eaf0;
-  --palette-hex-fbfcfe: #fbfcfe;
-  --palette-hex-142334: #142334;
-  --palette-hex-e6f3fa: #e6f3fa;
-  --palette-hex-087da8: #087da8;
-  --palette-hex-dce6ee: #dce6ee;
-  --palette-hex-758394: #758394;
-  --palette-hex-dce5ed: #dce5ed;
-  --palette-hex-243649: #243649;
-  --palette-hex-718096: #718096;
-  --palette-hex-9bc8dc: #9bc8dc;
-  --palette-hex-f8fcfe: #f8fcfe;
-  --palette-hex-e4eaf0: #e4eaf0;
-  --palette-hex-8491a0: #8491a0;
-  --palette-hex-9aa6b3: #9aa6b3;
-  --palette-hex-8995a3: #8995a3;
-  --palette-hex-68788a: #68788a;
-  --palette-hex-edf4f8: #edf4f8;
-  --palette-hex-1e526b: #1e526b;
-  --palette-hex-8a96a3: #8a96a3;
-  --palette-hex-e5edf3: #e5edf3;
-  --palette-hex-f5f9fc: #f5f9fc;
-  --palette-hex-66798b: #66798b;
-  --palette-hex-1684ad: #1684ad;
-  --palette-hex-63758a: #63758a;
-  --palette-hex-e7ecf1: #e7ecf1;
-  --palette-hex-8592a0: #8592a0;
-  --palette-hex-253648: #253648;
-  --palette-hex-c3cbd4: #c3cbd4;
-  --palette-hex-718091: #718091;
-  --palette-hex-20a477: #20a477;
-  --palette-hex-1680a8: #1680a8;
-  --palette-hex-172638: #172638;
-  --palette-hex-8793a1: #8793a1;
-  --palette-hex-527184: #527184;
-  --palette-hex-27394b: #27394b;
-  --palette-hex-8a97a5: #8a97a5;
-  --palette-hex-dbeaf2: #dbeaf2;
-  --palette-hex-f0f7fb: #f0f7fb;
-  --palette-hex-42677e: #42677e;
-  --palette-hex-f0dfc4: #f0dfc4;
-  --palette-hex-fff9ef: #fff9ef;
-  --palette-hex-8a6333: #8a6333;
-  --palette-hex-d6e1e9: #d6e1e9;
-  --palette-hex-7792a5: #7792a5;
-  --palette-hex-2a3b4d: #2a3b4d;
-  --palette-hex-758496: #758496;
-  --palette-hex-dcecf4: #dcecf4;
-  --palette-hex-eef7fb: #eef7fb;
-  --palette-hex-1682aa: #1682aa;
-  --palette-hex-26384a: #26384a;
-  --palette-hex-e0e8ee: #e0e8ee;
-  --palette-hex-627487: #627487;
-  --palette-hex-9ec9db: #9ec9db;
-  --palette-hex-1d6988: #1d6988;
-  --palette-hex-8da4b4: #8da4b4;
-  --palette-hex-47758d: #47758d;
-  --palette-hex-d9ebf3: #d9ebf3;
-  --palette-hex-edf7fb: #edf7fb;
-  --palette-hex-147da4: #147da4;
-  --palette-hex-8b98a5: #8b98a5;
-  --palette-hex-344557: #344557;
-  --palette-hex-b44d4d: #b44d4d;
-  --palette-hex-8291a0: #8291a0;
-  --palette-hex-7da7ba: #7da7ba;
-  --palette-hex-d5e1e9: #d5e1e9;
-  --palette-hex-53687a: #53687a;
-  --palette-hex-d9e3eb: #d9e3eb;
-  --palette-hex-9ac7da: #9ac7da;
-  --palette-hex-edf1f4: #edf1f4;
-  --palette-hex-9aa5b1: #9aa5b1;
-  --palette-hex-066b91: #066b91;
-  --palette-hex-a9c5d1: #a9c5d1;
-  --palette-hex-f8eeee: #f8eeee;
-  --palette-hex-a34a4a: #a34a4a;
-  --palette-hex-f3dddd: #f3dddd;
-  --palette-hex-e6ebf0: #e6ebf0;
-  --palette-hex-82909e: #82909e;
-  --palette-hex-526a7d: #526a7d;
-  --palette-hex-42596d: #42596d;
-  --palette-hex-96a2ad: #96a2ad;
-  --palette-hex-a0aab4: #a0aab4;
-  --palette-hex-101a24: #101a24;
-  --palette-hex-e7edf3: #e7edf3;
-  --palette-hex-263543: #263543;
-  --palette-hex-131f2a: #131f2a;
-  --palette-hex-e6edf4: #e6edf4;
-  --palette-hex-1b3545: #1b3545;
-  --palette-hex-8ed3ef: #8ed3ef;
-  --palette-hex-304252: #304252;
-  --palette-hex-192733: #192733;
-  --palette-hex-c6d2dc: #c6d2dc;
-  --palette-hex-9aabba: #9aabba;
-  --palette-hex-203545: #203545;
-  --palette-hex-b8e4f5: #b8e4f5;
-  --palette-hex-2a3b49: #2a3b49;
-  --palette-hex-172530: #172530;
-  --palette-hex-a6b5c1: #a6b5c1;
-  --palette-hex-9aaaba: #9aaaba;
-  --palette-hex-14212c: #14212c;
-  --palette-hex-d1dce5: #d1dce5;
-  --palette-hex-9bc8db: #9bc8db;
-  --palette-hex-2d4b5e: #2d4b5e;
-  --palette-hex-1a3040: #1a3040;
-  --palette-hex-b5d8e9: #b5d8e9;
-  --palette-hex-5b4931: #5b4931;
-  --palette-hex-30291f: #30291f;
-  --palette-hex-e4c99f: #e4c99f;
-  --palette-hex-344654: #344654;
-  --palette-hex-16242f: #16242f;
-  --palette-hex-cbd7e1: #cbd7e1;
-  --palette-hex-d3dfe8: #d3dfe8;
-  --palette-hex-3b292b: #3b292b;
-  --palette-hex-f1a9a9: #f1a9a9;
-  --palette-hex-25384a: #25384a;
-  --palette-hex-9fc9da: #9fc9da;
-  --palette-hex-f5f9fb: #f5f9fb;
-  --palette-hex-63788a: #63788a;
-  --palette-hex-f5f8fa: #f5f8fa;
-  --palette-hex-2d4356: #2d4356;
-  --palette-hex-edf2f5: #edf2f5;
-  --palette-hex-245a73: #245a73;
-  --palette-hex-dfe7ed: #dfe7ed;
-  --palette-hex-f2f6f8: #f2f6f8;
-  --palette-hex-40566a: #40566a;
-  --palette-hex-e0e9f0: #e0e9f0;
-  --palette-hex-4b7d95: #4b7d95;
-  --palette-hex-1b2d3a: #1b2d3a;
-  --palette-hex-b2c4d1: #b2c4d1;
-  --palette-hex-111d27: #111d27;
-  --palette-hex-d2dee8: #d2dee8;
-  --palette-hex-243847: #243847;
-  --palette-hex-b9ddeb: #b9ddeb;
-  --palette-hex-344653: #344653;
-  --palette-hex-20313e: #20313e;
-  --palette-hex-c8d5df: #c8d5df;
-  --palette-hex-9aa6b2: #9aa6b2;
-  --palette-hex-f8eaea: #f8eaea;
-  --palette-hex-e9f2f7: #e9f2f7;
-  --palette-hex-28718f: #28718f;
-  --palette-hex-e8f4ee: #e8f4ee;
-  --palette-hex-25805d: #25805d;
-  --palette-hex-a9d7e9: #a9d7e9;
-  --palette-hex-1e3a32: #1e3a32;
-  --palette-hex-8ed5b4: #8ed5b4;
-  --palette-hex-456b7e: #456b7e;
-  --palette-hex-dbe6ee: #dbe6ee;
-  --palette-hex-536b7d: #536b7d;
-  --palette-hex-4d7b91: #4d7b91;
-  --palette-hex-dce6ed: #dce6ed;
-  --palette-hex-f1f5f7: #f1f5f7;
-  --palette-hex-758493: #758493;
-  --palette-hex-e5ebf0: #e5ebf0;
-  --palette-hex-a8cedd: #a8cedd;
-  --palette-hex-f2f9fc: #f2f9fc;
-  --palette-hex-52697b: #52697b;
-  --palette-hex-34495c: #34495c;
-  --palette-hex-8794a1: #8794a1;
-  --palette-hex-30465a: #30465a;
-  --palette-hex-c5d2dc: #c5d2dc;
-  --palette-hex-c7d5df: #c7d5df;
-  --palette-hex-647789: #647789;
-  --palette-hex-a9cddd: #a9cddd;
-  --palette-hex-18789c: #18789c;
-  --palette-hex-b5c5d1: #b5c5d1;
-  --palette-hex-dce7ed: #dce7ed;
-  --palette-hex-60778a: #60778a;
-  --palette-hex-8a98a5: #8a98a5;
-  --palette-hex-a64d4d: #a64d4d;
-  --palette-hex-e1e8ed: #e1e8ed;
-  --palette-hex-718394: #718394;
-  --palette-hex-e7a1a1: #e7a1a1;
-  --palette-hex-a17b43: #a17b43;
-  --palette-hex-d5b77d: #d5b77d;
-  --palette-hex-e2e9ee: #e2e9ee;
-  --palette-hex-8996a3: #8996a3;
-  --palette-hex-e1e9ee: #e1e9ee;
-  --palette-hex-60788a: #60788a;
-  --palette-hex-b18136: #b18136;
-  --palette-hex-e2c17d: #e2c17d;
-  --palette-hex-f0f8fb: #f0f8fb;
-  --palette-hex-1685a8: #1685a8;
-  --palette-hex-426a7c: #426a7c;
-  --palette-hex-203642: #203642;
-  --palette-hex-b8dff0: #b8dff0;
-  --palette-hex-e8f7fc: #e8f7fc;
-  --palette-hex-f3f9ff: #f3f9ff;
-  --palette-hex-eef3ff: #eef3ff;
-  --palette-hex-075b7b: #075b7b;
-  --palette-hex-0797c5: #0797c5;
-  --palette-hex-0788b3: #0788b3;
-  --palette-hex-064f6b: #064f6b;
-  --palette-hex-54798a: #54798a;
-  --palette-hex-087fa8: #087fa8;
-  --palette-hex-75c5df: #75c5df;
-  --palette-hex-ddf3fa: #ddf3fa;
-  --palette-hex-eaf5ff: #eaf5ff;
-  --palette-hex-034e6b: #034e6b;
-  --palette-hex-d8f1f9: #d8f1f9;
-  --palette-hex-e6f1ff: #e6f1ff;
-  --palette-hex-315d70: #315d70;
-  --palette-hex-173b4b: #173b4b;
-  --palette-hex-1b3048: #1b3048;
-  --palette-hex-d5f4ff: #d5f4ff;
-  --palette-hex-e0f6ff: #e0f6ff;
-  --palette-hex-a6c5d4: #a6c5d4;
-  --palette-hex-65c9ed: #65c9ed;
-  --palette-hex-202b36: #202b36;
-  --palette-hex-17212b: #17212b;
-  --palette-hex-d7e0e7: #d7e0e7;
-  --palette-hex-526273: #526273;
-  --palette-hex-f1f5f8: #f1f5f8;
-  --palette-hex-354957: #354957;
-  --palette-hex-b5c4cf: #b5c4cf;
-  --palette-hex-75c9e8: #75c9e8;
-  --palette-hex-465768: #465768;
-  --palette-hex-075d7c: #075d7c;
-  --palette-hex-e8f4f8: #e8f4f8;
-  --palette-hex-b9dce8: #b9dce8;
-  --palette-hex-f2f7fa: #f2f7fa;
-  --palette-hex-cbd9e2: #cbd9e2;
-  --palette-hex-263746: #263746;
-  --palette-hex-f4f7f9: #f4f7f9;
-  --palette-hex-cbd6df: #cbd6df;
-  --palette-hex-17465a: #17465a;
-  --palette-hex-edf5f8: #edf5f8;
-  --palette-hex-bfd1dc: #bfd1dc;
-  --palette-hex-08394f: #08394f;
-  --palette-hex-6d9db3: #6d9db3;
-  --palette-hex-694b0a: #694b0a;
-  --palette-hex-d9c78f: #d9c78f;
-  --palette-hex-f4f8fa: #f4f8fa;
-  --palette-hex-c5d4de: #c5d4de;
-  --palette-hex-e8eef3: #e8eef3;
-  --palette-hex-111a23: #111a23;
-  --palette-hex-c0ccd5: #c0ccd5;
-  --palette-hex-b9e8f8: #b9e8f8;
-  --palette-hex-173443: #173443;
-  --palette-hex-376477: #376477;
-  --palette-hex-d8f28b: #d8f28b;
-  --palette-hex-0b1219: #0b1219;
-  --palette-hex-3b4c5a: #3b4c5a;
-  --palette-hex-d7e4d1: #d7e4d1;
-  --palette-hex-d8eaf2: #d8eaf2;
-  --palette-hex-1a2b37: #1a2b37;
-  --palette-hex-466273: #466273;
-  --palette-hex-79b8d0: #79b8d0;
-  --palette-hex-f1d99b: #f1d99b;
-  --palette-hex-625331: #625331;
-  --palette-hex-76767d: #76767d;
-  --palette-hex-fafafa: #fafafa;
-  --palette-hex-d5d5da: #d5d5da;
-  --palette-hex-52525a: #52525a;
-  --palette-hex-4b4b52: #4b4b52;
-  --palette-hex-333338: #333338;
-  --palette-hex-242429: #242429;
-  --palette-hex-242426: #242426;
-  --palette-hex-3a3a3c: #3a3a3c;
-  --palette-hex-c2c2c7: #c2c2c7;
-  --palette-hex-98989d: #98989d;
-  --palette-hex-20364d: #20364d;
-  --palette-hex-343436: #343436;
-  --palette-hex-3a2528: #3a2528;
-  --palette-hex-70434a: #70434a;
-  --palette-hex-ffb8bd: #ffb8bd;
-  --palette-hex-26372d: #26372d;
-  --palette-hex-466451: #466451;
-  --palette-hex-b9e5c7: #b9e5c7;
-  --palette-rgba-0-113-227-38: rgba(0,113,227,.38);
-  --palette-rgba-255-255-255-78: rgba(255,255,255,.78);
-  --palette-rgba-255-255-255-55: rgba(255,255,255,.55);
-  --palette-rgba-0-113-227-22: rgba(0,113,227,.22);
-  --palette-rgba-255-255-255-8: rgba(255,255,255,.8);
-  --palette-rgba-25-35-45-035: rgba(25,35,45,.035);
-  --palette-rgba-0-113-227-06: rgba(0,113,227,.06);
-  --palette-rgba-255-255-255-75: rgba(255,255,255,.75);
-  --palette-rgba-255-255-255-74: rgba(255,255,255,.74);
-  --palette-rgba-220-232-245-14: rgba(220,232,245,.14);
-  --palette-rgba-0-90-170-045: rgba(0,90,170,.045);
-  --palette-rgba-38-162-105-12: rgba(38,162,105,.12);
-  --palette-rgba-32-164-100-1: rgba(32,164,100,.1);
-  --palette-rgba-0-113-227-17: rgba(0,113,227,.17);
-  --palette-rgba-20-30-45-035: rgba(20,30,45,.035);
-  --palette-rgba-20-30-45-075: rgba(20,30,45,.075);
-  --palette-rgba-20-30-45-03: rgba(20,30,45,.03);
-  --palette-rgba-20-30-45-07: rgba(20,30,45,.07);
-  --palette-rgba-0-113-227-09: rgba(0,113,227,.09);
-  --palette-rgba-255-255-255-62: rgba(255,255,255,.62);
-  --palette-rgba-0-113-227-2: rgba(0,113,227,.2);
-  --palette-rgba-29-29-31-09: rgba(29,29,31,.09);
-  --palette-rgba-255-255-255-86: rgba(255,255,255,.86);
-  --palette-rgba-25-40-60-08: rgba(25,40,60,.08);
-  --palette-rgba-255-255-255-97: rgba(255,255,255,.97);
-  --palette-rgba-25-100-60-05: rgba(25,100,60,.05);
-  --palette-rgba-25-38-52-16: rgba(25,38,52,.16);
-  --palette-rgba-255-255-255-99: rgba(255,255,255,.99);
-  --palette-rgba-25-38-52-2: rgba(25,38,52,.2);
-  --palette-rgba-25-38-52-14: rgba(25,38,52,.14);
-  --palette-rgba-220-232-245-12: rgba(220,232,245,.12);
-  --palette-rgba-25-32-42-96: rgba(25,32,42,.96);
-  --palette-rgba-32-40-51-94: rgba(32,40,51,.94);
-  --palette-rgba-220-232-245-16: rgba(220,232,245,.16);
-  --palette-rgba-140-200-255-28: rgba(140,200,255,.28);
-  --palette-rgba-120-130-145-18: rgba(120,130,145,.18);
-  --palette-rgba-30-55-85-055: rgba(30, 55, 85, .055);
-  --palette-rgba-20-30-45-025: rgba(20, 30, 45, .025);
-  --palette-rgba-0-113-227-28: rgba(0, 113, 227, .28);
-  --palette-rgba-220-232-245-13: rgba(220, 232, 245, .13);
-  --palette-rgba-220-232-245-18: rgba(220, 232, 245, .18);
-  --palette-rgba-0-113-227-42: rgba(0, 113, 227, .42);
-  --palette-rgba-22-131-232-13: rgba(22, 131, 232, .13);
-  --palette-rgba-68-142-220-16: rgba(68, 142, 220, .16);
-  --palette-rgba-170-182-197-1: rgba(170, 182, 197, .1);
-  --palette-rgba-22-131-232-15: rgba(22,131,232,.15);
-  --palette-rgba-25-40-60-12: rgba(25,40,60,.12);
-  --palette-rgba-25-38-56-16: rgba(25,38,56,.16);
-  --palette-rgba-25-38-56-07: rgba(25,38,56,.07);
-  --palette-rgba-220-232-245-15: rgba(220,232,245,.15);
-  --palette-rgba-0-0-0-42: rgba(0,0,0,.42);
-  --palette-rgba-32-40-51-97: rgba(32,40,51,.97);
-  --palette-rgba-0-0-0-32: rgba(0,0,0,.32);
-  --palette-rgba-32-40-51-99: rgba(32,40,51,.99);
-  --palette-rgba-0-0-0-48: rgba(0,0,0,.48);
-  --palette-rgba-17-32-49-18: rgba(17, 32, 49, .18);
-  --palette-rgba-17-32-49-08: rgba(17, 32, 49, .08);
-  --palette-rgba-0-0-0-18: rgba(0,0,0,.18);
-  --palette-rgba-25-53-80-055: rgba(25,53,80,.055);
-  --palette-rgba-37-112-173-13: rgba(37,112,173,.13);
-  --palette-rgba-37-112-173-035: rgba(37,112,173,.035);
-  --palette-rgba-37-112-173-025: rgba(37,112,173,.025);
-  --palette-rgba-255-255-255-7: rgba(255,255,255,.7);
-  --palette-rgba-20-42-64-035: rgba(20,42,64,.035);
-  --palette-rgba-26-42-58-035: rgba(26,42,58,.035);
-  --palette-rgba-18-32-46-1: rgba(18,32,46,.1);
-  --palette-rgba-22-34-48-035: rgba(22, 34, 48, .035);
-  --palette-rgba-0-113-227-10: rgba(0, 113, 227, .10);
-  --palette-rgba-26-55-82-055: rgba(26, 55, 82, .055);
-  --palette-rgba-0-113-227-3: rgba(0, 113, 227, .3);
-  --palette-rgba-55-125-181-12: rgba(55, 125, 181, .12);
-  --palette-rgba-117-169-213-16: rgba(117, 169, 213, .16);
-  --palette-rgba-255-255-255-035: rgba(255, 255, 255, .035);
-  --palette-rgba-255-255-255-88: rgba(255,255,255,.88);
-  --palette-rgba-32-164-119-1: rgba(32,164,119,.1);
-  --palette-rgba-27-52-73-055: rgba(27,52,73,.055);
-  --palette-rgba-22-128-168-08: rgba(22,128,168,.08);
-  --palette-rgba-0-112-155-09: rgba(0,112,155,.09);
-  --palette-rgba-255-255-255-9: rgba(255,255,255,.9);
-  --palette-rgba-0-112-155-15: rgba(0,112,155,.15);
-  --palette-rgba-7-151-197-13: rgba(7,151,197,.13);
-  --palette-rgba-0-112-155-12: rgba(0,112,155,.12);
-  --palette-rgba-0-0-0-2: rgba(0,0,0,.2);
-  --palette-rgba-255-255-255-04: rgba(255,255,255,.04);
-  --palette-rgba-22-34-46-06: rgba(22, 34, 46, .06);
-  --palette-rgba-0-0-0-24: rgba(0, 0, 0, .24);
-  --palette-rgba-0-0-0-035: rgba(0,0,0,.035);
-  --palette-rgba-0-0-0-045: rgba(0,0,0,.045);
-}
-
 /* AEVOTRON Apple-style application layer. Scoped away from the public landing page. */
 .apple-app{--apple-bg:var(--palette-hex-f2f2f7);--apple-surface:var(--palette-hex-ffffff);--apple-solid:var(--palette-hex-ffffff);--apple-ink:var(--palette-hex-1c1c1e);--apple-muted:var(--palette-hex-636366);--apple-line:var(--palette-hex-e5e5ea);--apple-blue:var(--palette-hex-007aff);--apple-blue-hover:var(--palette-hex-0066d6);--apple-green:var(--palette-hex-248a52);--app-page:var(--palette-hex-f2f2f7);--app-card:var(--palette-hex-ffffff);--app-border:var(--palette-hex-e5e5ea);--app-text:var(--palette-hex-1c1c1e);--app-muted:var(--palette-hex-636366);--app-accent:var(--palette-hex-007aff);color:var(--app-text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 .apple-app :where(button,a,input,select,textarea){-webkit-tap-highlight-color:transparent}
@@ -888,7 +33,7 @@ html {
 .apple-app .mh-breadcrumb{display:flex;align-items:center;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .apple-app .mh-top-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:0 0 auto}
 .apple-app .mh-mobile-menu{display:none;flex:0 0 auto;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--apple-line);border-radius:10px;background:var(--palette-hex-fff);color:var(--palette-hex-30343b)}
-.apple-app[data-theme="gray"] .mh-mobile-menu{background:var(--palette-hex-202833);color:var(--palette-hex-e5ebf3);border-color:var(--palette-rgba-220-232-245-14)}
+.apple-app[data-theme="dark"] .mh-mobile-menu{background:var(--palette-hex-202833);color:var(--palette-hex-e5ebf3);border-color:var(--palette-rgba-220-232-245-14)}
 .apple-app .mh-breadcrumb{color:var(--palette-hex-898990);font-size:12px}
 .apple-app .mh-breadcrumb span{padding:0 8px;color:var(--palette-hex-c0c0c5)}
 .apple-app .mh-breadcrumb strong{color:var(--palette-hex-28282d);font-weight:650}
@@ -1219,123 +364,123 @@ body > .av-language-switcher,
 /* Persistent light/dark appearance switch. */
 .av-theme-trigger{position:fixed;right:22px;bottom:78px;z-index:9998;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:0 15px;border:1px solid var(--palette-hex-d6dce4);border-radius:999px;background:var(--palette-rgba-255-255-255-97);color:var(--palette-hex-263442);box-shadow:0 8px 28px var(--palette-rgba-25-38-52-14);backdrop-filter:blur(18px);font:650 13px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
 .av-theme-trigger:hover{background:var(--palette-hex-f2f7fc);border-color:var(--palette-hex-80b8ef)}.av-theme-trigger svg{color:var(--palette-hex-0877d1)}
-.apple-app[data-theme="gray"]{color-scheme:dark;--apple-bg:var(--palette-hex-11151c);--apple-surface:var(--palette-hex-1b222c);--apple-solid:var(--palette-hex-202833);--apple-ink:var(--palette-hex-edf2f8);--apple-muted:var(--palette-hex-aab5c3);--apple-line:var(--palette-rgba-220-232-245-12)}
-.apple-app[data-theme="gray"] .mh-shell,.apple-app[data-theme="gray"] .mh-main{background:var(--palette-hex-11151c);color:var(--palette-hex-edf2f8)}
-.apple-app[data-theme="gray"] .mh-sidebar,.apple-app[data-theme="gray"] .mh-topbar,.apple-app[data-theme="gray"] .mh-footer{background:var(--palette-rgba-25-32-42-96);color:var(--palette-hex-aab5c3);border-color:var(--palette-rgba-220-232-245-12)}
-.apple-app[data-theme="gray"] .mh-brand,.apple-app[data-theme="gray"] .mh-brand-accent,.apple-app[data-theme="gray"] .mh-breadcrumb strong,.apple-app[data-theme="gray"] .mh-page-heading h1,.apple-app[data-theme="gray"] .mh-section-heading h2,.apple-app[data-theme="gray"] .mh-panel-heading h3,.apple-app[data-theme="gray"] .mh-step h3,.apple-app[data-theme="gray"] .mh-model-name strong,.apple-app[data-theme="gray"] .mh-model-detail h2,.apple-app[data-theme="gray"] .mh-key-main strong,.apple-app[data-theme="gray"] .mh-connected-row strong,.apple-app[data-theme="gray"] .mh-usage-table td strong{color:var(--palette-hex-f1f5fa)}
-.apple-app[data-theme="gray"] .mh-workspace,.apple-app[data-theme="gray"] .mh-usage-mini,.apple-app[data-theme="gray"] .mh-stat,.apple-app[data-theme="gray"] .mh-step,.apple-app[data-theme="gray"] .mh-panel,.apple-app[data-theme="gray"] .mh-provider-card,.apple-app[data-theme="gray"] .mh-setup-panel,.apple-app[data-theme="gray"] .mh-key-list-panel,.apple-app[data-theme="gray"] .mh-usage-panel,.apple-app[data-theme="gray"] .mh-region,.apple-app[data-theme="gray"] .mh-icon-button,.apple-app[data-theme="gray"] .mh-button-quiet,.apple-app[data-theme="gray"] .mh-copy-button,.apple-app[data-theme="gray"] .mh-search ,.apple-app[data-theme="gray"] .mh-field,.apple-app[data-theme="gray"] .mh-empty-panel{background:var(--palette-hex-202833);color:var(--palette-hex-e5ebf3);border-color:var(--palette-rgba-220-232-245-14)}
-.apple-app[data-theme="gray"] .mh-nav-item{color:var(--palette-hex-b4bfcc)}.apple-app[data-theme="gray"] .mh-nav-item:hover,.apple-app[data-theme="gray"] .mh-profile:hover,.apple-app[data-theme="gray"] .mh-model-row:hover,.apple-app[data-theme="gray"] .mh-model-row.selected,.apple-app[data-theme="gray"] .mh-popular-row:hover{background:var(--palette-hex-293545);color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="gray"] .mh-nav-item.active{background:var(--palette-hex-173b5d);color:var(--palette-hex-8cc8ff)}
-.apple-app[data-theme="gray"] .mh-page-heading p,.apple-app[data-theme="gray"] .mh-section-heading p,.apple-app[data-theme="gray"] .mh-step p,.apple-app[data-theme="gray"] .mh-panel-heading p,.apple-app[data-theme="gray"] .mh-model-name small,.apple-app[data-theme="gray"] .mh-model-context,.apple-app[data-theme="gray"] .mh-provider-info small,.apple-app[data-theme="gray"] .mh-key-main small,.apple-app[data-theme="gray"] .mh-connected-row small,.apple-app[data-theme="gray"] .mh-stat-label,.apple-app[data-theme="gray"] .mh-stat-note,.apple-app[data-theme="gray"] .mh-breadcrumb,.apple-app[data-theme="gray"] .mh-empty,.apple-app[data-theme="gray"] .mh-field-label,.apple-app[data-theme="gray"] .mh-field-help{color:var(--palette-hex-aab6c5)}
-.apple-app[data-theme="gray"] .mh-preview-banner{background:var(--palette-hex-182c40);border-color:var(--palette-hex-294d6c);color:var(--palette-hex-d7eaff)}.apple-app[data-theme="gray"] .mh-preview-banner strong,.apple-app[data-theme="gray"] .mh-preview-banner small{color:var(--palette-hex-c3def7)}
-.apple-app[data-theme="gray"] .mh-trust-note,.apple-app[data-theme="gray"] .mh-inline-success{background:var(--palette-hex-183328);border-color:var(--palette-hex-28583e);color:var(--palette-hex-b7e6c8)}.apple-app[data-theme="gray"] .mh-callout,.apple-app[data-theme="gray"] .mh-detail-info{background:var(--palette-hex-182b3d);border-color:var(--palette-hex-294b68);color:var(--palette-hex-c3def7)}
-.apple-app[data-theme="gray"] .mh-search input,.apple-app[data-theme="gray"] .mh-field{color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="gray"] .mh-field::placeholder{color:var(--palette-hex-8492a3)}
-.apple-app[data-theme="gray"] .mh-model-row,.apple-app[data-theme="gray"] .mh-popular-row,.apple-app[data-theme="gray"] .mh-key-row,.apple-app[data-theme="gray"] .mh-connected-row,.apple-app[data-theme="gray"] .mh-detail-stats>div,.apple-app[data-theme="gray"] .mh-usage-table th,.apple-app[data-theme="gray"] .mh-usage-table td{border-color:var(--palette-rgba-220-232-245-12);color:var(--palette-hex-c4ceda)}
-.apple-app[data-theme="gray"] .mh-usage-table th,.apple-app[data-theme="gray"] .mh-usage-table td small{color:var(--palette-hex-aab6c5)}
-.apple-app[data-theme="gray"] .mh-tags span,.apple-app[data-theme="gray"] .mh-step-count,.apple-app[data-theme="gray"] .mh-code-language{background:var(--palette-hex-293545);border-color:var(--palette-hex-3a4a5e);color:var(--palette-hex-d6e1ed)}
-.apple-app[data-theme="gray"] .min-h-screen.bg-background{background:radial-gradient(ellipse at 50% 0%,var(--palette-hex-1b3046) 0%,var(--palette-hex-11151c) 55%,var(--palette-hex-11151c) 100%);color:var(--palette-hex-edf2f8)}
-.apple-app[data-theme="gray"] .min-h-screen.bg-background h1{color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="gray"] .min-h-screen.bg-background p{color:var(--palette-hex-aab6c5)}
-.apple-app[data-theme="gray"] .min-h-screen.bg-background>div>div:nth-child(2){background:var(--palette-rgba-32-40-51-94);border-color:var(--palette-rgba-220-232-245-14)}
-.apple-app[data-theme="gray"] .min-h-screen.bg-background input{background:var(--palette-hex-151c25);color:var(--palette-hex-f1f5fa);border-color:var(--palette-hex-3a4655)}
+.apple-app[data-theme="dark"]{color-scheme:dark;--apple-bg:var(--palette-hex-11151c);--apple-surface:var(--palette-hex-1b222c);--apple-solid:var(--palette-hex-202833);--apple-ink:var(--palette-hex-edf2f8);--apple-muted:var(--palette-hex-aab5c3);--apple-line:var(--palette-rgba-220-232-245-12)}
+.apple-app[data-theme="dark"] .mh-shell,.apple-app[data-theme="dark"] .mh-main{background:var(--palette-hex-11151c);color:var(--palette-hex-edf2f8)}
+.apple-app[data-theme="dark"] .mh-sidebar,.apple-app[data-theme="dark"] .mh-topbar,.apple-app[data-theme="dark"] .mh-footer{background:var(--palette-rgba-25-32-42-96);color:var(--palette-hex-aab5c3);border-color:var(--palette-rgba-220-232-245-12)}
+.apple-app[data-theme="dark"] .mh-brand,.apple-app[data-theme="dark"] .mh-brand-accent,.apple-app[data-theme="dark"] .mh-breadcrumb strong,.apple-app[data-theme="dark"] .mh-page-heading h1,.apple-app[data-theme="dark"] .mh-section-heading h2,.apple-app[data-theme="dark"] .mh-panel-heading h3,.apple-app[data-theme="dark"] .mh-step h3,.apple-app[data-theme="dark"] .mh-model-name strong,.apple-app[data-theme="dark"] .mh-model-detail h2,.apple-app[data-theme="dark"] .mh-key-main strong,.apple-app[data-theme="dark"] .mh-connected-row strong,.apple-app[data-theme="dark"] .mh-usage-table td strong{color:var(--palette-hex-f1f5fa)}
+.apple-app[data-theme="dark"] .mh-workspace,.apple-app[data-theme="dark"] .mh-usage-mini,.apple-app[data-theme="dark"] .mh-stat,.apple-app[data-theme="dark"] .mh-step,.apple-app[data-theme="dark"] .mh-panel,.apple-app[data-theme="dark"] .mh-provider-card,.apple-app[data-theme="dark"] .mh-setup-panel,.apple-app[data-theme="dark"] .mh-key-list-panel,.apple-app[data-theme="dark"] .mh-usage-panel,.apple-app[data-theme="dark"] .mh-region,.apple-app[data-theme="dark"] .mh-icon-button,.apple-app[data-theme="dark"] .mh-button-quiet,.apple-app[data-theme="dark"] .mh-copy-button,.apple-app[data-theme="dark"] .mh-search ,.apple-app[data-theme="dark"] .mh-field,.apple-app[data-theme="dark"] .mh-empty-panel{background:var(--palette-hex-202833);color:var(--palette-hex-e5ebf3);border-color:var(--palette-rgba-220-232-245-14)}
+.apple-app[data-theme="dark"] .mh-nav-item{color:var(--palette-hex-b4bfcc)}.apple-app[data-theme="dark"] .mh-nav-item:hover,.apple-app[data-theme="dark"] .mh-profile:hover,.apple-app[data-theme="dark"] .mh-model-row:hover,.apple-app[data-theme="dark"] .mh-model-row.selected,.apple-app[data-theme="dark"] .mh-popular-row:hover{background:var(--palette-hex-293545);color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="dark"] .mh-nav-item.active{background:var(--palette-hex-173b5d);color:var(--palette-hex-8cc8ff)}
+.apple-app[data-theme="dark"] .mh-page-heading p,.apple-app[data-theme="dark"] .mh-section-heading p,.apple-app[data-theme="dark"] .mh-step p,.apple-app[data-theme="dark"] .mh-panel-heading p,.apple-app[data-theme="dark"] .mh-model-name small,.apple-app[data-theme="dark"] .mh-model-context,.apple-app[data-theme="dark"] .mh-provider-info small,.apple-app[data-theme="dark"] .mh-key-main small,.apple-app[data-theme="dark"] .mh-connected-row small,.apple-app[data-theme="dark"] .mh-stat-label,.apple-app[data-theme="dark"] .mh-stat-note,.apple-app[data-theme="dark"] .mh-breadcrumb,.apple-app[data-theme="dark"] .mh-empty,.apple-app[data-theme="dark"] .mh-field-label,.apple-app[data-theme="dark"] .mh-field-help{color:var(--palette-hex-aab6c5)}
+.apple-app[data-theme="dark"] .mh-preview-banner{background:var(--palette-hex-182c40);border-color:var(--palette-hex-294d6c);color:var(--palette-hex-d7eaff)}.apple-app[data-theme="dark"] .mh-preview-banner strong,.apple-app[data-theme="dark"] .mh-preview-banner small{color:var(--palette-hex-c3def7)}
+.apple-app[data-theme="dark"] .mh-trust-note,.apple-app[data-theme="dark"] .mh-inline-success{background:var(--palette-hex-183328);border-color:var(--palette-hex-28583e);color:var(--palette-hex-b7e6c8)}.apple-app[data-theme="dark"] .mh-callout,.apple-app[data-theme="dark"] .mh-detail-info{background:var(--palette-hex-182b3d);border-color:var(--palette-hex-294b68);color:var(--palette-hex-c3def7)}
+.apple-app[data-theme="dark"] .mh-search input,.apple-app[data-theme="dark"] .mh-field{color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="dark"] .mh-field::placeholder{color:var(--palette-hex-8492a3)}
+.apple-app[data-theme="dark"] .mh-model-row,.apple-app[data-theme="dark"] .mh-popular-row,.apple-app[data-theme="dark"] .mh-key-row,.apple-app[data-theme="dark"] .mh-connected-row,.apple-app[data-theme="dark"] .mh-detail-stats>div,.apple-app[data-theme="dark"] .mh-usage-table th,.apple-app[data-theme="dark"] .mh-usage-table td{border-color:var(--palette-rgba-220-232-245-12);color:var(--palette-hex-c4ceda)}
+.apple-app[data-theme="dark"] .mh-usage-table th,.apple-app[data-theme="dark"] .mh-usage-table td small{color:var(--palette-hex-aab6c5)}
+.apple-app[data-theme="dark"] .mh-tags span,.apple-app[data-theme="dark"] .mh-step-count,.apple-app[data-theme="dark"] .mh-code-language{background:var(--palette-hex-293545);border-color:var(--palette-hex-3a4a5e);color:var(--palette-hex-d6e1ed)}
+.apple-app[data-theme="dark"] .min-h-screen.bg-background{background:radial-gradient(ellipse at 50% 0%,var(--palette-hex-1b3046) 0%,var(--palette-hex-11151c) 55%,var(--palette-hex-11151c) 100%);color:var(--palette-hex-edf2f8)}
+.apple-app[data-theme="dark"] .min-h-screen.bg-background h1{color:var(--palette-hex-f1f5fa)}.apple-app[data-theme="dark"] .min-h-screen.bg-background p{color:var(--palette-hex-aab6c5)}
+.apple-app[data-theme="dark"] .min-h-screen.bg-background>div>div:nth-child(2){background:var(--palette-rgba-32-40-51-94);border-color:var(--palette-rgba-220-232-245-14)}
+.apple-app[data-theme="dark"] .min-h-screen.bg-background input{background:var(--palette-hex-151c25);color:var(--palette-hex-f1f5fa);border-color:var(--palette-hex-3a4655)}
 @media(max-width:600px){.av-theme-trigger{right:14px;bottom:70px;min-height:42px}}
 
 
 /* Dark theme consistency: neutralize remaining light utility surfaces and black text. */
-.apple-app[data-theme="gray"] [class*="bg-white"],
-.apple-app[data-theme="gray"] [class*="bg-gray-50"],
-.apple-app[data-theme="gray"] [class*="bg-gray-100"],
-.apple-app[data-theme="gray"] [class*="bg-slate-50"],
-.apple-app[data-theme="gray"] [class*="bg-slate-100"],
-.apple-app[data-theme="gray"] [class*="bg-zinc-50"],
-.apple-app[data-theme="gray"] [class*="bg-neutral-50"] {
+.apple-app[data-theme="dark"] [class*="bg-white"],
+.apple-app[data-theme="dark"] [class*="bg-gray-50"],
+.apple-app[data-theme="dark"] [class*="bg-gray-100"],
+.apple-app[data-theme="dark"] [class*="bg-slate-50"],
+.apple-app[data-theme="dark"] [class*="bg-slate-100"],
+.apple-app[data-theme="dark"] [class*="bg-zinc-50"],
+.apple-app[data-theme="dark"] [class*="bg-neutral-50"] {
   background-color: var(--palette-hex-202833) !important;
   background-image: none;
 }
-.apple-app[data-theme="gray"] [class*="bg-black"],
-.apple-app[data-theme="gray"] [class*="bg-gray-950"],
-.apple-app[data-theme="gray"] [class*="bg-slate-950"] {
+.apple-app[data-theme="dark"] [class*="bg-black"],
+.apple-app[data-theme="dark"] [class*="bg-gray-950"],
+.apple-app[data-theme="dark"] [class*="bg-slate-950"] {
   background-color: var(--palette-hex-293545) !important;
 }
-.apple-app[data-theme="gray"] [class*="text-black"],
-.apple-app[data-theme="gray"] [class*="text-gray-900"],
-.apple-app[data-theme="gray"] [class*="text-gray-800"],
-.apple-app[data-theme="gray"] [class*="text-slate-900"],
-.apple-app[data-theme="gray"] [class*="text-slate-800"],
-.apple-app[data-theme="gray"] [class*="text-zinc-900"] {
+.apple-app[data-theme="dark"] [class*="text-black"],
+.apple-app[data-theme="dark"] [class*="text-gray-900"],
+.apple-app[data-theme="dark"] [class*="text-gray-800"],
+.apple-app[data-theme="dark"] [class*="text-slate-900"],
+.apple-app[data-theme="dark"] [class*="text-slate-800"],
+.apple-app[data-theme="dark"] [class*="text-zinc-900"] {
   color: var(--palette-hex-edf2f8) !important;
 }
-.apple-app[data-theme="gray"] [class*="border-gray-"],
-.apple-app[data-theme="gray"] [class*="border-slate-"],
-.apple-app[data-theme="gray"] [class*="border-zinc-"],
-.apple-app[data-theme="gray"] [class*="border-neutral-"] {
+.apple-app[data-theme="dark"] [class*="border-gray-"],
+.apple-app[data-theme="dark"] [class*="border-slate-"],
+.apple-app[data-theme="dark"] [class*="border-zinc-"],
+.apple-app[data-theme="dark"] [class*="border-neutral-"] {
   border-color: var(--palette-rgba-220-232-245-14) !important;
 }
-.apple-app[data-theme="gray"] input,
-.apple-app[data-theme="gray"] textarea,
-.apple-app[data-theme="gray"] select {
+.apple-app[data-theme="dark"] input,
+.apple-app[data-theme="dark"] textarea,
+.apple-app[data-theme="dark"] select {
   color-scheme: dark;
 }
-.apple-app[data-theme="gray"] input:not([type="checkbox"]):not([type="radio"]),
-.apple-app[data-theme="gray"] textarea,
-.apple-app[data-theme="gray"] select {
+.apple-app[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+.apple-app[data-theme="dark"] textarea,
+.apple-app[data-theme="dark"] select {
   background-color: var(--palette-hex-151c25);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-hex-3a4655);
 }
-.apple-app[data-theme="gray"] input::placeholder,
-.apple-app[data-theme="gray"] textarea::placeholder {
+.apple-app[data-theme="dark"] input::placeholder,
+.apple-app[data-theme="dark"] textarea::placeholder {
   color: var(--palette-hex-8794a4);
 }
-.apple-app[data-theme="gray"] pre,
-.apple-app[data-theme="gray"] code {
+.apple-app[data-theme="dark"] pre,
+.apple-app[data-theme="dark"] code {
   border-color: var(--palette-rgba-220-232-245-14);
 }
-.apple-app[data-theme="gray"] .av-language-menu {
+.apple-app[data-theme="dark"] .av-language-menu {
   background: var(--palette-hex-202833);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-rgba-220-232-245-16);
 }
-.apple-app[data-theme="gray"] .av-language-menu-title { color: var(--palette-hex-aab6c5); }
-.apple-app[data-theme="gray"] .av-language-menu button { color: var(--palette-hex-e5ebf3); }
-.apple-app[data-theme="gray"] .av-language-menu button:hover,
-.apple-app[data-theme="gray"] .av-language-menu button.active { background: var(--palette-hex-293545); color: var(--palette-hex-9acfff); }
-.apple-app[data-theme="gray"] .av-language-native { background: var(--palette-hex-354255); color: var(--palette-hex-e5ebf3); }
-.apple-app[data-theme="gray"] .av-theme-trigger { background: var(--palette-hex-202833); color: var(--palette-hex-edf2f8); border-color: var(--palette-hex-465568); }
-.apple-app[data-theme="gray"] .av-theme-trigger:hover { background: var(--palette-hex-293545); }
+.apple-app[data-theme="dark"] .av-language-menu-title { color: var(--palette-hex-aab6c5); }
+.apple-app[data-theme="dark"] .av-language-menu button { color: var(--palette-hex-e5ebf3); }
+.apple-app[data-theme="dark"] .av-language-menu button:hover,
+.apple-app[data-theme="dark"] .av-language-menu button.active { background: var(--palette-hex-293545); color: var(--palette-hex-9acfff); }
+.apple-app[data-theme="dark"] .av-language-native { background: var(--palette-hex-354255); color: var(--palette-hex-e5ebf3); }
+.apple-app[data-theme="dark"] .av-theme-trigger { background: var(--palette-hex-202833); color: var(--palette-hex-edf2f8); border-color: var(--palette-hex-465568); }
+.apple-app[data-theme="dark"] .av-theme-trigger:hover { background: var(--palette-hex-293545); }
 
 
 /* Dark-mode contrast fixes for overview metrics and workspace/account controls. */
-.apple-app[data-theme="gray"] .mh-stat-value,
-.apple-app[data-theme="gray"] .mh-workspace strong,
-.apple-app[data-theme="gray"] .mh-profile strong {
+.apple-app[data-theme="dark"] .mh-stat-value,
+.apple-app[data-theme="dark"] .mh-workspace strong,
+.apple-app[data-theme="dark"] .mh-profile strong {
   color: var(--palette-hex-f4f7fb) !important;
 }
-.apple-app[data-theme="gray"] .mh-stat-label,
-.apple-app[data-theme="gray"] .mh-stat-note,
-.apple-app[data-theme="gray"] .mh-workspace small,
-.apple-app[data-theme="gray"] .mh-profile small {
+.apple-app[data-theme="dark"] .mh-stat-label,
+.apple-app[data-theme="dark"] .mh-stat-note,
+.apple-app[data-theme="dark"] .mh-workspace small,
+.apple-app[data-theme="dark"] .mh-profile small {
   color: var(--palette-hex-b8c4d2) !important;
 }
-.apple-app[data-theme="gray"] .mh-profile {
+.apple-app[data-theme="dark"] .mh-profile {
   width: 100%;
   color: var(--palette-hex-e8eef6);
   border: 1px solid var(--palette-rgba-220-232-245-12);
   background: var(--palette-hex-202833);
   border-radius: 12px;
 }
-.apple-app[data-theme="gray"] .mh-profile:hover {
+.apple-app[data-theme="dark"] .mh-profile:hover {
   background: var(--palette-hex-293545);
   border-color: var(--palette-rgba-140-200-255-28);
 }
-.apple-app[data-theme="gray"] .mh-profile > svg {
+.apple-app[data-theme="dark"] .mh-profile > svg {
   color: var(--palette-hex-a9bfd5);
 }
-.apple-app[data-theme="gray"] .mh-workspace {
+.apple-app[data-theme="dark"] .mh-workspace {
   color: var(--palette-hex-e8eef6);
 }
-.apple-app[data-theme="gray"] .mh-workspace > svg {
+.apple-app[data-theme="dark"] .mh-workspace > svg {
   color: var(--palette-hex-a9bfd5);
 }
-.apple-app[data-theme="gray"] .mh-avatar {
+.apple-app[data-theme="dark"] .mh-avatar {
   background: linear-gradient(145deg,var(--palette-hex-294968),var(--palette-hex-1b3650));
   color: var(--palette-hex-c9e6ff);
 }
@@ -1408,19 +553,19 @@ body > .av-language-switcher,
 .apple-app .mh-profile small { color: var(--palette-hex-707984); }
 .apple-app .mh-profile > svg { flex: 0 0 auto; color: var(--palette-hex-697789); }
 .apple-app .mh-profile:hover { background: var(--palette-hex-f7faff); border-color: var(--palette-hex-cbdff4); }
-.apple-app[data-theme="gray"] .mh-profile {
+.apple-app[data-theme="dark"] .mh-profile {
   border-color: var(--palette-rgba-220-232-245-16);
   background: var(--palette-hex-202833);
   color: var(--palette-hex-e8eef6);
 }
-.apple-app[data-theme="gray"] .mh-profile strong { color: var(--palette-hex-f4f7fb); }
-.apple-app[data-theme="gray"] .mh-profile small,
-.apple-app[data-theme="gray"] .mh-profile > svg { color: var(--palette-hex-b8c4d2); }
-.apple-app[data-theme="gray"] .mh-model-row { color: var(--palette-hex-e5ebf3); }
-.apple-app[data-theme="gray"] .mh-model-name strong { color: var(--palette-hex-f1f5fa); }
-.apple-app[data-theme="gray"] .mh-model-name small,
-.apple-app[data-theme="gray"] .mh-model-context { color: var(--palette-hex-b5c0ce); }
-.apple-app[data-theme="gray"] .mh-list-header { color: var(--palette-hex-aab6c5); }
+.apple-app[data-theme="dark"] .mh-profile strong { color: var(--palette-hex-f4f7fb); }
+.apple-app[data-theme="dark"] .mh-profile small,
+.apple-app[data-theme="dark"] .mh-profile > svg { color: var(--palette-hex-b8c4d2); }
+.apple-app[data-theme="dark"] .mh-model-row { color: var(--palette-hex-e5ebf3); }
+.apple-app[data-theme="dark"] .mh-model-name strong { color: var(--palette-hex-f1f5fa); }
+.apple-app[data-theme="dark"] .mh-model-name small,
+.apple-app[data-theme="dark"] .mh-model-context { color: var(--palette-hex-b5c0ce); }
+.apple-app[data-theme="dark"] .mh-list-header { color: var(--palette-hex-aab6c5); }
 @media (max-width: 900px) {
   .apple-app .mh-catalog-layout { grid-template-columns: minmax(0, 1fr); }
 }
@@ -1480,12 +625,12 @@ body:has(.apple-app .mh-shell) {
   margin-top: auto;
   background: var(--palette-hex-f5f5f7);
 }
-.apple-app[data-theme="gray"] .mh-shell,
-.apple-app[data-theme="gray"] .mh-main,
-.apple-app[data-theme="gray"] .mh-footer,
-.apple-app[data-theme="gray"]:has(.mh-shell),
-html:has(.apple-app[data-theme="gray"] .mh-shell),
-body:has(.apple-app[data-theme="gray"] .mh-shell) {
+.apple-app[data-theme="dark"] .mh-shell,
+.apple-app[data-theme="dark"] .mh-main,
+.apple-app[data-theme="dark"] .mh-footer,
+.apple-app[data-theme="dark"]:has(.mh-shell),
+html:has(.apple-app[data-theme="dark"] .mh-shell),
+body:has(.apple-app[data-theme="dark"] .mh-shell) {
   background: var(--palette-hex-11151c) !important;
 }
 @media (max-width: 760px) {
@@ -1578,28 +723,28 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
  .apple-app .av-settings-tabs button,.apple-app .av-switch,.apple-app .av-switch span { transition:none; }
  .apple-app .av-modal-backdrop,.apple-app .av-modal { animation:none; }
 }
-.apple-app[data-theme="gray"] .av-settings-panel,.apple-app[data-theme="gray"] .av-modal { background:var(--palette-hex-1c1c1e); border-color:var(--palette-hex-38383a); }
-.apple-app[data-theme="gray"] .av-settings-heading h2,.apple-app[data-theme="gray"] .av-avatar-editor strong,.apple-app[data-theme="gray"] .av-session-row strong,.apple-app[data-theme="gray"] .av-notification-row strong,.apple-app[data-theme="gray"] .av-setting-row strong,.apple-app[data-theme="gray"] .av-modal h2 { color:var(--palette-hex-f5f5f7); }
-.apple-app[data-theme="gray"] .av-settings-heading p,.apple-app[data-theme="gray"] .av-setting-field>span,.apple-app[data-theme="gray"] .av-setting-row small,.apple-app[data-theme="gray"] .av-session-row small,.apple-app[data-theme="gray"] .av-notification-row p,.apple-app[data-theme="gray"] .av-modal p { color:var(--palette-hex-a1a1a6); }
-.apple-app[data-theme="gray"] .av-setting-field input,.apple-app[data-theme="gray"] .av-setting-field select,.apple-app[data-theme="gray"] .av-topup-row input,.apple-app[data-theme="gray"] .av-topup-row select,.apple-app[data-theme="gray"] .av-session-row select { background:var(--palette-hex-2c2c2e); color:var(--palette-hex-f5f5f7); border-color:var(--palette-hex-48484a); }
-.apple-app[data-theme="gray"] .av-settings-tabs button { color:var(--palette-hex-a1a1a6); }
-.apple-app[data-theme="gray"] .av-settings-tabs button.active { background:var(--palette-hex-173b5d); color:var(--palette-hex-8cc8ff); }
-.apple-app[data-theme="gray"] .av-settings-tabs button:hover { background:var(--palette-hex-2c2c2e); }
-.apple-app[data-theme="gray"] .av-avatar-preview { background:var(--palette-hex-173b5d); color:var(--palette-hex-8cc8ff); }
-.apple-app[data-theme="gray"] .av-appearance-options button { background:var(--palette-hex-2c2c2e); border-color:var(--palette-hex-48484a); color:var(--palette-hex-d1d1d6); }
-.apple-app[data-theme="gray"] .av-appearance-options button.selected { background:var(--palette-hex-173b5d); border-color:var(--palette-hex-0a84ff); color:var(--palette-hex-8cc8ff); }
-.apple-app[data-theme="gray"] .av-danger-card { background:var(--palette-hex-2c1c20); border-color:var(--palette-hex-704047); }
-.apple-app[data-theme="gray"] .av-danger-card strong { color:var(--palette-hex-ff9da6); }
-.apple-app[data-theme="gray"] .av-danger-card small { color:var(--palette-hex-d2aeb2); }
-.apple-app[data-theme="gray"] .av-settings-subtitle,.apple-app[data-theme="gray"] .av-setting-row,.apple-app[data-theme="gray"] .av-session-row,.apple-app[data-theme="gray"] .av-notification-row,.apple-app[data-theme="gray"] .av-avatar-editor { border-color:var(--palette-hex-38383a); color:var(--palette-hex-f5f5f7); }
-.apple-app[data-theme="gray"] .av-mock-panel { background:var(--palette-hex-1c1c1e); border-color:var(--palette-hex-38383a); }
-.apple-app[data-theme="gray"] .av-notification-row small { color:var(--palette-hex-a1a1a6); }
+.apple-app[data-theme="dark"] .av-settings-panel,.apple-app[data-theme="dark"] .av-modal { background:var(--palette-hex-1c1c1e); border-color:var(--palette-hex-38383a); }
+.apple-app[data-theme="dark"] .av-settings-heading h2,.apple-app[data-theme="dark"] .av-avatar-editor strong,.apple-app[data-theme="dark"] .av-session-row strong,.apple-app[data-theme="dark"] .av-notification-row strong,.apple-app[data-theme="dark"] .av-setting-row strong,.apple-app[data-theme="dark"] .av-modal h2 { color:var(--palette-hex-f5f5f7); }
+.apple-app[data-theme="dark"] .av-settings-heading p,.apple-app[data-theme="dark"] .av-setting-field>span,.apple-app[data-theme="dark"] .av-setting-row small,.apple-app[data-theme="dark"] .av-session-row small,.apple-app[data-theme="dark"] .av-notification-row p,.apple-app[data-theme="dark"] .av-modal p { color:var(--palette-hex-a1a1a6); }
+.apple-app[data-theme="dark"] .av-setting-field input,.apple-app[data-theme="dark"] .av-setting-field select,.apple-app[data-theme="dark"] .av-topup-row input,.apple-app[data-theme="dark"] .av-topup-row select,.apple-app[data-theme="dark"] .av-session-row select { background:var(--palette-hex-2c2c2e); color:var(--palette-hex-f5f5f7); border-color:var(--palette-hex-48484a); }
+.apple-app[data-theme="dark"] .av-settings-tabs button { color:var(--palette-hex-a1a1a6); }
+.apple-app[data-theme="dark"] .av-settings-tabs button.active { background:var(--palette-hex-173b5d); color:var(--palette-hex-8cc8ff); }
+.apple-app[data-theme="dark"] .av-settings-tabs button:hover { background:var(--palette-hex-2c2c2e); }
+.apple-app[data-theme="dark"] .av-avatar-preview { background:var(--palette-hex-173b5d); color:var(--palette-hex-8cc8ff); }
+.apple-app[data-theme="dark"] .av-appearance-options button { background:var(--palette-hex-2c2c2e); border-color:var(--palette-hex-48484a); color:var(--palette-hex-d1d1d6); }
+.apple-app[data-theme="dark"] .av-appearance-options button.selected { background:var(--palette-hex-173b5d); border-color:var(--palette-hex-0a84ff); color:var(--palette-hex-8cc8ff); }
+.apple-app[data-theme="dark"] .av-danger-card { background:var(--palette-hex-2c1c20); border-color:var(--palette-hex-704047); }
+.apple-app[data-theme="dark"] .av-danger-card strong { color:var(--palette-hex-ff9da6); }
+.apple-app[data-theme="dark"] .av-danger-card small { color:var(--palette-hex-d2aeb2); }
+.apple-app[data-theme="dark"] .av-settings-subtitle,.apple-app[data-theme="dark"] .av-setting-row,.apple-app[data-theme="dark"] .av-session-row,.apple-app[data-theme="dark"] .av-notification-row,.apple-app[data-theme="dark"] .av-avatar-editor { border-color:var(--palette-hex-38383a); color:var(--palette-hex-f5f5f7); }
+.apple-app[data-theme="dark"] .av-mock-panel { background:var(--palette-hex-1c1c1e); border-color:var(--palette-hex-38383a); }
+.apple-app[data-theme="dark"] .av-notification-row small { color:var(--palette-hex-a1a1a6); }
 
 
 .apple-app .av-pagination { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 0 2px; color:var(--palette-hex-737982); font-size:12px; }
 .apple-app .av-pagination>div { display:flex; gap:8px; }
 .apple-app .av-logs-toolbar { margin-top:14px; }
-.apple-app[data-theme="gray"] .av-pagination { color:var(--palette-hex-a1a1a6); }
+.apple-app[data-theme="dark"] .av-pagination { color:var(--palette-hex-a1a1a6); }
 @media(max-width:560px) {
   .apple-app .av-pagination { align-items:flex-start; flex-direction:column; }
   .apple-app .av-pagination>div { width:100%; }
@@ -1811,42 +956,42 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
   padding: 0 11px;
   font-size: 11px;
 }
-.apple-app[data-theme="gray"] .mh-key-row,
-.apple-app[data-theme="gray"] .mh-connected-row,
-.apple-app[data-theme="gray"] .mh-model-list,
-.apple-app[data-theme="gray"] .mh-usage-table-wrap {
+.apple-app[data-theme="dark"] .mh-key-row,
+.apple-app[data-theme="dark"] .mh-connected-row,
+.apple-app[data-theme="dark"] .mh-model-list,
+.apple-app[data-theme="dark"] .mh-usage-table-wrap {
   background: var(--palette-hex-202833);
   border-color: var(--palette-rgba-220-232-245-13);
 }
-.apple-app[data-theme="gray"] .mh-key-row:hover,
-.apple-app[data-theme="gray"] .mh-connected-row:hover,
-.apple-app[data-theme="gray"] .mh-model-row:hover,
-.apple-app[data-theme="gray"] .mh-model-row.selected,
-.apple-app[data-theme="gray"] .mh-usage-table tbody tr:hover,
-.apple-app[data-theme="gray"] .av-session-row:hover,
-.apple-app[data-theme="gray"] .av-notification-row:hover {
+.apple-app[data-theme="dark"] .mh-key-row:hover,
+.apple-app[data-theme="dark"] .mh-connected-row:hover,
+.apple-app[data-theme="dark"] .mh-model-row:hover,
+.apple-app[data-theme="dark"] .mh-model-row.selected,
+.apple-app[data-theme="dark"] .mh-usage-table tbody tr:hover,
+.apple-app[data-theme="dark"] .av-session-row:hover,
+.apple-app[data-theme="dark"] .av-notification-row:hover {
   background: var(--palette-hex-293545);
 }
-.apple-app[data-theme="gray"] .mh-key-main code {
+.apple-app[data-theme="dark"] .mh-key-main code {
   color: var(--palette-hex-c1ccda);
   background: var(--palette-hex-171e27);
   border-color: var(--palette-rgba-220-232-245-12);
 }
-.apple-app[data-theme="gray"] .mh-usage-table thead,
-.apple-app[data-theme="gray"] .av-pagination {
+.apple-app[data-theme="dark"] .mh-usage-table thead,
+.apple-app[data-theme="dark"] .av-pagination {
   background: var(--palette-hex-1b222c);
 }
-.apple-app[data-theme="gray"] .mh-usage-table th,
-.apple-app[data-theme="gray"] .mh-usage-table td,
-.apple-app[data-theme="gray"] .av-session-row,
-.apple-app[data-theme="gray"] .av-notification-row,
-.apple-app[data-theme="gray"] .av-pagination {
+.apple-app[data-theme="dark"] .mh-usage-table th,
+.apple-app[data-theme="dark"] .mh-usage-table td,
+.apple-app[data-theme="dark"] .av-session-row,
+.apple-app[data-theme="dark"] .av-notification-row,
+.apple-app[data-theme="dark"] .av-pagination {
   border-color: var(--palette-rgba-220-232-245-12);
 }
-.apple-app[data-theme="gray"] .mh-usage-table td:first-child,
-.apple-app[data-theme="gray"] .av-pagination { color: var(--palette-hex-aab6c5); }
-.apple-app[data-theme="gray"] .mh-session-row select,
-.apple-app[data-theme="gray"] .av-session-row select {
+.apple-app[data-theme="dark"] .mh-usage-table td:first-child,
+.apple-app[data-theme="dark"] .av-pagination { color: var(--palette-hex-aab6c5); }
+.apple-app[data-theme="dark"] .mh-session-row select,
+.apple-app[data-theme="dark"] .av-session-row select {
   color: var(--palette-hex-e5ebf3);
   background: var(--palette-hex-293545);
   border-color: var(--palette-rgba-220-232-245-18);
@@ -1925,21 +1070,21 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
 .apple-app .av-mock-panel > .mh-panel-heading {
   gap: 14px;
 }
-.apple-app[data-theme="gray"] .av-mock-panel,
-.apple-app[data-theme="gray"] .mh-panel {
+.apple-app[data-theme="dark"] .av-mock-panel,
+.apple-app[data-theme="dark"] .mh-panel {
   color: var(--palette-hex-e8edf4);
 }
-.apple-app[data-theme="gray"] .av-mock-panel .mh-panel-heading,
-.apple-app[data-theme="gray"] .av-mock-panel .mh-panel-heading p {
+.apple-app[data-theme="dark"] .av-mock-panel .mh-panel-heading,
+.apple-app[data-theme="dark"] .av-mock-panel .mh-panel-heading p {
   color: var(--palette-hex-aab6c5);
 }
-.apple-app[data-theme="gray"] .av-notification-row.is-read {
+.apple-app[data-theme="dark"] .av-notification-row.is-read {
   opacity: .68;
 }
-.apple-app[data-theme="gray"] .av-notification-dot {
+.apple-app[data-theme="dark"] .av-notification-dot {
   box-shadow: 0 0 0 4px var(--palette-rgba-68-142-220-16);
 }
-.apple-app[data-theme="gray"] .av-notification-row.is-read .av-notification-dot {
+.apple-app[data-theme="dark"] .av-notification-row.is-read .av-notification-dot {
   background: var(--palette-hex-697586);
   box-shadow: 0 0 0 4px var(--palette-rgba-170-182-197-1);
 }
@@ -2008,14 +1153,14 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
 .apple-app .av-dropdown-option:focus-visible { outline: 2px solid var(--palette-hex-1683e8); outline-offset: -2px; }
 .apple-app .av-dropdown.mh-field { display: block; }
 .apple-app .av-dropdown.mh-field .av-dropdown-trigger { min-width: 150px; }
-.apple-app[data-theme="gray"] .av-dropdown { color: var(--palette-hex-edf2f8); }
-.apple-app[data-theme="gray"] .av-dropdown-trigger { border-color: var(--palette-hex-465364); background: var(--palette-hex-202833); color: var(--palette-hex-edf2f8); box-shadow: none; }
-.apple-app[data-theme="gray"] .av-dropdown-trigger:hover:not(:disabled) { border-color: var(--palette-hex-71839a); background: var(--palette-hex-263241); }
-.apple-app[data-theme="gray"] .av-dropdown-chevron { stroke: var(--palette-hex-c2cedc); }
-.apple-app[data-theme="gray"] .av-dropdown-menu { border-color: var(--palette-rgba-220-232-245-15); background: var(--palette-hex-202833); box-shadow: 0 14px 38px var(--palette-rgba-0-0-0-42); }
-.apple-app[data-theme="gray"] .av-dropdown-option { color: var(--palette-hex-e3eaf3); }
-.apple-app[data-theme="gray"] .av-dropdown-option:hover, .apple-app[data-theme="gray"] .av-dropdown-option.is-active { background: var(--palette-hex-2b394a); }
-.apple-app[data-theme="gray"] .av-dropdown-option.is-selected { color: var(--palette-hex-8fc5ff); }
+.apple-app[data-theme="dark"] .av-dropdown { color: var(--palette-hex-edf2f8); }
+.apple-app[data-theme="dark"] .av-dropdown-trigger { border-color: var(--palette-hex-465364); background: var(--palette-hex-202833); color: var(--palette-hex-edf2f8); box-shadow: none; }
+.apple-app[data-theme="dark"] .av-dropdown-trigger:hover:not(:disabled) { border-color: var(--palette-hex-71839a); background: var(--palette-hex-263241); }
+.apple-app[data-theme="dark"] .av-dropdown-chevron { stroke: var(--palette-hex-c2cedc); }
+.apple-app[data-theme="dark"] .av-dropdown-menu { border-color: var(--palette-rgba-220-232-245-15); background: var(--palette-hex-202833); box-shadow: 0 14px 38px var(--palette-rgba-0-0-0-42); }
+.apple-app[data-theme="dark"] .av-dropdown-option { color: var(--palette-hex-e3eaf3); }
+.apple-app[data-theme="dark"] .av-dropdown-option:hover, .apple-app[data-theme="dark"] .av-dropdown-option.is-active { background: var(--palette-hex-2b394a); }
+.apple-app[data-theme="dark"] .av-dropdown-option.is-selected { color: var(--palette-hex-8fc5ff); }
 @keyframes av-dropdown-in { from { opacity: 0; transform: translateY(-4px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (max-width: 560px) {
   .apple-app .av-dropdown { width: 100%; min-width: 0; }
@@ -2054,8 +1199,8 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
   font-size: 12px;
   line-height: 1.6;
 }
-.apple-app[data-theme="gray"] .mh-model-description,
-.apple-app[data-theme="gray"] .mh-model-description-detail {
+.apple-app[data-theme="dark"] .mh-model-description,
+.apple-app[data-theme="dark"] .mh-model-description-detail {
   color: var(--palette-hex-aab6c5);
 }
 @media (max-width: 700px) {
@@ -2064,47 +1209,47 @@ body:has(.apple-app[data-theme="gray"] .mh-shell) {
 
 
 /* Global appearance controls live beside the app root, so theme them from the document state. */
-html[data-theme="gray"] .av-theme-trigger {
+html[data-theme="dark"] .av-theme-trigger {
   background: var(--palette-rgba-32-40-51-97);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-hex-465568);
   box-shadow: 0 8px 28px var(--palette-rgba-0-0-0-32);
 }
-html[data-theme="gray"] .av-theme-trigger:hover {
+html[data-theme="dark"] .av-theme-trigger:hover {
   background: var(--palette-hex-293545);
   border-color: var(--palette-hex-71839a);
 }
-html[data-theme="gray"] .av-theme-trigger svg { color: var(--palette-hex-8fc5ff); }
-html[data-theme="gray"] .av-language-trigger {
+html[data-theme="dark"] .av-theme-trigger svg { color: var(--palette-hex-8fc5ff); }
+html[data-theme="dark"] .av-language-trigger {
   background: var(--palette-rgba-32-40-51-97);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-hex-465568);
   box-shadow: 0 8px 28px var(--palette-rgba-0-0-0-32);
 }
-html[data-theme="gray"] .av-language-trigger:hover {
+html[data-theme="dark"] .av-language-trigger:hover {
   background: var(--palette-hex-293545);
   border-color: var(--palette-hex-71839a);
 }
-html[data-theme="gray"] .av-language-globe,
-html[data-theme="gray"] .av-language-trigger > svg { color: var(--palette-hex-8fc5ff); }
-html[data-theme="gray"] .av-language-menu {
+html[data-theme="dark"] .av-language-globe,
+html[data-theme="dark"] .av-language-trigger > svg { color: var(--palette-hex-8fc5ff); }
+html[data-theme="dark"] .av-language-menu {
   background: var(--palette-rgba-32-40-51-99);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-hex-465568);
   box-shadow: 0 18px 55px var(--palette-rgba-0-0-0-48);
 }
-html[data-theme="gray"] .av-language-menu-title { color: var(--palette-hex-aab6c5); }
-html[data-theme="gray"] .av-language-menu button { color: var(--palette-hex-e5ebf3); }
-html[data-theme="gray"] .av-language-menu button:hover,
-html[data-theme="gray"] .av-language-menu button.active {
+html[data-theme="dark"] .av-language-menu-title { color: var(--palette-hex-aab6c5); }
+html[data-theme="dark"] .av-language-menu button { color: var(--palette-hex-e5ebf3); }
+html[data-theme="dark"] .av-language-menu button:hover,
+html[data-theme="dark"] .av-language-menu button.active {
   background: var(--palette-hex-293545);
   color: var(--palette-hex-9acfff);
 }
-html[data-theme="gray"] .av-language-native {
+html[data-theme="dark"] .av-language-native {
   background: var(--palette-hex-354255);
   color: var(--palette-hex-e5ebf3);
 }
-html[data-theme="gray"] .av-language-menu button.active .av-language-native {
+html[data-theme="dark"] .av-language-menu button.active .av-language-native {
   background: var(--palette-hex-244a6b);
   color: var(--palette-hex-b8dcff);
 }
@@ -2182,33 +1327,33 @@ html[data-theme="gray"] .av-language-menu button.active .av-language-native {
 .apple-app .mh-bottom-grid > .mh-panel:first-child .mh-popular-row:hover {
   background: var(--palette-hex-f1f6fb);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child {
   background: var(--palette-hex-1b222c);
   color: var(--palette-hex-edf2f8);
   border-color: var(--palette-rgba-220-232-245-14);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-panel-heading h3 {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-panel-heading h3 {
   color: var(--palette-hex-f1f5fa);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-panel-heading p {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-panel-heading p {
   color: var(--palette-hex-aab6c5);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row {
   border-top-color: var(--palette-rgba-220-232-245-14);
   color: var(--palette-hex-e5ebf3);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row strong {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row strong {
   color: var(--palette-hex-f1f5fa);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row small,
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row .mh-model-description {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row small,
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row .mh-model-description {
   color: var(--palette-hex-b5c0ce);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row .mh-popular-price,
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row > svg {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row .mh-popular-price,
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row > svg {
   color: var(--palette-hex-c4ceda);
 }
-.apple-app[data-theme="gray"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row:hover {
+.apple-app[data-theme="dark"] .mh-bottom-grid > .mh-panel:first-child .mh-popular-row:hover {
   background: var(--palette-hex-293545);
 }
 @media (max-width: 560px) {
@@ -2319,24 +1464,24 @@ html[data-theme="gray"] .av-language-menu button.active .av-language-native {
   background: var(--palette-hex-f3f6f9) !important;
   border-color: var(--palette-hex-d8e1e9) !important;
 }
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] {
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] {
   border-color: var(--palette-hex-465568) !important;
   background: var(--palette-hex-202a37) !important;
   color: var(--palette-hex-f1f5fa) !important;
   box-shadow: 0 14px 40px var(--palette-rgba-0-0-0-48) !important;
 }
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-title],
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-title {
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-title],
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-title {
   color: var(--palette-hex-f1f5fa) !important;
 }
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-description],
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-description {
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-description],
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] .aevotron-toast-description {
   color: var(--palette-hex-c0ccda) !important;
 }
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-icon] {
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-icon] {
   color: var(--palette-hex-65d49a) !important;
 }
-html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-close-button] {
+html[data-theme="dark"] [data-sonner-toaster].aevotron-toaster [data-sonner-toast] [data-close-button] {
   color: var(--palette-hex-dce6f1) !important;
   background: var(--palette-hex-2c3949) !important;
   border-color: var(--palette-hex-526174) !important;
@@ -2396,9 +1541,9 @@ html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
 .apple-app .mh-api-params { width: 100%; border-collapse: collapse; font-size: 12px; }
 .apple-app .mh-api-params th,.apple-app .mh-api-params td { padding: 10px 9px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--palette-hex-e9edf2); }
 .apple-app .mh-api-params th { color: var(--palette-hex-68717d); font-weight: 650; }
-.apple-app[data-theme="gray"] .mh-api-reference-row { border-color: var(--palette-hex-3b4653); }
-.apple-app[data-theme="gray"] .mh-api-reference-row > span,.apple-app[data-theme="gray"] .mh-api-reference h4,.apple-app[data-theme="gray"] .mh-api-params th { color: var(--palette-hex-b8c4d3); }
-.apple-app[data-theme="gray"] .mh-api-params th,.apple-app[data-theme="gray"] .mh-api-params td { border-color: var(--palette-hex-3b4653); }
+.apple-app[data-theme="dark"] .mh-api-reference-row { border-color: var(--palette-hex-3b4653); }
+.apple-app[data-theme="dark"] .mh-api-reference-row > span,.apple-app[data-theme="dark"] .mh-api-reference h4,.apple-app[data-theme="dark"] .mh-api-params th { color: var(--palette-hex-b8c4d3); }
+.apple-app[data-theme="dark"] .mh-api-params th,.apple-app[data-theme="dark"] .mh-api-params td { border-color: var(--palette-hex-3b4653); }
 @media(max-width:600px) { .apple-app .mh-api-reference-row { grid-template-columns: 1fr; gap: 5px; } .apple-app .mh-api-params { display:block; overflow-x:auto; } }
 
 
@@ -2465,31 +1610,31 @@ html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
 .apple-app .mh-api-limit span { color:var(--palette-hex-7c6749); font-size:10px; font-weight:650; }
 .apple-app .mh-api-limit small { color:var(--palette-hex-9a876b); font-size:10px; }
 .apple-app .mh-api-docs > .mh-doc-warning { margin:0; }
-.apple-app[data-theme="gray"] .mh-api-hero { border-color:var(--palette-hex-34485d); background:linear-gradient(128deg,var(--palette-hex-202f3f),var(--palette-hex-1b2937) 58%,var(--palette-hex-202b38)); color:var(--palette-hex-edf4fb); }
-.apple-app[data-theme="gray"] .mh-api-hero-main h2 { color:var(--palette-hex-f0f5fb); }
-.apple-app[data-theme="gray"] .mh-api-hero-main p,.apple-app[data-theme="gray"] .mh-api-card-heading p { color:var(--palette-hex-a9b8c8); }
-.apple-app[data-theme="gray"] .mh-api-kicker { color:var(--palette-hex-8fc6ef); }
-.apple-app[data-theme="gray"] .mh-api-version,.apple-app[data-theme="gray"] .mh-api-language { border-color:var(--palette-hex-43566a); background:var(--palette-hex-263647); color:var(--palette-hex-b9c8d8); }
-.apple-app[data-theme="gray"] .mh-api-url { border-color:var(--palette-hex-405267); background:var(--palette-hex-172330); }
-.apple-app[data-theme="gray"] .mh-api-url span { color:var(--palette-hex-d5e6f5); }
-.apple-app[data-theme="gray"] .mh-api-url button { border-color:var(--palette-hex-405267); background:var(--palette-hex-263647); color:var(--palette-hex-d5e6f5); }
-.apple-app[data-theme="gray"] .mh-api-card { border-color:var(--palette-hex-354354); background:var(--palette-hex-1b2531); }
-.apple-app[data-theme="gray"] .mh-api-card-heading h3 { color:var(--palette-hex-eef3f9); }
-.apple-app[data-theme="gray"] .mh-api-icon { border-color:var(--palette-hex-3a5269); background:var(--palette-hex-26394b); color:var(--palette-hex-9bc8ec); }
-.apple-app[data-theme="gray"] .mh-api-icon.success { border-color:var(--palette-hex-315b48); background:var(--palette-hex-20392e); color:var(--palette-hex-81d5a5); }
-.apple-app[data-theme="gray"] .mh-api-icon.warning { border-color:var(--palette-hex-665238); background:var(--palette-hex-3b3021); color:var(--palette-hex-e4bd7c); }
-.apple-app[data-theme="gray"] .mh-api-code-line,.apple-app[data-theme="gray"] .mh-api-params th { border-color:var(--palette-hex-39495a); background:var(--palette-hex-202d3a); }
-.apple-app[data-theme="gray"] .mh-api-code-line code,.apple-app[data-theme="gray"] .mh-api-meta-row code { color:var(--palette-hex-d3e4f3); }
-.apple-app[data-theme="gray"] .mh-api-meta-row,.apple-app[data-theme="gray"] .mh-api-params td { color:var(--palette-hex-b1becc); }
-.apple-app[data-theme="gray"] .mh-api-params th { color:var(--palette-hex-aab9c9); }
-.apple-app[data-theme="gray"] .mh-api-params td code { color:var(--palette-hex-9bc8ec); }
-.apple-app[data-theme="gray"] .mh-api-type { background:var(--palette-hex-2b3a49); color:var(--palette-hex-c1ccda); }
-.apple-app[data-theme="gray"] .mh-api-bottom-grid .mh-api-card > p { color:var(--palette-hex-b4c0ce); }
-.apple-app[data-theme="gray"] .mh-api-response-chips code { border-color:var(--palette-hex-365544); background:var(--palette-hex-20372c); color:var(--palette-hex-a2dfba); }
-.apple-app[data-theme="gray"] .mh-api-limit { border-color:var(--palette-hex-665238); background:var(--palette-hex-382f22); }
-.apple-app[data-theme="gray"] .mh-api-limit strong { color:var(--palette-hex-f0c47d); }
-.apple-app[data-theme="gray"] .mh-api-limit span { color:var(--palette-hex-e1c99f); }
-.apple-app[data-theme="gray"] .mh-api-limit small { color:var(--palette-hex-c4ad86); }
+.apple-app[data-theme="dark"] .mh-api-hero { border-color:var(--palette-hex-34485d); background:linear-gradient(128deg,var(--palette-hex-202f3f),var(--palette-hex-1b2937) 58%,var(--palette-hex-202b38)); color:var(--palette-hex-edf4fb); }
+.apple-app[data-theme="dark"] .mh-api-hero-main h2 { color:var(--palette-hex-f0f5fb); }
+.apple-app[data-theme="dark"] .mh-api-hero-main p,.apple-app[data-theme="dark"] .mh-api-card-heading p { color:var(--palette-hex-a9b8c8); }
+.apple-app[data-theme="dark"] .mh-api-kicker { color:var(--palette-hex-8fc6ef); }
+.apple-app[data-theme="dark"] .mh-api-version,.apple-app[data-theme="dark"] .mh-api-language { border-color:var(--palette-hex-43566a); background:var(--palette-hex-263647); color:var(--palette-hex-b9c8d8); }
+.apple-app[data-theme="dark"] .mh-api-url { border-color:var(--palette-hex-405267); background:var(--palette-hex-172330); }
+.apple-app[data-theme="dark"] .mh-api-url span { color:var(--palette-hex-d5e6f5); }
+.apple-app[data-theme="dark"] .mh-api-url button { border-color:var(--palette-hex-405267); background:var(--palette-hex-263647); color:var(--palette-hex-d5e6f5); }
+.apple-app[data-theme="dark"] .mh-api-card { border-color:var(--palette-hex-354354); background:var(--palette-hex-1b2531); }
+.apple-app[data-theme="dark"] .mh-api-card-heading h3 { color:var(--palette-hex-eef3f9); }
+.apple-app[data-theme="dark"] .mh-api-icon { border-color:var(--palette-hex-3a5269); background:var(--palette-hex-26394b); color:var(--palette-hex-9bc8ec); }
+.apple-app[data-theme="dark"] .mh-api-icon.success { border-color:var(--palette-hex-315b48); background:var(--palette-hex-20392e); color:var(--palette-hex-81d5a5); }
+.apple-app[data-theme="dark"] .mh-api-icon.warning { border-color:var(--palette-hex-665238); background:var(--palette-hex-3b3021); color:var(--palette-hex-e4bd7c); }
+.apple-app[data-theme="dark"] .mh-api-code-line,.apple-app[data-theme="dark"] .mh-api-params th { border-color:var(--palette-hex-39495a); background:var(--palette-hex-202d3a); }
+.apple-app[data-theme="dark"] .mh-api-code-line code,.apple-app[data-theme="dark"] .mh-api-meta-row code { color:var(--palette-hex-d3e4f3); }
+.apple-app[data-theme="dark"] .mh-api-meta-row,.apple-app[data-theme="dark"] .mh-api-params td { color:var(--palette-hex-b1becc); }
+.apple-app[data-theme="dark"] .mh-api-params th { color:var(--palette-hex-aab9c9); }
+.apple-app[data-theme="dark"] .mh-api-params td code { color:var(--palette-hex-9bc8ec); }
+.apple-app[data-theme="dark"] .mh-api-type { background:var(--palette-hex-2b3a49); color:var(--palette-hex-c1ccda); }
+.apple-app[data-theme="dark"] .mh-api-bottom-grid .mh-api-card > p { color:var(--palette-hex-b4c0ce); }
+.apple-app[data-theme="dark"] .mh-api-response-chips code { border-color:var(--palette-hex-365544); background:var(--palette-hex-20372c); color:var(--palette-hex-a2dfba); }
+.apple-app[data-theme="dark"] .mh-api-limit { border-color:var(--palette-hex-665238); background:var(--palette-hex-382f22); }
+.apple-app[data-theme="dark"] .mh-api-limit strong { color:var(--palette-hex-f0c47d); }
+.apple-app[data-theme="dark"] .mh-api-limit span { color:var(--palette-hex-e1c99f); }
+.apple-app[data-theme="dark"] .mh-api-limit small { color:var(--palette-hex-c4ad86); }
 @media (max-width:760px) { .apple-app .mh-api-doc-grid { grid-template-columns:1fr; } }
 @media (max-width:560px) {
   .apple-app .mh-api-hero { padding:19px 16px 16px; border-radius:14px; }
@@ -2599,48 +1744,48 @@ html[data-theme="gray"] [data-sonner-toaster].aevotron-toaster [data-sonner-toas
 .apple-app .mh-catalog-empty p { color: var(--palette-hex-697586); }
 
 /* Dark theme uses the same hierarchy without carrying dark colors into light mode. */
-html[data-theme="gray"] .apple-app .mh-catalog-browser,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail {
+html[data-theme="dark"] .apple-app .mh-catalog-browser,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail {
   border-color: var(--palette-hex-303b49);
   background: var(--palette-hex-171e28);
   color: var(--palette-hex-e8edf5);
   box-shadow: none;
 }
-html[data-theme="gray"] .apple-app .mh-catalog-browser-head h2,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail h2,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-detail-stats strong,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail-meta strong,
-html[data-theme="gray"] .apple-app .mh-catalog-empty>strong { color: var(--palette-hex-e8edf5); }
-html[data-theme="gray"] .apple-app .mh-catalog-browser-head p,
-html[data-theme="gray"] .apple-app .mh-model-card>p,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-detail-stats small,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail-meta span,
-html[data-theme="gray"] .apple-app .mh-catalog-empty p { color: var(--palette-hex-a4b0bf); }
-html[data-theme="gray"] .apple-app .mh-catalog-result-count { border-color: var(--palette-hex-3a4655); color: var(--palette-hex-aab6c5); }
-html[data-theme="gray"] .apple-app .mh-catalog-filter-row,
-html[data-theme="gray"] .apple-app .mh-model-card-bottom,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-detail-stats>div,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail-meta { border-color: var(--palette-hex-303b49); }
-html[data-theme="gray"] .apple-app .mh-catalog-filter-label { color: var(--palette-hex-9aa8b8); }
-html[data-theme="gray"] .apple-app .mh-provider-filters button {
+html[data-theme="dark"] .apple-app .mh-catalog-browser-head h2,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail h2,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-detail-stats strong,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail-meta strong,
+html[data-theme="dark"] .apple-app .mh-catalog-empty>strong { color: var(--palette-hex-e8edf5); }
+html[data-theme="dark"] .apple-app .mh-catalog-browser-head p,
+html[data-theme="dark"] .apple-app .mh-model-card>p,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-detail-stats small,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail-meta span,
+html[data-theme="dark"] .apple-app .mh-catalog-empty p { color: var(--palette-hex-a4b0bf); }
+html[data-theme="dark"] .apple-app .mh-catalog-result-count { border-color: var(--palette-hex-3a4655); color: var(--palette-hex-aab6c5); }
+html[data-theme="dark"] .apple-app .mh-catalog-filter-row,
+html[data-theme="dark"] .apple-app .mh-model-card-bottom,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-detail-stats>div,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail-meta { border-color: var(--palette-hex-303b49); }
+html[data-theme="dark"] .apple-app .mh-catalog-filter-label { color: var(--palette-hex-9aa8b8); }
+html[data-theme="dark"] .apple-app .mh-provider-filters button {
   border-color: var(--palette-hex-3a4655);
   background: var(--palette-hex-1b2430);
   color: var(--palette-hex-b8c4d2);
 }
-html[data-theme="gray"] .apple-app .mh-provider-filters button:hover { border-color: var(--palette-hex-62748a); background: var(--palette-hex-222e3c); color: var(--palette-hex-f1f5fa); }
-html[data-theme="gray"] .apple-app .mh-provider-filters button.active { border-color: var(--palette-hex-557da2); background: var(--palette-hex-1e3549); color: var(--palette-hex-b9dcf8); }
-html[data-theme="gray"] .apple-app .mh-model-card { border-color: var(--palette-hex-303b49); background: transparent; color: var(--palette-hex-e8edf5); }
-html[data-theme="gray"] .apple-app .mh-model-card:hover { border-color: var(--palette-hex-465568); background: var(--palette-hex-1b2531); }
-html[data-theme="gray"] .apple-app .mh-model-card.selected { border-color: var(--palette-hex-557da2); background: var(--palette-hex-1b2c3b); box-shadow: inset 3px 0 0 var(--palette-hex-75a9d5); }
-html[data-theme="gray"] .apple-app .mh-model-card-brand { background: var(--palette-hex-233b2d); color: var(--palette-hex-a9d8b4); }
-html[data-theme="gray"] .apple-app .mh-model-card-brand.orange { background: var(--palette-hex-422f24); color: var(--palette-hex-f0b58e); }
-html[data-theme="gray"] .apple-app .mh-model-card-provider,
-html[data-theme="gray"] .apple-app .mh-model-card-bottom>span:last-child { color: var(--palette-hex-aab6c5); }
-html[data-theme="gray"] .apple-app .mh-model-card-access { background: var(--palette-hex-293545); color: var(--palette-hex-c4d4e5); }
-html[data-theme="gray"] .apple-app .mh-model-card-name { color: var(--palette-hex-edf2f8); }
-html[data-theme="gray"] .apple-app .mh-model-card-bottom>span:first-child,
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-detail-provider { color: var(--palette-hex-a9c8e5); }
-html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail-meta code { color: var(--palette-hex-b9d7f1); }
+html[data-theme="dark"] .apple-app .mh-provider-filters button:hover { border-color: var(--palette-hex-62748a); background: var(--palette-hex-222e3c); color: var(--palette-hex-f1f5fa); }
+html[data-theme="dark"] .apple-app .mh-provider-filters button.active { border-color: var(--palette-hex-557da2); background: var(--palette-hex-1e3549); color: var(--palette-hex-b9dcf8); }
+html[data-theme="dark"] .apple-app .mh-model-card { border-color: var(--palette-hex-303b49); background: transparent; color: var(--palette-hex-e8edf5); }
+html[data-theme="dark"] .apple-app .mh-model-card:hover { border-color: var(--palette-hex-465568); background: var(--palette-hex-1b2531); }
+html[data-theme="dark"] .apple-app .mh-model-card.selected { border-color: var(--palette-hex-557da2); background: var(--palette-hex-1b2c3b); box-shadow: inset 3px 0 0 var(--palette-hex-75a9d5); }
+html[data-theme="dark"] .apple-app .mh-model-card-brand { background: var(--palette-hex-233b2d); color: var(--palette-hex-a9d8b4); }
+html[data-theme="dark"] .apple-app .mh-model-card-brand.orange { background: var(--palette-hex-422f24); color: var(--palette-hex-f0b58e); }
+html[data-theme="dark"] .apple-app .mh-model-card-provider,
+html[data-theme="dark"] .apple-app .mh-model-card-bottom>span:last-child { color: var(--palette-hex-aab6c5); }
+html[data-theme="dark"] .apple-app .mh-model-card-access { background: var(--palette-hex-293545); color: var(--palette-hex-c4d4e5); }
+html[data-theme="dark"] .apple-app .mh-model-card-name { color: var(--palette-hex-edf2f8); }
+html[data-theme="dark"] .apple-app .mh-model-card-bottom>span:first-child,
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-detail-provider { color: var(--palette-hex-a9c8e5); }
+html[data-theme="dark"] .apple-app .mh-catalog-side .mh-model-detail-meta code { color: var(--palette-hex-b9d7f1); }
 
 /* Responsive catalog: no premature detail panel, clipped controls or forced horizontal scrolling. */
 @media (max-width: 980px) {
@@ -2686,13 +1831,13 @@ html[data-theme="gray"] .apple-app .mh-catalog-side .mh-model-detail-meta code {
   background: var(--palette-hex-f6f9fc);
 }
 .apple-app .mh-top-actions .av-theme-trigger svg { color: var(--palette-hex-397db5); }
-html[data-theme="gray"] .apple-app .mh-top-actions .av-theme-trigger {
+html[data-theme="dark"] .apple-app .mh-top-actions .av-theme-trigger {
   border-color: var(--palette-hex-3a4655);
   background: var(--palette-hex-202833);
   color: var(--palette-hex-edf2f8);
 }
-html[data-theme="gray"] .apple-app .mh-top-actions .av-theme-trigger:hover { background: var(--palette-hex-293545); }
-html[data-theme="gray"] .apple-app .mh-top-actions .av-theme-trigger svg { color: var(--palette-hex-8fc5ff); }
+html[data-theme="dark"] .apple-app .mh-top-actions .av-theme-trigger:hover { background: var(--palette-hex-293545); }
+html[data-theme="dark"] .apple-app .mh-top-actions .av-theme-trigger svg { color: var(--palette-hex-8fc5ff); }
 @media (max-width: 600px) {
   .apple-app .mh-top-actions .av-theme-trigger {
     width: 36px;
@@ -2741,23 +1886,23 @@ html[data-theme="gray"] .apple-app .mh-top-actions .av-theme-trigger svg { color
   color: var(--palette-hex-245b85);
 }
 .apple-app .mh-catalog-no-sources { color: var(--palette-hex-697586); }
-html[data-theme="gray"] .apple-app .mh-catalog-overview { background: transparent; }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip { border-color: var(--palette-hex-303b49); background: transparent; }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip>span:first-child,
-html[data-theme="gray"] .apple-app .mh-catalog-no-sources { color: var(--palette-hex-a4b0bf); }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip>button {
+html[data-theme="dark"] .apple-app .mh-catalog-overview { background: transparent; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip { border-color: var(--palette-hex-303b49); background: transparent; }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>span:first-child,
+html[data-theme="dark"] .apple-app .mh-catalog-no-sources { color: var(--palette-hex-a4b0bf); }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button {
   border-color: var(--palette-hex-3a4655);
   background: var(--palette-hex-1b2430);
   color: var(--palette-hex-b8c4d2);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip>button.active,
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip>button:hover {
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button.active,
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button:hover {
   border-color: var(--palette-hex-557da2);
   background: var(--palette-hex-1e3549);
   color: var(--palette-hex-b9dcf8);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip>button small { border-color: var(--palette-hex-3a4655); color: var(--palette-hex-aab6c5); }
-html[data-theme="gray"] .apple-app .mh-catalog-provider-strip .mh-catalog-add-source {
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip>button small { border-color: var(--palette-hex-3a4655); color: var(--palette-hex-aab6c5); }
+html[data-theme="dark"] .apple-app .mh-catalog-provider-strip .mh-catalog-add-source {
   border-color: var(--palette-hex-557da2);
   background: var(--palette-hex-1e3549);
   color: var(--palette-hex-b9dcf8);
@@ -2986,71 +2131,71 @@ html[data-theme="gray"] .apple-app .mh-catalog-provider-strip .mh-catalog-add-so
 .apple-app .mh-catalog-empty p { max-width: 440px; font-size: 13px; line-height: 1.6; }
 
 /* Matching dark appearance without reducing text contrast. */
-html[data-theme="gray"] .apple-app .mh-catalog-browser {
+html[data-theme="dark"] .apple-app .mh-catalog-browser {
   border-color: var(--palette-hex-354252);
   background: var(--palette-hex-171e28);
   color: var(--palette-hex-edf2f8);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-browser-head h2 { color: var(--palette-hex-f0f4f9); }
-html[data-theme="gray"] .apple-app .mh-catalog-browser-head p { color: var(--palette-hex-b0bdcc); }
-html[data-theme="gray"] .apple-app .mh-catalog-result-count {
+html[data-theme="dark"] .apple-app .mh-catalog-browser-head h2 { color: var(--palette-hex-f0f4f9); }
+html[data-theme="dark"] .apple-app .mh-catalog-browser-head p { color: var(--palette-hex-b0bdcc); }
+html[data-theme="dark"] .apple-app .mh-catalog-result-count {
   border-color: var(--palette-hex-3c4a5a);
   background: var(--palette-hex-202a36);
   color: var(--palette-hex-c0ccda);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-controls .mh-search {
+html[data-theme="dark"] .apple-app .mh-catalog-controls .mh-search {
   border-color: var(--palette-hex-3b4858);
   background: var(--palette-hex-202a36);
   color: var(--palette-hex-aab8c8);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-controls .mh-search:focus-within { background: var(--palette-hex-1b2531); }
-html[data-theme="gray"] .apple-app .mh-catalog-controls .mh-search input { color: var(--palette-hex-edf2f8); }
-html[data-theme="gray"] .apple-app .mh-catalog-controls .mh-search input::placeholder { color: var(--palette-hex-9aa8b8); }
-html[data-theme="gray"] .apple-app .mh-catalog-controls > .mh-button {
+html[data-theme="dark"] .apple-app .mh-catalog-controls .mh-search:focus-within { background: var(--palette-hex-1b2531); }
+html[data-theme="dark"] .apple-app .mh-catalog-controls .mh-search input { color: var(--palette-hex-edf2f8); }
+html[data-theme="dark"] .apple-app .mh-catalog-controls .mh-search input::placeholder { color: var(--palette-hex-9aa8b8); }
+html[data-theme="dark"] .apple-app .mh-catalog-controls > .mh-button {
   border-color: var(--palette-hex-3c4a5a);
   background: var(--palette-hex-202a36);
   color: var(--palette-hex-d4deea);
 }
-html[data-theme="gray"] .apple-app .mh-catalog-filter-row { border-color: var(--palette-hex-354252); }
-html[data-theme="gray"] .apple-app .mh-catalog-filter-label { color: var(--palette-hex-aab8c8); }
-html[data-theme="gray"] .apple-app .mh-provider-filters button {
+html[data-theme="dark"] .apple-app .mh-catalog-filter-row { border-color: var(--palette-hex-354252); }
+html[data-theme="dark"] .apple-app .mh-catalog-filter-label { color: var(--palette-hex-aab8c8); }
+html[data-theme="dark"] .apple-app .mh-provider-filters button {
   border-color: var(--palette-hex-3b4858);
   background: var(--palette-hex-1d2733);
   color: var(--palette-hex-c2cddb);
 }
-html[data-theme="gray"] .apple-app .mh-provider-filters button:hover {
+html[data-theme="dark"] .apple-app .mh-provider-filters button:hover {
   border-color: var(--palette-hex-60758d);
   background: var(--palette-hex-253342);
   color: var(--palette-hex-f2f6fb);
 }
-html[data-theme="gray"] .apple-app .mh-provider-filters button.active {
+html[data-theme="dark"] .apple-app .mh-provider-filters button.active {
   border-color: var(--palette-hex-5d8db8);
   background: var(--palette-hex-203b52);
   color: var(--palette-hex-c5e3ff);
 }
-html[data-theme="gray"] .apple-app .mh-model-card {
+html[data-theme="dark"] .apple-app .mh-model-card {
   border-color: var(--palette-hex-3a4655);
   background: var(--palette-hex-1b2430);
   color: var(--palette-hex-edf2f8);
 }
-html[data-theme="gray"] .apple-app .mh-model-card:hover {
+html[data-theme="dark"] .apple-app .mh-model-card:hover {
   border-color: var(--palette-hex-5a6e83);
   background: var(--palette-hex-202c39);
 }
-html[data-theme="gray"] .apple-app .mh-model-card.selected {
+html[data-theme="dark"] .apple-app .mh-model-card.selected {
   border-color: var(--palette-hex-6b9bc5);
   background: var(--palette-hex-203448);
   box-shadow: inset 0 0 0 1px var(--palette-rgba-117-169-213-16);
 }
-html[data-theme="gray"] .apple-app .mh-model-card-provider,
-html[data-theme="gray"] .apple-app .mh-model-card > p { color: var(--palette-hex-b1becc); }
-html[data-theme="gray"] .apple-app .mh-model-card-access {
+html[data-theme="dark"] .apple-app .mh-model-card-provider,
+html[data-theme="dark"] .apple-app .mh-model-card > p { color: var(--palette-hex-b1becc); }
+html[data-theme="dark"] .apple-app .mh-model-card-access {
   background: var(--palette-hex-2b3948);
   color: var(--palette-hex-d0dce9);
 }
-html[data-theme="gray"] .apple-app .mh-model-card-name { color: var(--palette-hex-f0f4f9); }
-html[data-theme="gray"] .apple-app .mh-model-card-bottom { border-color: var(--palette-hex-354252); color: var(--palette-hex-c0ccda); }
-html[data-theme="gray"] .apple-app .mh-model-card-bottom > span:last-child { color: var(--palette-hex-a8d3fa); }
+html[data-theme="dark"] .apple-app .mh-model-card-name { color: var(--palette-hex-f0f4f9); }
+html[data-theme="dark"] .apple-app .mh-model-card-bottom { border-color: var(--palette-hex-354252); color: var(--palette-hex-c0ccda); }
+html[data-theme="dark"] .apple-app .mh-model-card-bottom > span:last-child { color: var(--palette-hex-a8d3fa); }
 
 @media (max-width: 640px) {
   .apple-app .mh-catalog-browser { padding: 18px 16px; border-radius: 14px; }
@@ -3378,13 +2523,13 @@ html[data-theme="gray"] .apple-app .mh-model-card-bottom > span:last-child { col
   width: 16px;
   height: 16px;
 }
-.apple-app[data-theme="gray"] .mh-detail-info {
+.apple-app[data-theme="dark"] .mh-detail-info {
   border-color: var(--palette-hex-294b68);
   background: var(--palette-hex-182b3d);
   color: var(--palette-hex-c3def7);
   box-shadow: inset 0 1px 0 var(--palette-rgba-255-255-255-035);
 }
-.apple-app[data-theme="gray"] .mh-detail-info-icon {
+.apple-app[data-theme="dark"] .mh-detail-info-icon {
   border-color: var(--palette-hex-365b79);
   background: var(--palette-hex-243f56);
   color: var(--palette-hex-a9d7ff);
@@ -3524,29 +2669,29 @@ html[data-theme="gray"] .apple-app .mh-model-card-bottom > span:last-child { col
 .aw-disclaimer { margin:8px auto 0; color:var(--palette-hex-a0aab4); font-size:9px; text-align:center; }
 .aw-shell button:focus-visible,.aw-shell a:focus-visible,.aw-shell input:focus-visible,.aw-shell select:focus-visible,.aw-shell textarea:focus-visible { outline:2px solid var(--palette-hex-1682aa); outline-offset:2px; }
 .aw-shell button:disabled { cursor:not-allowed; }
-html[data-theme="gray"] .aw-shell { background:var(--palette-hex-101a24); color:var(--palette-hex-e7edf3); }
-html[data-theme="gray"] .aw-sidebar { border-color:var(--palette-hex-263543); background:var(--palette-hex-131f2a); }
-html[data-theme="gray"] .aw-brand { color:var(--palette-hex-e6edf4); }
-html[data-theme="gray"] .aw-brand-mark { background:var(--palette-hex-1b3545); color:var(--palette-hex-8ed3ef); }
-html[data-theme="gray"] .aw-brand-beta,html[data-theme="gray"] .aw-search,html[data-theme="gray"] .aw-new-chat { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-c6d2dc); }
-html[data-theme="gray"] .aw-search input,html[data-theme="gray"] .aw-model-select-wrap select,html[data-theme="gray"] .aw-composer > textarea { color:var(--palette-hex-e0e8ef); }
-html[data-theme="gray"] .aw-history > button { color:var(--palette-hex-9aabba); }
-html[data-theme="gray"] .aw-history > button:hover,html[data-theme="gray"] .aw-history > button.is-active { background:var(--palette-hex-203545); color:var(--palette-hex-b8e4f5); }
-html[data-theme="gray"] .aw-sidebar-note,html[data-theme="gray"] .aw-statusbar { border-color:var(--palette-hex-2a3b49); background:var(--palette-hex-172530); color:var(--palette-hex-a6b5c1); }
-html[data-theme="gray"] .aw-back-link,html[data-theme="gray"] .aw-topbar-title,html[data-theme="gray"] .aw-chat-heading p { color:var(--palette-hex-9aaaba); }
-html[data-theme="gray"] .aw-topbar { border-color:var(--palette-hex-263543); background:var(--palette-hex-14212c); }
-html[data-theme="gray"] .aw-topbar-title strong,html[data-theme="gray"] .aw-chat-heading h1,html[data-theme="gray"] .aw-empty-state h2,html[data-theme="gray"] .aw-empty-models h2 { color:var(--palette-hex-e6edf4); }
-html[data-theme="gray"] .aw-model-select-wrap,html[data-theme="gray"] .aw-composer,html[data-theme="gray"] .aw-prompt-suggestions button,html[data-theme="gray"] .aw-message-avatar,html[data-theme="gray"] .aw-edit-box textarea,html[data-theme="gray"] .aw-edit-box button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-d1dce5); }
-html[data-theme="gray"] .aw-model-select-wrap { color:var(--palette-hex-9bc8db); }
-html[data-theme="gray"] .aw-notice { border-color:var(--palette-hex-2d4b5e); background:var(--palette-hex-1a3040); color:var(--palette-hex-b5d8e9); }
-html[data-theme="gray"] .aw-notice.is-warning { border-color:var(--palette-hex-5b4931); background:var(--palette-hex-30291f); color:var(--palette-hex-e4c99f); }
-html[data-theme="gray"] .aw-empty-models { border-color:var(--palette-hex-344654); background:var(--palette-hex-16242f); }
-html[data-theme="gray"] .aw-empty-models p,html[data-theme="gray"] .aw-empty-state > p { color:var(--palette-hex-9aaaba); }
-html[data-theme="gray"] .aw-message-meta { color:var(--palette-hex-d9e3eb); }
-html[data-theme="gray"] .aw-message-content { color:var(--palette-hex-cbd7e1); }
-html[data-theme="gray"] .aw-composer-bottom { border-color:var(--palette-hex-2a3b49); }
-html[data-theme="gray"] .aw-status-model strong { color:var(--palette-hex-d3dfe8); }
-html[data-theme="gray"] .aw-send-button.is-stop { background:var(--palette-hex-3b292b); color:var(--palette-hex-f1a9a9); }
+html[data-theme="dark"] .aw-shell { background:var(--palette-hex-101a24); color:var(--palette-hex-e7edf3); }
+html[data-theme="dark"] .aw-sidebar { border-color:var(--palette-hex-263543); background:var(--palette-hex-131f2a); }
+html[data-theme="dark"] .aw-brand { color:var(--palette-hex-e6edf4); }
+html[data-theme="dark"] .aw-brand-mark { background:var(--palette-hex-1b3545); color:var(--palette-hex-8ed3ef); }
+html[data-theme="dark"] .aw-brand-beta,html[data-theme="dark"] .aw-search,html[data-theme="dark"] .aw-new-chat { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-c6d2dc); }
+html[data-theme="dark"] .aw-search input,html[data-theme="dark"] .aw-model-select-wrap select,html[data-theme="dark"] .aw-composer > textarea { color:var(--palette-hex-e0e8ef); }
+html[data-theme="dark"] .aw-history > button { color:var(--palette-hex-9aabba); }
+html[data-theme="dark"] .aw-history > button:hover,html[data-theme="dark"] .aw-history > button.is-active { background:var(--palette-hex-203545); color:var(--palette-hex-b8e4f5); }
+html[data-theme="dark"] .aw-sidebar-note,html[data-theme="dark"] .aw-statusbar { border-color:var(--palette-hex-2a3b49); background:var(--palette-hex-172530); color:var(--palette-hex-a6b5c1); }
+html[data-theme="dark"] .aw-back-link,html[data-theme="dark"] .aw-topbar-title,html[data-theme="dark"] .aw-chat-heading p { color:var(--palette-hex-9aaaba); }
+html[data-theme="dark"] .aw-topbar { border-color:var(--palette-hex-263543); background:var(--palette-hex-14212c); }
+html[data-theme="dark"] .aw-topbar-title strong,html[data-theme="dark"] .aw-chat-heading h1,html[data-theme="dark"] .aw-empty-state h2,html[data-theme="dark"] .aw-empty-models h2 { color:var(--palette-hex-e6edf4); }
+html[data-theme="dark"] .aw-model-select-wrap,html[data-theme="dark"] .aw-composer,html[data-theme="dark"] .aw-prompt-suggestions button,html[data-theme="dark"] .aw-message-avatar,html[data-theme="dark"] .aw-edit-box textarea,html[data-theme="dark"] .aw-edit-box button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-d1dce5); }
+html[data-theme="dark"] .aw-model-select-wrap { color:var(--palette-hex-9bc8db); }
+html[data-theme="dark"] .aw-notice { border-color:var(--palette-hex-2d4b5e); background:var(--palette-hex-1a3040); color:var(--palette-hex-b5d8e9); }
+html[data-theme="dark"] .aw-notice.is-warning { border-color:var(--palette-hex-5b4931); background:var(--palette-hex-30291f); color:var(--palette-hex-e4c99f); }
+html[data-theme="dark"] .aw-empty-models { border-color:var(--palette-hex-344654); background:var(--palette-hex-16242f); }
+html[data-theme="dark"] .aw-empty-models p,html[data-theme="dark"] .aw-empty-state > p { color:var(--palette-hex-9aaaba); }
+html[data-theme="dark"] .aw-message-meta { color:var(--palette-hex-d9e3eb); }
+html[data-theme="dark"] .aw-message-content { color:var(--palette-hex-cbd7e1); }
+html[data-theme="dark"] .aw-composer-bottom { border-color:var(--palette-hex-2a3b49); }
+html[data-theme="dark"] .aw-status-model strong { color:var(--palette-hex-d3dfe8); }
+html[data-theme="dark"] .aw-send-button.is-stop { background:var(--palette-hex-3b292b); color:var(--palette-hex-f1a9a9); }
 @media (max-width: 980px) {
   .aw-sidebar { flex-basis:220px; }
   .aw-content { padding-right:24px; padding-left:24px; }
@@ -3589,12 +2734,12 @@ html[data-theme="gray"] .aw-send-button.is-stop { background:var(--palette-hex-3
 .aw-message-content table { display:block; max-width:100%; overflow-x:auto; border-collapse:collapse; font-size:12px; }
 .aw-message-content th,.aw-message-content td { padding:7px 10px; border:1px solid var(--palette-hex-dfe7ed); text-align:left; }
 .aw-message-content th { background:var(--palette-hex-f2f6f8); color:var(--palette-hex-40566a); }
-html[data-theme="gray"] .aw-message-content h1,html[data-theme="gray"] .aw-message-content h2,html[data-theme="gray"] .aw-message-content h3 { color:var(--palette-hex-e0e9f0); }
-html[data-theme="gray"] .aw-message-content blockquote { border-color:var(--palette-hex-4b7d95); background:var(--palette-hex-1b2d3a); color:var(--palette-hex-b2c4d1); }
-html[data-theme="gray"] .aw-message-content pre { border-color:var(--palette-hex-304252); background:var(--palette-hex-111d27); color:var(--palette-hex-d2dee8); }
-html[data-theme="gray"] .aw-message-content :not(pre) > code { background:var(--palette-hex-243847); color:var(--palette-hex-b9ddeb); }
-html[data-theme="gray"] .aw-message-content th,html[data-theme="gray"] .aw-message-content td { border-color:var(--palette-hex-344653); }
-html[data-theme="gray"] .aw-message-content th { background:var(--palette-hex-20313e); color:var(--palette-hex-c8d5df); }
+html[data-theme="dark"] .aw-message-content h1,html[data-theme="dark"] .aw-message-content h2,html[data-theme="dark"] .aw-message-content h3 { color:var(--palette-hex-e0e9f0); }
+html[data-theme="dark"] .aw-message-content blockquote { border-color:var(--palette-hex-4b7d95); background:var(--palette-hex-1b2d3a); color:var(--palette-hex-b2c4d1); }
+html[data-theme="dark"] .aw-message-content pre { border-color:var(--palette-hex-304252); background:var(--palette-hex-111d27); color:var(--palette-hex-d2dee8); }
+html[data-theme="dark"] .aw-message-content :not(pre) > code { background:var(--palette-hex-243847); color:var(--palette-hex-b9ddeb); }
+html[data-theme="dark"] .aw-message-content th,html[data-theme="dark"] .aw-message-content td { border-color:var(--palette-hex-344653); }
+html[data-theme="dark"] .aw-message-content th { background:var(--palette-hex-20313e); color:var(--palette-hex-c8d5df); }
 
 .aw-history-item { display:flex; align-items:center; gap:3px; min-width:0; }
 .aw-history-select { display:flex; align-items:center; gap:9px; flex:1; min-width:0; width:100%; padding:10px 9px; border:0; border-radius:8px; background:transparent; color:var(--palette-hex-68788a); text-align:left; font-size:12px; cursor:pointer; }
@@ -3603,9 +2748,9 @@ html[data-theme="gray"] .aw-message-content th { background:var(--palette-hex-20
 .aw-history-delete { display:grid; flex:0 0 27px; width:27px; height:27px; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--palette-hex-9aa6b2); opacity:0; cursor:pointer; }
 .aw-history-item:hover .aw-history-delete,.aw-history-delete:focus-visible { opacity:1; }
 .aw-history-delete:hover { background:var(--palette-hex-f8eaea); color:var(--palette-hex-a34a4a); }
-html[data-theme="gray"] .aw-history-select { color:var(--palette-hex-9aabba); }
-html[data-theme="gray"] .aw-history-select:hover,html[data-theme="gray"] .aw-history-select.is-active { background:var(--palette-hex-203545); color:var(--palette-hex-b8e4f5); }
-html[data-theme="gray"] .aw-history-delete:hover { background:var(--palette-hex-3b292b); color:var(--palette-hex-f1a9a9); }
+html[data-theme="dark"] .aw-history-select { color:var(--palette-hex-9aabba); }
+html[data-theme="dark"] .aw-history-select:hover,html[data-theme="dark"] .aw-history-select.is-active { background:var(--palette-hex-203545); color:var(--palette-hex-b8e4f5); }
+html[data-theme="dark"] .aw-history-delete:hover { background:var(--palette-hex-3b292b); color:var(--palette-hex-f1a9a9); }
 @media (hover:none) { .aw-history-delete { opacity:1; } }
 
 .aw-history-rename,.aw-history-rename-save { display:grid; flex:0 0 27px; width:27px; height:27px; place-items:center; border:0; border-radius:7px; background:transparent; color:var(--palette-hex-9aa6b2); opacity:0; cursor:pointer; }
@@ -3613,9 +2758,9 @@ html[data-theme="gray"] .aw-history-delete:hover { background:var(--palette-hex-
 .aw-history-rename:hover { background:var(--palette-hex-e9f2f7); color:var(--palette-hex-28718f); }
 .aw-history-rename-save { background:var(--palette-hex-e8f4ee); color:var(--palette-hex-25805d); opacity:1; }
 .aw-history-rename-input { flex:1; min-width:0; width:100%; height:32px; padding:0 8px; border:1px solid var(--palette-hex-9bc8dc); border-radius:7px; outline:0; background:var(--palette-hex-fff); color:var(--palette-hex-26384a); font:12px inherit; }
-html[data-theme="gray"] .aw-history-rename:hover { background:var(--palette-hex-203545); color:var(--palette-hex-a9d7e9); }
-html[data-theme="gray"] .aw-history-rename-save { background:var(--palette-hex-1e3a32); color:var(--palette-hex-8ed5b4); }
-html[data-theme="gray"] .aw-history-rename-input { border-color:var(--palette-hex-456b7e); background:var(--palette-hex-192733); color:var(--palette-hex-dbe6ee); }
+html[data-theme="dark"] .aw-history-rename:hover { background:var(--palette-hex-203545); color:var(--palette-hex-a9d7e9); }
+html[data-theme="dark"] .aw-history-rename-save { background:var(--palette-hex-1e3a32); color:var(--palette-hex-8ed5b4); }
+html[data-theme="dark"] .aw-history-rename-input { border-color:var(--palette-hex-456b7e); background:var(--palette-hex-192733); color:var(--palette-hex-dbe6ee); }
 
 .aw-heading-controls { display:flex; align-items:flex-end; flex-direction:column; gap:9px; width:270px; flex:0 0 270px; }
 .aw-heading-controls .aw-model-picker { width:100%; flex-basis:auto; }
@@ -3644,17 +2789,17 @@ html[data-theme="gray"] .aw-history-rename-input { border-color:var(--palette-he
 .aw-compare-result-title strong { overflow:hidden; color:var(--palette-hex-30465a); font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
 .aw-compare-result-title span,.aw-compare-result > small { color:var(--palette-hex-8794a1); font-size:9px; }
 .aw-compare-result .aw-message-content { font-size:11px; }
-html[data-theme="gray"] .aw-compare-toggle,html[data-theme="gray"] .aw-compare-panel { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-c5d2dc); }
-html[data-theme="gray"] .aw-compare-heading strong,html[data-theme="gray"] .aw-compare-result-title strong { color:var(--palette-hex-e0e9f0); }
-html[data-theme="gray"] .aw-compare-models label,html[data-theme="gray"] .aw-compare-result { border-color:var(--palette-hex-304252); background:var(--palette-hex-16242f); }
-html[data-theme="gray"] .aw-compare-models label.is-selected { border-color:var(--palette-hex-456b7e); background:var(--palette-hex-1b3545); }
-html[data-theme="gray"] .aw-compare-models small { color:var(--palette-hex-c7d5df); }
-html[data-theme="gray"] .aw-compare-heading p,html[data-theme="gray"] .aw-compare-result-title span { color:var(--palette-hex-9aabba); }
+html[data-theme="dark"] .aw-compare-toggle,html[data-theme="dark"] .aw-compare-panel { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-c5d2dc); }
+html[data-theme="dark"] .aw-compare-heading strong,html[data-theme="dark"] .aw-compare-result-title strong { color:var(--palette-hex-e0e9f0); }
+html[data-theme="dark"] .aw-compare-models label,html[data-theme="dark"] .aw-compare-result { border-color:var(--palette-hex-304252); background:var(--palette-hex-16242f); }
+html[data-theme="dark"] .aw-compare-models label.is-selected { border-color:var(--palette-hex-456b7e); background:var(--palette-hex-1b3545); }
+html[data-theme="dark"] .aw-compare-models small { color:var(--palette-hex-c7d5df); }
+html[data-theme="dark"] .aw-compare-heading p,html[data-theme="dark"] .aw-compare-result-title span { color:var(--palette-hex-9aabba); }
 @media (max-width:720px) { .aw-heading-controls { width:100%; flex-basis:auto; align-items:stretch; } .aw-compare-toggle { align-self:flex-end; } .aw-compare-results { grid-template-columns:1fr; } }
 
 .aw-export-button { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border:1px solid var(--palette-hex-dfe7ed); border-radius:7px; background:var(--palette-hex-fff); color:var(--palette-hex-647789); font-size:10px; cursor:pointer; }
 .aw-export-button:hover { border-color:var(--palette-hex-a9cddd); color:var(--palette-hex-18789c); }
-html[data-theme="gray"] .aw-export-button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-b5c5d1); }
+html[data-theme="dark"] .aw-export-button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-b5c5d1); }
 
 .aw-hidden-file-input { display:none; }
 .aw-attachment-list { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 10px; }
@@ -3667,12 +2812,12 @@ html[data-theme="gray"] .aw-export-button { border-color:var(--palette-hex-30425
 .aw-attach-button { display:inline-flex; align-items:center; gap:5px; padding:5px 7px; border:1px solid var(--palette-hex-e1e8ed); border-radius:6px; background:var(--palette-hex-fff); color:var(--palette-hex-718394); font-size:10px; cursor:pointer; }
 .aw-attach-button:hover:not(:disabled) { border-color:var(--palette-hex-a9cddd); color:var(--palette-hex-18789c); }
 .aw-attach-button:disabled { opacity:.5; cursor:not-allowed; }
-html[data-theme="gray"] .aw-attachment-chip,html[data-theme="gray"] .aw-attach-button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-b5c5d1); }
-html[data-theme="gray"] .aw-file-error { color:var(--palette-hex-e7a1a1); }
+html[data-theme="dark"] .aw-attachment-chip,html[data-theme="dark"] .aw-attach-button { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-b5c5d1); }
+html[data-theme="dark"] .aw-file-error { color:var(--palette-hex-e7a1a1); }
 @media (max-width:520px) { .aw-composer-tools { align-items:flex-start; flex-direction:column; gap:5px; } }
 
 .aw-context-trimmed { color:var(--palette-hex-a17b43); font-size:9px; }
-html[data-theme="gray"] .aw-context-trimmed { color:var(--palette-hex-d5b77d); }
+html[data-theme="dark"] .aw-context-trimmed { color:var(--palette-hex-d5b77d); }
 
 .aw-model-search { width:100%; height:34px; margin-bottom:7px; padding:0 9px; border:1px solid var(--palette-hex-e2e9ee); border-radius:8px; outline:0; background:var(--palette-hex-fff); color:var(--palette-hex-26384a); font-size:11px; }
 .aw-model-search::placeholder { color:var(--palette-hex-9aa6b3); }
@@ -3682,9 +2827,9 @@ html[data-theme="gray"] .aw-context-trimmed { color:var(--palette-hex-d5b77d); }
 .aw-favorite-toggle:hover:not(:disabled) { border-color:var(--palette-hex-e1e9ee); color:var(--palette-hex-60788a); }
 .aw-favorite-toggle.is-favorite { color:var(--palette-hex-b18136); }
 .aw-favorite-toggle:disabled { opacity:.45; cursor:not-allowed; }
-html[data-theme="gray"] .aw-model-search { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-dce6ee); }
-html[data-theme="gray"] .aw-favorite-toggle:hover:not(:disabled) { border-color:var(--palette-hex-304252); }
-html[data-theme="gray"] .aw-favorite-toggle.is-favorite { color:var(--palette-hex-e2c17d); }
+html[data-theme="dark"] .aw-model-search { border-color:var(--palette-hex-304252); background:var(--palette-hex-192733); color:var(--palette-hex-dce6ee); }
+html[data-theme="dark"] .aw-favorite-toggle:hover:not(:disabled) { border-color:var(--palette-hex-304252); }
+html[data-theme="dark"] .aw-favorite-toggle.is-favorite { color:var(--palette-hex-e2c17d); }
 
 .aw-statusbar { position:sticky; bottom:8px; z-index:5; }
 
@@ -3692,7 +2837,7 @@ html[data-theme="gray"] .aw-favorite-toggle.is-favorite { color:var(--palette-he
 .aw-attachment-select { display:flex; align-items:center; gap:6px; min-width:0; cursor:pointer; }
 .aw-attachment-select input { width:12px; height:12px; flex:0 0 12px; margin:0; accent-color:var(--palette-hex-1685a8); }
 .aw-attachment-select span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-html[data-theme="gray"] .aw-attachment-chip.is-selected { border-color:var(--palette-hex-426a7c); background:var(--palette-hex-203642); }
+html[data-theme="dark"] .aw-attachment-chip.is-selected { border-color:var(--palette-hex-426a7c); background:var(--palette-hex-203642); }
 
 
 /* AI navigation item: two-column layout keeps every child inside the sidebar. */
@@ -3714,11 +2859,11 @@ html[data-theme="gray"] .aw-attachment-chip.is-selected { border-color:var(--pal
 .apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-cta { display:inline-flex; align-items:center; justify-content:center; max-width:100%; min-height:19px; padding:3px 7px; border-radius:6px; background:var(--palette-hex-087fa8); color:var(--palette-hex-fff); font-size:8px; font-weight:800; letter-spacing:.025em; line-height:1.2; white-space:normal; overflow-wrap:anywhere; }
 .apple-app .mh-nav-item.mh-nav-item-ai:hover { border-color:var(--palette-hex-75c5df); background:linear-gradient(112deg,var(--palette-hex-ddf3fa) 0%,var(--palette-hex-eaf5ff) 100%); color:var(--palette-hex-034e6b); box-shadow:0 5px 16px var(--palette-rgba-0-112-155-15); transform:translateY(-1px); }
 .apple-app .mh-nav-item.mh-nav-item-ai.active { border-color:var(--palette-hex-0797c5); background:linear-gradient(112deg,var(--palette-hex-d8f1f9) 0%,var(--palette-hex-e6f1ff) 100%); box-shadow:0 0 0 2px var(--palette-rgba-7-151-197-13),0 4px 14px var(--palette-rgba-0-112-155-12); }
-.apple-app[data-theme="gray"] .mh-nav-item.mh-nav-item-ai { border-color:var(--palette-hex-315d70); background:linear-gradient(112deg,var(--palette-hex-173b4b) 0%,var(--palette-hex-1b3048) 100%); color:var(--palette-hex-d5f4ff); box-shadow:0 3px 14px var(--palette-rgba-0-0-0-2),inset 0 1px 0 var(--palette-rgba-255-255-255-04); }
-.apple-app[data-theme="gray"] .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy strong { color:var(--palette-hex-e0f6ff); }
-.apple-app[data-theme="gray"] .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy small { color:var(--palette-hex-a6c5d4); }
-.apple-app[data-theme="gray"] .mh-nav-item.mh-nav-item-ai > svg { color:var(--palette-hex-65c9ed); }
-.apple-app[data-theme="gray"] .mh-nav-item.mh-nav-item-ai .mh-nav-cta { background:var(--palette-hex-087fa8); color:var(--palette-hex-fff); }
+.apple-app[data-theme="dark"] .mh-nav-item.mh-nav-item-ai { border-color:var(--palette-hex-315d70); background:linear-gradient(112deg,var(--palette-hex-173b4b) 0%,var(--palette-hex-1b3048) 100%); color:var(--palette-hex-d5f4ff); box-shadow:0 3px 14px var(--palette-rgba-0-0-0-2),inset 0 1px 0 var(--palette-rgba-255-255-255-04); }
+.apple-app[data-theme="dark"] .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy strong { color:var(--palette-hex-e0f6ff); }
+.apple-app[data-theme="dark"] .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy small { color:var(--palette-hex-a6c5d4); }
+.apple-app[data-theme="dark"] .mh-nav-item.mh-nav-item-ai > svg { color:var(--palette-hex-65c9ed); }
+.apple-app[data-theme="dark"] .mh-nav-item.mh-nav-item-ai .mh-nav-cta { background:var(--palette-hex-087fa8); color:var(--palette-hex-fff); }
 @media (max-width:760px) { .apple-app .mh-nav-item.mh-nav-item-ai { min-height:76px; } }
 @media (prefers-reduced-motion:reduce) { .apple-app .mh-nav-item.mh-nav-item-ai { transition:none; } }
 
@@ -3785,19 +2930,19 @@ html[data-theme="gray"] .aw-attachment-chip.is-selected { border-color:var(--pal
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-html[data-theme="gray"] .aw-shell {
+html[data-theme="dark"] .aw-shell {
   color: var(--palette-hex-e5edf3);
 }
-html[data-theme="gray"] .aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
+html[data-theme="dark"] .aw-shell :where(.aw-topbar-title, .aw-chat-heading h1, .aw-empty-state h2, .aw-compare-heading strong) {
   color: var(--palette-hex-f1f5f8);
 }
-html[data-theme="gray"] .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
+html[data-theme="dark"] .aw-shell :where(.aw-sidebar, .aw-main, .aw-content, .aw-composer, .aw-history, .aw-compare-panel) {
   border-color: var(--palette-hex-354957);
 }
-html[data-theme="gray"] .aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions, .aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta, .aw-context-trimmed) {
+html[data-theme="dark"] .aw-shell :where(.aw-sidebar-note, .aw-disclaimer, .aw-status-metric, .aw-compare-heading p, .aw-compare-actions, .aw-history-empty, .aw-empty-models, .aw-model-picker-meta small, .aw-message-meta, .aw-context-trimmed) {
   color: var(--palette-hex-b5c4cf);
 }
-html[data-theme="gray"] .aw-shell :where(button, a, input, textarea, select):focus-visible {
+html[data-theme="dark"] .aw-shell :where(button, a, input, textarea, select):focus-visible {
   outline-color: var(--palette-hex-75c9e8);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -3878,48 +3023,48 @@ html[data-theme="gray"] .aw-shell :where(button, a, input, textarea, select):foc
   border: 1px solid var(--palette-hex-c5d4de);
   font-size: 13px;
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout {
+html[data-theme="dark"] .apple-app .mh-docs-layout {
   color: var(--palette-hex-e8eef3);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-docs {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs {
   color: var(--palette-hex-e8eef3);
   background: var(--palette-hex-111a23);
   border-color: var(--palette-hex-354957);
   box-shadow: 0 1px 2px var(--palette-rgba-0-0-0-24);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-docs-title h3 {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs-title h3 {
   color: var(--palette-hex-f1f5f8);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-docs > p {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-docs > p {
   color: var(--palette-hex-c0ccd5);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-doc-step {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-doc-step {
   color: var(--palette-hex-b9e8f8);
   background: var(--palette-hex-173443);
   border-color: var(--palette-hex-376477);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-endpoint {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-endpoint {
   color: var(--palette-hex-d8f28b);
   background: var(--palette-hex-0b1219);
   border-color: var(--palette-hex-3b4c5a);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-code {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-code {
   color: var(--palette-hex-d7e4d1);
   background: var(--palette-hex-0b1219);
   border-color: var(--palette-hex-354957);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-copy-button,
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-button-quiet {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-copy-button,
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-button-quiet {
   color: var(--palette-hex-d8eaf2);
   background: var(--palette-hex-1a2b37);
   border-color: var(--palette-hex-466273);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-copy-button:hover,
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-button-quiet:hover {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-copy-button:hover,
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-button-quiet:hover {
   color: var(--palette-hex-ffffff);
   border-color: var(--palette-hex-79b8d0);
 }
-html[data-theme="gray"] .apple-app .mh-docs-layout .mh-doc-warning {
+html[data-theme="dark"] .apple-app .mh-docs-layout .mh-doc-warning {
   color: var(--palette-hex-f1d99b);
   border-color: var(--palette-hex-625331);
 }
@@ -4140,9 +3285,9 @@ html, body, .apple-app, .aw-shell {
 .aw-shell .aw-statusbar { border-radius: var(--av-radius-card); }
 
 /* Gray-based Apple dark appearance. No pure black, purple, or gradient surfaces. */
-html[data-theme="gray"], html[data-theme="gray"] body,
-html[data-theme="gray"] .apple-app,
-html[data-theme="gray"] .aw-shell {
+html[data-theme="dark"], html[data-theme="dark"] body,
+html[data-theme="dark"] .apple-app,
+html[data-theme="dark"] .aw-shell {
   color-scheme: dark;
   --av-bg: var(--palette-hex-1c1c1e);
   --av-surface: var(--palette-hex-2c2c2e);
@@ -4156,17 +3301,17 @@ html[data-theme="gray"] .aw-shell {
   background: var(--palette-hex-1c1c1e);
   color: var(--palette-hex-f5f5f7);
 }
-html[data-theme="gray"] body,
-html[data-theme="gray"] .mh-shell,
-html[data-theme="gray"] .mh-main,
-html[data-theme="gray"] .mh-content,
-html[data-theme="gray"] .aw-shell,
-html[data-theme="gray"] .aw-main,
-html[data-theme="gray"] .aw-content {
+html[data-theme="dark"] body,
+html[data-theme="dark"] .mh-shell,
+html[data-theme="dark"] .mh-main,
+html[data-theme="dark"] .mh-content,
+html[data-theme="dark"] .aw-shell,
+html[data-theme="dark"] .aw-main,
+html[data-theme="dark"] .aw-content {
   background: var(--palette-hex-1c1c1e);
   color: var(--palette-hex-f5f5f7);
 }
-html[data-theme="gray"] .apple-app :is(
+html[data-theme="dark"] .apple-app :is(
   .mh-sidebar, .mh-topbar, .mh-panel, .mh-stat, .mh-step, .mh-provider-card,
   .mh-model-card, .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
   .mh-usage-panel, .mh-secret-reveal, .mh-api-card, .mh-api-example,
@@ -4177,60 +3322,60 @@ html[data-theme="gray"] .apple-app :is(
   color: var(--palette-hex-f5f5f7);
   box-shadow: none;
 }
-html[data-theme="gray"] .apple-app :is(.mh-stat, .mh-step, .mh-provider-card, .mh-model-card):hover {
+html[data-theme="dark"] .apple-app :is(.mh-stat, .mh-step, .mh-provider-card, .mh-model-card):hover {
   background: var(--palette-hex-343436);
   border-color: var(--palette-hex-48484a);
   box-shadow: none;
   transform: none;
 }
-html[data-theme="gray"] .apple-app :is(
+html[data-theme="dark"] .apple-app :is(
   .mh-page-heading h1, .mh-panel-heading h3, .mh-step-copy h3, .mh-model-card-name,
   .mh-stat-value, .mh-docs-title h3, .mh-api-card-heading, .mh-key-main strong,
   .mh-connected-row strong, .mh-model-name strong, .mh-model-detail h2
 ) { color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .apple-app :is(
+html[data-theme="dark"] .apple-app :is(
   .mh-page-heading p, .mh-panel-heading p, .mh-step-copy p, .mh-stat-label,
   .mh-stat-note, .mh-model-card-provider, .mh-provider-info small, .mh-key-main small,
   .mh-docs > p, .mh-section-heading p, .mh-field-help, .mh-detail-info,
   .mh-breadcrumb, .mh-footer, .mh-model-card-bottom
 ) { color: var(--palette-hex-c2c2c7); opacity: 1; }
-html[data-theme="gray"] .apple-app :is(
+html[data-theme="dark"] .apple-app :is(
   .mh-step-icon, .mh-stat-icon, .mh-provider-logo, .mh-api-icon,
   .mh-empty-icon, .mh-catalog-empty-icon, .mh-catalog-side-note-icon
 ) { background: var(--palette-hex-38383a); color: var(--palette-hex-d1d1d6); border-color: var(--palette-hex-48484a); }
-html[data-theme="gray"] .apple-app :is(
+html[data-theme="dark"] .apple-app :is(
   .mh-status, .mh-method, .mh-code-language, .mh-tags span, .mh-beta,
   .mh-button-quiet, .mh-copy-button, .mh-nav-item.mh-nav-item-ai .mh-nav-cta
 ) { background: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); border-color: var(--palette-hex-48484a); }
-html[data-theme="gray"] .apple-app :is(.mh-field, .mh-search, .mh-toolbar .av-dropdown-trigger, .mh-code, .mh-endpoint) {
+html[data-theme="dark"] .apple-app :is(.mh-field, .mh-search, .mh-toolbar .av-dropdown-trigger, .mh-code, .mh-endpoint) {
   background: var(--palette-hex-242426);
   color: var(--palette-hex-f5f5f7);
   border-color: var(--palette-hex-3a3a3c);
 }
-html[data-theme="gray"] .apple-app :is(.mh-code, .mh-endpoint) { color: var(--palette-hex-e5e5ea); }
-html[data-theme="gray"] .apple-app :is(.mh-key-row, .mh-popular-row, .mh-detail-stats, .mh-trust-note) { border-color: var(--palette-hex-3a3a3c); }
-html[data-theme="gray"] .apple-app .mh-model-card.selected,
-html[data-theme="gray"] .apple-app .mh-model-row.selected {
+html[data-theme="dark"] .apple-app :is(.mh-code, .mh-endpoint) { color: var(--palette-hex-e5e5ea); }
+html[data-theme="dark"] .apple-app :is(.mh-key-row, .mh-popular-row, .mh-detail-stats, .mh-trust-note) { border-color: var(--palette-hex-3a3a3c); }
+html[data-theme="dark"] .apple-app .mh-model-card.selected,
+html[data-theme="dark"] .apple-app .mh-model-row.selected {
   background: var(--palette-hex-20364d);
   border-color: var(--palette-hex-0a84ff);
   box-shadow: inset 0 0 0 1px var(--palette-hex-0a84ff);
 }
-html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai {
+html[data-theme="dark"] .apple-app .mh-nav-item.mh-nav-item-ai {
   background: var(--palette-hex-2c2c2e);
   border-color: var(--palette-hex-3a3a3c);
   color: var(--palette-hex-f5f5f7);
   box-shadow: none;
 }
-html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai :is(strong, small, svg) { color: inherit; }
-html[data-theme="gray"] .apple-app .mh-button-primary,
-html[data-theme="gray"] .apple-app .mh-text-link { background: var(--palette-hex-0a84ff); border-color: var(--palette-hex-0a84ff); color: var(--palette-hex-fff); }
-html[data-theme="gray"] .apple-app .mh-text-link { background: transparent; }
-html[data-theme="gray"] .apple-app .mh-inline-error { background: var(--palette-hex-3a2528); border-color: var(--palette-hex-70434a); color: var(--palette-hex-ffb8bd); }
-html[data-theme="gray"] .apple-app .mh-inline-success { background: var(--palette-hex-26372d); border-color: var(--palette-hex-466451); color: var(--palette-hex-b9e5c7); }
-html[data-theme="gray"] .apple-app .mh-callout { background: var(--palette-hex-343436); border-color: var(--palette-hex-48484a); color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .apple-app .mh-callout p { color: var(--palette-hex-c2c2c7); }
+html[data-theme="dark"] .apple-app .mh-nav-item.mh-nav-item-ai :is(strong, small, svg) { color: inherit; }
+html[data-theme="dark"] .apple-app .mh-button-primary,
+html[data-theme="dark"] .apple-app .mh-text-link { background: var(--palette-hex-0a84ff); border-color: var(--palette-hex-0a84ff); color: var(--palette-hex-fff); }
+html[data-theme="dark"] .apple-app .mh-text-link { background: transparent; }
+html[data-theme="dark"] .apple-app .mh-inline-error { background: var(--palette-hex-3a2528); border-color: var(--palette-hex-70434a); color: var(--palette-hex-ffb8bd); }
+html[data-theme="dark"] .apple-app .mh-inline-success { background: var(--palette-hex-26372d); border-color: var(--palette-hex-466451); color: var(--palette-hex-b9e5c7); }
+html[data-theme="dark"] .apple-app .mh-callout { background: var(--palette-hex-343436); border-color: var(--palette-hex-48484a); color: var(--palette-hex-f5f5f7); }
+html[data-theme="dark"] .apple-app .mh-callout p { color: var(--palette-hex-c2c2c7); }
 
-html[data-theme="gray"] .aw-shell {
+html[data-theme="dark"] .aw-shell {
   --aw-bg: var(--palette-hex-1c1c1e);
   --aw-surface: var(--palette-hex-2c2c2e);
   --aw-border: var(--palette-hex-3a3a3c);
@@ -4240,7 +3385,7 @@ html[data-theme="gray"] .aw-shell {
   background: var(--palette-hex-1c1c1e);
   color: var(--palette-hex-f5f5f7);
 }
-html[data-theme="gray"] .aw-shell :is(
+html[data-theme="dark"] .aw-shell :is(
   .aw-sidebar, .aw-topbar, .aw-sidebar-note, .aw-statusbar, .aw-compare-panel,
   .aw-compare-result, .aw-empty-models, .aw-notice, .aw-notice.is-warning,
   .aw-composer, .aw-model-select-wrap, .aw-message-avatar, .aw-edit-box,
@@ -4251,44 +3396,44 @@ html[data-theme="gray"] .aw-shell :is(
   color: var(--palette-hex-f5f5f7);
   box-shadow: none;
 }
-html[data-theme="gray"] .aw-shell :is(
+html[data-theme="dark"] .aw-shell :is(
   .aw-compare-models label, .aw-attachment-chip, .aw-model-search, .aw-search,
   .aw-new-chat, .aw-history-rename-input
 ) { background: var(--palette-hex-242426); border-color: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .aw-shell :is(
+html[data-theme="dark"] .aw-shell :is(
   .aw-topbar-title strong, .aw-chat-heading h1, .aw-empty-state h2,
   .aw-empty-models h2, .aw-compare-heading strong, .aw-message-meta,
   .aw-message-content, .aw-status-model strong, .aw-model-select-wrap select,
   .aw-composer > textarea, .aw-edit-box textarea
 ) { color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .aw-shell :is(
+html[data-theme="dark"] .aw-shell :is(
   p, .aw-chat-heading p, .aw-empty-state > p, .aw-empty-models p,
   .aw-compare-heading p, .aw-sidebar-note, .aw-disclaimer, .aw-status-metric,
   .aw-model-picker-meta small, .aw-history-empty, .aw-compare-actions,
   .aw-status-model span, .aw-message-meta span
 ) { color: var(--palette-hex-c2c2c7); opacity: 1; }
-html[data-theme="gray"] .aw-shell :is(.aw-compare-models label.is-selected, .aw-attachment-chip.is-selected) {
+html[data-theme="dark"] .aw-shell :is(.aw-compare-models label.is-selected, .aw-attachment-chip.is-selected) {
   background: var(--palette-hex-20364d);
   border-color: var(--palette-hex-0a84ff);
   color: var(--palette-hex-f5f5f7);
 }
-html[data-theme="gray"] .aw-shell :is(.aw-prompt-suggestions button:hover, .aw-compare-models label:hover) {
+html[data-theme="dark"] .aw-shell :is(.aw-prompt-suggestions button:hover, .aw-compare-models label:hover) {
   background: var(--palette-hex-343436);
   border-color: var(--palette-hex-48484a);
 }
-html[data-theme="gray"] .aw-shell .aw-compare-actions button,
-html[data-theme="gray"] .aw-shell .aw-send-button:not(.is-stop) {
+html[data-theme="dark"] .aw-shell .aw-compare-actions button,
+html[data-theme="dark"] .aw-shell .aw-send-button:not(.is-stop) {
   background: var(--palette-hex-0a84ff);
   color: var(--palette-hex-fff);
 }
-html[data-theme="gray"] .aw-shell .aw-send-button.is-stop { background: var(--palette-hex-48484a); color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .aw-shell .aw-message-content blockquote { background: var(--palette-hex-343436); border-color: var(--palette-hex-636366); color: var(--palette-hex-e5e5ea); }
-html[data-theme="gray"] .aw-shell .aw-message-content pre { background: var(--palette-hex-242426); border-color: var(--palette-hex-3a3a3c); color: var(--palette-hex-e5e5ea); }
-html[data-theme="gray"] .aw-shell .aw-message-content :not(pre) > code { background: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .aw-shell .aw-message-content th { background: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); }
-html[data-theme="gray"] .aw-shell .aw-message-content th,
-html[data-theme="gray"] .aw-shell .aw-message-content td { border-color: var(--palette-hex-48484a); }
-html[data-theme="gray"] .aw-shell .aw-notice svg { color: var(--palette-hex-c2c2c7); }
+html[data-theme="dark"] .aw-shell .aw-send-button.is-stop { background: var(--palette-hex-48484a); color: var(--palette-hex-f5f5f7); }
+html[data-theme="dark"] .aw-shell .aw-message-content blockquote { background: var(--palette-hex-343436); border-color: var(--palette-hex-636366); color: var(--palette-hex-e5e5ea); }
+html[data-theme="dark"] .aw-shell .aw-message-content pre { background: var(--palette-hex-242426); border-color: var(--palette-hex-3a3a3c); color: var(--palette-hex-e5e5ea); }
+html[data-theme="dark"] .aw-shell .aw-message-content :not(pre) > code { background: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); }
+html[data-theme="dark"] .aw-shell .aw-message-content th { background: var(--palette-hex-3a3a3c); color: var(--palette-hex-f5f5f7); }
+html[data-theme="dark"] .aw-shell .aw-message-content th,
+html[data-theme="dark"] .aw-shell .aw-message-content td { border-color: var(--palette-hex-48484a); }
+html[data-theme="dark"] .aw-shell .aw-notice svg { color: var(--palette-hex-c2c2c7); }
 
 /* Ensure the app never reintroduces gradients, black surfaces or lift effects. */
 .apple-app :is(.mh-panel, .mh-stat, .mh-step, .mh-provider-card, .mh-model-card),
@@ -4296,7 +3441,7 @@ html[data-theme="gray"] .aw-shell .aw-notice svg { color: var(--palette-hex-c2c2
   background-image: none;
   transform: none;
 }
-html[data-theme="gray"] :is(.apple-app, .aw-shell) :is(
+html[data-theme="dark"] :is(.apple-app, .aw-shell) :is(
   .mh-panel, .mh-stat, .mh-step, .mh-provider-card, .mh-model-card,
   .aw-compare-panel, .aw-compare-result, .aw-empty-models, .aw-notice, .aw-composer
 ) { box-shadow: none; }
@@ -4389,7 +3534,7 @@ html[data-theme="gray"] :is(.apple-app, .aw-shell) :is(
   --apple-line:var(--app-border);
   --apple-blue:var(--app-accent);
 }
-.apple-app[data-theme="gray"],html[data-theme="gray"] .apple-app{
+.apple-app[data-theme="dark"],html[data-theme="dark"] .apple-app{
   color-scheme:dark;
   --app-page:var(--palette-hex-1c1c1e);
   --app-page-subtle:var(--palette-hex-1c1c1e);
@@ -4426,7 +3571,7 @@ html[data-theme="gray"] :is(.apple-app, .aw-shell) :is(
 .apple-app .mh-stat-label,.apple-app .mh-stat-note{color:var(--app-muted);min-width:0}
 .apple-app .aw-statusbar{position:sticky;bottom:0;z-index:20;background:var(--app-card);border-top:1px solid var(--app-border);color:var(--app-muted)}
 .apple-app :where(button,a,input,select,textarea,.mh-panel,.mh-stat,.mh-step,.aw-shell,.aw-statusbar){transition-property:background-color,border-color,color,box-shadow;transition-duration:160ms;transition-timing-function:ease}
-html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] body{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
 @media(prefers-reduced-motion:reduce){.apple-app :where(*, *::before, *::after){transition-duration:0ms!important;animation-duration:0.01ms!important;animation-iteration-count:1!important}}
 
 
@@ -4469,59 +3614,59 @@ html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--pa
 .apple-app .mh-stat-value{font-variant-numeric:tabular-nums;white-space:nowrap}
 .apple-app .mh-stat-icon,.apple-app .aw-shell svg{backface-visibility:hidden}
 
-html[data-theme="gray"] .apple-app .mh-shell,
-html[data-theme="gray"] .apple-app .aw-shell{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
-html[data-theme="gray"] .apple-app .mh-sidebar,
-html[data-theme="gray"] .apple-app .mh-topbar,
-html[data-theme="gray"] .apple-app .aw-sidebar,
-html[data-theme="gray"] .apple-app .aw-topbar{background:var(--palette-hex-2c2c2e);border-color:var(--palette-hex-3a3a3c);color:var(--palette-hex-f5f5f7)}
-html[data-theme="gray"] .apple-app .mh-workspace,
-html[data-theme="gray"] .apple-app .mh-usage-mini,
-html[data-theme="gray"] .apple-app .mh-panel,
-html[data-theme="gray"] .apple-app .mh-stat,
-html[data-theme="gray"] .apple-app .mh-step,
-html[data-theme="gray"] .apple-app .mh-provider-card,
-html[data-theme="gray"] .apple-app .mh-model-card,
-html[data-theme="gray"] .apple-app .aw-model-picker,
-html[data-theme="gray"] .apple-app .aw-compare-panel,
-html[data-theme="gray"] .apple-app .aw-compare-result,
-html[data-theme="gray"] .apple-app .aw-empty-models,
-html[data-theme="gray"] .apple-app .aw-notice,
-html[data-theme="gray"] .apple-app .aw-composer,
-html[data-theme="gray"] .apple-app .aw-statusbar{
+html[data-theme="dark"] .apple-app .mh-shell,
+html[data-theme="dark"] .apple-app .aw-shell{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] .apple-app .mh-sidebar,
+html[data-theme="dark"] .apple-app .mh-topbar,
+html[data-theme="dark"] .apple-app .aw-sidebar,
+html[data-theme="dark"] .apple-app .aw-topbar{background:var(--palette-hex-2c2c2e);border-color:var(--palette-hex-3a3a3c);color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] .apple-app .mh-workspace,
+html[data-theme="dark"] .apple-app .mh-usage-mini,
+html[data-theme="dark"] .apple-app .mh-panel,
+html[data-theme="dark"] .apple-app .mh-stat,
+html[data-theme="dark"] .apple-app .mh-step,
+html[data-theme="dark"] .apple-app .mh-provider-card,
+html[data-theme="dark"] .apple-app .mh-model-card,
+html[data-theme="dark"] .apple-app .aw-model-picker,
+html[data-theme="dark"] .apple-app .aw-compare-panel,
+html[data-theme="dark"] .apple-app .aw-compare-result,
+html[data-theme="dark"] .apple-app .aw-empty-models,
+html[data-theme="dark"] .apple-app .aw-notice,
+html[data-theme="dark"] .apple-app .aw-composer,
+html[data-theme="dark"] .apple-app .aw-statusbar{
   background:var(--palette-hex-2c2c2e);border-color:var(--palette-hex-3a3a3c);color:var(--palette-hex-f5f5f7);box-shadow:none;
 }
-html[data-theme="gray"] .apple-app .mh-page-heading h1,
-html[data-theme="gray"] .apple-app .mh-section-heading h2,
-html[data-theme="gray"] .apple-app .mh-panel-heading h3,
-html[data-theme="gray"] .apple-app .mh-stat-value,
-html[data-theme="gray"] .apple-app .aw-chat-heading h1,
-html[data-theme="gray"] .apple-app .aw-message-body,
-html[data-theme="gray"] .apple-app .aw-status-model strong{color:var(--palette-hex-f5f5f7)}
-html[data-theme="gray"] .apple-app .mh-page-heading p,
-html[data-theme="gray"] .apple-app .mh-stat-label,
-html[data-theme="gray"] .apple-app .mh-stat-note,
-html[data-theme="gray"] .apple-app .mh-section-heading p,
-html[data-theme="gray"] .apple-app .mh-panel-heading p,
-html[data-theme="gray"] .apple-app .aw-chat-heading p,
-html[data-theme="gray"] .apple-app .aw-statusbar,
-html[data-theme="gray"] .apple-app .aw-status-metric,
-html[data-theme="gray"] .apple-app .aw-disclaimer{color:var(--palette-hex-98989d)}
-html[data-theme="gray"] .apple-app .mh-button-quiet,
-html[data-theme="gray"] .apple-app .mh-field,
-html[data-theme="gray"] .apple-app .mh-search,
-html[data-theme="gray"] .apple-app .aw-model-search,
-html[data-theme="gray"] .apple-app .aw-composer textarea,
-html[data-theme="gray"] .apple-app .aw-history-rename-input{
+html[data-theme="dark"] .apple-app .mh-page-heading h1,
+html[data-theme="dark"] .apple-app .mh-section-heading h2,
+html[data-theme="dark"] .apple-app .mh-panel-heading h3,
+html[data-theme="dark"] .apple-app .mh-stat-value,
+html[data-theme="dark"] .apple-app .aw-chat-heading h1,
+html[data-theme="dark"] .apple-app .aw-message-body,
+html[data-theme="dark"] .apple-app .aw-status-model strong{color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] .apple-app .mh-page-heading p,
+html[data-theme="dark"] .apple-app .mh-stat-label,
+html[data-theme="dark"] .apple-app .mh-stat-note,
+html[data-theme="dark"] .apple-app .mh-section-heading p,
+html[data-theme="dark"] .apple-app .mh-panel-heading p,
+html[data-theme="dark"] .apple-app .aw-chat-heading p,
+html[data-theme="dark"] .apple-app .aw-statusbar,
+html[data-theme="dark"] .apple-app .aw-status-metric,
+html[data-theme="dark"] .apple-app .aw-disclaimer{color:var(--palette-hex-98989d)}
+html[data-theme="dark"] .apple-app .mh-button-quiet,
+html[data-theme="dark"] .apple-app .mh-field,
+html[data-theme="dark"] .apple-app .mh-search,
+html[data-theme="dark"] .apple-app .aw-model-search,
+html[data-theme="dark"] .apple-app .aw-composer textarea,
+html[data-theme="dark"] .apple-app .aw-history-rename-input{
   background:var(--palette-hex-2c2c2e);color:var(--palette-hex-f5f5f7);border-color:var(--palette-hex-3a3a3c);
 }
-html[data-theme="gray"] .apple-app .mh-nav-item:hover,
-html[data-theme="gray"] .apple-app .mh-profile:hover,
-html[data-theme="gray"] .apple-app .aw-history-item:hover,
-html[data-theme="gray"] .apple-app .aw-model-option:hover{background:var(--palette-hex-3a3a3c);color:var(--palette-hex-f5f5f7)}
-html[data-theme="gray"] .apple-app .mh-button-primary,
-html[data-theme="gray"] .apple-app .aw-send-button{background:var(--palette-hex-0a84ff);border-color:var(--palette-hex-0a84ff);color:var(--palette-hex-ffffff)}
-html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] .apple-app .mh-nav-item:hover,
+html[data-theme="dark"] .apple-app .mh-profile:hover,
+html[data-theme="dark"] .apple-app .aw-history-item:hover,
+html[data-theme="dark"] .apple-app .aw-model-option:hover{background:var(--palette-hex-3a3a3c);color:var(--palette-hex-f5f5f7)}
+html[data-theme="dark"] .apple-app .mh-button-primary,
+html[data-theme="dark"] .apple-app .aw-send-button{background:var(--palette-hex-0a84ff);border-color:var(--palette-hex-0a84ff);color:var(--palette-hex-ffffff)}
+html[data-theme="dark"] body{background:var(--palette-hex-1c1c1e);color:var(--palette-hex-f5f5f7)}
 
 
 /* File tree and persistent Workspace telemetry. */
@@ -4559,10 +3704,10 @@ html[data-theme="gray"] body{background:var(--palette-hex-1c1c1e);color:var(--pa
 .apple-app .mh-brand-mark,.apple-app .mh-workspace-icon,.apple-app .mh-avatar{
   background:var(--app-accent);color:var(--palette-hex-ffffff);box-shadow:none
 }
-html[data-theme="gray"] .apple-app .mh-nav-item.active{background:var(--app-hover);color:var(--app-accent)}
-html[data-theme="gray"] .apple-app .mh-icon-button,
-html[data-theme="gray"] .apple-app .mh-region,
-html[data-theme="gray"] .apple-app .mh-mobile-menu{background:var(--app-card);color:var(--app-muted);border-color:var(--app-border)}
+html[data-theme="dark"] .apple-app .mh-nav-item.active{background:var(--app-hover);color:var(--app-accent)}
+html[data-theme="dark"] .apple-app .mh-icon-button,
+html[data-theme="dark"] .apple-app .mh-region,
+html[data-theme="dark"] .apple-app .mh-mobile-menu{background:var(--app-card);color:var(--app-muted);border-color:var(--app-border)}
 
 .apple-app .aw-model-details{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .apple-app .aw-model-badge{display:inline-flex;align-items:center;min-height:22px;padding:3px 7px;border:1px solid var(--app-border);border-radius:999px;background:var(--app-page-subtle);color:var(--app-muted);font-size:10px;font-weight:550;line-height:1.25}
@@ -4585,16 +3730,16 @@ html[data-theme="gray"] .apple-app .mh-mobile-menu{background:var(--app-card);co
 .apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-item-copy small{color:var(--app-muted)}
 .apple-app .mh-nav-item.mh-nav-item-ai::before{background:var(--app-accent)}
 .apple-app .mh-nav-item.mh-nav-item-ai .mh-nav-cta{background:var(--app-accent);color:var(--palette-hex-ffffff)}
-html[data-theme="gray"] .apple-app .mh-preview-banner,
-html[data-theme="gray"] .apple-app .mh-api-hero,
-html[data-theme="gray"] .apple-app .min-h-screen.bg-background,
-html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai,
-html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai:hover,
-html[data-theme="gray"] .apple-app .mh-nav-item.mh-nav-item-ai.active{
+html[data-theme="dark"] .apple-app .mh-preview-banner,
+html[data-theme="dark"] .apple-app .mh-api-hero,
+html[data-theme="dark"] .apple-app .min-h-screen.bg-background,
+html[data-theme="dark"] .apple-app .mh-nav-item.mh-nav-item-ai,
+html[data-theme="dark"] .apple-app .mh-nav-item.mh-nav-item-ai:hover,
+html[data-theme="dark"] .apple-app .mh-nav-item.mh-nav-item-ai.active{
   background:var(--app-card);background-image:none;color:var(--app-text);border-color:var(--app-border);box-shadow:none
 }
-html[data-theme="gray"] .apple-app .mh-workspace-icon,
-html[data-theme="gray"] .apple-app .mh-avatar{background:var(--app-hover);background-image:none;color:var(--app-muted)}
+html[data-theme="dark"] .apple-app .mh-workspace-icon,
+html[data-theme="dark"] .apple-app .mh-avatar{background:var(--app-hover);background-image:none;color:var(--app-muted)}
 
 .apple-app .min-h-screen.bg-background>div>div:first-child>div:first-child{
   background:var(--app-hover);background-image:none;color:var(--app-text);box-shadow:none
@@ -4602,18 +3747,18 @@ html[data-theme="gray"] .apple-app .mh-avatar{background:var(--app-hover);backgr
 
 
 /* Dashboard footer: readable neutral text in the graphite theme. */
-html[data-theme="gray"] .apple-app .mh-footer {
+html[data-theme="dark"] .apple-app .mh-footer {
   color: var(--palette-hex-c2c2c7);
   border-top-color: var(--palette-hex-3a3a3c);
 }
-html[data-theme="gray"] .apple-app .mh-footer > span:first-child,
-html[data-theme="gray"] .apple-app .mh-footer > span:last-child {
+html[data-theme="dark"] .apple-app .mh-footer > span:first-child,
+html[data-theme="dark"] .apple-app .mh-footer > span:last-child {
   color: var(--palette-hex-a1a1a6);
 }
-html[data-theme="gray"] .apple-app .mh-footer-dot {
+html[data-theme="dark"] .apple-app .mh-footer-dot {
   background: var(--palette-hex-34c759);
   box-shadow: 0 0 8px color-mix(in srgb, var(--palette-hex-34c759) 35%, transparent);
 }
-html[data-theme="gray"] .apple-app .mh-footer-sep {
+html[data-theme="dark"] .apple-app .mh-footer-sep {
   color: var(--palette-hex-636366);
 }
