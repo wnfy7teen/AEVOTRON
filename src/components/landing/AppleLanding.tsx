@@ -237,7 +237,7 @@ export default function AppleLanding() {
       <nav className={"av-nav-links " + (menuOpen ? "is-open" : "")} aria-label={t("Основная навигация")}>
         <a href="#platform" onClick={() => setMenuOpen(false)}>{t("Платформа")}</a><a href="#security" onClick={() => setMenuOpen(false)}>{t("Безопасность")}</a><a href="#developers" onClick={() => setMenuOpen(false)}>{t("Разработчикам")}</a>
       </nav>
-      <div className="av-nav-actions"><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
+      <div className="av-nav-actions"><Link to="/workspace" className="av-login av-workspace-link">{t("Workspace")}</Link><Link to="/login" search={{ demo: "1" }} className="av-login">{t("Войти")}</Link><Link to="/register" className="av-nav-cta">{t("Начать работу")} <ArrowRight size={15} /></Link></div>
       <div className="av-theme-switch" role="group" aria-label={t("Тема оформления")}>
         <button type="button" className={theme === "dark" ? "active" : ""} onClick={() => setTheme("dark")} aria-label={t("Тёмная тема")} aria-pressed={theme === "dark"} title={t("Тёмная")}><Moon size={14} aria-hidden="true" /><span>{t("Тёмная")}</span></button>
         <button type="button" className={theme === "light" ? "active" : ""} onClick={() => setTheme("light")} aria-label={t("Светлая тема")} aria-pressed={theme === "light"} title={t("Светлая")}><Sun size={14} aria-hidden="true" /><span>{t("Светлая")}</span></button>
