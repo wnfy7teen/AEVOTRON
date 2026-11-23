@@ -30,7 +30,6 @@ export function SubmitButton({ busy, busyLabel, children, ...props }) {
   );
 }
 
-export function GoogleButton() { return null; }
 
 export function OrDivider() {
   const { t } = useTranslation(["auth", "translation"]);
