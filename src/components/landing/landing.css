@@ -2794,8 +2794,34 @@ body:has(.av-site) .av-site {
 /* The floating section navigator is a desktop affordance only.
    On touch layouts the header menu is the single, predictable navigation entry. */
 @media (max-width: 800px) {
+  /* Keep the section navigator available on iPhone/iPad as well as desktop.
+     It is a body portal, so position it independently from the landing layout. */
   body:has(.av-site) > .av-section-nav {
-    display: none !important;
+    display: flex !important;
+    position: fixed;
+    z-index: 1000;
+    top: 50%;
+    right: max(8px, env(safe-area-inset-right));
+    left: auto;
+    width: max-content;
+    min-width: 108px;
+    max-width: min(38vw, 144px);
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 32px);
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 9px 7px;
+    transform: translate3d(0, -50%, 0);
+    pointer-events: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  body:has(.av-site) > .av-section-nav a {
+    min-height: 44px;
+    padding: 0 7px;
+    font-size: 11px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 @media (min-width: 801px) {
