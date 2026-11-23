@@ -1,7 +1,8 @@
-/* Landing hero orbital visualization — semantic theme tokens only. */
+/* Apple-style orbital badge. Colors come from the active Light/Gray theme tokens. */
 .av-site .av-hero-art {
   position: relative;
   display: block;
+  isolation: isolate;
   width: 100%;
   max-width: 560px;
   aspect-ratio: 1 / 1;
@@ -11,227 +12,161 @@
 
 .av-site .av-hero-art .av-orbit {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px solid var(--border-strong);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--border-strong);
   border-radius: 50%;
-  transform: translate(-50%, -50%);
   pointer-events: none;
-  backface-visibility: hidden;
 }
 
 .av-site .av-hero-art .av-orbit-one {
-  width: 72%;
-  height: 72%;
+  inset: 0;
 }
 
 .av-site .av-hero-art .av-orbit-two {
-  width: 96%;
-  height: 96%;
-  border-style: dashed;
+  inset: 12%;
+  width: 76%;
+  height: 76%;
+  border-style: solid;
+  opacity: 0.72;
 }
 
-.av-site .av-hero-art .av-orbit::before {
+.av-site .av-hero-art .av-orbit-one::before,
+.av-site .av-hero-art .av-orbit-two::before {
   content: "";
   position: absolute;
-  top: -5px;
+  top: -4px;
   left: 50%;
-  width: 10px;
-  height: 10px;
-  margin-left: -5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent);
+  transform: translateX(-50%);
 }
 
 .av-site .av-hero-art .av-orbit-two::before {
   top: auto;
-  bottom: -5px;
+  bottom: -4px;
   background: var(--text-secondary);
 }
 
-@keyframes av-orbit-spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes av-orbit-spin-rev {
-  to { transform: translate(-50%, -50%) rotate(-360deg); }
-}
-
-@keyframes av-core-spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes av-float {
-  50% { translate: 0 -4px; }
-}
-
-/* The circular core and its complete text stack rotate as one centered unit. */
 .av-site .av-hero-art .av-core {
+  --size: 120px;
   position: absolute;
   z-index: 2;
   top: 50%;
   left: 50%;
   display: flex;
-  width: 140px;
-  height: 140px;
-  max-width: none;
+  width: var(--size);
+  height: var(--size);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 14px;
+  gap: 0.25rem;
+  padding: 0.75rem;
   overflow: hidden;
   transform: translate(-50%, -50%);
-  border: 1px solid var(--border-strong);
+  border: 2px solid var(--border-strong);
   border-radius: 50%;
   background: var(--bg-secondary);
   box-shadow: none;
+  color: var(--text-primary);
   text-align: center;
   contain: layout style paint;
-  backface-visibility: hidden;
+}
+
+.av-site .av-hero-art .av-core-mark {
+  display: block;
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
 }
 
 .av-site .av-hero-art .av-core strong {
+  display: block;
   max-width: 100%;
   color: var(--text-primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.25;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
   text-align: center;
   white-space: nowrap;
 }
 
 .av-site .av-hero-art .av-core small {
+  display: block;
   max-width: 100%;
   color: var(--text-secondary);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 1.25;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   text-align: center;
   white-space: nowrap;
 }
 
-.av-site .av-hero-art .av-core-mark {
-  display: grid;
-  width: 40px;
-  height: 40px;
-  flex: 0 0 40px;
-  place-items: center;
-  border: 0;
-  border-radius: 11px;
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  font-size: 23px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1;
-}
-
 .av-site .av-hero-art .av-orbit-label {
+  --orbit-radius: 39%;
   position: absolute;
   z-index: 3;
+  top: 50%;
+  left: 50%;
+  display: block;
   max-width: 44%;
-  padding: 6px 12px;
+  padding: 6px 11px;
+  overflow: visible;
+  transform-origin: 0 0;
+  transform: rotate(var(--orbit-start, 0deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
   border: 1px solid var(--border-strong);
-  border-radius: 980px;
+  border-radius: 999px;
   background: var(--bg-secondary);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 16px;
+  letter-spacing: 0.045em;
+  line-height: 1.25;
+  text-align: center;
   white-space: nowrap;
-  opacity: 1;
-  filter: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backface-visibility: hidden;
+  will-change: transform;
+  animation: av-label-orbit 20s linear infinite;
 }
 
-.av-site .av-hero-art .av-label-top {
-  top: 2%;
-  left: 50%;
-  transform: translateX(-50%);
+.av-site .av-hero-art .av-orbit-label > span {
+  display: block;
+  animation: av-label-counter-spin 20s linear infinite;
+  backface-visibility: hidden;
 }
 
-.av-site .av-hero-art .av-label-bottom {
-  bottom: 2%;
-  left: 50%;
-  transform: translateX(-50%);
+@keyframes av-label-orbit {
+  from {
+    transform: rotate(var(--orbit-start, 0deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
+  }
+  to {
+    transform: rotate(calc(var(--orbit-start, 0deg) + 360deg)) translateX(var(--orbit-radius)) translate(-50%, -50%);
+  }
 }
 
-.av-site .av-hero-art .av-label-left {
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
+@keyframes av-label-counter-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
-.av-site .av-hero-art .av-label-right {
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
+.av-site .av-hero-art:hover .av-orbit-label,
+.av-site .av-hero-art:hover .av-orbit-label > span {
+  animation-play-state: paused;
 }
 
-.av-site .av-hero-art .av-label-top-right {
-  top: 16%;
-  right: 4%;
-}
-
-.av-site .av-hero-art .av-label-bottom-left {
-  bottom: 16%;
-  left: 4%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .av-site .av-hero-art .av-orbit-one {
-    animation: av-orbit-spin 40s linear infinite;
-    will-change: transform;
-  }
-
-  .av-site .av-hero-art .av-orbit-two {
-    animation: av-orbit-spin-rev 70s linear infinite;
-    will-change: transform;
-  }
-
-  .av-site .av-hero-art .av-core {
-    animation: av-core-spin 20s linear infinite;
-    will-change: transform;
-  }
-
-  .av-site .av-hero-art.is-paused .av-orbit,
-  .av-site .av-hero-art.is-paused .av-core {
-    animation-play-state: paused;
-  }
-
-  .av-site .av-hero-art:hover .av-core {
-    animation-play-state: paused;
-  }
-
-  .av-site .av-hero-art .av-label-left {
-    animation: av-float 6s ease-in-out 0s infinite;
-  }
-
-  .av-site .av-hero-art .av-label-right {
-    animation: av-float 6s ease-in-out -1.5s infinite;
-  }
-
-  .av-site .av-hero-art .av-label-top-right {
-    animation: av-float 6s ease-in-out -3s infinite;
-  }
-
-  .av-site .av-hero-art .av-label-bottom-left {
-    animation: av-float 6s ease-in-out -4.5s infinite;
-  }
-
-  .av-site .av-hero-art .av-label-top {
-    animation: av-float 6s ease-in-out -.75s infinite;
-  }
-
-  .av-site .av-hero-art .av-label-bottom {
-    animation: av-float 6s ease-in-out -2.25s infinite;
-  }
+.av-site .av-hero-art.is-paused .av-orbit-label,
+.av-site .av-hero-art.is-paused .av-orbit-label > span {
+  animation-play-state: paused;
 }
 
 @media (max-width: 640px) {
@@ -239,44 +174,51 @@
     max-width: 340px;
   }
 
-  .av-site .av-hero-art .av-orbit-label {
-    max-width: 46%;
-    padding: 4px 10px;
+  .av-site .av-hero-art .av-core {
+    --size: 96px;
+    gap: 0.15rem;
+    padding: 0.45rem;
+  }
+
+  .av-site .av-hero-art .av-core-mark {
+    font-size: 29px;
+  }
+
+  .av-site .av-hero-art .av-core strong {
+    font-size: 14px;
+  }
+
+  .av-site .av-hero-art .av-core small {
     font-size: 10px;
   }
 
-  .av-site .av-hero-art .av-label-left {
-    left: 0;
-  }
-
-  .av-site .av-hero-art .av-label-right {
-    right: 0;
+  .av-site .av-hero-art .av-orbit-label {
+    --orbit-radius: 38%;
+    max-width: 46%;
+    padding: 4px 8px;
+    font-size: 9px;
+    letter-spacing: 0.025em;
   }
 
   .av-site .av-hero-art .av-label-top-right,
   .av-site .av-hero-art .av-label-bottom-left {
     display: none;
   }
-
-  .av-site .av-hero-art .av-core {
-    width: 112px;
-    height: 112px;
-    padding: 10px;
-  }
-
-  .av-site .av-hero-art .av-core-mark {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-    font-size: 20px;
-  }
 }
 
 @media (max-width: 360px) {
   .av-site .av-hero-art .av-orbit-label {
-    max-width: 43%;
-    padding-inline: 7px;
-    font-size: 9px;
-    letter-spacing: 0.04em;
+    --orbit-radius: 36%;
+    max-width: 44%;
+    padding-inline: 6px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-site .av-hero-art .av-orbit-label,
+  .av-site .av-hero-art .av-orbit-label > span {
+    animation: none;
+    will-change: auto;
   }
 }
