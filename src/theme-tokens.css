@@ -13,12 +13,12 @@ html[data-theme="light"], [data-theme="light"] {
   --bg-primary: #f5f5f7;
   --bg-secondary: #ffffff;
   --bg-tertiary: #e8e8ed;
-  --bg-elevated: rgba(255,255,255,0.80);
+  --bg-elevated: rgba(255,255,255,0.72);
   --text-primary: #1d1d1f;
   --text-secondary: #6e6e73;
   --text-tertiary: #86868b;
-  --border: rgba(0,0,0,0.10);
-  --border-strong: rgba(0,0,0,0.18);
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.14);
   --accent: #0071e3;
   --accent-hover: #0077ed;
   --accent-foreground:#ffffff;
