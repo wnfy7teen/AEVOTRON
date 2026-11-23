@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:5173";
 
 test("orbital badge remains animated and scroll stays responsive", async ({ page }) => {
-  const longTasks: number[] = [];
   await page.addInitScript(() => {
     (window as Window & { __longTasks?: number[] }).__longTasks = [];
     if ("PerformanceObserver" in window) {
