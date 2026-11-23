@@ -789,5 +789,13 @@
   "Gray theme": "Gray theme",
   "Switch to gray theme": "Switch to gray theme",
   "Sample data · Interactive demo · Local changes only · No account or backend connection required": "Sample data · Interactive demo · Local changes only · No account or backend connection required",
-  "AEVOTRON": "AEVOTRON"
+  "AEVOTRON": "AEVOTRON",
+  "core.aevotron": "AEVOTRON",
+  "core.unified_api": "UNIFIED API",
+  "orbit.top": "ONE INTERFACE",
+  "orbit.bottom": "MULTIPLE MODELS",
+  "orbit.left": "SECURE KEYS",
+  "orbit.right": "USAGE ANALYTICS",
+  "orbit.top_right": "LOW LATENCY",
+  "orbit.bottom_left": "SMART ROUTING"
 }
