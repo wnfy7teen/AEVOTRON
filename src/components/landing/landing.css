@@ -103,9 +103,7 @@
 
 
 /* Landing page smooth anchor navigation and scroll reveals */
-.av-site {
-  scroll-behavior: smooth;
-}
+.av-site { scroll-behavior: auto; }
 .av-site section[id] {
   scroll-margin-top: 82px;
 }
@@ -259,7 +257,7 @@
 
 
 /* Reliable, visible motion: entrance, scroll reveals, floating artwork and interactions */
-html:has(.av-site) { scroll-behavior: smooth; }
+html:has(.av-site) { scroll-behavior: auto; }
 .av-site .av-reveal.is-visible {
   animation: av-section-enter 760ms cubic-bezier(.18,.72,.24,1) both;
 }
@@ -272,7 +270,6 @@ html:has(.av-site) { scroll-behavior: smooth; }
 .av-site .av-hero.is-visible .av-hero-copy { animation: av-item-enter 700ms 240ms both; }
 .av-site .av-hero.is-visible .av-hero-actions { animation: av-item-enter 700ms 330ms both; }
 .av-site .av-hero.is-visible .av-hero-footnote { animation: av-item-enter 700ms 410ms both; }
-.av-site .av-hero.is-visible .av-hero-art { animation: av-item-enter 900ms 480ms both; }
 @keyframes av-item-enter {
   from { opacity: 0; transform: translate3d(0, 22px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -737,10 +734,7 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
   opacity: 0;
   transition: opacity 0s;
 }
-.av-site .av-code .av-code-result {
-  opacity: 0;
-  transition: opacity 260ms ease-out;
-}
+.av-site .av-code .av-code-result { opacity: 1; transition: none; }
 .av-site .av-code .av-code-result.is-typed {
   opacity: 1;
 }
