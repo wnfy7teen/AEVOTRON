@@ -118,7 +118,7 @@
   opacity: 1;
 }
 .auth-card input::placeholder { color: var(--text-tertiary); opacity: 1; }
-.auth-card input:focus-visible,
+.auth-card input:focus-visible:not([autocomplete="one-time-code"]),
 .auth-card textarea:focus-visible,
 .auth-card select:focus-visible {
   border-color: var(--accent);
