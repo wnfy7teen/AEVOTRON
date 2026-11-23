@@ -2,7 +2,7 @@
 .av-site .av-hero-art {
   --orbit-radius: 28cqw;
   position: relative;
-  width: min(100%, 400px);
+  width: min(100%, 500px);
   aspect-ratio: 1 / 1;
   height: auto;
   margin: 0 auto 54px;
@@ -38,7 +38,7 @@
   animation: av-orbit-dot-spin 32s linear infinite;
 }
 .av-site .av-hero-art .av-orbit-one::after {
-  --dot-radius: 46cqw;
+  --dot-radius: 48cqw;
   background: var(--app-accent);
   transform: rotate(0deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%);
 }
@@ -117,11 +117,11 @@
   will-change: transform;
 }
 .av-site .av-hero-art .av-orbit-track-inner {
-  --orbit-radius: 26cqw;
+  --orbit-radius: 30cqw;
   animation: av-orbit-spin 28s linear infinite;
 }
 .av-site .av-hero-art .av-orbit-track-outer {
-  --orbit-radius: 39cqw;
+  --orbit-radius: 43cqw;
   animation: av-orbit-spin 42s linear infinite reverse;
 }
 .av-site .av-hero-art .av-orbit-label {
@@ -184,20 +184,20 @@
 }
 
 @media (max-width: 640px) {
-  .av-site .av-hero-art { width: min(100%, 340px); --orbit-radius: 28cqw; margin-bottom: 42px; }
+  .av-site .av-hero-art { width: min(100%, 420px); --orbit-radius: 28cqw; margin-bottom: 42px; }
   .av-site .av-hero-art .av-core { width: 96px; height: 96px; gap: 3px; padding: 8px; }
   .av-site .av-hero-art .av-core-mark { font-size: 28px; }
   .av-site .av-hero-art .av-core strong { font-size: 12px; }
   .av-site .av-hero-art .av-core small { font-size: 8px; }
-   .av-site .av-hero-art .av-orbit-track-inner { --orbit-radius: 26cqw; }
-  .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 39cqw; }
+   .av-site .av-hero-art .av-orbit-track-inner { --orbit-radius: 30cqw; }
+  .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 43cqw; }
   .av-site .av-hero-art .av-orbit-label { max-width: 34%; }
   .av-site .av-hero-art .av-orbit-label > span { padding: 5px 7px; font-size: 8px; letter-spacing: 0; }
 }
 @media (max-width: 520px) { .av-site .av-hero-art { margin-bottom: 34px; } }
 @media (max-width: 360px) {
   .av-site .av-hero-art { --orbit-radius: 27cqw; }
-   .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 37cqw; }
+   .av-site .av-hero-art .av-orbit-track-outer { --orbit-radius: 41cqw; }
   .av-site .av-hero-art .av-orbit-label { max-width: 32%; }
   .av-site .av-hero-art .av-orbit-label > span { padding-inline: 5px; font-size: 7px; }
 }
