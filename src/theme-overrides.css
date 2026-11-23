@@ -156,7 +156,7 @@ body {
 
 
 /* Dashboard and workspace theme parity: override the legacy gray palette at component boundaries. */
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
   .aw-shell, .aw-main, .aw-content
 ) {
@@ -164,7 +164,7 @@ html[data-theme="dark"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
   .aw-shell, .aw-main, .aw-content
 ) {
@@ -172,7 +172,7 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
   .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
   .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
@@ -181,7 +181,7 @@ html[data-theme="dark"] .apple-app :is(
   .aw-card, .aw-panel, .aw-message, .aw-composer, .aw-model-card,
   .aw-model-picker, .aw-compare-panel, .aw-compare-result, .aw-empty-state
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
   .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
   .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
@@ -202,14 +202,14 @@ html[data-theme="light"] .apple-app :is(
   text-shadow: none;
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
   .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
   .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
   .aw-title, .aw-panel-title, .aw-message strong, .aw-message-content h1,
   .aw-message-content h2, .aw-message-content h3
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
   .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
   .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
@@ -219,14 +219,14 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
   .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
   .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
   .mh-field-label, .mh-field-help, .aw-muted, .aw-description,
   .aw-message-meta, .aw-history-label, .aw-disclaimer, .aw-empty-state p
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
   .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
   .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
@@ -236,14 +236,14 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-secondary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
   .mh-text-link, .mh-tab, .mh-provider-filters button,
   .aw-model-picker button, .aw-model-option, .aw-history-item,
   .aw-new-chat, .aw-export-button, .aw-attach-button, .aw-compare-toggle,
   .aw-favorite-toggle, .aw-message-action
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
   .mh-text-link, .mh-tab, .mh-provider-filters button,
   .aw-model-picker button, .aw-model-option, .aw-history-item,
@@ -254,12 +254,12 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
   .mh-provider-filters button.active, .aw-model-option:hover,
   .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
   .mh-provider-filters button.active, .aw-model-option:hover,
   .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
@@ -269,11 +269,11 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
   .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
   .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
 ) {
@@ -282,10 +282,10 @@ html[data-theme="light"] .apple-app :is(
   border: 1px solid var(--border-strong);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
 ) {
   background: var(--bg-elevated);
@@ -293,11 +293,11 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
   .mh-api-params, .mh-api-params th, .mh-api-params td
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
   .mh-api-params, .mh-api-params th, .mh-api-params td
 ) {
@@ -306,10 +306,10 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-button-primary, .aw-send-button
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-button-primary, .aw-send-button
 ) {
   background: var(--accent);
@@ -317,20 +317,20 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--accent);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-button-primary, .aw-send-button
 ):hover,
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-button-primary, .aw-send-button
 ):hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] html[data-theme="dark"] .apple-app :is(
   .mh-button-danger, .aw-compare-stop
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] html[data-theme="light"] .apple-app :is(
   .mh-button-danger, .aw-compare-stop
 ) {
   background: var(--danger);
@@ -442,21 +442,21 @@ html[data-theme="light"] .apple-app :is(
 
 
 /* Authentication surfaces are solid cards, not translucent overlays. */
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background {
+html[data-theme="dark"] html[data-theme="dark"] .apple-app .min-h-screen.bg-background,
+html[data-theme="light"] html[data-theme="light"] .apple-app .min-h-screen.bg-background {
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background h1,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background h1 {
+html[data-theme="dark"] html[data-theme="dark"] .apple-app .min-h-screen.bg-background h1,
+html[data-theme="light"] html[data-theme="light"] .apple-app .min-h-screen.bg-background h1 {
   color: var(--text-primary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background p,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background p {
+html[data-theme="dark"] html[data-theme="dark"] .apple-app .min-h-screen.bg-background p,
+html[data-theme="light"] html[data-theme="light"] .apple-app .min-h-screen.bg-background p {
   color: var(--text-secondary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2),
-html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2) {
+html[data-theme="dark"] html[data-theme="dark"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2),
+html[data-theme="light"] html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2) {
   background: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border);
