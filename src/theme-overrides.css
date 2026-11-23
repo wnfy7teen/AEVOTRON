@@ -156,7 +156,7 @@ body {
 
 
 /* Dashboard and workspace theme parity: override the legacy gray palette at component boundaries. */
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
   .aw-shell, .aw-main, .aw-content
 ) {
@@ -164,7 +164,7 @@ html[data-theme="dark"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-shell, .mh-main, .mh-content, .mh-page, .mh-section,
   .aw-shell, .aw-main, .aw-content
 ) {
@@ -172,7 +172,7 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
   .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
   .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
@@ -181,7 +181,7 @@ html[data-theme="dark"] .apple-app :is(
   .aw-card, .aw-panel, .aw-message, .aw-composer, .aw-model-card,
   .aw-model-picker, .aw-compare-panel, .aw-compare-result, .aw-empty-state
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-stat, .mh-step, .mh-panel, .mh-provider-card, .mh-model-card,
   .mh-model-detail, .mh-catalog-overview, .mh-catalog-browser,
   .mh-connection-panel, .mh-key-create, .mh-key-list-panel,
@@ -202,14 +202,14 @@ html[data-theme="light"] .apple-app :is(
   text-shadow: none;
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
   .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
   .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
   .aw-title, .aw-panel-title, .aw-message strong, .aw-message-content h1,
   .aw-message-content h2, .aw-message-content h3
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-page-heading h1, .mh-section-heading h2, .mh-panel-heading h3,
   .mh-step-copy h3, .mh-model-detail h2, .mh-provider-info strong,
   .mh-key-main strong, .mh-workspace strong, .mh-profile strong,
@@ -219,14 +219,14 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-primary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
   .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
   .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
   .mh-field-label, .mh-field-help, .aw-muted, .aw-description,
   .aw-message-meta, .aw-history-label, .aw-disclaimer, .aw-empty-state p
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-page-heading p, .mh-section-heading p, .mh-panel-heading p,
   .mh-step-copy p, .mh-provider-info small, .mh-key-main small,
   .mh-stat-label, .mh-stat-note, .mh-breadcrumb, .mh-empty,
@@ -236,14 +236,14 @@ html[data-theme="light"] .apple-app :is(
   color: var(--text-secondary);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
   .mh-text-link, .mh-tab, .mh-provider-filters button,
   .aw-model-picker button, .aw-model-option, .aw-history-item,
   .aw-new-chat, .aw-export-button, .aw-attach-button, .aw-compare-toggle,
   .aw-favorite-toggle, .aw-message-action
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-nav-item, .mh-button-quiet, .mh-copy-button, .mh-icon-button,
   .mh-text-link, .mh-tab, .mh-provider-filters button,
   .aw-model-picker button, .aw-model-option, .aw-history-item,
@@ -254,12 +254,12 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
   .mh-provider-filters button.active, .aw-model-option:hover,
   .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-nav-item:hover, .mh-nav-item.active, .mh-tab[aria-selected="true"],
   .mh-provider-filters button.active, .aw-model-option:hover,
   .aw-history-item:hover, .aw-history-item.active, .aw-prompt-suggestions button:hover
@@ -269,11 +269,11 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
   .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   input, select, textarea, .mh-field, .mh-search, .mh-toolbar select,
   .aw-input, .aw-select, .aw-textarea, .aw-model-search, .aw-history-rename-input
 ) {
@@ -282,10 +282,10 @@ html[data-theme="light"] .apple-app :is(
   border: 1px solid var(--border-strong);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-sidebar, .aw-sidebar, .mh-topbar, .aw-topbar
 ) {
   background: var(--bg-elevated);
@@ -293,11 +293,11 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
   .mh-api-params, .mh-api-params th, .mh-api-params td
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-usage-table, .mh-usage-table th, .mh-usage-table td,
   .mh-api-params, .mh-api-params th, .mh-api-params td
 ) {
@@ -306,10 +306,10 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--border);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-button-primary, .aw-send-button
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-button-primary, .aw-send-button
 ) {
   background: var(--accent);
@@ -317,20 +317,20 @@ html[data-theme="light"] .apple-app :is(
   border-color: var(--accent);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-button-primary, .aw-send-button
 ):hover,
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-button-primary, .aw-send-button
 ):hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
 }
 
-html[data-theme="dark"] .apple-app :is(
+html[data-theme="dark"] .apple-app[data-theme="dark"] :is(
   .mh-button-danger, .aw-compare-stop
 ),
-html[data-theme="light"] .apple-app :is(
+html[data-theme="light"] .apple-app[data-theme="light"] :is(
   .mh-button-danger, .aw-compare-stop
 ) {
   background: var(--danger);
@@ -442,21 +442,21 @@ html[data-theme="light"] .apple-app :is(
 
 
 /* Authentication surfaces are solid cards, not translucent overlays. */
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background {
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background {
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background h1,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background h1 {
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background h1,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background h1 {
   color: var(--text-primary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background p,
-html[data-theme="light"] .apple-app .min-h-screen.bg-background p {
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background p,
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background p {
   color: var(--text-secondary);
 }
-html[data-theme="dark"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2),
-html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-child(2) {
+html[data-theme="dark"] .apple-app[data-theme="dark"] .min-h-screen.bg-background > div > div:nth-child(2),
+html[data-theme="light"] .apple-app[data-theme="light"] .min-h-screen.bg-background > div > div:nth-child(2) {
   background: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border);
@@ -479,213 +479,3 @@ html[data-theme="light"] .apple-app .min-h-screen.bg-background > div > div:nth-
 }
 .apple-app .app-route-transition { animation: none; }
 .av-site .av-reveal { opacity: 1; transform: none; transition: none; }
-
-
-/* Auth pages: shared, token-driven layout for both document themes. */
-.auth-page {
-  box-sizing: border-box;
-  display: flex;
-  min-height: 100vh;
-  min-height: 100dvh;
-  flex-direction: column;
-  overflow-x: clip;
-  padding: 18px clamp(16px, 3vw, 40px) 28px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-}
-.auth-topbar {
-  display: flex;
-  width: 100%;
-  min-height: 44px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-right: 74px;
-}
-.auth-brand {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-primary);
-  font-size: 15px;
-  font-weight: 750;
-  letter-spacing: -.035em;
-  text-decoration: none;
-}
-.auth-brand-mark {
-  display: inline-grid;
-  width: 32px;
-  height: 32px;
-  place-items: center;
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  color: var(--accent);
-  font-size: 17px;
-  font-weight: 800;
-}
-.auth-home-link {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  color: var(--text-secondary);
-  font-size: 13px;
-  text-decoration: none;
-}
-.auth-home-link:hover,
-.auth-home-link:focus-visible { color: var(--accent); text-decoration: underline; }
-.auth-main {
-  display: flex;
-  width: 100%;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: 28px 0 36px;
-}
-.auth-card {
-  box-sizing: border-box;
-  width: min(100%, 420px);
-  padding: 40px 32px;
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  box-shadow: var(--shadow-lg);
-}
-.auth-heading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 28px;
-  text-align: center;
-}
-.auth-icon {
-  display: grid;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 18px;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--bg-tertiary);
-  color: var(--accent);
-}
-.auth-icon svg { width: 24px; height: 24px; stroke: currentColor; }
-.auth-heading h1 {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -.03em;
-  line-height: 1.2;
-}
-.auth-heading p {
-  margin: 8px 0 0;
-  color: var(--text-secondary);
-  font-size: 15px;
-  line-height: 1.5;
-}
-.auth-card-content { color: var(--text-primary); }
-.auth-card label {
-  color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 600;
-}
-.auth-card input:not([type="checkbox"]):not([type="radio"]):not([autocomplete="one-time-code"]) {
-  box-sizing: border-box;
-  min-height: 44px;
-  height: 44px;
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 14px;
-  opacity: 1;
-}
-.auth-card input::placeholder { color: var(--text-tertiary); opacity: 1; }
-.auth-card input:focus-visible,
-.auth-card textarea:focus-visible,
-.auth-card select:focus-visible {
-  border-color: var(--accent);
-  outline: 2px solid color-mix(in srgb, var(--accent) 25%, transparent);
-  outline-offset: 1px;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
-}
-.auth-card button[type="submit"] {
-  display: inline-flex;
-  width: 100%;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--accent);
-  border-radius: 980px;
-  background: var(--accent);
-  color: var(--accent-foreground);
-  font-size: 15px;
-  font-weight: 650;
-}
-.auth-card button[type="submit"]:hover:not(:disabled) {
-  border-color: var(--accent-hover);
-  background: var(--accent-hover);
-}
-.auth-card button:focus-visible,
-.auth-card a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.auth-card button:disabled,
-.auth-card input:disabled {
-  color: var(--text-tertiary);
-  background: var(--bg-tertiary);
-  opacity: 1;
-  cursor: not-allowed;
-}
-.auth-card a { color: var(--accent); }
-.auth-card a:hover { color: var(--accent-hover); text-decoration: underline; }
-.auth-card [role="alert"] {
-  border: 1px solid color-mix(in srgb, var(--danger) 36%, transparent);
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--danger) 12%, var(--bg-secondary));
-  color: var(--danger);
-}
-.auth-card .text-muted-foreground { color: var(--text-secondary); }
-.auth-card .text-primary { color: var(--accent); }
-.auth-card-footer {
-  margin: 22px 0 0;
-  color: var(--text-tertiary);
-  font-size: 12px;
-  text-align: center;
-}
-.auth-page .av-theme-trigger {
-  top: 18px;
-  right: clamp(16px, 3vw, 40px);
-  bottom: auto;
-}
-@media (max-width: 560px) {
-  .auth-page { padding: 12px 14px 22px; }
-  .auth-topbar { padding-right: 68px; }
-  .auth-card { padding: 28px 20px; border-radius: 24px; }
-  .auth-heading h1 { font-size: 26px; }
-  .auth-main { padding: 24px 0; }
-  .auth-page .av-theme-trigger { top: 12px; right: 12px; min-height: 44px; }
-}
-
-.auth-card .flex.items-center > .relative.flex {
-  box-sizing: border-box;
-  width: 48px;
-  height: 56px;
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 24px;
-  font-weight: 650;
-}
-.auth-card .flex.items-center > .relative.flex.z-10 {
-  border-color: var(--accent);
-  outline: 2px solid color-mix(in srgb, var(--accent) 24%, transparent);
-  outline-offset: 2px;
-}
