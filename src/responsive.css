@@ -19,6 +19,16 @@ pre, .aw-message-content pre, .mh-code { max-width: 100%; overflow-x: auto; -web
 .apple-app .mh-usage-table, .apple-app .mh-api-params { min-width: 560px; }
 .apple-app .mh-button, .apple-app .mh-icon-button, .apple-app .mh-mobile-menu, .aw-shell button, .av-site button { min-height: 40px; }
 @media (max-width: 1023px) {
+  .av-site .av-nav-wrap { position: relative; }
+  .av-site .av-menu-toggle { display: grid; width: 44px; height: 44px; place-items: center; }
+  .av-site .av-nav-links { display: none; position: absolute; z-index: 2; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; margin: 0; padding: 10px 20px 0; background: var(--bg-primary); border: 0; }
+  .av-site .av-nav-links.is-open { display: flex; }
+  .av-site .av-nav-links.is-open a { display: flex; min-height: 44px; align-items: center; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open)::before { content: ""; position: absolute; z-index: 1; top: 100%; left: 0; right: 0; height: 330px; background: var(--bg-primary); border-bottom: 1px solid var(--border); }
+  .av-site .av-nav-actions, .av-site .av-theme-switch { display: none; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-nav-actions { position: absolute; z-index: 2; top: calc(100% + 148px); left: 20px; right: 20px; display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin: 0; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-nav-actions > * { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; }
+  .av-site .av-nav-wrap:has(.av-nav-links.is-open) .av-theme-switch { position: absolute; z-index: 2; top: calc(100% + 282px); left: 20px; right: 20px; display: flex; justify-content: center; }
   .apple-app .mh-shell { display: flex; width: 100%; min-width: 0; }
   .apple-app .mh-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 10020; width: min(280px, calc(100% - 48px)); height: 100dvh; max-height: 100dvh; overflow-y: auto; transform: translateX(-105%); transition: transform 220ms ease; }
   .apple-app .mh-sidebar.mh-sidebar-open { transform: translateX(0); }
