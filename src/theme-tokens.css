@@ -1303,6 +1303,7 @@ html[data-theme="light"], [data-theme="light"] {
   --bg-tertiary: #e8e8ed;
   --landing-section-alt: #ffffff;
   --bg-elevated: rgba(255,255,255,0.72);
+  --overlay: rgba(0,0,0,0.42);
   --text-primary: #1d1d1f;
   --text-secondary: #6e6e73;
   --text-tertiary: #86868b;
@@ -1326,6 +1327,7 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
   --bg-tertiary: #3a3a3c;
   --landing-section-alt: #232325;
   --bg-elevated: rgba(44,44,46,0.80);
+  --overlay: rgba(0,0,0,0.58);
   --text-primary: #f5f5f7;
   --text-secondary: #a1a1a6;
   --text-tertiary: #8e8e93;
