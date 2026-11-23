@@ -32,7 +32,7 @@ export function LoginPage() {
       const demoRequested = new URLSearchParams(window.location.search).get("demo") === "1";
       if (demoRequested && isDemoAuthEnabled()) {
         signInDemo(email);
-        window.location.assign("/dashboard");
+        window.location.assign(returnTo === "/" ? "/dashboard" : returnTo);
         return;
       }
       const result = await loginWithMfa(email, password);
