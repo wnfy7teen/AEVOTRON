@@ -1,11 +1,11 @@
-/* Isolated orbital illustration: transform-only animation and pass-through hit testing. */
+/* Isolated orbital artwork. Only the center accepts pointer input. */
 .av-site .av-hero-art {
-  --orbit-radius: 34cqw;
+  --orbit-radius: 31cqw;
   position: relative;
   display: grid;
   place-items: center;
   width: min(100%, 560px);
-  aspect-ratio: 1;
+  aspect-ratio: 1 / 1;
   height: auto;
   margin: 0 auto 54px;
   overflow: hidden;
@@ -17,54 +17,112 @@
   font-family: var(--font-ui);
 }
 .av-site .av-hero-art .av-orbit {
-  position: absolute; inset: 4%; z-index: 0;
-  border: 1px solid var(--app-border); border-radius: 50%; pointer-events: none;
+  position: absolute;
+  inset: 4%;
+  z-index: 0;
+  border: 1px solid var(--app-border);
+  border-radius: 50%;
+  pointer-events: none;
 }
 .av-site .av-hero-art .av-orbit-one { border-style: dashed; opacity: .9; }
 .av-site .av-hero-art .av-orbit-two { inset: 16%; opacity: .7; }
 .av-site .av-hero-art .av-orbit::after {
-  position: absolute; top: 50%; left: 50%; width: 7px; height: 7px;
-  border-radius: 50%; background: var(--app-accent); content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--app-accent);
+  content: "";
   transform: translate(-50%, -50%);
 }
 .av-site .av-hero-art .av-orbit-one::after { top: 0; }
-.av-site .av-hero-art .av-orbit-two::after { top: auto; bottom: 0; background: var(--app-text-secondary); }
+.av-site .av-hero-art .av-orbit-two::after {
+  top: auto;
+  bottom: 0;
+  background: var(--app-text-secondary);
+}
 .av-site .av-hero-art .av-core {
   --core-size: 120px;
-  position: relative; z-index: 2; display: flex; grid-area: 1 / 1;
-  width: var(--core-size); height: var(--core-size); flex: none;
-  flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px; padding: 12px; overflow: hidden;
-  border: 1px solid var(--app-border); border-radius: 50%;
-  background: var(--app-surface); color: var(--app-text-primary);
-  text-align: center; pointer-events: auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  grid-area: 1 / 1;
+  width: var(--core-size);
+  height: var(--core-size);
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: 50%;
+  background: var(--app-surface);
+  color: var(--app-text-primary);
+  text-align: center;
+  pointer-events: auto;
 }
 .av-site .av-hero-art .av-core-mark {
-  display: block; flex: 0 0 auto; color: var(--app-accent);
-  font-size: 34px; font-weight: 750; letter-spacing: -.07em; line-height: 1;
+  display: block;
+  flex: 0 0 auto;
+  color: var(--app-accent);
+  font-size: 34px;
+  font-weight: 750;
+  letter-spacing: -.07em;
+  line-height: 1;
 }
 .av-site .av-hero-art .av-core strong {
-  display: block; max-width: 100%; color: var(--app-text-primary);
-  font-size: 15px; font-weight: 650; letter-spacing: -.035em;
-  line-height: 1.1; white-space: nowrap;
+  display: block;
+  max-width: 100%;
+  color: var(--app-text-primary);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -.035em;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 .av-site .av-hero-art .av-core small {
-  display: block; max-width: 100%; color: var(--app-text-secondary);
-  font-size: 9px; font-weight: 600; letter-spacing: .055em;
-  line-height: 1.2; white-space: nowrap;
+  display: block;
+  max-width: 100%;
+  color: var(--app-text-secondary);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .055em;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 .av-site .av-hero-art .av-orbit-track {
-  position: absolute; z-index: 1; inset: 0; pointer-events: none;
-  transform-origin: 50% 50%; animation: av-orbit-spin 36s linear infinite;
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: av-orbit-spin 36s linear infinite;
 }
 .av-site .av-hero-art .av-orbit-label {
-  --orbit-angle: 0deg; --orbit-counter-angle: 0deg;
-  position: absolute; top: 50%; left: 50%; display: block; max-width: 32%;
-  padding: 6px 9px; overflow: hidden;
-  border: 1px solid var(--app-border); border-radius: 999px;
-  background: var(--app-surface); color: var(--app-text-secondary);
-  font-size: 10px; font-weight: 650; letter-spacing: .035em;
-  line-height: 1.2; text-align: center; text-overflow: ellipsis; white-space: nowrap;
+  --orbit-angle: 0deg;
+  --orbit-counter-angle: 0deg;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  max-width: 32%;
+  padding: 6px 9px;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .025em;
+  line-height: 1.2;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   transform: rotate(var(--orbit-angle)) translateY(calc(var(--orbit-radius) * -1)) translate(-50%, -50%);
 }
 .av-site .av-hero-art .av-label-top { --orbit-angle: 0deg; --orbit-counter-angle: 0deg; }
@@ -74,34 +132,89 @@
 .av-site .av-hero-art .av-label-bottom-left { --orbit-angle: 225deg; --orbit-counter-angle: -225deg; }
 .av-site .av-hero-art .av-label-left { --orbit-angle: 270deg; --orbit-counter-angle: -270deg; }
 .av-site .av-hero-art .av-orbit-label > span {
-  display: block; transform: rotate(var(--orbit-counter-angle));
+  display: block;
+  transform: rotate(var(--orbit-counter-angle));
   animation: av-orbit-counter-spin 36s linear infinite;
 }
-@keyframes av-orbit-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes av-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 @keyframes av-orbit-counter-spin {
   from { transform: rotate(var(--orbit-counter-angle)); }
   to { transform: rotate(calc(var(--orbit-counter-angle) - 360deg)); }
 }
-/* Pointer events are disabled on the figure; only the core can receive hover. */
 .av-site .av-hero-art:has(.av-core:hover) .av-orbit-track,
-.av-site .av-hero-art:has(.av-core:hover) .av-orbit-label > span { animation-play-state: paused; }
+.av-site .av-hero-art:has(.av-core:hover) .av-orbit-label > span {
+  animation-play-state: paused;
+}
 @media (max-width: 800px) { .av-site .av-hero-art { margin-bottom: 42px; } }
 @media (max-width: 640px) {
-  .av-site .av-hero-art { width: min(100%, 340px); --orbit-radius: 30cqw; }
+  .av-site .av-hero-art { width: min(100%, 340px); --orbit-radius: 29cqw; }
   .av-site .av-hero-art .av-core { --core-size: 96px; gap: 3px; padding: 8px; }
   .av-site .av-hero-art .av-core-mark { font-size: 28px; }
   .av-site .av-hero-art .av-core strong { font-size: 12px; }
   .av-site .av-hero-art .av-core small { font-size: 8px; }
-  .av-site .av-hero-art .av-orbit-label { max-width: 38%; padding: 4px 7px; font-size: 8px; letter-spacing: .015em; }
+  .av-site .av-hero-art .av-orbit-label {
+    max-width: 37%;
+    padding: 4px 7px;
+    font-size: 8px;
+    letter-spacing: .01em;
+  }
   .av-site .av-hero-art .av-label-top-right,
   .av-site .av-hero-art .av-label-bottom-left { display: none; }
 }
 @media (max-width: 520px) { .av-site .av-hero-art { margin-bottom: 34px; } }
 @media (max-width: 360px) {
-  .av-site .av-hero-art { --orbit-radius: 28cqw; }
+  .av-site .av-hero-art { --orbit-radius: 27cqw; }
   .av-site .av-hero-art .av-orbit-label { max-width: 36%; padding-inline: 5px; font-size: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .av-site .av-hero-art .av-orbit-track,
   .av-site .av-hero-art .av-orbit-label > span { animation: none; }
+}
+
+/* Landing surfaces now use the same light/graphite tokens as the Workspace. */
+html[data-theme] .av-site[data-theme] {
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+html[data-theme] .av-site[data-theme] :is(.av-header,.av-footer) {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  color: var(--app-text-secondary);
+}
+html[data-theme] .av-site[data-theme] :is(.av-hero,.av-intro,.av-feature,.av-final-cta) {
+  background: var(--app-bg);
+  color: var(--app-text-primary);
+}
+html[data-theme] .av-site[data-theme] :is(h1,h2,h3,h4,.av-brand,.av-api-node strong,.av-provider strong) {
+  color: var(--app-text-primary);
+}
+html[data-theme] .av-site[data-theme] :is(p,.av-hero-copy,.av-feature-copy p,.av-final-cta p,.av-footer a,.av-hero-footnote) {
+  color: var(--app-text-secondary);
+}
+html[data-theme] .av-site[data-theme] .av-header {
+  border-bottom: 1px solid var(--app-border);
+}
+html[data-theme] .av-site[data-theme] :is(.av-api-node,.av-provider,.av-final-icon,.av-theme-switch) {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  color: var(--app-text-primary);
+  box-shadow: none;
+}
+html[data-theme] .av-site[data-theme] :is(.av-primary-button,.av-nav-cta) {
+  background: var(--app-accent);
+  border-color: var(--app-accent);
+  color: var(--app-accent-foreground);
+}
+html[data-theme] .av-site[data-theme] .av-theme-switch button.active {
+  background: var(--app-accent);
+  border-color: var(--app-accent);
+  color: var(--app-accent-foreground);
+}
+html[data-theme] .av-site[data-theme] .av-code .av-code-result,
+html[data-theme] .av-site[data-theme] .av-code .av-typed-char,
+html[data-theme] .av-site[data-theme] .av-control .av-typed-char {
+  opacity: 1;
 }
