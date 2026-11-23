@@ -2602,14 +2602,9 @@ html[data-theme="light"] .av-site .av-visual.av-control .av-control-inner strong
 html[data-theme="dark"] .av-site .av-visual.av-control .av-control-inner strong {
   letter-spacing: 0;
 }
-@media (prefers-reduced-motion: no-preference) {
-}
-@keyframes av-key-live {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-@media (max-width: 480px) {
-}
+
+
+
 
 /* 18 — macOS-style API key protection status badge. */
 .av-control .av-key-status {
