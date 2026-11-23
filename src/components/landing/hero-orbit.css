@@ -73,7 +73,6 @@
   box-shadow: none;
   color: var(--text-primary);
   text-align: center;
-  contain: layout style paint;
 }
 
 .av-site .av-hero-art .av-core-mark {
@@ -138,6 +137,13 @@
   will-change: transform;
   animation: av-label-orbit 20s linear infinite;
 }
+
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="-90deg"] { --orbit-start: -90deg; }
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="90deg"] { --orbit-start: 90deg; }
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="180deg"] { --orbit-start: 180deg; }
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="0deg"] { --orbit-start: 0deg; }
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="-45deg"] { --orbit-start: -45deg; }
+.av-site .av-hero-art .av-orbit-label[data-orbit-start="135deg"] { --orbit-start: 135deg; }
 
 .av-site .av-hero-art .av-orbit-label > span {
   display: block;
