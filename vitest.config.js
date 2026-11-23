@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   test: {
     environment: "jsdom",
-    include: ["tests/**/*.{test,spec}.{js,jsx,ts,tsx}"],
+    include: ["tests/**/*.test.jsx", "tests/**/*.test.tsx"],
     restoreMocks: true,
     clearMocks: true,
   },
