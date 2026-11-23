@@ -2837,3 +2837,84 @@ body:has(.av-site) .av-site {
     top: 50%;
   }
 }
+
+
+/* Canonical section navigation layout.
+   Rendered inside .av-site (not a body portal) so it shares the landing
+   page lifecycle and cannot be affected by body-portal layout resets. */
+.av-site > .av-section-nav {
+  position: fixed !important;
+  z-index: 1100 !important;
+  top: 50% !important;
+  right: clamp(16px, 2.5vw, 36px) !important;
+  bottom: auto !important;
+  left: auto !important;
+  display: flex !important;
+  width: max-content;
+  min-width: 142px;
+  max-width: min(220px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  height: auto !important;
+  min-height: 0 !important;
+  flex-direction: column !important;
+  align-items: stretch;
+  gap: 7px;
+  padding: 12px 10px;
+  overflow: auto;
+  transform: translate3d(0, -50%, 0) !important;
+  pointer-events: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.av-site > .av-section-nav a {
+  display: flex;
+  min-width: 0;
+  min-height: 40px;
+  align-items: center;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+@media (max-width: 800px) {
+  .av-site > .av-section-nav {
+    top: auto !important;
+    right: auto !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    left: 12px !important;
+    width: max-content;
+    min-width: 0;
+    max-width: calc(100vw - 104px);
+    max-height: none;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    transform: none !important;
+  }
+  .av-site > .av-section-nav .av-section-nav-label,
+  .av-site > .av-section-nav a i {
+    display: none !important;
+  }
+  .av-site > .av-section-nav a {
+    min-height: 44px;
+    padding: 0 clamp(6px, 2vw, 10px);
+    justify-content: center;
+    font-size: clamp(9px, 2.5vw, 11px);
+    border-radius: 999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+@media (max-width: 390px) {
+  .av-site > .av-section-nav {
+    left: 8px !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+    max-width: calc(100vw - 92px);
+    gap: 1px;
+    padding: 3px;
+  }
+  .av-site > .av-section-nav a {
+    min-height: 44px;
+    padding: 0 6px;
+    font-size: 9px;
+  }
+}
