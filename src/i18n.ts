@@ -11,10 +11,10 @@ export type SupportedLanguage = (typeof supportedLanguages)[number];
 export type LocaleNamespace = "dashboard" | "landing" | "auth";
 
 export function getRouteNamespace(pathname: string): LocaleNamespace | undefined {
-  const path = pathname.replace(/\\/+$/, "") || "/";
+  const path = pathname.replace(/\/+$/, "") || "/";
   if (path === "/") return "landing";
-  if (/^\\/(?:login|register|forgot-password|reset-password|mfa|verify-email)(?:\\/|$)/.test(path)) return "auth";
-  if (/^\\/(?:dashboard|workspace|workspace-preview)(?:\\/|$)/.test(path)) return "dashboard";
+  if (/^\/(?:login|register|forgot-password|reset-password|mfa|verify-email)(?:\/|$)/.test(path)) return "auth";
+  if (/^\/(?:dashboard|workspace|workspace-preview)(?:\/|$)/.test(path)) return "dashboard";
   return undefined;
 }
 export type LocaleNamespaces = Record<LocaleNamespace, Record<string, string>>;
