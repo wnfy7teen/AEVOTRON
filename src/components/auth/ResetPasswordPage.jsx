@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { AlertTriangle, Lock } from "lucide-react";
+import { AlertTriangle, Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api } from "@/api/client";
@@ -15,6 +15,8 @@ export function ResetPasswordPage() {
   const token = new URLSearchParams(window.location.search).get("token");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -59,14 +61,16 @@ export function ResetPasswordPage() {
           <Label htmlFor="reset-password">{t("New password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="reset-password" type="password" autoComplete="new-password" minLength={12} autoFocus placeholder={t("At least 12 characters")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10" required />
+            <Input id="reset-password" type={showPassword ? "text" : "password"} autoComplete="new-password" minLength={12} autoFocus placeholder={t("At least 12 characters")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10 pr-12" required />
+            <button type="button" className="auth-password-toggle" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? t("Hide password") : t("Show password")} aria-pressed={showPassword}>{showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="reset-confirm">{t("Confirm password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="reset-confirm" type="password" autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" required />
+            <Input id="reset-confirm" type={showConfirm ? "text" : "password"} autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10 pr-12" required />
+            <button type="button" className="auth-password-toggle" onClick={() => setShowConfirm((value) => !value)} aria-label={showConfirm ? t("Hide password") : t("Show password")} aria-pressed={showConfirm}>{showConfirm ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
           </div>
         </div>
         <SubmitButton busy={busy} busyLabel={t("Resetting...")}>
