@@ -49,8 +49,12 @@ export default function AppleLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState("platform");
-  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "dark" ? "dark" : "light");
-  useEffect(() => { window.localStorage.setItem("aevotron-theme", theme); }, [theme]);
+  const [theme, setTheme] = useState(() => typeof window !== "undefined" && window.localStorage.getItem("aevotron-theme") === "light" ? "light" : "dark");
+  useEffect(() => {
+    window.localStorage.setItem("aevotron-theme", theme);
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
   useEffect(() => {
     const sections = document.querySelectorAll(".av-site .av-reveal");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
