@@ -1,5 +1,5 @@
 import { HeadContent, Outlet, Scripts, createRootRoute, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary";
 import { NotFound } from "@/components/NotFound";
@@ -42,13 +42,52 @@ function RootComponent() {
   return (
     <LanguageProvider initialLanguage={locale} initialResources={resources}>
       <AuthProvider>
-        <div key={pathname} className="apple-app app-route-transition"><Outlet /></div>
+        <div key={pathname} className="apple-app app-route-transition">
+          <RouteNamespaceGate><Outlet /></RouteNamespaceGate>
+        </div>
         <DocumentMetadataSync />
         <Toaster />
         <LanguageSwitcher />
       </AuthProvider>
     </LanguageProvider>
   );
+}
+
+function RouteNamespaceGate({ children }) {
+  const { i18n } = useTranslation();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const language = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
+  const namespace = getRouteNamespace(pathname);
+  const routeKey = `${language}:${namespace || "core"}:${pathname}`;
+  const [readyKey, setReadyKey] = useState(() =>
+    !namespace || i18n.hasResourceBundle(language, namespace) ? routeKey : ""
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!namespace || i18n.hasResourceBundle(language, namespace)) {
+      setReadyKey(routeKey);
+      return () => { cancelled = true; };
+    }
+
+    setReadyKey("");
+    void loadLocaleResources(language, [namespace]).then((resources) => {
+      if (cancelled) return;
+      if (!i18n.hasResourceBundle(language, namespace)) {
+        i18n.addResourceBundle(language, namespace, resources[namespace] || {}, true, true);
+      }
+      setReadyKey(routeKey);
+    }).catch(() => {
+      if (!cancelled) setReadyKey(routeKey);
+    });
+
+    return () => { cancelled = true; };
+  }, [i18n, language, namespace, routeKey]);
+
+  if (readyKey !== routeKey) {
+    return <div className="av-translation-loading" role="status" aria-label="Loading translations" />;
+  }
+  return children;
 }
 
 function RootDocument({ children }) {
