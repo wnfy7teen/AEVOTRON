@@ -14,11 +14,11 @@ export default {
   		},
   		colors: {
             av: {
-              blue: '#0877D1',
-              ink: '#111318',
-              muted: '#6E737C',
-              line: '#E6E8EB',
-              surface: '#F5F7F9'
+              blue: 'var(--accent)',
+              ink: 'var(--text-primary)',
+              muted: 'var(--text-secondary)',
+              line: 'var(--border)',
+              surface: 'var(--bg-secondary)'
             },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
