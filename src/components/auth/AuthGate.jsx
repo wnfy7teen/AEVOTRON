@@ -19,9 +19,9 @@ class NotRegisteredError extends Error {}
  * so these pages render in the browser only, and children inherit that.
  */
 export async function requireSignedIn({ context, location }) {
-  // Public Workers previews must never enter authenticated routes: demo auth is
-  // intentionally local, and these routes can issue real API requests.
-  if (isCloudflareWorkersPreview()) {
+  // Workers Preview keeps account routes read-only, but permits the isolated
+  // demo-mode chat workspace, which does not load authenticated chat history.
+  if (isCloudflareWorkersPreview() && location.pathname !== "/workspace") {
     throw redirect({ to: "/workspace-preview", reloadDocument: true });
   }
   // A /me outage (429, 503) is not a sign-out: it rejects here and reaches the error
