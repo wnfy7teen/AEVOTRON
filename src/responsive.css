@@ -30,6 +30,13 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+h1, h2, h3, h4, h5, h6, p, li, td, th, label, a, button, span, strong, small, code {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+.no-wrap, [class*="nowrap"] { white-space: normal; }
+pre, code, kbd { overflow-wrap: normal; }
 html, body { max-width: 100%; overflow-x: hidden; }
 body { min-height: 100dvh; }
 img, video, canvas, iframe { max-width: 100%; height: auto; }
