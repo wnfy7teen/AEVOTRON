@@ -141,3 +141,10 @@ html[data-theme] { --av-font-sans:var(--font-ui);--av-bg:var(--bg-primary);--av-
 .av-site .av-section-nav { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
 .apple-app .av-theme-trigger { backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
 .app-route-transition { animation:none!important;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important; }
+
+/* Text remains fully opaque and sharp in every interaction state. */
+.av-site :where(h1,h2,h3,h4,p,span,strong,b,small,label,a,button,li,code,pre) { opacity:1!important;text-shadow:none!important; }
+.apple-app :where(h1,h2,h3,h4,p,span,strong,b,small,label,a,button,li,code,pre,td,th) { opacity:1!important;text-shadow:none!important; }
+.av-site :where(.av-typed-char,.av-code-result) { opacity:1!important; }
+.apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-card,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,.mh-secret-reveal,.mh-api-card,.mh-api-example,.mh-catalog-side-note,.mh-mock-panel,.av-danger-card,.av-settings-panel,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-compare-panel,.aw-model-picker,.aw-model-option) { transform:none; }
+.apple-app :where(.mh-stat:hover,.mh-step:hover,.mh-panel:hover,.mh-provider-card:hover,.mh-model-card:hover,.aw-card:hover,.aw-panel:hover) { transform:translateY(-2px); }
