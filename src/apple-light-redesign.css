@@ -699,3 +699,37 @@ html[data-theme] .apple-app .aw-composer textarea {
   backdrop-filter: var(--blur) !important;
   -webkit-backdrop-filter: var(--blur) !important;
 }
+
+
+/* Secondary dashboard surfaces and catalog/API cards omitted by the legacy base stylesheet. */
+.apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-overview,.mh-catalog-side,.mh-api-card,.mh-api-example,.mh-usage-panel,.mh-usage-table-wrap) {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-primary) !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-shadow: none !important;
+}
+.apple-app .mh-model-card { padding: 20px 24px; }
+.apple-app :is(.mh-catalog-browser,.mh-catalog-overview,.mh-catalog-side,.mh-api-card,.mh-api-example,.mh-usage-panel,.mh-usage-table-wrap) { padding: 20px 24px; }
+.apple-app :is(.mh-model-card-name,.mh-model-card-provider,.mh-model-card-brand,.mh-catalog-overview-copy,.mh-api-card-heading,.mh-api-section-head,.mh-api-hero-main,.mh-api-hero-top) { color: var(--text-primary) !important; }
+.apple-app :is(.mh-model-card-access,.mh-model-card-bottom,.mh-catalog-filter-label,.mh-catalog-result-count,.mh-catalog-side-note,.mh-api-meta-row,.mh-api-params,.mh-api-type,.mh-api-kicker,.mh-api-overline,.mh-api-version,.mh-api-limit,.mh-api-doc-step) { color: var(--text-secondary) !important; }
+.apple-app :is(.mh-catalog-empty,.mh-catalog-no-sources) { background: var(--bg-primary) !important; color: var(--text-secondary) !important; border-color: var(--border) !important; }
+.apple-app :is(.mh-api-code-line,.mh-api-url,.mh-api-params-wrap,.mh-api-response-chips) { background: var(--bg-primary) !important; color: var(--text-primary) !important; border-color: var(--border) !important; }
+.apple-app .mh-usage-table { width: 100%; border-collapse: collapse; color: var(--text-primary) !important; }
+.apple-app .mh-usage-table :is(th,td) { min-height: 52px; padding: 12px 14px; border-bottom: 1px solid var(--border) !important; color: var(--text-secondary) !important; background: transparent !important; }
+.apple-app .mh-usage-table th { color: var(--text-primary) !important; font-weight: 600; }
+html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-overview,.mh-catalog-side,.mh-api-card,.mh-api-example,.mh-usage-panel,.mh-usage-table-wrap) {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
