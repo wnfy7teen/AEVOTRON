@@ -599,8 +599,8 @@ html[data-theme="dark"] .apple-app .mh-shell,
 html[data-theme="dark"] .apple-app .mh-main,
 html[data-theme="dark"] .apple-app .mh-footer,
 html[data-theme="dark"] .apple-app:has(.mh-shell),
-html:has(html[data-theme="dark"] .apple-app .mh-shell),
-body:has(html[data-theme="dark"] .apple-app .mh-shell) {
+html[data-theme="dark"],
+html[data-theme="dark"] body {
   background: var(--palette-hex-11151c) !important;
 }
 @media (max-width: 760px) {
