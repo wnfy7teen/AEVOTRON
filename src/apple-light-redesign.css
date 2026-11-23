@@ -733,3 +733,176 @@ html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-o
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+
+/* Final surface audit: nested cards, data panels, code samples and secondary controls. */
+.apple-app :is(
+  .mh-profile,.mh-usage-mini,.mh-detail-info,.mh-detail-stats,.mh-docs-layout,
+  .mh-api-doc-grid,.mh-api-bottom-grid,.mh-api-docs,.mh-provider-grid-muted,
+  .mh-key-list,.mh-key-row,.mh-connected-row,.mh-catalog-panel-head,
+  .mh-catalog-provider-strip,.mh-catalog-overview-stats>div,
+  .mh-model-detail-meta,.mh-secret-value,.mh-detail-top
+) {
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+.apple-app :is(.mh-profile,.mh-usage-mini,.mh-detail-info,.mh-detail-stats,.mh-docs-layout,.mh-api-doc-grid,.mh-api-bottom-grid,.mh-api-docs,.mh-provider-grid-muted,.mh-key-list-panel,.mh-connection-panel,.mh-key-create,.mh-key-list,.mh-secret-reveal,.mh-detail-info) {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+.apple-app :is(.mh-code,.mh-endpoint,.mh-secret-value,.mh-api-code-line,.mh-api-url,.mh-api-params-wrap) {
+  background: var(--bg-tertiary) !important;
+  background-image: none !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.apple-app :is(.mh-code code,.mh-endpoint code,.mh-secret-value code,.mh-api-code-line code,.mh-api-url code) {
+  color: var(--text-primary) !important;
+}
+.apple-app :is(.mh-connected-row strong,.mh-key-main strong,.mh-detail-info strong,.mh-detail-stats strong,.mh-model-detail-meta strong,.mh-model-detail-meta code) {
+  color: var(--text-primary) !important;
+}
+.apple-app :is(.mh-connected-row small,.mh-key-main small,.mh-detail-info p,.mh-detail-stats small,.mh-model-detail-meta span,.mh-catalog-overview-copy p) {
+  color: var(--text-secondary) !important;
+}
+.apple-app .mh-key-row { border-top: 1px solid var(--border) !important; }
+.apple-app .mh-secret-heading { color: #176b3a !important; }
+.apple-app .mh-secret-value code { color: var(--text-primary) !important; }
+.apple-app .mh-preview-label,
+.apple-app .mh-catalog-count,
+.apple-app .mh-catalog-provider-strip>button,
+.apple-app .mh-provider-filters button {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important;
+}
+.apple-app .mh-catalog-provider-strip,
+.apple-app .mh-catalog-panel-head,
+.apple-app .mh-catalog-overview-stats>div {
+  background: var(--bg-secondary) !important;
+}
+.apple-app .mh-catalog-provider-strip>button.active,
+.apple-app .mh-provider-filters button.active {
+  background: #e8f2ff !important;
+  border-color: var(--accent) !important;
+  color: #005bb5 !important;
+}
+.apple-app .mh-catalog-overview-stats strong { color: var(--text-primary) !important; }
+.apple-app .mh-catalog-overview-stats span { color: var(--text-secondary) !important; }
+.apple-app .mh-doc-warning { color: #754600 !important; border-color: var(--border) !important; }
+.apple-app .mh-method { background: var(--bg-tertiary) !important; color: var(--text-secondary) !important; }
+.apple-app .mh-button-danger { background: #fff1f0 !important; color: var(--danger) !important; border-color: #f3c6c3 !important; }
+.apple-app :is(.mh-inline-error,.mh-usage-error-code) { color: var(--danger) !important; }
+.apple-app :is(.mh-status,.mh-tags span,.mh-method,.mh-preview-label,.mh-catalog-count) { min-height: 24px; border-radius: 999px !important; }
+.apple-app .mh-eyebrow,
+.apple-app .mh-field-label,
+.apple-app .mh-nav-label,
+.apple-app .mh-catalog-filter-label,
+.apple-app .mh-api-kicker,
+.apple-app .mh-api-overline { color: var(--text-secondary) !important; }
+
+/* Workspace message and nested surfaces. */
+.apple-app :is(.aw-thread,.aw-message,.aw-message-body,.aw-message-content,.aw-model-details,.aw-model-picker-meta,.aw-compare-models,.aw-compare-results,.aw-prompt-suggestions,.aw-context-trimmed,.aw-thinking,.aw-attachment-list,.aw-attachment-tree) {
+  color: var(--text-primary) !important;
+  text-shadow: none !important;
+}
+.apple-app :is(.aw-model-details,.aw-model-picker-meta,.aw-compare-models,.aw-compare-results,.aw-prompt-suggestions,.aw-context-trimmed,.aw-thinking) {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+}
+.apple-app .aw-message-content :is(pre,blockquote,table,code) {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  text-shadow: none !important;
+}
+.apple-app .aw-message-content a { color: var(--accent) !important; }
+.apple-app .aw-message-content :is(h1,h2,h3,h4,strong,b) { color: var(--text-primary) !important; }
+.apple-app .aw-message-content :is(p,li,td,th) { color: var(--text-primary) !important; }
+.apple-app .aw-message-meta,
+.apple-app .aw-attachment-tree-heading,
+.apple-app .aw-attachment-file,
+.apple-app .aw-attachment-folder { color: var(--text-secondary) !important; }
+.apple-app .aw-attachment-file,
+.apple-app .aw-attachment-folder,
+.apple-app .aw-history-item { border-color: var(--border) !important; }
+.apple-app .aw-file-error,
+.apple-app .aw-message-error,
+.apple-app .aw-notice.is-warning { background: #fff6e5 !important; color: #754600 !important; border-color: #ead4a7 !important; }
+.apple-app .aw-model-badge,
+.apple-app .aw-compare-models label,
+.apple-app .aw-status-model,
+.apple-app .aw-status-cost { min-height: 28px; }
+.apple-app .aw-model-select,
+.apple-app .aw-model-select-wrap select,
+.apple-app .aw-history-rename-input { background: var(--bg-secondary) !important; color: var(--text-primary) !important; border-color: var(--border-strong) !important; }
+.apple-app .aw-sidebar-note { color: var(--text-secondary) !important; }
+
+/* Landing code demonstration is a light card, not a legacy dark panel. */
+.av-site .av-code {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text-primary) !important;
+}
+.av-site .av-code .av-window-bar {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border) !important;
+}
+.av-site .av-code .av-window-bar>span { background: #a1a1a6 !important; }
+.av-site .av-code .av-window-bar small { color: var(--text-secondary) !important; }
+.av-site .av-code pre { color: var(--text-primary) !important; }
+.av-site .av-code-muted { color: #7b3fb2 !important; }
+.av-site .av-code-blue { color: #005bb5 !important; }
+.av-site .av-code-green { color: #176b3a !important; }
+.av-site .av-code-result {
+  background: #e8f7ee !important;
+  border: 1px solid #b9e3c8 !important;
+  color: #176b3a !important;
+}
+.av-site .av-code-result small { color: #176b3a !important; }
+
+/* Typed reveal is disabled visually: no text glyph or text ancestor fades in/out. */
+.av-site .av-typed-char,
+.av-site .av-code-result,
+.av-site .av-control-inner *,
+.av-site .av-permissions *,
+.av-site .av-control-footer * {
+  opacity: 1 !important;
+}
+.av-site .av-reveal,
+.av-site .av-reveal-ready,
+.av-site .av-reveal.is-visible,
+.av-site .av-child-reveal,
+.av-site .av-scroll-reveal,
+.av-site .av-item-enter,
+.av-site .av-section-enter,
+.av-site .av-nav-enter,
+.av-site .av-language-in {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+.apple-app :where(*) { will-change: auto !important; }
+.apple-app :is(.mh-nav-item:disabled,.mh-text-link:disabled,.mh-popular-row:disabled) {
+  opacity: 1 !important;
+  color: var(--text-tertiary) !important;
+}
+.av-site :where(button,a,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 3px !important;
+}
+.apple-app :where(button,a,input,select,textarea,[role="button"],[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 3px !important;
+}
