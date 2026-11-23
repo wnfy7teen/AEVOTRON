@@ -1420,3 +1420,123 @@ body:has(.av-site[data-theme="dark"]) .av-language-menu button.active .av-langua
 @media (prefers-reduced-motion: reduce) {
   .av-site .av-header .av-theme-switch button { transition: none; }
 }
+
+
+/* Landing mark and navigation CTA contrast fix — scoped to the public landing. */
+html[data-theme="light"] .av-site .av-brand-mark {
+  background: var(--text-primary);
+  color: var(--bg-secondary);
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+html[data-theme="dark"] .av-site .av-core {
+  background: var(--bg-secondary);
+  background-image: none;
+  box-shadow: none;
+  filter: none;
+  text-shadow: none;
+}
+
+html[data-theme="dark"] .av-site .av-core-mark {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  box-shadow: none;
+  filter: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+html[data-theme="dark"] .av-site .av-brand-mark {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+html[data-theme="light"] .av-site .av-core-mark {
+  background: var(--palette-hex-111318);
+  color: var(--palette-hex-fff);
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+/* Keep the navbar CTA readable regardless of global anchor/link states. */
+html[data-theme] .av-site .av-header .av-nav-cta,
+html[data-theme] .av-site .av-header .av-nav-cta:link,
+html[data-theme] .av-site .av-header .av-nav-cta:visited,
+html[data-theme] .av-site .av-header .av-nav-cta:hover,
+html[data-theme] .av-site .av-header .av-nav-cta:active {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  height: auto;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 980px;
+  background: var(--accent);
+  color: var(--accent-foreground-color, #ffffff) !important;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 1;
+  filter: none;
+  text-shadow: none;
+  transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+html[data-theme] .av-site .av-header .av-nav-cta:hover {
+  background: var(--accent-hover);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+html[data-theme] .av-site .av-header .av-nav-cta:active {
+  color: #ffffff !important;
+  transform: translateY(0);
+}
+
+html[data-theme] .av-site .av-header .av-nav-cta:focus-visible {
+  color: #ffffff !important;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+html[data-theme] .av-site .av-header .av-nav-cta svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  html[data-theme] .av-site .av-header .av-nav-cta {
+    display: inline-flex !important;
+    min-height: 44px;
+    height: auto;
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 6px;
+    flex: 0 0 auto;
+  }
+
+  .av-site .av-header .av-nav-actions {
+    gap: 8px;
+  }
+}
