@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ThemeSwitcher } from "@/lib/ThemeSwitcher";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { loadSignInOptions } from "@/lib/authMfaFlow";
@@ -23,9 +25,22 @@ export function useAppInfo() {
 // A whole page holding one MFA card. MfaFlow and MfaManage are card content, so a page that
 // shows them returns <MfaScreen> in place of its own layout instead of nesting them in its card.
 export function MfaScreen({ children }) {
+  const { t } = useTranslation(["auth", "translation"]);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
-      <div className="w-full max-w-md bg-card rounded-2xl shadow-sm border border-border p-8">{children}</div>
+    <div className="auth-page auth-mfa-page">
+      <header className="auth-topbar">
+        <Link to="/" className="auth-brand" aria-label="AEVOTRON — Home">
+          <span className="auth-brand-mark" aria-hidden="true">A</span>
+          <span>AEVOTRON</span>
+        </Link>
+        <div className="auth-top-actions">
+          <Link to="/" className="auth-home-link">{t("Back to home")}</Link>
+          <ThemeSwitcher />
+        </div>
+      </header>
+      <main className="auth-main">
+        <section className="auth-card">{children}</section>
+      </main>
     </div>
   );
 }
