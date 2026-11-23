@@ -58,6 +58,30 @@ export default function AppleLanding() {
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
   useEffect(() => {
+    const sections = document.querySelectorAll(".av-site .av-reveal");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      sections.forEach((section) => section.classList.add("is-visible"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -24px 0px" });
+    sections.forEach((section) => {
+      section.classList.add("av-reveal-ready");
+      if (section.getBoundingClientRect().top < window.innerHeight * 0.92) {
+        section.classList.add("is-visible");
+      } else {
+        observer.observe(section);
+      }
+    });
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const codeExample = document.querySelector(".av-site .av-code");
     if (!codeExample) return;
