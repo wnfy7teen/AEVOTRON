@@ -112,7 +112,23 @@ const localeBackend = {
 };
 
 export async function changeAppLanguage(instance: I18nInstance, language: string): Promise<void> {
-  await instance.changeLanguage(normalizeLanguage(language));
+  const nextLanguage = normalizeLanguage(language);
+  const currentLanguage = normalizeLanguage(instance.resolvedLanguage || instance.language);
+  const activeNamespaces = Object.keys(instance.store.data[currentLanguage] || {})
+    .filter((namespace): namespace is LocaleNamespace =>
+      namespace === "dashboard" || namespace === "landing" || namespace === "auth"
+    );
+
+  if (activeNamespaces.length > 0) {
+    const loaded = await loadLocaleResources(nextLanguage, activeNamespaces);
+    for (const namespace of activeNamespaces) {
+      if (!instance.hasResourceBundle(nextLanguage, namespace)) {
+        instance.addResourceBundle(nextLanguage, namespace, loaded[namespace] || {}, true, true);
+      }
+    }
+  }
+
+  await instance.changeLanguage(nextLanguage);
 }
 
 export function createAppI18n(options: I18nOptions | Pick<Storage, "getItem" | "setItem"> | null = {}): I18nInstance {
