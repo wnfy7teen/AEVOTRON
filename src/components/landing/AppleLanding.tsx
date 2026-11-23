@@ -274,7 +274,21 @@ export default function AppleLanding() {
       <p className="av-hero-copy">{t("Подключайте AI-модели разных провайдеров через единый интерфейс — без лишней сложности в интеграциях.")}</p>
       <div className="av-hero-actions"><Link to="/register" className="av-primary-button">{t("Создать аккаунт")} <ArrowRight size={17} /></Link><a href="#developers" className="av-secondary-button">{t("Как это работает")} <ChevronRight size={17} /></a></div>
       <div className="av-hero-footnote"><ShieldCheck size={15} /><span className="av-hero-footnote-text">{t("Архитектура BYOK · Ваши ключи провайдеров остаются под вашим контролем")}</span></div>
-      <div className="av-hero-art" aria-label={t("Визуализация единого API AEVOTRON")}><div className="av-orbit av-orbit-one" /><div className="av-orbit av-orbit-two" /><div className="av-core"><span className="av-core-mark">A</span><strong>{t("AEVOTRON")}</strong><small>{t("UNIFIED API")}</small></div><div className="av-orbit-label av-label-top">{t("ONE INTERFACE")}</div><div className="av-orbit-label av-label-bottom">{t("MULTIPLE MODELS")}</div><div className="av-orbit-label av-label-left" data-no-translate="true">SECURE KEYS</div><div className="av-orbit-label av-label-right" data-no-translate="true">USAGE ANALYTICS</div><div className="av-orbit-label av-label-top-right" data-no-translate="true">LOW LATENCY</div><div className="av-orbit-label av-label-bottom-left" data-no-translate="true">SMART ROUTING</div></div>
+      <div className="av-hero-art" aria-label={t("Визуализация единого API AEVOTRON")}>
+        <div className="av-orbit av-orbit-one" aria-hidden="true" />
+        <div className="av-orbit av-orbit-two" aria-hidden="true" />
+        <div className="av-core">
+          <span className="av-core-mark" aria-hidden="true">A</span>
+          <strong>{t("core.aevotron")}</strong>
+          <small>{t("core.unified_api")}</small>
+        </div>
+        <div className="av-orbit-label av-label-top" style={{ "--orbit-start": "-90deg" }}><span>{t("orbit.top")}</span></div>
+        <div className="av-orbit-label av-label-bottom" style={{ "--orbit-start": "90deg" }}><span>{t("orbit.bottom")}</span></div>
+        <div className="av-orbit-label av-label-left" data-no-translate="true" style={{ "--orbit-start": "180deg" }}><span>{t("orbit.left")}</span></div>
+        <div className="av-orbit-label av-label-right" data-no-translate="true" style={{ "--orbit-start": "0deg" }}><span>{t("orbit.right")}</span></div>
+        <div className="av-orbit-label av-label-top-right" data-no-translate="true" style={{ "--orbit-start": "-45deg" }}><span>{t("orbit.top_right")}</span></div>
+        <div className="av-orbit-label av-label-bottom-left" data-no-translate="true" style={{ "--orbit-start": "135deg" }}><span>{t("orbit.bottom_left")}</span></div>
+      </div>
     </section>
     <section className="av-intro av-reveal"><p>{t("ЕДИНАЯ СРЕДА ДЛЯ РАБОТЫ С МОДЕЛЯМИ")}</p><h2>{t("Меньше связующего кода.")}<br />{t("Больше времени на продукт.")}</h2></section>
     {features.map((feature, index) => <section className={"av-feature av-reveal " + (feature.reverse ? "av-feature-reverse" : "")} id={index === 1 ? "security" : index === 2 ? "developers" : undefined} key={feature.variant}>
