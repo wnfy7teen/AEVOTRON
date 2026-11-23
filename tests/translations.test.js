@@ -187,6 +187,7 @@ it("migrates landing and authentication UI to domain namespaces with legacy fall
     readFile(new URL("../src/components/auth/RegisterPage.jsx", import.meta.url), "utf8"),
     readFile(new URL("../src/routes/verify-email.jsx", import.meta.url), "utf8"),
   ]);
+  // Non-core locale catalogs are loaded through per-locale dynamic import maps.
   assert.match(config, /namespaceLoaders/);
   assert.match(config, /en: async \(\) =>/);
   assert.match(config, /import\("\.\/locales\/landing\/en\.json"\)/);
