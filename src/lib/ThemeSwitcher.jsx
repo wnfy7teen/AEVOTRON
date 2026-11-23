@@ -4,10 +4,10 @@ import { Moon, Sun } from "lucide-react";
 
 const THEME_STORAGE_KEY = "aevotron-theme";
 const THEME_CHANGE_EVENT = "aevotron:theme-change";
-const VALID_THEMES = new Set(["light", "gray"]);
+const VALID_THEMES = new Set(["light", "dark"]);
 
 function normalizeTheme(value) {
-  if (value === "dark") return "gray";
+  if (value === "gray") return "dark";
   return VALID_THEMES.has(value) ? value : "light";
 }
 
@@ -32,7 +32,7 @@ function applyResolvedTheme(theme) {
   if (typeof document === "undefined") return;
   document.querySelectorAll(".apple-app").forEach((element) => { element.dataset.theme = theme; });
   document.documentElement.dataset.theme = theme;
-  document.documentElement.style.colorScheme = theme === "gray" ? "dark" : "light";
+  document.documentElement.style.colorScheme = theme === "dark" ? "dark" : "light";
 }
 
 export function setAppTheme(theme) {
@@ -63,9 +63,9 @@ export function ThemeSwitcher() {
     return () => window.removeEventListener(THEME_CHANGE_EVENT, syncTheme);
   }, [theme]);
 
-  const gray = theme === "gray";
+  const gray = theme === "dark";
   return <button type="button" className="av-theme-trigger"
-    onClick={() => setAppTheme(gray ? "light" : "gray")}
+    onClick={() => setAppTheme(gray ? "light" : "dark")}
     aria-label={gray ? t("Switch to light theme") : t("Switch to gray theme")}
     title={gray ? t("Light theme") : t("Gray theme")} aria-pressed={gray}>
     {gray ? <Sun size={18}/> : <Moon size={18}/>}
