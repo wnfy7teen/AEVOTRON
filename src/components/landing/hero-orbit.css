@@ -1,12 +1,13 @@
 /* Orbital hero: fixed square geometry, isolated paint and no hit-testing outside the core. */
 .av-site .av-hero-art {
-  --orbit-radius: 45cqw;
+  --orbit-radius: 40cqw;
   position: relative;
   width: min(100%, 400px);
   aspect-ratio: 1 / 1;
   height: auto;
   margin: 0 auto 54px;
   contain: paint layout style;
+  container-type: inline-size;
   isolation: isolate;
   overflow: hidden;
   pointer-events: none;
@@ -154,7 +155,7 @@
 }
 
 @media (max-width: 640px) {
-  .av-site .av-hero-art { width: min(100%, 340px); --orbit-radius: 43cqw; margin-bottom: 42px; }
+  .av-site .av-hero-art { width: min(100%, 340px); --orbit-radius: 40cqw; margin-bottom: 42px; }
   .av-site .av-hero-art .av-core { width: 96px; height: 96px; gap: 3px; padding: 8px; }
   .av-site .av-hero-art .av-core-mark { font-size: 28px; }
   .av-site .av-hero-art .av-core strong { font-size: 12px; }
@@ -165,7 +166,7 @@
 }
 @media (max-width: 520px) { .av-site .av-hero-art { margin-bottom: 34px; } }
 @media (max-width: 360px) {
-  .av-site .av-hero-art { --orbit-radius: 41cqw; }
+  .av-site .av-hero-art { --orbit-radius: 39cqw; }
   .av-site .av-hero-art .av-orbit-label { max-width: 36%; padding-inline: 5px; font-size: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
