@@ -82,3 +82,60 @@ html[data-theme="light"] :where(.auth-page,.auth-shell,.auth-card,.login-page,.r
 html[data-theme="dark"] :where(.auth-card,.auth-panel,.auth-form,.auth-side,.login-card,.register-card,.error-card,.not-found-card) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
 html[data-theme="light"] :where(.auth-card,.auth-panel,.auth-form,.auth-side,.login-card,.register-card,.error-card,.not-found-card) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Complete workspace surface coverage, including secondary panels and nested controls. */
+.apple-app :where(.aw-history-item,.aw-history-empty,.aw-model-picker,.aw-model-option,.aw-model-details,.aw-compare-panel,.aw-compare-result,.aw-attachment-list,.aw-attachment-chip,.aw-sidebar-note,.aw-notice,.aw-edit-box,.aw-thread,.aw-thinking,.aw-prompt-suggestions button,.aw-message-assistant,.aw-message-user,.aw-message-error,.aw-model-badge,.aw-model-select,.aw-model-search,.aw-search,.aw-history-rename-input,.aw-attachment-select) {
+  background:var(--bg-secondary)!important;
+  background-image:none!important;
+  color:var(--text-primary)!important;
+  border-color:var(--border)!important;
+  box-shadow:var(--shadow-sm);
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  filter:none!important;
+  text-shadow:none!important;
+}
+.apple-app :where(.aw-sidebar,.aw-topbar) { background:var(--bg-elevated)!important; }
+.apple-app .aw-statusbar { background:var(--bg-secondary)!important; border:1px solid var(--border)!important; color:var(--text-secondary)!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important; }
+.apple-app :where(.aw-message-content,.aw-message-body,.aw-message-meta,.aw-history-label,.aw-model-details,.aw-attachment-file,.aw-attachment-folder,.aw-disclaimer,.aw-empty-state,.aw-history-empty,.aw-sidebar-note,.aw-notice) { color:var(--text-secondary)!important; }
+.apple-app :where(.aw-message-content strong,.aw-message-content h1,.aw-message-content h2,.aw-message-content h3,.aw-history-item strong,.aw-model-option strong,.aw-model-details strong) { color:var(--text-primary)!important; }
+.apple-app :where(.aw-model-picker button,.aw-model-option,.aw-history-item,.aw-new-chat,.aw-export-button,.aw-attach-button,.aw-compare-toggle,.aw-favorite-toggle,.aw-message-action,.aw-attachment-file button) { color:var(--text-secondary)!important; border-color:var(--border)!important; }
+.apple-app :where(.aw-model-picker button:hover,.aw-model-option:hover,.aw-history-item:hover,.aw-history-item.active,.aw-prompt-suggestions button:hover) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important; }
+.apple-app :where(.aw-composer,.aw-composer textarea,.aw-edit-box textarea,.aw-history-rename-input,.aw-model-search,.aw-search) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border-strong)!important; }
+.apple-app :where(.aw-send-button,.aw-compare-actions button:first-child) { background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important; }
+.apple-app :where(.aw-model-badge,.aw-attachment-chip,.aw-status-cost,.aw-status-metric,.aw-status-model) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important; }
+.apple-app :where(.aw-empty-icon,.aw-message-avatar) { background:var(--bg-tertiary)!important;color:var(--accent)!important;border-color:var(--border)!important; }
+.apple-app :where(.mh-catalog-overview,.mh-catalog-browser,.mh-catalog-side-note,.mh-catalog-provider-strip,.mh-catalog-controls,.mh-model-card-grid,.mh-catalog-result-count,.mh-catalog-filter-row,.mh-model-detail-meta) { background:var(--bg-secondary)!important;background-image:none!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
+.apple-app :where(.mh-catalog-overview-copy>span,.mh-catalog-provider-strip>span:first-child,.mh-catalog-filter-label,.mh-catalog-result-count,.mh-model-detail-meta span) { color:var(--text-tertiary)!important; }
+.apple-app :where(.mh-catalog-overview-copy>strong,.mh-catalog-browser-head h2,.mh-catalog-overview-stats strong,.mh-model-detail-meta strong,.mh-model-detail-meta code) { color:var(--text-primary)!important; }
+.apple-app :where(.mh-provider-dot.green,.mh-provider-dot.orange,.mh-provider-dot.blue,.mh-provider-dot.cyan,.mh-provider-dot.purple,.mh-provider-dot.pink,.mh-provider-dot.violet) { background:var(--accent)!important;box-shadow:none!important; }
+.apple-app :where(.mh-callout,.mh-preview-banner,.mh-secret-reveal,.mh-inline-error,.mh-inline-success) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
+.apple-app :where(.mh-inline-error,.mh-button-danger,.mh-usage-error-code) { color:var(--danger-text)!important; }
+.apple-app :where(.mh-inline-success) { color:var(--success-text)!important; }
+.apple-app :where(.mh-secret-value,.mh-endpoint,.mh-code,.mh-usage-table,.mh-usage-table th,.mh-usage-table td) { background:var(--bg-tertiary)!important;color:var(--text-primary)!important;border-color:var(--border)!important; }
+.apple-app :where(.mh-list-header,.mh-key-row,.mh-model-row,.mh-popular-row,.mh-detail-stats,.mh-detail-info,.mh-trust-note,.mh-usage-table th,.mh-usage-table td) { border-color:var(--border)!important; }
+.apple-app :where(.mh-list-header,.mh-usage-table th,.mh-model-provider,.mh-catalog-empty>strong) { color:var(--text-secondary)!important; }
+.apple-app :where(.mh-model-card-brand,.mh-model-card-access,.mh-model-card-bottom,.mh-catalog-count) { background:var(--bg-tertiary)!important;color:var(--text-secondary)!important;border-color:var(--border)!important; }
+.apple-app :where(.mh-model-card,.mh-model-card.selected,.mh-catalog-overview,.mh-catalog-browser) { box-shadow:var(--shadow-sm)!important; }
+.apple-app :where(.mh-model-card:hover,.mh-model-card.selected) { border-color:var(--border-strong)!important;background:var(--bg-tertiary)!important; }
+
+/* Auth, verification, MFA, error and not-found pages use the same semantic palette. */
+.apple-app .min-h-screen.bg-background { background:var(--bg-primary)!important;color:var(--text-primary)!important; }
+.apple-app .min-h-screen.bg-background>div>div:nth-child(2) { background:var(--bg-secondary)!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;box-shadow:var(--shadow-md)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+.apple-app .bg-card { background:var(--bg-secondary)!important;color:var(--text-primary)!important; }
+.apple-app .text-foreground,.apple-app .text-card-foreground { color:var(--text-primary)!important; }
+.apple-app .text-muted-foreground { color:var(--text-secondary)!important; }
+.apple-app .border-border { border-color:var(--border)!important; }
+.apple-app .bg-background { background:var(--bg-primary)!important; }
+.apple-app .bg-primary { background:var(--accent)!important; }
+.apple-app .text-primary-foreground { color:#fff!important; }
+.apple-app :where(.text-black,.text-gray-900,.text-slate-900) { color:var(--text-primary)!important; }
+.apple-app :where(.bg-white,.bg-gray-50,.bg-gray-100,.bg-slate-50,.bg-slate-100) { background:var(--bg-secondary)!important; }
+.apple-app :where(.border-gray-100,.border-gray-200,.border-slate-100,.border-slate-200) { border-color:var(--border)!important; }
+
+/* Crisp cards: no filters, translucent surfaces, text shadows or compositing hints. */
+.apple-app :where(.mh-stat,.mh-step,.mh-panel,.mh-provider-card,.mh-model-card,.mh-connection-panel,.mh-key-create,.mh-key-list-panel,.mh-usage-panel,.mh-secret-reveal,.mh-api-card,.mh-api-example,.mh-catalog-side-note,.mh-mock-panel,.av-danger-card,.av-settings-panel,.aw-card,.aw-panel,.aw-message,.aw-composer,.aw-compare-panel,.aw-model-picker,.aw-model-option) {
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none!important;text-shadow:none!important;opacity:1!important;
+}
+.av-site .av-section-nav { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+.app-route-transition { animation:none!important;transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important;will-change:auto!important; }
