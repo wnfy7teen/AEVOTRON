@@ -10,6 +10,7 @@ import { getRequestLocale } from "@/lib/i18n.functions";
 import { getRouteNamespace, loadLocaleResources, normalizeLanguage, translateForLanguage } from "@/i18n";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
+import appleLightRedesignCss from "@/apple-light-redesign.css?url";
 
 export const Route = createRootRoute({
   loader: async ({ location }) => {
@@ -27,7 +28,11 @@ export const Route = createRootRoute({
         { title: translateForLanguage(locale, "Aevotron — One API. Every model.") },
         { name: "description", content: translateForLanguage(locale, "Unified API infrastructure for AI models.") },
       ],
-      links: [{ rel: "stylesheet", href: appCss }, { rel: "stylesheet", href: appleCss }],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        { rel: "stylesheet", href: appleCss },
+        { rel: "stylesheet", href: appleLightRedesignCss },
+      ],
     };
   },
   errorComponent: DefaultCatchBoundary,
