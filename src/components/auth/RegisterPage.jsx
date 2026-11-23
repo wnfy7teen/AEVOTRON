@@ -1,4 +1,4 @@
-import { Lock, Mail, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -25,6 +25,8 @@ export function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [step, setStep] = useState("form");
   const [error, setError] = useState("");
@@ -145,14 +147,16 @@ export function RegisterPage() {
           <Label htmlFor="register-password">{t("Password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="register-password" type="password" autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10" disabled={busy} required />
+            <Input id="register-password" type={showPassword ? "text" : "password"} autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10 pr-12" disabled={busy} required />
+            <button type="button" className="auth-password-toggle" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? t("Hide password") : t("Show password")} aria-pressed={showPassword}>{showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="register-confirm">{t("Confirm password")}</Label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="register-confirm" type="password" autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10" disabled={busy} required />
+            <Input id="register-confirm" type={showConfirm ? "text" : "password"} autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={confirm} onChange={(e) => setConfirm(e.target.value)} className="h-12 pl-10 pr-12" disabled={busy} required />
+            <button type="button" className="auth-password-toggle" onClick={() => setShowConfirm((value) => !value)} aria-label={showConfirm ? t("Hide password") : t("Show password")} aria-pressed={showConfirm}>{showConfirm ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
           </div>
         </div>
         <SubmitButton busy={busy} busyLabel={t("Creating account...")}>
