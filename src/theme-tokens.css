@@ -1348,7 +1348,7 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
 }
 
 
-/* Unified AEVOTRON semantic tokens. */
+/* Canonical AEVOTRON design tokens. */
 :root {
   --app-bg: #FFFFFF;
   --app-surface: #FFFFFF;
@@ -1356,8 +1356,10 @@ html[data-theme="dark"], [data-theme="dark"], [data-theme="gray"] {
   --app-text-primary: #1C1C1E;
   --app-text-secondary: #636366;
   --app-accent: #007AFF;
+  --app-accent-blue: #007AFF;
   --app-accent-violet: #8E5CF6;
   --app-accent-graphite: #636366;
+  --app-accent-foreground: #FFFFFF;
 }
 .dark,
 html[data-theme="dark"],
@@ -1370,6 +1372,8 @@ html[data-theme="gray"],
   --app-text-primary: #F5F5F7;
   --app-text-secondary: #98989D;
   --app-accent: #0A84FF;
+  --app-accent-blue: #0A84FF;
   --app-accent-violet: #BF9BFF;
   --app-accent-graphite: #A1A1A6;
+  --app-accent-foreground: #FFFFFF;
 }
