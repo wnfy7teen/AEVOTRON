@@ -42,20 +42,28 @@ describe("OrbitalBadge language updates", () => {
     const brand = () => container.querySelector(".av-core strong")?.textContent;
     const descriptor = () => container.querySelector(".av-core small")?.textContent;
     const monogram = () => container.querySelector(".av-core-mark")?.textContent;
+    const topLabel = () => container.querySelector(".av-label-top")?.textContent;
+    const bottomLabel = () => container.querySelector(".av-label-bottom")?.textContent;
 
     expect(brand()).toBe("AEVOTRON");
     expect(descriptor()).toBe("UNIFIED API");
     expect(monogram()).toBe("A");
+    expect(topLabel()).toBe("ONE INTERFACE");
+    expect(bottomLabel()).toBe("MULTIPLE MODELS");
 
     await act(async () => changeAppLanguage(i18n, "ru"));
     expect(brand()).toBe("AEVOTRON");
     expect(descriptor()).toBe("ЕДИНЫЙ API");
     expect(monogram()).toBe("A");
+    expect(topLabel()).toBe("ЕДИНЫЙ ИНТЕРФЕЙС");
+    expect(bottomLabel()).toBe("НЕСКОЛЬКО МОДЕЛЕЙ");
 
     await act(async () => changeAppLanguage(i18n, "zh"));
     expect(brand()).toBe("AEVOTRON");
     expect(descriptor()).toBe("统一 API");
     expect(monogram()).toBe("A");
+    expect(topLabel()).toBe("统一接口");
+    expect(bottomLabel()).toBe("多种模型");
   });
 
   it("renders all six orbit labels from translation keys", () => {
