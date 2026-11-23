@@ -32,6 +32,7 @@ export function RegisterPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [mfaChallenge, setMfaChallenge] = useState(null);
+  const passwordStrength = [password.length >= 12, /[a-z]/.test(password), /[A-Z]/.test(password), /[0-9]|[^a-zA-Z0-9]/.test(password)].filter(Boolean).length;
 
   async function register(e) {
     e.preventDefault();
@@ -149,6 +150,10 @@ export function RegisterPage() {
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input id="register-password" type={showPassword ? "text" : "password"} autoComplete="new-password" minLength={12} placeholder={t("At least 12 characters")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 pl-10 pr-12" disabled={busy} required />
             <button type="button" className="auth-password-toggle" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? t("Hide password") : t("Show password")} aria-pressed={showPassword}>{showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
+          </div>
+          <div className="auth-password-strength" role="meter" aria-label={t("Password strength")} aria-valuemin={0} aria-valuemax={4} aria-valuenow={passwordStrength} data-strength={passwordStrength}>
+            <span /><span /><span /><span />
+          </div>
           </div>
         </div>
         <div className="space-y-2">
