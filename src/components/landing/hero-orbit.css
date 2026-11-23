@@ -49,8 +49,8 @@
   transform: rotate(0deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%);
 }
 @keyframes av-orbit-dot-spin {
-  from { rotate: 0deg; }
-  to { rotate: 360deg; }
+  from { transform: rotate(0deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%); }
+  to { transform: rotate(360deg) translateY(calc(-1 * var(--dot-radius))) translate(-50%, -50%); }
 }
 
 /* The center is the only interactive surface in the artwork. */
