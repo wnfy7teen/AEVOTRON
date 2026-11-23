@@ -1,16 +1,24 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { Check, ChevronDown } from "lucide-react";
-import { createAppI18n, LANGUAGE_STORAGE_KEY, normalizeLanguage, persistLanguageCookie, supportedLanguages } from "@/i18n";
+import {
+  changeAppLanguage,
+  createAppI18n,
+  LANGUAGE_STORAGE_KEY,
+  normalizeLanguage,
+  persistLanguageCookie,
+  supportedLanguages,
+} from "@/i18n";
 
 function getBrowserStorage() {
   try { return typeof window !== "undefined" ? window.localStorage : null; } catch { return null; }
 }
 
-export function LanguageProvider({ children, initialLanguage = "en" }) {
+export function LanguageProvider({ children, initialLanguage = "en", initialResources = {} }) {
   const [instance] = useState(() => createAppI18n({
     language: initialLanguage,
     storage: getBrowserStorage(),
+    resources: { [normalizeLanguage(initialLanguage)]: initialResources },
   }));
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -21,7 +29,7 @@ export function LanguageProvider({ children, initialLanguage = "en" }) {
     const preferredLocale = savedLocale ? normalizeLanguage(savedLocale) : normalizeLanguage(initialLanguage);
     persistLanguageCookie(preferredLocale);
     if (preferredLocale !== normalizeLanguage(initialLanguage)) {
-      instance.changeLanguage(preferredLocale);
+      void changeAppLanguage(instance, preferredLocale);
     }
   }, [initialLanguage, instance]);
   return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
@@ -33,7 +41,7 @@ export function useLanguage(namespaces) {
   const setLanguage = useMemo(() => (next) => {
     if (!supportedLanguages.includes(next)) return Promise.resolve();
     persistLanguageCookie(next);
-    return activeI18n.changeLanguage(next);
+    return changeAppLanguage(activeI18n, next);
   }, [activeI18n]);
   return { language, setLanguage, t };
 }
@@ -71,8 +79,7 @@ export function LanguageSwitcher() {
   }, [open]);
 
   const selectLanguage = async (next) => {
-    persistLanguageCookie(next);
-    await activeI18n.changeLanguage(next);
+    await changeAppLanguage(activeI18n, next);
     setOpen(false);
     triggerRef.current?.focus();
   };
