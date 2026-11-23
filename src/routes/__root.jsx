@@ -7,14 +7,18 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/AuthContext";
 import { LanguageProvider, LanguageSwitcher } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/i18n.functions";
-import { normalizeLanguage, translateForLanguage } from "@/i18n";
+import { loadLocaleResources, normalizeLanguage, translateForLanguage } from "@/i18n";
 import appCss from "@/index.css?url";
 import appleCss from "@/apple-style.css?url";
 
 export const Route = createRootRoute({
-  loader: () => getRequestLocale(),
+  loader: async () => {
+    const locale = await getRequestLocale();
+    const resources = await loadLocaleResources(locale);
+    return { locale, resources };
+  },
   head: ({ loaderData }) => {
-    const locale = loaderData?.locale || loaderData || "en";
+    const locale = loaderData?.locale || "en";
     return {
       meta: [
         { charSet: "utf-8" },
@@ -32,10 +36,10 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const locale = Route.useLoaderData();
+  const { locale, resources } = Route.useLoaderData();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
-    <LanguageProvider initialLanguage={locale}>
+    <LanguageProvider initialLanguage={locale} initialResources={resources}>
       <AuthProvider>
         <div key={pathname} className="apple-app app-route-transition"><Outlet /></div>
         <DocumentMetadataSync />
@@ -47,10 +51,10 @@ function RootComponent() {
 }
 
 function RootDocument({ children }) {
-  const locale = useRouterState({
-    select: (state) => state.matches.find((match) => match.routeId === "__root__")?.loaderData || "en",
+  const loaderData = useRouterState({
+    select: (state) => state.matches.find((match) => match.routeId === "__root__")?.loaderData,
   });
-  const language = normalizeLanguage(locale);
+  const language = normalizeLanguage(loaderData?.locale || "en");
   return (
     <html lang={language === "zh" ? "zh-CN" : language}>
       <head><HeadContent /></head>
