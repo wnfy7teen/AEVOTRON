@@ -616,6 +616,9 @@ html[data-theme] .apple-app[data-theme] .mh-popular-row small,
 html[data-theme] .apple-app[data-theme] .mh-model-description {
   color: var(--app-text-secondary);
 }
+html[data-theme] .apple-app[data-theme] .mh-model-card p {
+  color: var(--app-text-secondary);
+}
 
 html[data-theme] .apple-app[data-theme] .mh-catalog-provider-strip {
   display: flex;
