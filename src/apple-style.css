@@ -1,5 +1,5 @@
 /* Centralized legacy palette aliases. Components consume variables, never literal color values. */
-:root {
+html {
   --palette-hex-f2f2f7: #F2F2F7;
   --palette-hex-ffffff: #FFFFFF;
   --palette-hex-1c1c1e: #1C1C1E;
