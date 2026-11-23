@@ -46,7 +46,7 @@ describe("workspace theme", () => {
     setAppTheme("dark");
     expect(getAppThemePreference()).toBe("dark");
     expect(window.localStorage.getItem("aevotron-theme")).toBe("dark");
-    expect(document.documentElement.dataset.theme).toBe("gray");
+    expect(document.documentElement.dataset.theme).toBe("dark");
     expect(document.documentElement.style.colorScheme).toBe("dark");
 
     setAppTheme("system");
@@ -59,7 +59,7 @@ describe("workspace theme", () => {
   it("migrates legacy and unsupported stored preferences to one of the two themes", () => {
     window.localStorage.setItem("aevotron-theme", "dark");
     expect(getAppThemePreference()).toBe("dark");
-    expect(window.localStorage.getItem("aevotron-theme")).toBe("gray");
+    expect(window.localStorage.getItem("aevotron-theme")).toBe("dark");
     window.localStorage.setItem("aevotron-theme", "system");
     expect(getAppThemePreference()).toBe("light");
     expect(window.localStorage.getItem("aevotron-theme")).toBe("light");
