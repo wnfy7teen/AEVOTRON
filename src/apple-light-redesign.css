@@ -953,3 +953,40 @@ html[data-theme] .apple-app :is(.mh-model-card,.mh-catalog-browser,.mh-catalog-o
   .apple-app .aw-compare-panel,
   .apple-app .aw-composer { padding: 20px; }
 }
+
+
+/* Text-bearing controls and muted states use color, never container opacity. */
+.av-site .av-section-nav,
+.av-site .av-section-nav a,
+.av-site .av-nav-links a,
+.av-site .av-hero-footnote,
+.apple-app .av-notification-row.is-read,
+.apple-app .av-dropdown-trigger:disabled,
+.apple-app .av-dropdown-option:disabled,
+.apple-app .aw-prompt-suggestions button:disabled,
+.apple-app .aw-composer>textarea:disabled,
+.apple-app .aw-compare-toggle:disabled,
+.apple-app .aw-compare-actions button:disabled,
+.apple-app .aw-attach-button:disabled,
+.apple-app .aw-favorite-toggle:disabled {
+  opacity: 1 !important;
+}
+.apple-app :is(
+  .av-notification-row.is-read,
+  .av-dropdown-trigger:disabled,
+  .av-dropdown-option:disabled,
+  .aw-prompt-suggestions button:disabled,
+  .aw-composer>textarea:disabled,
+  .aw-compare-toggle:disabled,
+  .aw-compare-actions button:disabled,
+  .aw-attach-button:disabled,
+  .aw-favorite-toggle:disabled
+) {
+  color: var(--text-secondary) !important;
+}
+.av-site .av-section-nav {
+  background: var(--bg-secondary) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.av-site .av-section-nav a:not(.active) { color: var(--text-secondary) !important; }
